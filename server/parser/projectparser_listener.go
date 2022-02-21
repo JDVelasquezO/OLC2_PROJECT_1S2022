@@ -17,20 +17,26 @@ type ProjectParserListener interface {
 	// EnterInstruction is called when entering the instruction production.
 	EnterInstruction(c *InstructionContext)
 
+	// EnterPrint_prod is called when entering the print_prod production.
+	EnterPrint_prod(c *Print_prodContext)
+
 	// EnterDeclaration_prod is called when entering the declaration_prod production.
 	EnterDeclaration_prod(c *Declaration_prodContext)
 
 	// EnterAssign_prod is called when entering the assign_prod production.
 	EnterAssign_prod(c *Assign_prodContext)
 
-	// EnterTypeDataVar is called when entering the typeDataVar production.
-	EnterTypeDataVar(c *TypeDataVarContext)
+	// EnterConditional_prod is called when entering the conditional_prod production.
+	EnterConditional_prod(c *Conditional_prodContext)
+
+	// EnterBloq is called when entering the bloq production.
+	EnterBloq(c *BloqContext)
 
 	// EnterListIds is called when entering the listIds production.
 	EnterListIds(c *ListIdsContext)
 
-	// EnterPrint_prod is called when entering the print_prod production.
-	EnterPrint_prod(c *Print_prodContext)
+	// EnterTypeDataVar is called when entering the typeDataVar production.
+	EnterTypeDataVar(c *TypeDataVarContext)
 
 	// EnterExpression is called when entering the expression production.
 	EnterExpression(c *ExpressionContext)
@@ -56,20 +62,26 @@ type ProjectParserListener interface {
 	// ExitInstruction is called when exiting the instruction production.
 	ExitInstruction(c *InstructionContext)
 
+	// ExitPrint_prod is called when exiting the print_prod production.
+	ExitPrint_prod(c *Print_prodContext)
+
 	// ExitDeclaration_prod is called when exiting the declaration_prod production.
 	ExitDeclaration_prod(c *Declaration_prodContext)
 
 	// ExitAssign_prod is called when exiting the assign_prod production.
 	ExitAssign_prod(c *Assign_prodContext)
 
-	// ExitTypeDataVar is called when exiting the typeDataVar production.
-	ExitTypeDataVar(c *TypeDataVarContext)
+	// ExitConditional_prod is called when exiting the conditional_prod production.
+	ExitConditional_prod(c *Conditional_prodContext)
+
+	// ExitBloq is called when exiting the bloq production.
+	ExitBloq(c *BloqContext)
 
 	// ExitListIds is called when exiting the listIds production.
 	ExitListIds(c *ListIdsContext)
 
-	// ExitPrint_prod is called when exiting the print_prod production.
-	ExitPrint_prod(c *Print_prodContext)
+	// ExitTypeDataVar is called when exiting the typeDataVar production.
+	ExitTypeDataVar(c *TypeDataVarContext)
 
 	// ExitExpression is called when exiting the expression production.
 	ExitExpression(c *ExpressionContext)

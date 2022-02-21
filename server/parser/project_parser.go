@@ -13,7 +13,7 @@ import (
 import "OLC2_Project1/server/interpreter/AST"
 import "OLC2_Project1/server/interpreter/Abstract"
 import "OLC2_Project1/server/interpreter/AST/Expression"
-import "OLC2_Project1/server/interpreter/AST/Instruction"
+import "OLC2_Project1/server/interpreter/AST/Natives"
 import "OLC2_Project1/server/interpreter/SymbolTable"
 import arrayList "github.com/colegno/arraylist"
 
@@ -23,85 +23,96 @@ var _ = reflect.Copy
 var _ = strconv.Itoa
 
 var parserATN = []uint16{
-	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 45, 188,
+	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 45, 212,
 	4, 2, 9, 2, 4, 3, 9, 3, 4, 4, 9, 4, 4, 5, 9, 5, 4, 6, 9, 6, 4, 7, 9, 7,
 	4, 8, 9, 8, 4, 9, 9, 9, 4, 10, 9, 10, 4, 11, 9, 11, 4, 12, 9, 12, 4, 13,
-	9, 13, 4, 14, 9, 14, 3, 2, 3, 2, 3, 2, 3, 3, 7, 3, 33, 10, 3, 12, 3, 14,
-	3, 36, 11, 3, 3, 3, 3, 3, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3,
-	4, 3, 4, 5, 4, 49, 10, 4, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3,
-	5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 5, 5, 65, 10, 5, 3, 6, 3, 6, 3,
-	6, 3, 6, 3, 6, 3, 6, 3, 7, 3, 7, 3, 7, 3, 7, 3, 7, 3, 7, 3, 7, 3, 7, 5,
-	7, 81, 10, 7, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 3, 8, 7, 8, 91,
-	10, 8, 12, 8, 14, 8, 94, 11, 8, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3,
-	9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 5,
-	9, 114, 10, 9, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10,
-	3, 10, 5, 10, 125, 10, 10, 3, 11, 3, 11, 3, 11, 3, 11, 3, 11, 3, 11, 3,
-	11, 3, 11, 3, 11, 7, 11, 136, 10, 11, 12, 11, 14, 11, 139, 11, 11, 3, 12,
-	3, 12, 3, 12, 3, 12, 3, 12, 3, 13, 3, 13, 3, 13, 3, 13, 3, 13, 3, 13, 3,
-	13, 3, 13, 3, 13, 3, 13, 3, 13, 3, 13, 3, 13, 5, 13, 159, 10, 13, 3, 13,
-	3, 13, 3, 13, 3, 13, 3, 13, 3, 13, 3, 13, 3, 13, 3, 13, 3, 13, 7, 13, 171,
-	10, 13, 12, 13, 14, 13, 174, 11, 13, 3, 14, 3, 14, 3, 14, 3, 14, 3, 14,
-	3, 14, 3, 14, 3, 14, 3, 14, 3, 14, 5, 14, 186, 10, 14, 3, 14, 2, 5, 14,
-	20, 24, 15, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 2, 6, 4, 2,
-	34, 34, 36, 39, 3, 2, 13, 14, 4, 2, 40, 41, 44, 44, 3, 2, 42, 43, 2, 194,
-	2, 28, 3, 2, 2, 2, 4, 34, 3, 2, 2, 2, 6, 48, 3, 2, 2, 2, 8, 64, 3, 2, 2,
-	2, 10, 66, 3, 2, 2, 2, 12, 80, 3, 2, 2, 2, 14, 82, 3, 2, 2, 2, 16, 113,
-	3, 2, 2, 2, 18, 124, 3, 2, 2, 2, 20, 126, 3, 2, 2, 2, 22, 140, 3, 2, 2,
-	2, 24, 158, 3, 2, 2, 2, 26, 185, 3, 2, 2, 2, 28, 29, 5, 4, 3, 2, 29, 30,
-	8, 2, 1, 2, 30, 3, 3, 2, 2, 2, 31, 33, 5, 6, 4, 2, 32, 31, 3, 2, 2, 2,
-	33, 36, 3, 2, 2, 2, 34, 32, 3, 2, 2, 2, 34, 35, 3, 2, 2, 2, 35, 37, 3,
-	2, 2, 2, 36, 34, 3, 2, 2, 2, 37, 38, 8, 3, 1, 2, 38, 5, 3, 2, 2, 2, 39,
-	40, 5, 16, 9, 2, 40, 41, 8, 4, 1, 2, 41, 49, 3, 2, 2, 2, 42, 43, 5, 8,
-	5, 2, 43, 44, 8, 4, 1, 2, 44, 49, 3, 2, 2, 2, 45, 46, 5, 10, 6, 2, 46,
-	47, 8, 4, 1, 2, 47, 49, 3, 2, 2, 2, 48, 39, 3, 2, 2, 2, 48, 42, 3, 2, 2,
-	2, 48, 45, 3, 2, 2, 2, 49, 7, 3, 2, 2, 2, 50, 51, 7, 6, 2, 2, 51, 52, 5,
-	14, 8, 2, 52, 53, 5, 12, 7, 2, 53, 54, 7, 23, 2, 2, 54, 55, 5, 18, 10,
-	2, 55, 56, 7, 25, 2, 2, 56, 57, 8, 5, 1, 2, 57, 65, 3, 2, 2, 2, 58, 59,
-	7, 6, 2, 2, 59, 60, 5, 14, 8, 2, 60, 61, 5, 12, 7, 2, 61, 62, 7, 25, 2,
-	2, 62, 63, 8, 5, 1, 2, 63, 65, 3, 2, 2, 2, 64, 50, 3, 2, 2, 2, 64, 58,
-	3, 2, 2, 2, 65, 9, 3, 2, 2, 2, 66, 67, 5, 14, 8, 2, 67, 68, 7, 23, 2, 2,
-	68, 69, 5, 18, 10, 2, 69, 70, 7, 25, 2, 2, 70, 71, 8, 6, 1, 2, 71, 11,
-	3, 2, 2, 2, 72, 73, 7, 8, 2, 2, 73, 81, 8, 7, 1, 2, 74, 75, 7, 7, 2, 2,
-	75, 81, 8, 7, 1, 2, 76, 77, 7, 9, 2, 2, 77, 81, 8, 7, 1, 2, 78, 79, 7,
-	10, 2, 2, 79, 81, 8, 7, 1, 2, 80, 72, 3, 2, 2, 2, 80, 74, 3, 2, 2, 2, 80,
-	76, 3, 2, 2, 2, 80, 78, 3, 2, 2, 2, 81, 13, 3, 2, 2, 2, 82, 83, 8, 8, 1,
-	2, 83, 84, 7, 21, 2, 2, 84, 85, 8, 8, 1, 2, 85, 92, 3, 2, 2, 2, 86, 87,
-	12, 4, 2, 2, 87, 88, 7, 26, 2, 2, 88, 89, 7, 21, 2, 2, 89, 91, 8, 8, 1,
-	2, 90, 86, 3, 2, 2, 2, 91, 94, 3, 2, 2, 2, 92, 90, 3, 2, 2, 2, 92, 93,
-	3, 2, 2, 2, 93, 15, 3, 2, 2, 2, 94, 92, 3, 2, 2, 2, 95, 96, 7, 3, 2, 2,
-	96, 97, 7, 24, 2, 2, 97, 98, 7, 4, 2, 2, 98, 99, 7, 28, 2, 2, 99, 100,
-	5, 18, 10, 2, 100, 101, 7, 29, 2, 2, 101, 102, 7, 25, 2, 2, 102, 103, 8,
-	9, 1, 2, 103, 114, 3, 2, 2, 2, 104, 105, 7, 3, 2, 2, 105, 106, 7, 24, 2,
-	2, 106, 107, 7, 5, 2, 2, 107, 108, 7, 28, 2, 2, 108, 109, 5, 18, 10, 2,
-	109, 110, 7, 29, 2, 2, 110, 111, 7, 25, 2, 2, 111, 112, 8, 9, 1, 2, 112,
-	114, 3, 2, 2, 2, 113, 95, 3, 2, 2, 2, 113, 104, 3, 2, 2, 2, 114, 17, 3,
-	2, 2, 2, 115, 116, 5, 20, 11, 2, 116, 117, 8, 10, 1, 2, 117, 125, 3, 2,
-	2, 2, 118, 119, 5, 24, 13, 2, 119, 120, 8, 10, 1, 2, 120, 125, 3, 2, 2,
-	2, 121, 122, 5, 22, 12, 2, 122, 123, 8, 10, 1, 2, 123, 125, 3, 2, 2, 2,
-	124, 115, 3, 2, 2, 2, 124, 118, 3, 2, 2, 2, 124, 121, 3, 2, 2, 2, 125,
-	19, 3, 2, 2, 2, 126, 127, 8, 11, 1, 2, 127, 128, 5, 24, 13, 2, 128, 129,
-	8, 11, 1, 2, 129, 137, 3, 2, 2, 2, 130, 131, 12, 4, 2, 2, 131, 132, 9,
-	2, 2, 2, 132, 133, 5, 20, 11, 5, 133, 134, 8, 11, 1, 2, 134, 136, 3, 2,
-	2, 2, 135, 130, 3, 2, 2, 2, 136, 139, 3, 2, 2, 2, 137, 135, 3, 2, 2, 2,
-	137, 138, 3, 2, 2, 2, 138, 21, 3, 2, 2, 2, 139, 137, 3, 2, 2, 2, 140, 141,
-	5, 20, 11, 2, 141, 142, 9, 3, 2, 2, 142, 143, 5, 20, 11, 2, 143, 144, 8,
-	12, 1, 2, 144, 23, 3, 2, 2, 2, 145, 146, 8, 13, 1, 2, 146, 147, 7, 43,
-	2, 2, 147, 148, 5, 18, 10, 2, 148, 149, 8, 13, 1, 2, 149, 159, 3, 2, 2,
-	2, 150, 151, 5, 26, 14, 2, 151, 152, 8, 13, 1, 2, 152, 159, 3, 2, 2, 2,
-	153, 154, 7, 28, 2, 2, 154, 155, 5, 18, 10, 2, 155, 156, 7, 29, 2, 2, 156,
-	157, 8, 13, 1, 2, 157, 159, 3, 2, 2, 2, 158, 145, 3, 2, 2, 2, 158, 150,
-	3, 2, 2, 2, 158, 153, 3, 2, 2, 2, 159, 172, 3, 2, 2, 2, 160, 161, 12, 6,
-	2, 2, 161, 162, 9, 4, 2, 2, 162, 163, 5, 24, 13, 7, 163, 164, 8, 13, 1,
-	2, 164, 171, 3, 2, 2, 2, 165, 166, 12, 5, 2, 2, 166, 167, 9, 5, 2, 2, 167,
-	168, 5, 24, 13, 6, 168, 169, 8, 13, 1, 2, 169, 171, 3, 2, 2, 2, 170, 160,
-	3, 2, 2, 2, 170, 165, 3, 2, 2, 2, 171, 174, 3, 2, 2, 2, 172, 170, 3, 2,
-	2, 2, 172, 173, 3, 2, 2, 2, 173, 25, 3, 2, 2, 2, 174, 172, 3, 2, 2, 2,
-	175, 176, 7, 17, 2, 2, 176, 186, 8, 14, 1, 2, 177, 178, 7, 18, 2, 2, 178,
-	186, 8, 14, 1, 2, 179, 180, 7, 19, 2, 2, 180, 186, 8, 14, 1, 2, 181, 182,
-	7, 20, 2, 2, 182, 186, 8, 14, 1, 2, 183, 184, 7, 21, 2, 2, 184, 186, 8,
-	14, 1, 2, 185, 175, 3, 2, 2, 2, 185, 177, 3, 2, 2, 2, 185, 179, 3, 2, 2,
-	2, 185, 181, 3, 2, 2, 2, 185, 183, 3, 2, 2, 2, 186, 27, 3, 2, 2, 2, 14,
-	34, 48, 64, 80, 92, 113, 124, 137, 158, 170, 172, 185,
+	9, 13, 4, 14, 9, 14, 4, 15, 9, 15, 4, 16, 9, 16, 3, 2, 3, 2, 3, 2, 3, 3,
+	7, 3, 37, 10, 3, 12, 3, 14, 3, 40, 11, 3, 3, 3, 3, 3, 3, 4, 3, 4, 3, 4,
+	3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 5, 4, 56, 10, 4,
+	3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5,
+	3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 5, 5, 76, 10, 5, 3, 6, 3, 6, 3, 6,
+	3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 5, 6,
+	92, 10, 6, 3, 7, 3, 7, 3, 7, 3, 7, 3, 7, 3, 7, 3, 8, 3, 8, 3, 8, 3, 8,
+	3, 8, 3, 8, 3, 8, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 5, 9,
+	115, 10, 9, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 7,
+	10, 125, 10, 10, 12, 10, 14, 10, 128, 11, 10, 3, 11, 3, 11, 3, 11, 3, 11,
+	3, 11, 3, 11, 3, 11, 3, 11, 5, 11, 138, 10, 11, 3, 12, 3, 12, 3, 12, 3,
+	12, 3, 12, 3, 12, 3, 12, 3, 12, 3, 12, 5, 12, 149, 10, 12, 3, 13, 3, 13,
+	3, 13, 3, 13, 3, 13, 3, 13, 3, 13, 3, 13, 3, 13, 7, 13, 160, 10, 13, 12,
+	13, 14, 13, 163, 11, 13, 3, 14, 3, 14, 3, 14, 3, 14, 3, 14, 3, 15, 3, 15,
+	3, 15, 3, 15, 3, 15, 3, 15, 3, 15, 3, 15, 3, 15, 3, 15, 3, 15, 3, 15, 3,
+	15, 5, 15, 183, 10, 15, 3, 15, 3, 15, 3, 15, 3, 15, 3, 15, 3, 15, 3, 15,
+	3, 15, 3, 15, 3, 15, 7, 15, 195, 10, 15, 12, 15, 14, 15, 198, 11, 15, 3,
+	16, 3, 16, 3, 16, 3, 16, 3, 16, 3, 16, 3, 16, 3, 16, 3, 16, 3, 16, 5, 16,
+	210, 10, 16, 3, 16, 2, 5, 18, 24, 28, 17, 2, 4, 6, 8, 10, 12, 14, 16, 18,
+	20, 22, 24, 26, 28, 30, 2, 6, 4, 2, 34, 34, 36, 39, 3, 2, 13, 14, 4, 2,
+	40, 41, 44, 44, 3, 2, 42, 43, 2, 218, 2, 32, 3, 2, 2, 2, 4, 38, 3, 2, 2,
+	2, 6, 55, 3, 2, 2, 2, 8, 75, 3, 2, 2, 2, 10, 91, 3, 2, 2, 2, 12, 93, 3,
+	2, 2, 2, 14, 99, 3, 2, 2, 2, 16, 114, 3, 2, 2, 2, 18, 116, 3, 2, 2, 2,
+	20, 137, 3, 2, 2, 2, 22, 148, 3, 2, 2, 2, 24, 150, 3, 2, 2, 2, 26, 164,
+	3, 2, 2, 2, 28, 182, 3, 2, 2, 2, 30, 209, 3, 2, 2, 2, 32, 33, 5, 4, 3,
+	2, 33, 34, 8, 2, 1, 2, 34, 3, 3, 2, 2, 2, 35, 37, 5, 6, 4, 2, 36, 35, 3,
+	2, 2, 2, 37, 40, 3, 2, 2, 2, 38, 36, 3, 2, 2, 2, 38, 39, 3, 2, 2, 2, 39,
+	41, 3, 2, 2, 2, 40, 38, 3, 2, 2, 2, 41, 42, 8, 3, 1, 2, 42, 5, 3, 2, 2,
+	2, 43, 44, 5, 8, 5, 2, 44, 45, 8, 4, 1, 2, 45, 56, 3, 2, 2, 2, 46, 47,
+	5, 10, 6, 2, 47, 48, 8, 4, 1, 2, 48, 56, 3, 2, 2, 2, 49, 50, 5, 12, 7,
+	2, 50, 51, 8, 4, 1, 2, 51, 56, 3, 2, 2, 2, 52, 53, 5, 14, 8, 2, 53, 54,
+	8, 4, 1, 2, 54, 56, 3, 2, 2, 2, 55, 43, 3, 2, 2, 2, 55, 46, 3, 2, 2, 2,
+	55, 49, 3, 2, 2, 2, 55, 52, 3, 2, 2, 2, 56, 7, 3, 2, 2, 2, 57, 58, 7, 3,
+	2, 2, 58, 59, 7, 24, 2, 2, 59, 60, 7, 4, 2, 2, 60, 61, 7, 28, 2, 2, 61,
+	62, 5, 22, 12, 2, 62, 63, 7, 29, 2, 2, 63, 64, 7, 25, 2, 2, 64, 65, 8,
+	5, 1, 2, 65, 76, 3, 2, 2, 2, 66, 67, 7, 3, 2, 2, 67, 68, 7, 24, 2, 2, 68,
+	69, 7, 5, 2, 2, 69, 70, 7, 28, 2, 2, 70, 71, 5, 22, 12, 2, 71, 72, 7, 29,
+	2, 2, 72, 73, 7, 25, 2, 2, 73, 74, 8, 5, 1, 2, 74, 76, 3, 2, 2, 2, 75,
+	57, 3, 2, 2, 2, 75, 66, 3, 2, 2, 2, 76, 9, 3, 2, 2, 2, 77, 78, 7, 6, 2,
+	2, 78, 79, 5, 18, 10, 2, 79, 80, 5, 20, 11, 2, 80, 81, 7, 23, 2, 2, 81,
+	82, 5, 22, 12, 2, 82, 83, 7, 25, 2, 2, 83, 84, 8, 6, 1, 2, 84, 92, 3, 2,
+	2, 2, 85, 86, 7, 6, 2, 2, 86, 87, 5, 18, 10, 2, 87, 88, 5, 20, 11, 2, 88,
+	89, 7, 25, 2, 2, 89, 90, 8, 6, 1, 2, 90, 92, 3, 2, 2, 2, 91, 77, 3, 2,
+	2, 2, 91, 85, 3, 2, 2, 2, 92, 11, 3, 2, 2, 2, 93, 94, 5, 18, 10, 2, 94,
+	95, 7, 23, 2, 2, 95, 96, 5, 22, 12, 2, 96, 97, 7, 25, 2, 2, 97, 98, 8,
+	7, 1, 2, 98, 13, 3, 2, 2, 2, 99, 100, 7, 11, 2, 2, 100, 101, 7, 28, 2,
+	2, 101, 102, 5, 22, 12, 2, 102, 103, 7, 29, 2, 2, 103, 104, 5, 16, 9, 2,
+	104, 105, 8, 8, 1, 2, 105, 15, 3, 2, 2, 2, 106, 107, 7, 32, 2, 2, 107,
+	108, 5, 4, 3, 2, 108, 109, 7, 33, 2, 2, 109, 110, 8, 9, 1, 2, 110, 115,
+	3, 2, 2, 2, 111, 112, 7, 32, 2, 2, 112, 113, 7, 33, 2, 2, 113, 115, 8,
+	9, 1, 2, 114, 106, 3, 2, 2, 2, 114, 111, 3, 2, 2, 2, 115, 17, 3, 2, 2,
+	2, 116, 117, 8, 10, 1, 2, 117, 118, 7, 21, 2, 2, 118, 119, 8, 10, 1, 2,
+	119, 126, 3, 2, 2, 2, 120, 121, 12, 4, 2, 2, 121, 122, 7, 26, 2, 2, 122,
+	123, 7, 21, 2, 2, 123, 125, 8, 10, 1, 2, 124, 120, 3, 2, 2, 2, 125, 128,
+	3, 2, 2, 2, 126, 124, 3, 2, 2, 2, 126, 127, 3, 2, 2, 2, 127, 19, 3, 2,
+	2, 2, 128, 126, 3, 2, 2, 2, 129, 130, 7, 8, 2, 2, 130, 138, 8, 11, 1, 2,
+	131, 132, 7, 7, 2, 2, 132, 138, 8, 11, 1, 2, 133, 134, 7, 9, 2, 2, 134,
+	138, 8, 11, 1, 2, 135, 136, 7, 10, 2, 2, 136, 138, 8, 11, 1, 2, 137, 129,
+	3, 2, 2, 2, 137, 131, 3, 2, 2, 2, 137, 133, 3, 2, 2, 2, 137, 135, 3, 2,
+	2, 2, 138, 21, 3, 2, 2, 2, 139, 140, 5, 24, 13, 2, 140, 141, 8, 12, 1,
+	2, 141, 149, 3, 2, 2, 2, 142, 143, 5, 28, 15, 2, 143, 144, 8, 12, 1, 2,
+	144, 149, 3, 2, 2, 2, 145, 146, 5, 26, 14, 2, 146, 147, 8, 12, 1, 2, 147,
+	149, 3, 2, 2, 2, 148, 139, 3, 2, 2, 2, 148, 142, 3, 2, 2, 2, 148, 145,
+	3, 2, 2, 2, 149, 23, 3, 2, 2, 2, 150, 151, 8, 13, 1, 2, 151, 152, 5, 28,
+	15, 2, 152, 153, 8, 13, 1, 2, 153, 161, 3, 2, 2, 2, 154, 155, 12, 4, 2,
+	2, 155, 156, 9, 2, 2, 2, 156, 157, 5, 24, 13, 5, 157, 158, 8, 13, 1, 2,
+	158, 160, 3, 2, 2, 2, 159, 154, 3, 2, 2, 2, 160, 163, 3, 2, 2, 2, 161,
+	159, 3, 2, 2, 2, 161, 162, 3, 2, 2, 2, 162, 25, 3, 2, 2, 2, 163, 161, 3,
+	2, 2, 2, 164, 165, 5, 24, 13, 2, 165, 166, 9, 3, 2, 2, 166, 167, 5, 24,
+	13, 2, 167, 168, 8, 14, 1, 2, 168, 27, 3, 2, 2, 2, 169, 170, 8, 15, 1,
+	2, 170, 171, 7, 43, 2, 2, 171, 172, 5, 22, 12, 2, 172, 173, 8, 15, 1, 2,
+	173, 183, 3, 2, 2, 2, 174, 175, 5, 30, 16, 2, 175, 176, 8, 15, 1, 2, 176,
+	183, 3, 2, 2, 2, 177, 178, 7, 28, 2, 2, 178, 179, 5, 22, 12, 2, 179, 180,
+	7, 29, 2, 2, 180, 181, 8, 15, 1, 2, 181, 183, 3, 2, 2, 2, 182, 169, 3,
+	2, 2, 2, 182, 174, 3, 2, 2, 2, 182, 177, 3, 2, 2, 2, 183, 196, 3, 2, 2,
+	2, 184, 185, 12, 6, 2, 2, 185, 186, 9, 4, 2, 2, 186, 187, 5, 28, 15, 7,
+	187, 188, 8, 15, 1, 2, 188, 195, 3, 2, 2, 2, 189, 190, 12, 5, 2, 2, 190,
+	191, 9, 5, 2, 2, 191, 192, 5, 28, 15, 6, 192, 193, 8, 15, 1, 2, 193, 195,
+	3, 2, 2, 2, 194, 184, 3, 2, 2, 2, 194, 189, 3, 2, 2, 2, 195, 198, 3, 2,
+	2, 2, 196, 194, 3, 2, 2, 2, 196, 197, 3, 2, 2, 2, 197, 29, 3, 2, 2, 2,
+	198, 196, 3, 2, 2, 2, 199, 200, 7, 17, 2, 2, 200, 210, 8, 16, 1, 2, 201,
+	202, 7, 18, 2, 2, 202, 210, 8, 16, 1, 2, 203, 204, 7, 19, 2, 2, 204, 210,
+	8, 16, 1, 2, 205, 206, 7, 20, 2, 2, 206, 210, 8, 16, 1, 2, 207, 208, 7,
+	21, 2, 2, 208, 210, 8, 16, 1, 2, 209, 199, 3, 2, 2, 2, 209, 201, 3, 2,
+	2, 2, 209, 203, 3, 2, 2, 2, 209, 205, 3, 2, 2, 2, 209, 207, 3, 2, 2, 2,
+	210, 31, 3, 2, 2, 2, 15, 38, 55, 75, 91, 114, 126, 137, 148, 161, 182,
+	194, 196, 209,
 }
 var deserializer = antlr.NewATNDeserializer(nil)
 var deserializedATN = deserializer.DeserializeFromUInt16(parserATN)
@@ -124,9 +135,9 @@ var symbolicNames = []string{
 }
 
 var ruleNames = []string{
-	"start", "instructions", "instruction", "declaration_prod", "assign_prod",
-	"typeDataVar", "listIds", "print_prod", "expression", "expr_rel", "expr_logic",
-	"expr_arit", "primitive",
+	"start", "instructions", "instruction", "print_prod", "declaration_prod",
+	"assign_prod", "conditional_prod", "bloq", "listIds", "typeDataVar", "expression",
+	"expr_rel", "expr_logic", "expr_arit", "primitive",
 }
 var decisionToDFA = make([]*antlr.DFA, len(deserializedATN.DecisionToState))
 
@@ -213,16 +224,18 @@ const (
 	ProjectParserRULE_start            = 0
 	ProjectParserRULE_instructions     = 1
 	ProjectParserRULE_instruction      = 2
-	ProjectParserRULE_declaration_prod = 3
-	ProjectParserRULE_assign_prod      = 4
-	ProjectParserRULE_typeDataVar      = 5
-	ProjectParserRULE_listIds          = 6
-	ProjectParserRULE_print_prod       = 7
-	ProjectParserRULE_expression       = 8
-	ProjectParserRULE_expr_rel         = 9
-	ProjectParserRULE_expr_logic       = 10
-	ProjectParserRULE_expr_arit        = 11
-	ProjectParserRULE_primitive        = 12
+	ProjectParserRULE_print_prod       = 3
+	ProjectParserRULE_declaration_prod = 4
+	ProjectParserRULE_assign_prod      = 5
+	ProjectParserRULE_conditional_prod = 6
+	ProjectParserRULE_bloq             = 7
+	ProjectParserRULE_listIds          = 8
+	ProjectParserRULE_typeDataVar      = 9
+	ProjectParserRULE_expression       = 10
+	ProjectParserRULE_expr_rel         = 11
+	ProjectParserRULE_expr_logic       = 12
+	ProjectParserRULE_expr_arit        = 13
+	ProjectParserRULE_primitive        = 14
 )
 
 // IStartContext is an interface to support dynamic dispatch.
@@ -337,7 +350,7 @@ func (p *ProjectParser) Start() (localctx IStartContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(26)
+		p.SetState(30)
 
 		var _x = p.Instructions()
 
@@ -487,13 +500,13 @@ func (p *ProjectParser) Instructions() (localctx IInstructionsContext) {
 	}()
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(32)
+	p.SetState(36)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	for ((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<ProjectParserSENTENCIA)|(1<<ProjectParserDECLARAR)|(1<<ProjectParserID))) != 0 {
+	for ((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<ProjectParserSENTENCIA)|(1<<ProjectParserDECLARAR)|(1<<ProjectParserRIF)|(1<<ProjectParserID))) != 0 {
 		{
-			p.SetState(29)
+			p.SetState(33)
 
 			var _x = p.Instruction()
 
@@ -501,7 +514,7 @@ func (p *ProjectParser) Instructions() (localctx IInstructionsContext) {
 		}
 		localctx.(*InstructionsContext).e = append(localctx.(*InstructionsContext).e, localctx.(*InstructionsContext)._instruction)
 
-		p.SetState(34)
+		p.SetState(38)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -531,6 +544,9 @@ type IInstructionContext interface {
 	// Get_assign_prod returns the _assign_prod rule contexts.
 	Get_assign_prod() IAssign_prodContext
 
+	// Get_conditional_prod returns the _conditional_prod rule contexts.
+	Get_conditional_prod() IConditional_prodContext
+
 	// Set_print_prod sets the _print_prod rule contexts.
 	Set_print_prod(IPrint_prodContext)
 
@@ -539,6 +555,9 @@ type IInstructionContext interface {
 
 	// Set_assign_prod sets the _assign_prod rule contexts.
 	Set_assign_prod(IAssign_prodContext)
+
+	// Set_conditional_prod sets the _conditional_prod rule contexts.
+	Set_conditional_prod(IConditional_prodContext)
 
 	// GetInstr returns the instr attribute.
 	GetInstr() Abstract.Instruction
@@ -557,6 +576,7 @@ type InstructionContext struct {
 	_print_prod       IPrint_prodContext
 	_declaration_prod IDeclaration_prodContext
 	_assign_prod      IAssign_prodContext
+	_conditional_prod IConditional_prodContext
 }
 
 func NewEmptyInstructionContext() *InstructionContext {
@@ -589,6 +609,10 @@ func (s *InstructionContext) Get_declaration_prod() IDeclaration_prodContext {
 
 func (s *InstructionContext) Get_assign_prod() IAssign_prodContext { return s._assign_prod }
 
+func (s *InstructionContext) Get_conditional_prod() IConditional_prodContext {
+	return s._conditional_prod
+}
+
 func (s *InstructionContext) Set_print_prod(v IPrint_prodContext) { s._print_prod = v }
 
 func (s *InstructionContext) Set_declaration_prod(v IDeclaration_prodContext) {
@@ -596,6 +620,10 @@ func (s *InstructionContext) Set_declaration_prod(v IDeclaration_prodContext) {
 }
 
 func (s *InstructionContext) Set_assign_prod(v IAssign_prodContext) { s._assign_prod = v }
+
+func (s *InstructionContext) Set_conditional_prod(v IConditional_prodContext) {
+	s._conditional_prod = v
+}
 
 func (s *InstructionContext) GetInstr() Abstract.Instruction { return s.instr }
 
@@ -629,6 +657,16 @@ func (s *InstructionContext) Assign_prod() IAssign_prodContext {
 	}
 
 	return t.(IAssign_prodContext)
+}
+
+func (s *InstructionContext) Conditional_prod() IConditional_prodContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IConditional_prodContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IConditional_prodContext)
 }
 
 func (s *InstructionContext) GetRuleContext() antlr.RuleContext {
@@ -671,14 +709,14 @@ func (p *ProjectParser) Instruction() (localctx IInstructionContext) {
 		}
 	}()
 
-	p.SetState(46)
+	p.SetState(53)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case ProjectParserSENTENCIA:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(37)
+			p.SetState(41)
 
 			var _x = p.Print_prod()
 
@@ -689,7 +727,7 @@ func (p *ProjectParser) Instruction() (localctx IInstructionContext) {
 	case ProjectParserDECLARAR:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(40)
+			p.SetState(44)
 
 			var _x = p.Declaration_prod()
 
@@ -700,7 +738,7 @@ func (p *ProjectParser) Instruction() (localctx IInstructionContext) {
 	case ProjectParserID:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(43)
+			p.SetState(47)
 
 			var _x = p.Assign_prod()
 
@@ -708,8 +746,264 @@ func (p *ProjectParser) Instruction() (localctx IInstructionContext) {
 		}
 		localctx.(*InstructionContext).instr = localctx.(*InstructionContext).Get_assign_prod().GetInstr()
 
+	case ProjectParserRIF:
+		p.EnterOuterAlt(localctx, 4)
+		{
+			p.SetState(50)
+
+			var _x = p.Conditional_prod()
+
+			localctx.(*InstructionContext)._conditional_prod = _x
+		}
+		localctx.(*InstructionContext).instr = localctx.(*InstructionContext).Get_conditional_prod().GetInstr()
+
 	default:
 		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
+	}
+
+	return localctx
+}
+
+// IPrint_prodContext is an interface to support dynamic dispatch.
+type IPrint_prodContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// Get_LEFT_PAR returns the _LEFT_PAR token.
+	Get_LEFT_PAR() antlr.Token
+
+	// Set_LEFT_PAR sets the _LEFT_PAR token.
+	Set_LEFT_PAR(antlr.Token)
+
+	// Get_expression returns the _expression rule contexts.
+	Get_expression() IExpressionContext
+
+	// Set_expression sets the _expression rule contexts.
+	Set_expression(IExpressionContext)
+
+	// GetInstr returns the instr attribute.
+	GetInstr() Abstract.Instruction
+
+	// SetInstr sets the instr attribute.
+	SetInstr(Abstract.Instruction)
+
+	// IsPrint_prodContext differentiates from other interfaces.
+	IsPrint_prodContext()
+}
+
+type Print_prodContext struct {
+	*antlr.BaseParserRuleContext
+	parser      antlr.Parser
+	instr       Abstract.Instruction
+	_LEFT_PAR   antlr.Token
+	_expression IExpressionContext
+}
+
+func NewEmptyPrint_prodContext() *Print_prodContext {
+	var p = new(Print_prodContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = ProjectParserRULE_print_prod
+	return p
+}
+
+func (*Print_prodContext) IsPrint_prodContext() {}
+
+func NewPrint_prodContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Print_prodContext {
+	var p = new(Print_prodContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = ProjectParserRULE_print_prod
+
+	return p
+}
+
+func (s *Print_prodContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *Print_prodContext) Get_LEFT_PAR() antlr.Token { return s._LEFT_PAR }
+
+func (s *Print_prodContext) Set_LEFT_PAR(v antlr.Token) { s._LEFT_PAR = v }
+
+func (s *Print_prodContext) Get_expression() IExpressionContext { return s._expression }
+
+func (s *Print_prodContext) Set_expression(v IExpressionContext) { s._expression = v }
+
+func (s *Print_prodContext) GetInstr() Abstract.Instruction { return s.instr }
+
+func (s *Print_prodContext) SetInstr(v Abstract.Instruction) { s.instr = v }
+
+func (s *Print_prodContext) SENTENCIA() antlr.TerminalNode {
+	return s.GetToken(ProjectParserSENTENCIA, 0)
+}
+
+func (s *Print_prodContext) DOT() antlr.TerminalNode {
+	return s.GetToken(ProjectParserDOT, 0)
+}
+
+func (s *Print_prodContext) CONSOLA() antlr.TerminalNode {
+	return s.GetToken(ProjectParserCONSOLA, 0)
+}
+
+func (s *Print_prodContext) LEFT_PAR() antlr.TerminalNode {
+	return s.GetToken(ProjectParserLEFT_PAR, 0)
+}
+
+func (s *Print_prodContext) Expression() IExpressionContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IExpressionContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IExpressionContext)
+}
+
+func (s *Print_prodContext) RIGHT_PAR() antlr.TerminalNode {
+	return s.GetToken(ProjectParserRIGHT_PAR, 0)
+}
+
+func (s *Print_prodContext) SEMICOLON() antlr.TerminalNode {
+	return s.GetToken(ProjectParserSEMICOLON, 0)
+}
+
+func (s *Print_prodContext) CONSOLALN() antlr.TerminalNode {
+	return s.GetToken(ProjectParserCONSOLALN, 0)
+}
+
+func (s *Print_prodContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *Print_prodContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *Print_prodContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(ProjectParserListener); ok {
+		listenerT.EnterPrint_prod(s)
+	}
+}
+
+func (s *Print_prodContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(ProjectParserListener); ok {
+		listenerT.ExitPrint_prod(s)
+	}
+}
+
+func (p *ProjectParser) Print_prod() (localctx IPrint_prodContext) {
+	localctx = NewPrint_prodContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 6, ProjectParserRULE_print_prod)
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.SetState(73)
+	p.GetErrorHandler().Sync(p)
+	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 2, p.GetParserRuleContext()) {
+	case 1:
+		p.EnterOuterAlt(localctx, 1)
+		{
+			p.SetState(55)
+			p.Match(ProjectParserSENTENCIA)
+		}
+		{
+			p.SetState(56)
+			p.Match(ProjectParserDOT)
+		}
+		{
+			p.SetState(57)
+			p.Match(ProjectParserCONSOLA)
+		}
+		{
+			p.SetState(58)
+
+			var _m = p.Match(ProjectParserLEFT_PAR)
+
+			localctx.(*Print_prodContext)._LEFT_PAR = _m
+		}
+		{
+			p.SetState(59)
+
+			var _x = p.Expression()
+
+			localctx.(*Print_prodContext)._expression = _x
+		}
+		{
+			p.SetState(60)
+			p.Match(ProjectParserRIGHT_PAR)
+		}
+		{
+			p.SetState(61)
+			p.Match(ProjectParserSEMICOLON)
+		}
+		localctx.(*Print_prodContext).instr = Natives.NewPrint(localctx.(*Print_prodContext).Get_expression().GetP(), false, (func() int {
+			if localctx.(*Print_prodContext).Get_LEFT_PAR() == nil {
+				return 0
+			} else {
+				return localctx.(*Print_prodContext).Get_LEFT_PAR().GetLine()
+			}
+		}()), localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn())
+
+	case 2:
+		p.EnterOuterAlt(localctx, 2)
+		{
+			p.SetState(64)
+			p.Match(ProjectParserSENTENCIA)
+		}
+		{
+			p.SetState(65)
+			p.Match(ProjectParserDOT)
+		}
+		{
+			p.SetState(66)
+			p.Match(ProjectParserCONSOLALN)
+		}
+		{
+			p.SetState(67)
+
+			var _m = p.Match(ProjectParserLEFT_PAR)
+
+			localctx.(*Print_prodContext)._LEFT_PAR = _m
+		}
+		{
+			p.SetState(68)
+
+			var _x = p.Expression()
+
+			localctx.(*Print_prodContext)._expression = _x
+		}
+		{
+			p.SetState(69)
+			p.Match(ProjectParserRIGHT_PAR)
+		}
+		{
+			p.SetState(70)
+			p.Match(ProjectParserSEMICOLON)
+		}
+		localctx.(*Print_prodContext).instr = Natives.NewPrint(localctx.(*Print_prodContext).Get_expression().GetP(), true, (func() int {
+			if localctx.(*Print_prodContext).Get_LEFT_PAR() == nil {
+				return 0
+			} else {
+				return localctx.(*Print_prodContext).Get_LEFT_PAR().GetLine()
+			}
+		}()), localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn())
+
 	}
 
 	return localctx
@@ -861,7 +1155,7 @@ func (s *Declaration_prodContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *ProjectParser) Declaration_prod() (localctx IDeclaration_prodContext) {
 	localctx = NewDeclaration_prodContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 6, ProjectParserRULE_declaration_prod)
+	p.EnterRule(localctx, 8, ProjectParserRULE_declaration_prod)
 
 	defer func() {
 		p.ExitRule()
@@ -879,42 +1173,42 @@ func (p *ProjectParser) Declaration_prod() (localctx IDeclaration_prodContext) {
 		}
 	}()
 
-	p.SetState(62)
+	p.SetState(89)
 	p.GetErrorHandler().Sync(p)
-	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 2, p.GetParserRuleContext()) {
+	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 3, p.GetParserRuleContext()) {
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(48)
+			p.SetState(75)
 			p.Match(ProjectParserDECLARAR)
 		}
 		{
-			p.SetState(49)
+			p.SetState(76)
 
 			var _x = p.listIds(0)
 
 			localctx.(*Declaration_prodContext)._listIds = _x
 		}
 		{
-			p.SetState(50)
+			p.SetState(77)
 
 			var _x = p.TypeDataVar()
 
 			localctx.(*Declaration_prodContext)._typeDataVar = _x
 		}
 		{
-			p.SetState(51)
+			p.SetState(78)
 			p.Match(ProjectParserEQUAL)
 		}
 		{
-			p.SetState(52)
+			p.SetState(79)
 
 			var _x = p.Expression()
 
 			localctx.(*Declaration_prodContext)._expression = _x
 		}
 		{
-			p.SetState(53)
+			p.SetState(80)
 			p.Match(ProjectParserSEMICOLON)
 		}
 
@@ -923,25 +1217,25 @@ func (p *ProjectParser) Declaration_prod() (localctx IDeclaration_prodContext) {
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(56)
+			p.SetState(83)
 			p.Match(ProjectParserDECLARAR)
 		}
 		{
-			p.SetState(57)
+			p.SetState(84)
 
 			var _x = p.listIds(0)
 
 			localctx.(*Declaration_prodContext)._listIds = _x
 		}
 		{
-			p.SetState(58)
+			p.SetState(85)
 
 			var _x = p.TypeDataVar()
 
 			localctx.(*Declaration_prodContext)._typeDataVar = _x
 		}
 		{
-			p.SetState(59)
+			p.SetState(86)
 			p.Match(ProjectParserSEMICOLON)
 		}
 
@@ -1073,7 +1367,7 @@ func (s *Assign_prodContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *ProjectParser) Assign_prod() (localctx IAssign_prodContext) {
 	localctx = NewAssign_prodContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 8, ProjectParserRULE_assign_prod)
+	p.EnterRule(localctx, 10, ProjectParserRULE_assign_prod)
 
 	defer func() {
 		p.ExitRule()
@@ -1093,25 +1387,25 @@ func (p *ProjectParser) Assign_prod() (localctx IAssign_prodContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(64)
+		p.SetState(91)
 
 		var _x = p.listIds(0)
 
 		localctx.(*Assign_prodContext)._listIds = _x
 	}
 	{
-		p.SetState(65)
+		p.SetState(92)
 		p.Match(ProjectParserEQUAL)
 	}
 	{
-		p.SetState(66)
+		p.SetState(93)
 
 		var _x = p.Expression()
 
 		localctx.(*Assign_prodContext)._expression = _x
 	}
 	{
-		p.SetState(67)
+		p.SetState(94)
 		p.Match(ProjectParserSEMICOLON)
 	}
 
@@ -1120,94 +1414,132 @@ func (p *ProjectParser) Assign_prod() (localctx IAssign_prodContext) {
 	return localctx
 }
 
-// ITypeDataVarContext is an interface to support dynamic dispatch.
-type ITypeDataVarContext interface {
+// IConditional_prodContext is an interface to support dynamic dispatch.
+type IConditional_prodContext interface {
 	antlr.ParserRuleContext
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
-	// GetT returns the t attribute.
-	GetT() SymbolTable.DataType
+	// Get_expression returns the _expression rule contexts.
+	Get_expression() IExpressionContext
 
-	// SetT sets the t attribute.
-	SetT(SymbolTable.DataType)
+	// Get_bloq returns the _bloq rule contexts.
+	Get_bloq() IBloqContext
 
-	// IsTypeDataVarContext differentiates from other interfaces.
-	IsTypeDataVarContext()
+	// Set_expression sets the _expression rule contexts.
+	Set_expression(IExpressionContext)
+
+	// Set_bloq sets the _bloq rule contexts.
+	Set_bloq(IBloqContext)
+
+	// GetInstr returns the instr attribute.
+	GetInstr() Abstract.Instruction
+
+	// SetInstr sets the instr attribute.
+	SetInstr(Abstract.Instruction)
+
+	// IsConditional_prodContext differentiates from other interfaces.
+	IsConditional_prodContext()
 }
 
-type TypeDataVarContext struct {
+type Conditional_prodContext struct {
 	*antlr.BaseParserRuleContext
-	parser antlr.Parser
-	t      SymbolTable.DataType
+	parser      antlr.Parser
+	instr       Abstract.Instruction
+	_expression IExpressionContext
+	_bloq       IBloqContext
 }
 
-func NewEmptyTypeDataVarContext() *TypeDataVarContext {
-	var p = new(TypeDataVarContext)
+func NewEmptyConditional_prodContext() *Conditional_prodContext {
+	var p = new(Conditional_prodContext)
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
-	p.RuleIndex = ProjectParserRULE_typeDataVar
+	p.RuleIndex = ProjectParserRULE_conditional_prod
 	return p
 }
 
-func (*TypeDataVarContext) IsTypeDataVarContext() {}
+func (*Conditional_prodContext) IsConditional_prodContext() {}
 
-func NewTypeDataVarContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *TypeDataVarContext {
-	var p = new(TypeDataVarContext)
+func NewConditional_prodContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Conditional_prodContext {
+	var p = new(Conditional_prodContext)
 
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = ProjectParserRULE_typeDataVar
+	p.RuleIndex = ProjectParserRULE_conditional_prod
 
 	return p
 }
 
-func (s *TypeDataVarContext) GetParser() antlr.Parser { return s.parser }
+func (s *Conditional_prodContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *TypeDataVarContext) GetT() SymbolTable.DataType { return s.t }
+func (s *Conditional_prodContext) Get_expression() IExpressionContext { return s._expression }
 
-func (s *TypeDataVarContext) SetT(v SymbolTable.DataType) { s.t = v }
+func (s *Conditional_prodContext) Get_bloq() IBloqContext { return s._bloq }
 
-func (s *TypeDataVarContext) RINTEGER() antlr.TerminalNode {
-	return s.GetToken(ProjectParserRINTEGER, 0)
+func (s *Conditional_prodContext) Set_expression(v IExpressionContext) { s._expression = v }
+
+func (s *Conditional_prodContext) Set_bloq(v IBloqContext) { s._bloq = v }
+
+func (s *Conditional_prodContext) GetInstr() Abstract.Instruction { return s.instr }
+
+func (s *Conditional_prodContext) SetInstr(v Abstract.Instruction) { s.instr = v }
+
+func (s *Conditional_prodContext) RIF() antlr.TerminalNode {
+	return s.GetToken(ProjectParserRIF, 0)
 }
 
-func (s *TypeDataVarContext) RSTRING() antlr.TerminalNode {
-	return s.GetToken(ProjectParserRSTRING, 0)
+func (s *Conditional_prodContext) LEFT_PAR() antlr.TerminalNode {
+	return s.GetToken(ProjectParserLEFT_PAR, 0)
 }
 
-func (s *TypeDataVarContext) RREAL() antlr.TerminalNode {
-	return s.GetToken(ProjectParserRREAL, 0)
+func (s *Conditional_prodContext) Expression() IExpressionContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IExpressionContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IExpressionContext)
 }
 
-func (s *TypeDataVarContext) RBOOLEAN() antlr.TerminalNode {
-	return s.GetToken(ProjectParserRBOOLEAN, 0)
+func (s *Conditional_prodContext) RIGHT_PAR() antlr.TerminalNode {
+	return s.GetToken(ProjectParserRIGHT_PAR, 0)
 }
 
-func (s *TypeDataVarContext) GetRuleContext() antlr.RuleContext {
+func (s *Conditional_prodContext) Bloq() IBloqContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IBloqContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IBloqContext)
+}
+
+func (s *Conditional_prodContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
 
-func (s *TypeDataVarContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+func (s *Conditional_prodContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
-func (s *TypeDataVarContext) EnterRule(listener antlr.ParseTreeListener) {
+func (s *Conditional_prodContext) EnterRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(ProjectParserListener); ok {
-		listenerT.EnterTypeDataVar(s)
+		listenerT.EnterConditional_prod(s)
 	}
 }
 
-func (s *TypeDataVarContext) ExitRule(listener antlr.ParseTreeListener) {
+func (s *Conditional_prodContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(ProjectParserListener); ok {
-		listenerT.ExitTypeDataVar(s)
+		listenerT.ExitConditional_prod(s)
 	}
 }
 
-func (p *ProjectParser) TypeDataVar() (localctx ITypeDataVarContext) {
-	localctx = NewTypeDataVarContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 10, ProjectParserRULE_typeDataVar)
+func (p *ProjectParser) Conditional_prod() (localctx IConditional_prodContext) {
+	localctx = NewConditional_prodContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 12, ProjectParserRULE_conditional_prod)
 
 	defer func() {
 		p.ExitRule()
@@ -1225,44 +1557,190 @@ func (p *ProjectParser) TypeDataVar() (localctx ITypeDataVarContext) {
 		}
 	}()
 
-	p.SetState(78)
-	p.GetErrorHandler().Sync(p)
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(97)
+		p.Match(ProjectParserRIF)
+	}
+	{
+		p.SetState(98)
+		p.Match(ProjectParserLEFT_PAR)
+	}
+	{
+		p.SetState(99)
 
-	switch p.GetTokenStream().LA(1) {
-	case ProjectParserRINTEGER:
+		var _x = p.Expression()
+
+		localctx.(*Conditional_prodContext)._expression = _x
+	}
+	{
+		p.SetState(100)
+		p.Match(ProjectParserRIGHT_PAR)
+	}
+	{
+		p.SetState(101)
+
+		var _x = p.Bloq()
+
+		localctx.(*Conditional_prodContext)._bloq = _x
+	}
+	localctx.(*Conditional_prodContext).instr = Natives.NewIf(localctx.(*Conditional_prodContext).Get_expression().GetP(), localctx.(*Conditional_prodContext).Get_bloq().GetContent(), nil, nil)
+
+	return localctx
+}
+
+// IBloqContext is an interface to support dynamic dispatch.
+type IBloqContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// Get_instructions returns the _instructions rule contexts.
+	Get_instructions() IInstructionsContext
+
+	// Set_instructions sets the _instructions rule contexts.
+	Set_instructions(IInstructionsContext)
+
+	// GetContent returns the content attribute.
+	GetContent() *arrayList.List
+
+	// SetContent sets the content attribute.
+	SetContent(*arrayList.List)
+
+	// IsBloqContext differentiates from other interfaces.
+	IsBloqContext()
+}
+
+type BloqContext struct {
+	*antlr.BaseParserRuleContext
+	parser        antlr.Parser
+	content       *arrayList.List
+	_instructions IInstructionsContext
+}
+
+func NewEmptyBloqContext() *BloqContext {
+	var p = new(BloqContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = ProjectParserRULE_bloq
+	return p
+}
+
+func (*BloqContext) IsBloqContext() {}
+
+func NewBloqContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *BloqContext {
+	var p = new(BloqContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = ProjectParserRULE_bloq
+
+	return p
+}
+
+func (s *BloqContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *BloqContext) Get_instructions() IInstructionsContext { return s._instructions }
+
+func (s *BloqContext) Set_instructions(v IInstructionsContext) { s._instructions = v }
+
+func (s *BloqContext) GetContent() *arrayList.List { return s.content }
+
+func (s *BloqContext) SetContent(v *arrayList.List) { s.content = v }
+
+func (s *BloqContext) LEFT_BRACKET() antlr.TerminalNode {
+	return s.GetToken(ProjectParserLEFT_BRACKET, 0)
+}
+
+func (s *BloqContext) Instructions() IInstructionsContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*IInstructionsContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(IInstructionsContext)
+}
+
+func (s *BloqContext) RIGHT_BRACKET() antlr.TerminalNode {
+	return s.GetToken(ProjectParserRIGHT_BRACKET, 0)
+}
+
+func (s *BloqContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *BloqContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *BloqContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(ProjectParserListener); ok {
+		listenerT.EnterBloq(s)
+	}
+}
+
+func (s *BloqContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(ProjectParserListener); ok {
+		listenerT.ExitBloq(s)
+	}
+}
+
+func (p *ProjectParser) Bloq() (localctx IBloqContext) {
+	localctx = NewBloqContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 14, ProjectParserRULE_bloq)
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.SetState(112)
+	p.GetErrorHandler().Sync(p)
+	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 4, p.GetParserRuleContext()) {
+	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(70)
-			p.Match(ProjectParserRINTEGER)
+			p.SetState(104)
+			p.Match(ProjectParserLEFT_BRACKET)
 		}
-		localctx.(*TypeDataVarContext).t = SymbolTable.INTEGER
+		{
+			p.SetState(105)
 
-	case ProjectParserRSTRING:
+			var _x = p.Instructions()
+
+			localctx.(*BloqContext)._instructions = _x
+		}
+		{
+			p.SetState(106)
+			p.Match(ProjectParserRIGHT_BRACKET)
+		}
+		localctx.(*BloqContext).content = localctx.(*BloqContext).Get_instructions().GetL()
+
+	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(72)
-			p.Match(ProjectParserRSTRING)
+			p.SetState(109)
+			p.Match(ProjectParserLEFT_BRACKET)
 		}
-		localctx.(*TypeDataVarContext).t = SymbolTable.STRING
-
-	case ProjectParserRREAL:
-		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(74)
-			p.Match(ProjectParserRREAL)
+			p.SetState(110)
+			p.Match(ProjectParserRIGHT_BRACKET)
 		}
-		localctx.(*TypeDataVarContext).t = SymbolTable.FLOAT
+		localctx.(*BloqContext).content = arrayList.New()
 
-	case ProjectParserRBOOLEAN:
-		p.EnterOuterAlt(localctx, 4)
-		{
-			p.SetState(76)
-			p.Match(ProjectParserRBOOLEAN)
-		}
-		localctx.(*TypeDataVarContext).t = SymbolTable.BOOLEAN
-
-	default:
-		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
 	}
 
 	return localctx
@@ -1387,8 +1865,8 @@ func (p *ProjectParser) listIds(_p int) (localctx IListIdsContext) {
 	localctx = NewListIdsContext(p, p.GetParserRuleContext(), _parentState)
 	var _prevctx IListIdsContext = localctx
 	var _ antlr.ParserRuleContext = _prevctx // TODO: To prevent unused variable warning.
-	_startState := 12
-	p.EnterRecursionRule(localctx, 12, ProjectParserRULE_listIds, _p)
+	_startState := 16
+	p.EnterRecursionRule(localctx, 16, ProjectParserRULE_listIds, _p)
 
 	localctx.(*ListIdsContext).list = arrayList.New()
 
@@ -1412,7 +1890,7 @@ func (p *ProjectParser) listIds(_p int) (localctx IListIdsContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(81)
+		p.SetState(115)
 
 		var _m = p.Match(ProjectParserID)
 
@@ -1433,9 +1911,9 @@ func (p *ProjectParser) listIds(_p int) (localctx IListIdsContext) {
 	}()), localctx.(*ListIdsContext).Get_ID().GetColumn()))
 
 	p.GetParserRuleContext().SetStop(p.GetTokenStream().LT(-1))
-	p.SetState(90)
+	p.SetState(124)
 	p.GetErrorHandler().Sync(p)
-	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 4, p.GetParserRuleContext())
+	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 5, p.GetParserRuleContext())
 
 	for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
 		if _alt == 1 {
@@ -1446,17 +1924,17 @@ func (p *ProjectParser) listIds(_p int) (localctx IListIdsContext) {
 			localctx = NewListIdsContext(p, _parentctx, _parentState)
 			localctx.(*ListIdsContext).sub = _prevctx
 			p.PushNewRecursionContext(localctx, _startState, ProjectParserRULE_listIds)
-			p.SetState(84)
+			p.SetState(118)
 
 			if !(p.Precpred(p.GetParserRuleContext(), 2)) {
 				panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 2)", ""))
 			}
 			{
-				p.SetState(85)
+				p.SetState(119)
 				p.Match(ProjectParserCOMMA)
 			}
 			{
-				p.SetState(86)
+				p.SetState(120)
 
 				var _m = p.Match(ProjectParserID)
 
@@ -1479,146 +1957,102 @@ func (p *ProjectParser) listIds(_p int) (localctx IListIdsContext) {
 			localctx.(*ListIdsContext).list = localctx.(*ListIdsContext).GetSub().GetList()
 
 		}
-		p.SetState(92)
+		p.SetState(126)
 		p.GetErrorHandler().Sync(p)
-		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 4, p.GetParserRuleContext())
+		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 5, p.GetParserRuleContext())
 	}
 
 	return localctx
 }
 
-// IPrint_prodContext is an interface to support dynamic dispatch.
-type IPrint_prodContext interface {
+// ITypeDataVarContext is an interface to support dynamic dispatch.
+type ITypeDataVarContext interface {
 	antlr.ParserRuleContext
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
-	// Get_LEFT_PAR returns the _LEFT_PAR token.
-	Get_LEFT_PAR() antlr.Token
+	// GetT returns the t attribute.
+	GetT() SymbolTable.DataType
 
-	// Set_LEFT_PAR sets the _LEFT_PAR token.
-	Set_LEFT_PAR(antlr.Token)
+	// SetT sets the t attribute.
+	SetT(SymbolTable.DataType)
 
-	// Get_expression returns the _expression rule contexts.
-	Get_expression() IExpressionContext
-
-	// Set_expression sets the _expression rule contexts.
-	Set_expression(IExpressionContext)
-
-	// GetInstr returns the instr attribute.
-	GetInstr() Abstract.Instruction
-
-	// SetInstr sets the instr attribute.
-	SetInstr(Abstract.Instruction)
-
-	// IsPrint_prodContext differentiates from other interfaces.
-	IsPrint_prodContext()
+	// IsTypeDataVarContext differentiates from other interfaces.
+	IsTypeDataVarContext()
 }
 
-type Print_prodContext struct {
+type TypeDataVarContext struct {
 	*antlr.BaseParserRuleContext
-	parser      antlr.Parser
-	instr       Abstract.Instruction
-	_LEFT_PAR   antlr.Token
-	_expression IExpressionContext
+	parser antlr.Parser
+	t      SymbolTable.DataType
 }
 
-func NewEmptyPrint_prodContext() *Print_prodContext {
-	var p = new(Print_prodContext)
+func NewEmptyTypeDataVarContext() *TypeDataVarContext {
+	var p = new(TypeDataVarContext)
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
-	p.RuleIndex = ProjectParserRULE_print_prod
+	p.RuleIndex = ProjectParserRULE_typeDataVar
 	return p
 }
 
-func (*Print_prodContext) IsPrint_prodContext() {}
+func (*TypeDataVarContext) IsTypeDataVarContext() {}
 
-func NewPrint_prodContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Print_prodContext {
-	var p = new(Print_prodContext)
+func NewTypeDataVarContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *TypeDataVarContext {
+	var p = new(TypeDataVarContext)
 
 	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
 
 	p.parser = parser
-	p.RuleIndex = ProjectParserRULE_print_prod
+	p.RuleIndex = ProjectParserRULE_typeDataVar
 
 	return p
 }
 
-func (s *Print_prodContext) GetParser() antlr.Parser { return s.parser }
+func (s *TypeDataVarContext) GetParser() antlr.Parser { return s.parser }
 
-func (s *Print_prodContext) Get_LEFT_PAR() antlr.Token { return s._LEFT_PAR }
+func (s *TypeDataVarContext) GetT() SymbolTable.DataType { return s.t }
 
-func (s *Print_prodContext) Set_LEFT_PAR(v antlr.Token) { s._LEFT_PAR = v }
+func (s *TypeDataVarContext) SetT(v SymbolTable.DataType) { s.t = v }
 
-func (s *Print_prodContext) Get_expression() IExpressionContext { return s._expression }
-
-func (s *Print_prodContext) Set_expression(v IExpressionContext) { s._expression = v }
-
-func (s *Print_prodContext) GetInstr() Abstract.Instruction { return s.instr }
-
-func (s *Print_prodContext) SetInstr(v Abstract.Instruction) { s.instr = v }
-
-func (s *Print_prodContext) SENTENCIA() antlr.TerminalNode {
-	return s.GetToken(ProjectParserSENTENCIA, 0)
+func (s *TypeDataVarContext) RINTEGER() antlr.TerminalNode {
+	return s.GetToken(ProjectParserRINTEGER, 0)
 }
 
-func (s *Print_prodContext) DOT() antlr.TerminalNode {
-	return s.GetToken(ProjectParserDOT, 0)
+func (s *TypeDataVarContext) RSTRING() antlr.TerminalNode {
+	return s.GetToken(ProjectParserRSTRING, 0)
 }
 
-func (s *Print_prodContext) CONSOLA() antlr.TerminalNode {
-	return s.GetToken(ProjectParserCONSOLA, 0)
+func (s *TypeDataVarContext) RREAL() antlr.TerminalNode {
+	return s.GetToken(ProjectParserRREAL, 0)
 }
 
-func (s *Print_prodContext) LEFT_PAR() antlr.TerminalNode {
-	return s.GetToken(ProjectParserLEFT_PAR, 0)
+func (s *TypeDataVarContext) RBOOLEAN() antlr.TerminalNode {
+	return s.GetToken(ProjectParserRBOOLEAN, 0)
 }
 
-func (s *Print_prodContext) Expression() IExpressionContext {
-	var t = s.GetTypedRuleContext(reflect.TypeOf((*IExpressionContext)(nil)).Elem(), 0)
-
-	if t == nil {
-		return nil
-	}
-
-	return t.(IExpressionContext)
-}
-
-func (s *Print_prodContext) RIGHT_PAR() antlr.TerminalNode {
-	return s.GetToken(ProjectParserRIGHT_PAR, 0)
-}
-
-func (s *Print_prodContext) SEMICOLON() antlr.TerminalNode {
-	return s.GetToken(ProjectParserSEMICOLON, 0)
-}
-
-func (s *Print_prodContext) CONSOLALN() antlr.TerminalNode {
-	return s.GetToken(ProjectParserCONSOLALN, 0)
-}
-
-func (s *Print_prodContext) GetRuleContext() antlr.RuleContext {
+func (s *TypeDataVarContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
 
-func (s *Print_prodContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+func (s *TypeDataVarContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
 	return antlr.TreesStringTree(s, ruleNames, recog)
 }
 
-func (s *Print_prodContext) EnterRule(listener antlr.ParseTreeListener) {
+func (s *TypeDataVarContext) EnterRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(ProjectParserListener); ok {
-		listenerT.EnterPrint_prod(s)
+		listenerT.EnterTypeDataVar(s)
 	}
 }
 
-func (s *Print_prodContext) ExitRule(listener antlr.ParseTreeListener) {
+func (s *TypeDataVarContext) ExitRule(listener antlr.ParseTreeListener) {
 	if listenerT, ok := listener.(ProjectParserListener); ok {
-		listenerT.ExitPrint_prod(s)
+		listenerT.ExitTypeDataVar(s)
 	}
 }
 
-func (p *ProjectParser) Print_prod() (localctx IPrint_prodContext) {
-	localctx = NewPrint_prodContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 14, ProjectParserRULE_print_prod)
+func (p *ProjectParser) TypeDataVar() (localctx ITypeDataVarContext) {
+	localctx = NewTypeDataVarContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 18, ProjectParserRULE_typeDataVar)
 
 	defer func() {
 		p.ExitRule()
@@ -1636,97 +2070,44 @@ func (p *ProjectParser) Print_prod() (localctx IPrint_prodContext) {
 		}
 	}()
 
-	p.SetState(111)
+	p.SetState(135)
 	p.GetErrorHandler().Sync(p)
-	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 5, p.GetParserRuleContext()) {
-	case 1:
+
+	switch p.GetTokenStream().LA(1) {
+	case ProjectParserRINTEGER:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(93)
-			p.Match(ProjectParserSENTENCIA)
+			p.SetState(127)
+			p.Match(ProjectParserRINTEGER)
 		}
-		{
-			p.SetState(94)
-			p.Match(ProjectParserDOT)
-		}
-		{
-			p.SetState(95)
-			p.Match(ProjectParserCONSOLA)
-		}
-		{
-			p.SetState(96)
+		localctx.(*TypeDataVarContext).t = SymbolTable.INTEGER
 
-			var _m = p.Match(ProjectParserLEFT_PAR)
-
-			localctx.(*Print_prodContext)._LEFT_PAR = _m
-		}
-		{
-			p.SetState(97)
-
-			var _x = p.Expression()
-
-			localctx.(*Print_prodContext)._expression = _x
-		}
-		{
-			p.SetState(98)
-			p.Match(ProjectParserRIGHT_PAR)
-		}
-		{
-			p.SetState(99)
-			p.Match(ProjectParserSEMICOLON)
-		}
-		localctx.(*Print_prodContext).instr = Natives.NewPrint(localctx.(*Print_prodContext).Get_expression().GetP(), false, (func() int {
-			if localctx.(*Print_prodContext).Get_LEFT_PAR() == nil {
-				return 0
-			} else {
-				return localctx.(*Print_prodContext).Get_LEFT_PAR().GetLine()
-			}
-		}()), localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn())
-
-	case 2:
+	case ProjectParserRSTRING:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(102)
-			p.Match(ProjectParserSENTENCIA)
+			p.SetState(129)
+			p.Match(ProjectParserRSTRING)
 		}
-		{
-			p.SetState(103)
-			p.Match(ProjectParserDOT)
-		}
-		{
-			p.SetState(104)
-			p.Match(ProjectParserCONSOLALN)
-		}
-		{
-			p.SetState(105)
+		localctx.(*TypeDataVarContext).t = SymbolTable.STRING
 
-			var _m = p.Match(ProjectParserLEFT_PAR)
-
-			localctx.(*Print_prodContext)._LEFT_PAR = _m
-		}
+	case ProjectParserRREAL:
+		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(106)
-
-			var _x = p.Expression()
-
-			localctx.(*Print_prodContext)._expression = _x
+			p.SetState(131)
+			p.Match(ProjectParserRREAL)
 		}
+		localctx.(*TypeDataVarContext).t = SymbolTable.FLOAT
+
+	case ProjectParserRBOOLEAN:
+		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(107)
-			p.Match(ProjectParserRIGHT_PAR)
+			p.SetState(133)
+			p.Match(ProjectParserRBOOLEAN)
 		}
-		{
-			p.SetState(108)
-			p.Match(ProjectParserSEMICOLON)
-		}
-		localctx.(*Print_prodContext).instr = Natives.NewPrint(localctx.(*Print_prodContext).Get_expression().GetP(), true, (func() int {
-			if localctx.(*Print_prodContext).Get_LEFT_PAR() == nil {
-				return 0
-			} else {
-				return localctx.(*Print_prodContext).Get_LEFT_PAR().GetLine()
-			}
-		}()), localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn())
+		localctx.(*TypeDataVarContext).t = SymbolTable.BOOLEAN
 
+	default:
+		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
 	}
 
 	return localctx
@@ -1866,7 +2247,7 @@ func (s *ExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *ProjectParser) Expression() (localctx IExpressionContext) {
 	localctx = NewExpressionContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 16, ProjectParserRULE_expression)
+	p.EnterRule(localctx, 20, ProjectParserRULE_expression)
 
 	defer func() {
 		p.ExitRule()
@@ -1884,13 +2265,13 @@ func (p *ProjectParser) Expression() (localctx IExpressionContext) {
 		}
 	}()
 
-	p.SetState(122)
+	p.SetState(146)
 	p.GetErrorHandler().Sync(p)
-	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 6, p.GetParserRuleContext()) {
+	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 7, p.GetParserRuleContext()) {
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(113)
+			p.SetState(137)
 
 			var _x = p.expr_rel(0)
 
@@ -1901,7 +2282,7 @@ func (p *ProjectParser) Expression() (localctx IExpressionContext) {
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(116)
+			p.SetState(140)
 
 			var _x = p.expr_arit(0)
 
@@ -1912,7 +2293,7 @@ func (p *ProjectParser) Expression() (localctx IExpressionContext) {
 	case 3:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(119)
+			p.SetState(143)
 
 			var _x = p.Expr_logic()
 
@@ -2101,8 +2482,8 @@ func (p *ProjectParser) expr_rel(_p int) (localctx IExpr_relContext) {
 	localctx = NewExpr_relContext(p, p.GetParserRuleContext(), _parentState)
 	var _prevctx IExpr_relContext = localctx
 	var _ antlr.ParserRuleContext = _prevctx // TODO: To prevent unused variable warning.
-	_startState := 18
-	p.EnterRecursionRule(localctx, 18, ProjectParserRULE_expr_rel, _p)
+	_startState := 22
+	p.EnterRecursionRule(localctx, 22, ProjectParserRULE_expr_rel, _p)
 	var _la int
 
 	defer func() {
@@ -2125,7 +2506,7 @@ func (p *ProjectParser) expr_rel(_p int) (localctx IExpr_relContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(125)
+		p.SetState(149)
 
 		var _x = p.expr_arit(0)
 
@@ -2134,9 +2515,9 @@ func (p *ProjectParser) expr_rel(_p int) (localctx IExpr_relContext) {
 	localctx.(*Expr_relContext).p = localctx.(*Expr_relContext).Get_expr_arit().GetP()
 
 	p.GetParserRuleContext().SetStop(p.GetTokenStream().LT(-1))
-	p.SetState(135)
+	p.SetState(159)
 	p.GetErrorHandler().Sync(p)
-	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 7, p.GetParserRuleContext())
+	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 8, p.GetParserRuleContext())
 
 	for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
 		if _alt == 1 {
@@ -2147,13 +2528,13 @@ func (p *ProjectParser) expr_rel(_p int) (localctx IExpr_relContext) {
 			localctx = NewExpr_relContext(p, _parentctx, _parentState)
 			localctx.(*Expr_relContext).opLeft = _prevctx
 			p.PushNewRecursionContext(localctx, _startState, ProjectParserRULE_expr_rel)
-			p.SetState(128)
+			p.SetState(152)
 
 			if !(p.Precpred(p.GetParserRuleContext(), 2)) {
 				panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 2)", ""))
 			}
 			{
-				p.SetState(129)
+				p.SetState(153)
 
 				var _lt = p.GetTokenStream().LT(1)
 
@@ -2171,7 +2552,7 @@ func (p *ProjectParser) expr_rel(_p int) (localctx IExpr_relContext) {
 				}
 			}
 			{
-				p.SetState(130)
+				p.SetState(154)
 
 				var _x = p.expr_rel(3)
 
@@ -2192,9 +2573,9 @@ func (p *ProjectParser) expr_rel(_p int) (localctx IExpr_relContext) {
 			}()), localctx.(*Expr_relContext).GetOp().GetColumn())
 
 		}
-		p.SetState(137)
+		p.SetState(161)
 		p.GetErrorHandler().Sync(p)
-		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 7, p.GetParserRuleContext())
+		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 8, p.GetParserRuleContext())
 	}
 
 	return localctx
@@ -2335,7 +2716,7 @@ func (s *Expr_logicContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *ProjectParser) Expr_logic() (localctx IExpr_logicContext) {
 	localctx = NewExpr_logicContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 20, ProjectParserRULE_expr_logic)
+	p.EnterRule(localctx, 24, ProjectParserRULE_expr_logic)
 	var _la int
 
 	defer func() {
@@ -2356,14 +2737,14 @@ func (p *ProjectParser) Expr_logic() (localctx IExpr_logicContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(138)
+		p.SetState(162)
 
 		var _x = p.expr_rel(0)
 
 		localctx.(*Expr_logicContext).opLeft = _x
 	}
 	{
-		p.SetState(139)
+		p.SetState(163)
 
 		var _lt = p.GetTokenStream().LT(1)
 
@@ -2381,7 +2762,7 @@ func (p *ProjectParser) Expr_logic() (localctx IExpr_logicContext) {
 		}
 	}
 	{
-		p.SetState(140)
+		p.SetState(164)
 
 		var _x = p.expr_rel(0)
 
@@ -2620,8 +3001,8 @@ func (p *ProjectParser) expr_arit(_p int) (localctx IExpr_aritContext) {
 	localctx = NewExpr_aritContext(p, p.GetParserRuleContext(), _parentState)
 	var _prevctx IExpr_aritContext = localctx
 	var _ antlr.ParserRuleContext = _prevctx // TODO: To prevent unused variable warning.
-	_startState := 22
-	p.EnterRecursionRule(localctx, 22, ProjectParserRULE_expr_arit, _p)
+	_startState := 26
+	p.EnterRecursionRule(localctx, 26, ProjectParserRULE_expr_arit, _p)
 	var _la int
 
 	defer func() {
@@ -2643,17 +3024,17 @@ func (p *ProjectParser) expr_arit(_p int) (localctx IExpr_aritContext) {
 	var _alt int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(156)
+	p.SetState(180)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case ProjectParserSUB:
 		{
-			p.SetState(144)
+			p.SetState(168)
 			p.Match(ProjectParserSUB)
 		}
 		{
-			p.SetState(145)
+			p.SetState(169)
 
 			var _x = p.Expression()
 
@@ -2664,7 +3045,7 @@ func (p *ProjectParser) expr_arit(_p int) (localctx IExpr_aritContext) {
 
 	case ProjectParserINTEGER, ProjectParserFLOAT, ProjectParserSTRING, ProjectParserBOOLEAN, ProjectParserID:
 		{
-			p.SetState(148)
+			p.SetState(172)
 
 			var _x = p.Primitive()
 
@@ -2674,18 +3055,18 @@ func (p *ProjectParser) expr_arit(_p int) (localctx IExpr_aritContext) {
 
 	case ProjectParserLEFT_PAR:
 		{
-			p.SetState(151)
+			p.SetState(175)
 			p.Match(ProjectParserLEFT_PAR)
 		}
 		{
-			p.SetState(152)
+			p.SetState(176)
 
 			var _x = p.Expression()
 
 			localctx.(*Expr_aritContext)._expression = _x
 		}
 		{
-			p.SetState(153)
+			p.SetState(177)
 			p.Match(ProjectParserRIGHT_PAR)
 		}
 		localctx.(*Expr_aritContext).p = localctx.(*Expr_aritContext).Get_expression().GetP()
@@ -2694,9 +3075,9 @@ func (p *ProjectParser) expr_arit(_p int) (localctx IExpr_aritContext) {
 		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
 	}
 	p.GetParserRuleContext().SetStop(p.GetTokenStream().LT(-1))
-	p.SetState(170)
+	p.SetState(194)
 	p.GetErrorHandler().Sync(p)
-	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 10, p.GetParserRuleContext())
+	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 11, p.GetParserRuleContext())
 
 	for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
 		if _alt == 1 {
@@ -2704,20 +3085,20 @@ func (p *ProjectParser) expr_arit(_p int) (localctx IExpr_aritContext) {
 				p.TriggerExitRuleEvent()
 			}
 			_prevctx = localctx
-			p.SetState(168)
+			p.SetState(192)
 			p.GetErrorHandler().Sync(p)
-			switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 9, p.GetParserRuleContext()) {
+			switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 10, p.GetParserRuleContext()) {
 			case 1:
 				localctx = NewExpr_aritContext(p, _parentctx, _parentState)
 				localctx.(*Expr_aritContext).opLeft = _prevctx
 				p.PushNewRecursionContext(localctx, _startState, ProjectParserRULE_expr_arit)
-				p.SetState(158)
+				p.SetState(182)
 
 				if !(p.Precpred(p.GetParserRuleContext(), 4)) {
 					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 4)", ""))
 				}
 				{
-					p.SetState(159)
+					p.SetState(183)
 
 					var _lt = p.GetTokenStream().LT(1)
 
@@ -2735,7 +3116,7 @@ func (p *ProjectParser) expr_arit(_p int) (localctx IExpr_aritContext) {
 					}
 				}
 				{
-					p.SetState(160)
+					p.SetState(184)
 
 					var _x = p.expr_arit(5)
 
@@ -2759,13 +3140,13 @@ func (p *ProjectParser) expr_arit(_p int) (localctx IExpr_aritContext) {
 				localctx = NewExpr_aritContext(p, _parentctx, _parentState)
 				localctx.(*Expr_aritContext).opLeft = _prevctx
 				p.PushNewRecursionContext(localctx, _startState, ProjectParserRULE_expr_arit)
-				p.SetState(163)
+				p.SetState(187)
 
 				if !(p.Precpred(p.GetParserRuleContext(), 3)) {
 					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 3)", ""))
 				}
 				{
-					p.SetState(164)
+					p.SetState(188)
 
 					var _lt = p.GetTokenStream().LT(1)
 
@@ -2783,7 +3164,7 @@ func (p *ProjectParser) expr_arit(_p int) (localctx IExpr_aritContext) {
 					}
 				}
 				{
-					p.SetState(165)
+					p.SetState(189)
 
 					var _x = p.expr_arit(4)
 
@@ -2806,9 +3187,9 @@ func (p *ProjectParser) expr_arit(_p int) (localctx IExpr_aritContext) {
 			}
 
 		}
-		p.SetState(172)
+		p.SetState(196)
 		p.GetErrorHandler().Sync(p)
-		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 10, p.GetParserRuleContext())
+		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 11, p.GetParserRuleContext())
 	}
 
 	return localctx
@@ -2960,7 +3341,7 @@ func (s *PrimitiveContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *ProjectParser) Primitive() (localctx IPrimitiveContext) {
 	localctx = NewPrimitiveContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 24, ProjectParserRULE_primitive)
+	p.EnterRule(localctx, 28, ProjectParserRULE_primitive)
 
 	defer func() {
 		p.ExitRule()
@@ -2978,14 +3359,14 @@ func (p *ProjectParser) Primitive() (localctx IPrimitiveContext) {
 		}
 	}()
 
-	p.SetState(183)
+	p.SetState(207)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case ProjectParserINTEGER:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(173)
+			p.SetState(197)
 
 			var _m = p.Match(ProjectParserINTEGER)
 
@@ -3013,7 +3394,7 @@ func (p *ProjectParser) Primitive() (localctx IPrimitiveContext) {
 	case ProjectParserFLOAT:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(175)
+			p.SetState(199)
 
 			var _m = p.Match(ProjectParserFLOAT)
 
@@ -3041,7 +3422,7 @@ func (p *ProjectParser) Primitive() (localctx IPrimitiveContext) {
 	case ProjectParserSTRING:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(177)
+			p.SetState(201)
 
 			var _m = p.Match(ProjectParserSTRING)
 
@@ -3072,7 +3453,7 @@ func (p *ProjectParser) Primitive() (localctx IPrimitiveContext) {
 	case ProjectParserBOOLEAN:
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(179)
+			p.SetState(203)
 
 			var _m = p.Match(ProjectParserBOOLEAN)
 
@@ -3098,7 +3479,7 @@ func (p *ProjectParser) Primitive() (localctx IPrimitiveContext) {
 	case ProjectParserID:
 		p.EnterOuterAlt(localctx, 5)
 		{
-			p.SetState(181)
+			p.SetState(205)
 
 			var _m = p.Match(ProjectParserID)
 
@@ -3127,21 +3508,21 @@ func (p *ProjectParser) Primitive() (localctx IPrimitiveContext) {
 
 func (p *ProjectParser) Sempred(localctx antlr.RuleContext, ruleIndex, predIndex int) bool {
 	switch ruleIndex {
-	case 6:
+	case 8:
 		var t *ListIdsContext = nil
 		if localctx != nil {
 			t = localctx.(*ListIdsContext)
 		}
 		return p.ListIds_Sempred(t, predIndex)
 
-	case 9:
+	case 11:
 		var t *Expr_relContext = nil
 		if localctx != nil {
 			t = localctx.(*Expr_relContext)
 		}
 		return p.Expr_rel_Sempred(t, predIndex)
 
-	case 11:
+	case 13:
 		var t *Expr_aritContext = nil
 		if localctx != nil {
 			t = localctx.(*Expr_aritContext)

@@ -39,6 +39,12 @@ func (s *BaseProjectParserListener) EnterInstruction(ctx *InstructionContext) {}
 // ExitInstruction is called when production instruction is exited.
 func (s *BaseProjectParserListener) ExitInstruction(ctx *InstructionContext) {}
 
+// EnterPrint_prod is called when production print_prod is entered.
+func (s *BaseProjectParserListener) EnterPrint_prod(ctx *Print_prodContext) {}
+
+// ExitPrint_prod is called when production print_prod is exited.
+func (s *BaseProjectParserListener) ExitPrint_prod(ctx *Print_prodContext) {}
+
 // EnterDeclaration_prod is called when production declaration_prod is entered.
 func (s *BaseProjectParserListener) EnterDeclaration_prod(ctx *Declaration_prodContext) {}
 
@@ -51,11 +57,17 @@ func (s *BaseProjectParserListener) EnterAssign_prod(ctx *Assign_prodContext) {}
 // ExitAssign_prod is called when production assign_prod is exited.
 func (s *BaseProjectParserListener) ExitAssign_prod(ctx *Assign_prodContext) {}
 
-// EnterTypeDataVar is called when production typeDataVar is entered.
-func (s *BaseProjectParserListener) EnterTypeDataVar(ctx *TypeDataVarContext) {}
+// EnterConditional_prod is called when production conditional_prod is entered.
+func (s *BaseProjectParserListener) EnterConditional_prod(ctx *Conditional_prodContext) {}
 
-// ExitTypeDataVar is called when production typeDataVar is exited.
-func (s *BaseProjectParserListener) ExitTypeDataVar(ctx *TypeDataVarContext) {}
+// ExitConditional_prod is called when production conditional_prod is exited.
+func (s *BaseProjectParserListener) ExitConditional_prod(ctx *Conditional_prodContext) {}
+
+// EnterBloq is called when production bloq is entered.
+func (s *BaseProjectParserListener) EnterBloq(ctx *BloqContext) {}
+
+// ExitBloq is called when production bloq is exited.
+func (s *BaseProjectParserListener) ExitBloq(ctx *BloqContext) {}
 
 // EnterListIds is called when production listIds is entered.
 func (s *BaseProjectParserListener) EnterListIds(ctx *ListIdsContext) {}
@@ -63,11 +75,11 @@ func (s *BaseProjectParserListener) EnterListIds(ctx *ListIdsContext) {}
 // ExitListIds is called when production listIds is exited.
 func (s *BaseProjectParserListener) ExitListIds(ctx *ListIdsContext) {}
 
-// EnterPrint_prod is called when production print_prod is entered.
-func (s *BaseProjectParserListener) EnterPrint_prod(ctx *Print_prodContext) {}
+// EnterTypeDataVar is called when production typeDataVar is entered.
+func (s *BaseProjectParserListener) EnterTypeDataVar(ctx *TypeDataVarContext) {}
 
-// ExitPrint_prod is called when production print_prod is exited.
-func (s *BaseProjectParserListener) ExitPrint_prod(ctx *Print_prodContext) {}
+// ExitTypeDataVar is called when production typeDataVar is exited.
+func (s *BaseProjectParserListener) ExitTypeDataVar(ctx *TypeDataVarContext) {}
 
 // EnterExpression is called when production expression is entered.
 func (s *BaseProjectParserListener) EnterExpression(ctx *ExpressionContext) {}

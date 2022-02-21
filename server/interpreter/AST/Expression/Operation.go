@@ -65,7 +65,8 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		row := strconv.Itoa(p.Row)
 		col := strconv.Itoa(p.Col)
 		errors.CounterError += 1
-		err := errors.Error{Id: errors.CounterError, Line: p.Row, Col: p.Col, Msg: "(" + row + ", " + col + ") ID " + p.OpLeft.(Identifier).Id + " no declarado o asignado"}
+		msg := "(" + row + ", " + col + ") ID " + p.OpLeft.(Identifier).Id + " no declarado o asignado"
+		err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
 		errors.TypeError = append(errors.TypeError, err)
 		return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 	}
@@ -77,7 +78,8 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			row := strconv.Itoa(p.Row)
 			col := strconv.Itoa(p.Col)
 			errors.CounterError += 1
-			err := errors.Error{Id: errors.CounterError, Line: p.Row, Col: p.Col, Msg: "(" + row + ", " + col + ") ID " + p.OpRight.(Identifier).Id + " no asignado"}
+			msg := "(" + row + ", " + col + ") ID " + p.OpRight.(Identifier).Id + " no asignado"
+			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
 			errors.TypeError = append(errors.TypeError, err)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 		}
@@ -125,7 +127,8 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			row := strconv.Itoa(p.Row)
 			col := strconv.Itoa(p.Col)
 			errors.CounterError += 1
-			err := errors.Error{Id: errors.CounterError, Line: p.Row, Col: p.Col, Msg: "(" + row + ", " + col + ") Error: Operación '-' no soportada", Type: "Semantic", Ambit: "global"}
+			msg := "(" + row + ", " + col + ") Error: Operación '-' no soportada"
+			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
 			errors.TypeError = append(errors.TypeError, err)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 		}
@@ -148,7 +151,8 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			row := strconv.Itoa(p.Row)
 			col := strconv.Itoa(p.Col)
 			errors.CounterError += 1
-			err := errors.Error{Id: errors.CounterError, Line: p.Row, Col: p.Col, Msg: "(" + row + ", " + col + ") Error: Operación '*' no soportada", Type: "Semantic", Ambit: "global"}
+			msg := "(" + row + ", " + col + ") Error: Operación '*' no soportada"
+			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
 			errors.TypeError = append(errors.TypeError, err)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 		}
@@ -171,7 +175,8 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			row := strconv.Itoa(p.Row)
 			col := strconv.Itoa(p.Col)
 			errors.CounterError += 1
-			err := errors.Error{Id: errors.CounterError, Line: p.Row, Col: p.Col, Msg: "(" + row + ", " + col + ") Error: Operación '/' no soportada", Type: "Semantic", Ambit: "global"}
+			msg := "(" + row + ", " + col + ") Error: Operación '/' no soportada"
+			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
 			errors.TypeError = append(errors.TypeError, err)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 		}
@@ -194,7 +199,8 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			row := strconv.Itoa(p.Row)
 			col := strconv.Itoa(p.Col)
 			errors.CounterError += 1
-			err := errors.Error{Id: errors.CounterError, Type: "Semantic", Line: p.Row, Col: p.Col, Msg: "(" + row + ", " + col + ") Error: Operación '%' no soportada", Ambit: "global"}
+			msg := "(" + row + ", " + col + ") Error: Operación '%' no soportada"
+			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
 			errors.TypeError = append(errors.TypeError, err)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 		}
@@ -217,7 +223,8 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			row := strconv.Itoa(p.Row)
 			col := strconv.Itoa(p.Col)
 			errors.CounterError += 1
-			err := errors.Error{Id: errors.CounterError, Type: "Semantic", Line: p.Row, Col: p.Col, Msg: "(" + row + ", " + col + ") Error: Operación '%' no soportada", Ambit: "global"}
+			msg := "(" + row + ", " + col + ") Error: Operación '>' no soportada"
+			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
 			errors.TypeError = append(errors.TypeError, err)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 		}
@@ -240,7 +247,8 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			row := strconv.Itoa(p.Row)
 			col := strconv.Itoa(p.Col)
 			errors.CounterError += 1
-			err := errors.Error{Id: errors.CounterError, Type: "Semantic", Line: p.Row, Col: p.Col, Msg: "(" + row + ", " + col + ") Error: Operación '<' no soportada", Ambit: "global"}
+			msg := "(" + row + ", " + col + ") Error: Operación '<' no soportada"
+			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
 			errors.TypeError = append(errors.TypeError, err)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 		}
@@ -263,7 +271,8 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			row := strconv.Itoa(p.Row)
 			col := strconv.Itoa(p.Col)
 			errors.CounterError += 1
-			err := errors.Error{Id: errors.CounterError, Type: "Semantic", Line: p.Row, Col: p.Col, Msg: "(" + row + ", " + col + ") Error: Operación '>=' no soportada", Ambit: "global"}
+			msg := "(" + row + ", " + col + ") Error: Operación '>=' no soportada"
+			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
 			errors.TypeError = append(errors.TypeError, err)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 		}
@@ -286,7 +295,8 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			row := strconv.Itoa(p.Row)
 			col := strconv.Itoa(p.Col)
 			errors.CounterError += 1
-			err := errors.Error{Id: errors.CounterError, Type: "Semantic", Line: p.Row, Col: p.Col, Msg: "(" + row + ", " + col + ") Error: Operación '<=' no soportada", Ambit: "global"}
+			msg := "(" + row + ", " + col + ") Error: Operación '<=' no soportada"
+			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
 			errors.TypeError = append(errors.TypeError, err)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 		}
@@ -305,7 +315,8 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			row := strconv.Itoa(p.Row)
 			col := strconv.Itoa(p.Col)
 			errors.CounterError += 1
-			err := errors.Error{Id: errors.CounterError, Type: "Semantic", Line: p.Row, Col: p.Col, Msg: "(" + row + ", " + col + ") Error: Operación '==' no soportada", Ambit: "global"}
+			msg := "(" + row + ", " + col + ") Error: Operación '==' no soportada"
+			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
 			errors.TypeError = append(errors.TypeError, err)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 		}
@@ -349,7 +360,8 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			row := strconv.Itoa(p.Row)
 			col := strconv.Itoa(p.Col)
 			errors.CounterError += 1
-			err := errors.Error{Id: errors.CounterError, Type: "Semantic", Line: p.Row, Col: p.Col, Msg: "(" + row + ", " + col + ") Error: Operación AND no soportada", Ambit: "global"}
+			msg := "(" + row + ", " + col + ") Error: Operación 'AND' no soportada"
+			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
 			errors.TypeError = append(errors.TypeError, err)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 		}
@@ -382,7 +394,8 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			row := strconv.Itoa(p.Row)
 			col := strconv.Itoa(p.Col)
 			errors.CounterError += 1
-			err := errors.Error{Id: errors.CounterError, Type: "Semantic", Line: p.Row, Col: p.Col, Msg: "(" + row + ", " + col + ") Error: Operación OR no soportada", Ambit: "global"}
+			msg := "(" + row + ", " + col + ") Error: Operación 'OR' no soportada"
+			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
 			errors.TypeError = append(errors.TypeError, err)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 		}

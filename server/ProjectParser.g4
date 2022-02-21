@@ -8,7 +8,7 @@ options {
     import "OLC2_Project1/server/interpreter/AST"
     import "OLC2_Project1/server/interpreter/Abstract"
     import "OLC2_Project1/server/interpreter/AST/Expression"
-    import "OLC2_Project1/server/interpreter/AST/Instruction"
+    import "OLC2_Project1/server/interpreter/AST/Natives"
     import "OLC2_Project1/server/interpreter/SymbolTable"
     import arrayList "github.com/colegno/arraylist"
 }
@@ -43,7 +43,12 @@ instruction returns [Abstract.Instruction instr]
     : print_prod        { $instr = $print_prod.instr }
     | declaration_prod  { $instr = $declaration_prod.instr }
     | assign_prod       { $instr = $assign_prod.instr }
-//    | conditional_prod  { $instr = $conditional_prod.instr }
+    | conditional_prod  { $instr = $conditional_prod.instr }
+    ;
+
+print_prod returns [Abstract.Instruction instr]
+    : SENTENCIA DOT CONSOLA LEFT_PAR expression RIGHT_PAR SEMICOLON { $instr = Natives.NewPrint($expression.p, false, $LEFT_PAR.line, localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn()) }
+    | SENTENCIA DOT CONSOLALN LEFT_PAR expression RIGHT_PAR SEMICOLON { $instr = Natives.NewPrint($expression.p, true, $LEFT_PAR.line, localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn()) }
     ;
 
 declaration_prod returns [Abstract.Instruction instr]
@@ -61,11 +66,30 @@ assign_prod returns [Abstract.Instruction instr]
     }
     ;
 
-typeDataVar returns [SymbolTable.DataType t]
-    : RINTEGER  { $t = SymbolTable.INTEGER }
-    | RSTRING   { $t = SymbolTable.STRING }
-    | RREAL     { $t = SymbolTable.FLOAT }
-    | RBOOLEAN  { $t = SymbolTable.BOOLEAN }
+conditional_prod returns [Abstract.Instruction instr]
+    : RIF LEFT_PAR expression RIGHT_PAR bloq { $instr = Natives.NewIf($expression.p, $bloq.content, nil, nil) }
+//     | RIF LEFT_PAR expression RIGHT_PAR bif=bloq RELSE belse=bloq
+//     | RIF LEFT_PAR expression RIGHT_PAR bif=bloq list_else_if
+//     | RIF LEFT_PAR expression RIGHT_PAR bif=bloq list_else_if RELSE belse=bloq
+    ;
+
+//list_else_if returns [*arrayList.List list]
+//    : l += else_if+ {
+//        acumulator := localctx.(*List_else_ifContext).GetList()
+//
+//        for _, e := range acumulator {
+//            $l.Add(e.GetInstr)
+//        }
+//    }
+//    ;
+
+//else_if returns[Abstract.Natives instr]
+//    : RELSE RIF LEFT_PAR expression RIGHT_PAR bloq { $instr = Natives.NewIf() }
+//    ;
+
+bloq returns [*arrayList.List content]
+    : LEFT_BRACKET instructions RIGHT_BRACKET   { $content = $instructions.l }
+    | LEFT_BRACKET RIGHT_BRACKET                { $content = arrayList.New() }
     ;
 
 listIds returns [*arrayList.List list]
@@ -79,36 +103,12 @@ listIds returns [*arrayList.List list]
     | ID                    { $list.Add(Expression.NewIdentifier($ID.text, $ID.line, localctx.(*ListIdsContext).Get_ID().GetColumn())) }
     ;
 
-print_prod returns [Abstract.Instruction instr]
-    : SENTENCIA DOT CONSOLA LEFT_PAR expression RIGHT_PAR SEMICOLON { $instr = Natives.NewPrint($expression.p, false, $LEFT_PAR.line, localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn()) }
-    | SENTENCIA DOT CONSOLALN LEFT_PAR expression RIGHT_PAR SEMICOLON { $instr = Natives.NewPrint($expression.p, true, $LEFT_PAR.line, localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn()) }
+typeDataVar returns [SymbolTable.DataType t]
+    : RINTEGER  { $t = SymbolTable.INTEGER }
+    | RSTRING   { $t = SymbolTable.STRING }
+    | RREAL     { $t = SymbolTable.FLOAT }
+    | RBOOLEAN  { $t = SymbolTable.BOOLEAN }
     ;
-
-//conditional_prod returns [Abstract.Instruction instr]
-//    : RIF LEFT_PAR expression RIGHT_PAR bloq { $instr =  }
-//     | RIF LEFT_PAR expression RIGHT_PAR bif=bloq RELSE belse=bloq
-//     | RIF LEFT_PAR expression RIGHT_PAR bif=bloq list_else_if
-//     | RIF LEFT_PAR expression RIGHT_PAR bif=bloq list_else_if RELSE belse=bloq
-//    ;
-
-//list_else_if returns [*arrayList.List list]
-//    : l += else_if+ {
-//        acumulator := localctx.(*List_else_ifContext).GetList()
-//
-//        for _, e := range acumulator {
-//            $l.Add(e.GetInstr)
-//        }
-//    }
-//    ;
-
-//else_if returns[Abstract.Instruction instr]
-//    : RELSE RIF LEFT_PAR expression RIGHT_PAR bloq { $instr = Natives.NewIf() }
-//    ;
-
-//bloq returns [*arrayList.List content]
-//    : LEFT_BRACKET instructions RIGHT_BRACKET   { $content = $instructions.l }
-//    | LEFT_BRACKET RIGHT_BRACKET                { $content = arrayList.New() }
-//    ;
 
 expression returns [Abstract.Expression p]
     : expr_rel   { $p = $expr_rel.p }
