@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Test</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+
+  <!-- Styles for Codemirror -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css"
+        integrity="sha512-uf06llspW44/LZpHzHT6qBOIVODjWtv4MxCricRxkzvopAlSWnTf6hpZTFxuuZcuNE9CBQhqE0Seu1CoRk84nQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Scripts for Codemirror -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"
+          integrity="sha512-xwrAU5yhWwdTvvmMNheFn9IyuDbl/Kyghz2J3wQRDR8tyNmT8ZIYOd0V3iPYY/g4XdNPy0n/g0NvqGu9f0fPJQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <!-- Theme dracula -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/theme/dracula.min.css"
+        integrity="sha512-gFMl3u9d0xt3WR8ZeW05MWm3yZ+ZfgsBVXLSOiFz2xeVrZ8Neg0+V1kkRIo9LikyA/T9HuS91kDfc2XWse0K0A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- Mode js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/javascript/javascript.min.js"
+          integrity="sha512-IS1FyxQkiJHT1SAvLXBaJu1UTFSIw0GT/DuzxHl69djqyLoEwGmR2davcZUnB8M7ppi9nfTGZR/vdfqmWt+i6A=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <!-- Mode powershell -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/powershell/powershell.min.js"
+          integrity="sha512-LqqYYiphtlUW/A/ctvWI7aJspzPsy3ZhoUT59+3X5vpNVp8u+U+kMkA5Isl/l8jmZX2lRyUBInVKjxYbWwab/w=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body class="has-background-dark">
+<nav class="navbar has-background-danger" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <p class="is-size-2 has-text-light ml-3">Antlr_Go</p>
+  </div>
+
+  <div class="navbar-end">
+    <div class="navbar-item">
+      <div class="buttons">
+        <div class="is-primary">
+          <strong class="has-text-light mr-2">201800722</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-6 mb-6" id="mirror">
+
+  <form action="http://localhost:3000/analyze" method="post">
+    <div class="columns">
+      <div class="column">
+        <p class="has-text-light">Input code:</p>
+        <textarea autofocus name="code" id="writer">{{ .Parser }}</textarea>
+      </div>
+      <div class="column">
+        <p class="has-text-light">Output:</p>
+        <textarea id="reader">{{ .Res }}</textarea>
+      </div>
+    </div>
+    <button class="button is-info">Interpreter</button>
+    &nbsp;<button class="button is-danger">Errors</button>
+  </form>
+
+</div>
+
+<footer style="border-top: solid 1px white;" class="footer has-background-dark">
+  <div class="content has-text-centered">
+    <p class="has-text-light">
+      <strong class="has-text-light">Antlr-Go</strong> by JDVelasquezO
+    </p>
+  </div>
+</footer>
+
+<script>
+
+  myCodeMirror = CodeMirror.fromTextArea(document.getElementById("writer"), {
+    lineNumbers: true,
+    styleActivateLine: true,
+    matchBrackets: true,
+    theme: 'dracula',
+    mode: 'javascript',
+  });
+
+  myCodeMirror2 = CodeMirror.fromTextArea(document.getElementById("reader"), {
+    lineNumbers: true,
+    theme: 'dracula',
+    mode: 'powershell',
+    readOnly: true,
+  });
+
+</script>
+
+</body>
+</html>

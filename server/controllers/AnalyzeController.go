@@ -106,9 +106,15 @@ func Analyze(c *fiber.Ctx) error {
 		}
 	}
 
-	return c.JSON(fiber.Map{
-		"parser": data.Code,
-		"res":    interpreter.Console,
-		"err":    errors.TypeError,
+	//return c.JSON(fiber.Map{
+	//	"parser": data.Code,
+	//	"res":    interpreter.Console,
+	//	"err":    errors.TypeError,
+	//})
+
+	return c.Render("main", fiber.Map{
+		"Parser": data.Code,
+		"Res":    interpreter.Console,
+		"Err":    errors.TypeError,
 	})
 }
