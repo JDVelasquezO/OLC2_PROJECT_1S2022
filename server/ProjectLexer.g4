@@ -2,9 +2,8 @@
 lexer grammar ProjectLexer;
 
 // Reserve words
-SENTENCIA: 'Sentencia';
-CONSOLA:   'consola';
-CONSOLALN: 'consolaln';
+PRINTLN:   'println';
+PRINT:     'print';
 
 // Variables
 DECLARAR:  'let';
@@ -41,6 +40,7 @@ DOT:                    '.';
 SEMICOLON:              ';';
 COMMA:                  ',';
 COLON:                  ':';
+ADMIRATION:             '!';
 
 // Grouping Operators
 LEFT_PAR:               '(';

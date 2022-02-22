@@ -47,8 +47,10 @@ instruction returns [Abstract.Instruction instr]
     ;
 
 print_prod returns [Abstract.Instruction instr]
-    : SENTENCIA DOT CONSOLA LEFT_PAR expression RIGHT_PAR SEMICOLON { $instr = Natives.NewPrint($expression.p, false, $LEFT_PAR.line, localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn()) }
-    | SENTENCIA DOT CONSOLALN LEFT_PAR expression RIGHT_PAR SEMICOLON { $instr = Natives.NewPrint($expression.p, true, $LEFT_PAR.line, localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn()) }
+    : PRINT ADMIRATION LEFT_PAR expression RIGHT_PAR SEMICOLON { $instr = Natives.NewPrint($expression.p, false, $LEFT_PAR.line, localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn()) }
+    | PRINT ADMIRATION LEFT_PAR opBefore = expression COMMA opAfter = expression RIGHT_PAR SEMICOLON { $instr = Natives.NewPrintWithAfter($opBefore.p, $opAfter.p, false, $LEFT_PAR.line, localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn()) }
+    | PRINTLN ADMIRATION LEFT_PAR expression RIGHT_PAR SEMICOLON { $instr = Natives.NewPrint($expression.p, true, $LEFT_PAR.line, localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn()) }
+    | PRINTLN ADMIRATION LEFT_PAR opBefore = expression COMMA opAfter = expression RIGHT_PAR SEMICOLON { $instr = Natives.NewPrintWithAfter($opBefore.p, $opAfter.p, true, $LEFT_PAR.line, localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn()) }
     ;
 
 declaration_prod returns [Abstract.Instruction instr]
