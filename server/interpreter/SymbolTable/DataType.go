@@ -6,6 +6,7 @@ const (
 	INTEGER DataType = iota
 	FLOAT
 	STRING
+	CHAR
 	BOOLEAN
 	NULL
 	ERROR

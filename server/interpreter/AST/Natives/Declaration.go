@@ -12,12 +12,13 @@ import (
 	"strconv"
 )
 
-var typeDef = [5][5]SymbolTable.DataType{
-	{SymbolTable.INTEGER, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
-	{SymbolTable.FLOAT, SymbolTable.FLOAT, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
-	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.STRING, SymbolTable.NULL, SymbolTable.NULL},
-	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.BOOLEAN, SymbolTable.NULL},
-	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
+var typeDef = [6][6]SymbolTable.DataType{
+	{SymbolTable.INTEGER, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
+	{SymbolTable.FLOAT, SymbolTable.FLOAT, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
+	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.STRING, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
+	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.CHAR, SymbolTable.NULL, SymbolTable.NULL},
+	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.BOOLEAN, SymbolTable.NULL},
+	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
 }
 
 type Declaration struct {
@@ -26,16 +27,16 @@ type Declaration struct {
 	ListIds  *arrayList.List
 }
 
-func NewDeclaration(listIds *arrayList.List, dataType SymbolTable.DataType) *Declaration {
+func NewDeclaration(listIds *arrayList.List) *Declaration {
 	return &Declaration{
-		DataType: dataType,
+		DataType: SymbolTable.NULL,
 		ListIds:  listIds,
 		InitVal:  nil,
 	}
 }
 
-func NewDeclarationInit(listIds *arrayList.List, dataType SymbolTable.DataType, valInit Abstract.Expression) *Declaration {
-	return &Declaration{DataType: dataType, ListIds: listIds, InitVal: valInit}
+func NewDeclarationInit(listIds *arrayList.List, valInit Abstract.Expression) *Declaration {
+	return &Declaration{DataType: SymbolTable.NULL, ListIds: listIds, InitVal: valInit}
 }
 
 func (d *Declaration) IsInitialized() bool {
@@ -46,6 +47,19 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 	if d.IsInitialized() {
 		if d.ListIds.Len() > 1 {
 			return nil
+		}
+
+		switch d.InitVal.GetValue(table).Type {
+		case SymbolTable.INTEGER:
+			d.DataType = SymbolTable.INTEGER
+		case SymbolTable.FLOAT:
+			d.DataType = SymbolTable.FLOAT
+		case SymbolTable.STRING:
+			d.DataType = SymbolTable.STRING
+		case SymbolTable.CHAR:
+			d.DataType = SymbolTable.CHAR
+		case SymbolTable.BOOLEAN:
+			d.DataType = SymbolTable.BOOLEAN
 		}
 
 		retExpr := d.InitVal.GetValue(table)

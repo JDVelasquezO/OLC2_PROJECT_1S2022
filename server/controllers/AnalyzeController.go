@@ -97,20 +97,17 @@ func Analyze(c *fiber.Ctx) error {
 	ast := listener.Tree
 	globalTable := SymbolTable.NewSymbolTable("global", nil)
 
-	if ast.ListInstr != nil {
-		for i := 0; i < ast.ListInstr.Len(); i++ {
-			r := ast.ListInstr.GetValue(i)
-			if r != nil {
-				r.(Abstract.Instruction).Execute(globalTable)
+	if len(lexicalErrors.Errors) == 0 && len(parseErrors.Errors) == 0 {
+		if ast.ListInstr != nil {
+			for i := 0; i < ast.ListInstr.Len(); i++ {
+				r := ast.ListInstr.GetValue(i)
+				if r != nil {
+					r.(Abstract.Instruction).Execute(globalTable)
+				}
 			}
 		}
-	}
 
-	//return c.JSON(fiber.Map{
-	//	"parser": data.Code,
-	//	"res":    interpreter.Console,
-	//	"err":    errors.TypeError,
-	//})
+	}
 
 	return c.Render("main", fiber.Map{
 		"Parser": data.Code,

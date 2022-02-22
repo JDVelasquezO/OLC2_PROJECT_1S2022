@@ -52,11 +52,11 @@ print_prod returns [Abstract.Instruction instr]
     ;
 
 declaration_prod returns [Abstract.Instruction instr]
-    : DECLARAR listIds typeDataVar EQUAL expression SEMICOLON {
-        $instr = Natives.NewDeclarationInit($listIds.list, $typeDataVar.t, $expression.p)
+    : DECLARAR listIds EQUAL expression SEMICOLON {
+        $instr = Natives.NewDeclarationInit($listIds.list, $expression.p)
         }
-    | DECLARAR listIds typeDataVar SEMICOLON {
-        $instr = Natives.NewDeclaration($listIds.list, $typeDataVar.t)
+    | DECLARAR listIds SEMICOLON {
+        $instr = Natives.NewDeclaration($listIds.list)
     }
     ;
 
@@ -151,6 +151,10 @@ primitive returns [Abstract.Expression p]
     | STRING {
         str := $STRING.text[1:len($STRING.text)-1]
         $p = Expression.NewPrimitive(str, SymbolTable.STRING, $STRING.line, localctx.(*PrimitiveContext).Get_STRING().GetColumn())
+    }
+    | CHAR {
+        chr := $CHAR.text
+        $p = Expression.NewPrimitive(chr, SymbolTable.CHAR, $CHAR.line, localctx.(*PrimitiveContext).Get_CHAR().GetColumn())
     }
     | BOOLEAN {
         str := $BOOLEAN.text

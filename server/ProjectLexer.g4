@@ -7,7 +7,7 @@ CONSOLA:   'consola';
 CONSOLALN: 'consolaln';
 
 // Variables
-DECLARAR:  'declarar';
+DECLARAR:  'let';
 
 // Data Type of Vars
 RSTRING:    'String';
@@ -24,16 +24,16 @@ RAND:       'AND';
 ROR:        'OR';
 
 // Comments
-MULTILINE:      '(*' (~[/])+ '*)' -> skip;
+MULTILINE:      '/*' (~[/])+ '*/' -> skip;
 INLINE:         '//'(~[\n])+ -> skip;
 
 // Regular expressions
 INTEGER:                [0-9]+;
 FLOAT:                  [0-9]+'.'[0-9]+;
-STRING:                 '\''~["]*'\'';
+CHAR:                   '\''~["]'\'';
+STRING:                 '"'~["]*'"';
 BOOLEAN:                ('true' | 'false');
 ID:                     [a-zñA-ZÑ_][a-zñA-ZÑ0-9]*;
-DATA_TYPE:              'int';
 
 // General Operators
 EQUAL:                  '=';
