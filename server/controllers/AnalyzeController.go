@@ -109,7 +109,7 @@ func Analyze(c *fiber.Ctx) error {
 
 	}
 
-	return c.Render("main", fiber.Map{
+	return c.Render("index", fiber.Map{
 		"Parser": data.Code,
 		"Res":    interpreter.Console,
 		"Err":    errors.TypeError,
