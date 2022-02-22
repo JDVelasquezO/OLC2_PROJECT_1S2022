@@ -2,20 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Test</title>
+    <title>Rust DB</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-
 
     <script src="./codemirror-5.65.2/lib/codemirror.js"></script>
     <link rel="stylesheet" href="./codemirror-5.65.2/lib/codemirror.css" />
     <link rel="stylesheet" href="./codemirror-5.65.2/theme/dracula.css" />
     <script src="./codemirror-5.65.2/mode/javascript/javascript.js"></script>
     <script src="./codemirror-5.65.2/mode/powershell/powershell.js"></script>
+    
 </head>
 <body class="has-background-dark">
 <nav class="navbar has-background-danger" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-        <p class="is-size-2 has-text-light ml-3">Antlr_Go</p>
+        <p class="is-size-2 has-text-light ml-3">Rust<strong>DB</strong></p>
+    </div>
+
+    <div class="navbar-menu ml-6">
+        <div class="navbar-start">
+            <a class="navbar-item has-text-black has-background-light">
+                Editor
+            </a>
+    
+            <a class="navbar-item has-text-black">
+                Reportes
+            </a>
+
+            <a class="navbar-item has-text-black">
+                Acerca de
+            </a>
+        </div>
     </div>
 
     <div class="navbar-end">
@@ -42,8 +58,7 @@
                 <textarea id="reader"></textarea>
             </div>
         </div>
-        <button class="button is-info">Interpreter</button>
-        &nbsp;<button class="button is-danger">Errors</button>
+        <button class="button is-info">Ejecutar</button>
     </form>
 
 </div>
