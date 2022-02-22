@@ -2,20 +2,22 @@ package Natives
 
 import (
 	"OLC2_Project1/server/interpreter"
+	"OLC2_Project1/server/interpreter/AST/Expression"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	"OLC2_Project1/server/interpreter/errors"
 	"fmt"
+	arrayList "github.com/colegno/arraylist"
 	"strconv"
 	"strings"
 )
 
 type Print struct {
-	Expressions     Abstract.Expression
-	ExpressionAfter Abstract.Expression
-	isBreakLine     bool
-	Row             int
-	Col             int
+	Expressions Abstract.Expression
+	ListIds     *arrayList.List
+	isBreakLine bool
+	Row         int
+	Col         int
 }
 
 func NewPrint(val Abstract.Expression, isBreakLine bool, row int, col int) Print {
@@ -23,8 +25,8 @@ func NewPrint(val Abstract.Expression, isBreakLine bool, row int, col int) Print
 	return e
 }
 
-func NewPrintWithAfter(val Abstract.Expression, after Abstract.Expression, isBreakLine bool, row int, col int) Print {
-	e := Print{val, after, isBreakLine, row, col}
+func NewPrintWithAfter(val Abstract.Expression, listIds *arrayList.List, isBreakLine bool, row int, col int) Print {
+	e := Print{val, listIds, isBreakLine, row, col}
 	return e
 }
 
@@ -34,19 +36,46 @@ func (p Print) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 		return nil
 	}
 
-	if p.ExpressionAfter != nil {
+	if p.ListIds.Len() > 0 {
 
-		strToConcat := fmt.Sprintf("%v", p.ExpressionAfter.GetValue(symbolTable).Value)
-		strToCompare := fmt.Sprintf("%v", p.Expressions.GetValue(symbolTable).Value)
-		if strings.Contains(strToCompare, "{}") {
-			words := strings.Split(strToCompare, "{}")
-			finalMsg := words[0] + strToConcat
-			if p.isBreakLine {
-				finalMsg = finalMsg + "\n"
+		finalMsg := ""
+		for i := 0; i < p.ListIds.Len(); i++ {
+			strFromList := p.ListIds.GetValue(i).(Abstract.Expression).GetValue(symbolTable).Value
+
+			// Validacion si no existe el ID
+			if strFromList == nil {
+				row := p.Row
+				col := p.Col
+				errors.CounterError += 1
+				msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No esta asignada la variable ID: " + p.ListIds.GetValue(i).(Expression.Identifier).Id
+				err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
+				errors.TypeError = append(errors.TypeError, err)
+				interpreter.Console += fmt.Sprintf("%v", err.Msg)
+				return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
 			}
 
-			interpreter.Console += fmt.Sprintf("%v", finalMsg)
+			strToConcat := fmt.Sprintf("%v", strFromList)
+			strToCompare := fmt.Sprintf("%v", p.Expressions.GetValue(symbolTable).Value)
+			numberRepKeys := strings.Count(strToCompare, "{}")
+
+			if p.ListIds.Len() != numberRepKeys {
+				row := p.Row
+				col := p.Col
+				errors.CounterError += 1
+				msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No está el forma especificado"
+				err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
+				errors.TypeError = append(errors.TypeError, err)
+				interpreter.Console += fmt.Sprintf("%v", err.Msg)
+				return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
+			}
+
+			words := strings.Split(strToCompare, "{}")
+			finalMsg += words[i] + strToConcat
 		}
+		if p.isBreakLine {
+			finalMsg = finalMsg + "\n"
+		}
+		interpreter.Console += fmt.Sprintf("%v", finalMsg)
 
 	} else {
 		varDec := p.Expressions.GetValue(symbolTable)
@@ -70,19 +99,5 @@ func (p Print) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
 		}
 	}
-
-	//varDec := p.Expressions.GetValue(symbolTable)
-	//// Validacion si no existe el ID
-	//if varDec.Value == nil {
-	//	row := p.Row
-	//	col := p.Col
-	//	errors.CounterError += 1
-	//	msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No esta asignada la variable ID: " + p.Expressions.(Expression.Identifier).Id
-	//	err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
-	//	errors.TypeError = append(errors.TypeError, err)
-	//	interpreter.Console += fmt.Sprintf("%v", err.Msg)
-	//	return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
-	//}
-
 	return nil
 }

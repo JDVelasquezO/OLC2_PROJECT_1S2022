@@ -48,9 +48,22 @@ instruction returns [Abstract.Instruction instr]
 
 print_prod returns [Abstract.Instruction instr]
     : PRINT ADMIRATION LEFT_PAR expression RIGHT_PAR SEMICOLON { $instr = Natives.NewPrint($expression.p, false, $LEFT_PAR.line, localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn()) }
-    | PRINT ADMIRATION LEFT_PAR opBefore = expression COMMA opAfter = expression RIGHT_PAR SEMICOLON { $instr = Natives.NewPrintWithAfter($opBefore.p, $opAfter.p, false, $LEFT_PAR.line, localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn()) }
+    | PRINT ADMIRATION LEFT_PAR opBefore = expression COMMA listVars RIGHT_PAR SEMICOLON { $instr = Natives.NewPrintWithAfter($opBefore.p, $listVars.list, false, $LEFT_PAR.line, localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn()) }
     | PRINTLN ADMIRATION LEFT_PAR expression RIGHT_PAR SEMICOLON { $instr = Natives.NewPrint($expression.p, true, $LEFT_PAR.line, localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn()) }
-    | PRINTLN ADMIRATION LEFT_PAR opBefore = expression COMMA opAfter = expression RIGHT_PAR SEMICOLON { $instr = Natives.NewPrintWithAfter($opBefore.p, $opAfter.p, true, $LEFT_PAR.line, localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn()) }
+    | PRINTLN ADMIRATION LEFT_PAR opBefore = expression COMMA listVars RIGHT_PAR SEMICOLON { $instr = Natives.NewPrintWithAfter($opBefore.p, $listVars.list, true, $LEFT_PAR.line, localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn()) }
+    ;
+
+listVars returns [*arrayList.List list]
+    @init {
+        $list = arrayList.New()
+    }
+    : sub = listVars COMMA expression {
+        $sub.list.Add($expression.p)
+        $list = $sub.list
+    }
+    | expression {
+        $list.Add($expression.p)
+    }
     ;
 
 declaration_prod returns [Abstract.Instruction instr]
@@ -66,6 +79,17 @@ assign_prod returns [Abstract.Instruction instr]
     : listIds EQUAL expression SEMICOLON {
         $instr = Natives.NewAssign($listIds.list, $expression.p)
     }
+    ;
+
+listIds returns [*arrayList.List list]
+    @init {
+        $list = arrayList.New()
+    }
+    : sub = listIds COMMA ID  {
+                                $sub.list.Add(Expression.NewIdentifier($ID.text, $ID.line, localctx.(*ListIdsContext).Get_ID().GetColumn()))
+                                $list = $sub.list
+                              }
+    | ID  {  $list.Add(Expression.NewIdentifier($ID.text, $ID.line, localctx.(*ListIdsContext).Get_ID().GetColumn())) }
     ;
 
 conditional_prod returns [Abstract.Instruction instr]
@@ -92,24 +116,6 @@ conditional_prod returns [Abstract.Instruction instr]
 bloq returns [*arrayList.List content]
     : LEFT_BRACKET instructions RIGHT_BRACKET   { $content = $instructions.l }
     | LEFT_BRACKET RIGHT_BRACKET                { $content = arrayList.New() }
-    ;
-
-listIds returns [*arrayList.List list]
-    @init {
-        $list = arrayList.New()
-    }
-    : sub = listIds COMMA ID  {
-                                $sub.list.Add(Expression.NewIdentifier($ID.text, $ID.line, localctx.(*ListIdsContext).Get_ID().GetColumn()))
-                                $list = $sub.list
-                              }
-    | ID                    { $list.Add(Expression.NewIdentifier($ID.text, $ID.line, localctx.(*ListIdsContext).Get_ID().GetColumn())) }
-    ;
-
-typeDataVar returns [SymbolTable.DataType t]
-    : RINTEGER  { $t = SymbolTable.INTEGER }
-    | RSTRING   { $t = SymbolTable.STRING }
-    | RREAL     { $t = SymbolTable.FLOAT }
-    | RBOOLEAN  { $t = SymbolTable.BOOLEAN }
     ;
 
 expression returns [Abstract.Expression p]
@@ -155,7 +161,7 @@ primitive returns [Abstract.Expression p]
         $p = Expression.NewPrimitive(str, SymbolTable.STRING, $STRING.line, localctx.(*PrimitiveContext).Get_STRING().GetColumn())
     }
     | CHAR {
-        chr := $CHAR.text
+        chr := $CHAR.text[1:len($CHAR.text)-1]
         $p = Expression.NewPrimitive(chr, SymbolTable.CHAR, $CHAR.line, localctx.(*PrimitiveContext).Get_CHAR().GetColumn())
     }
     | BOOLEAN {

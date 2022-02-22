@@ -20,23 +20,23 @@ type ProjectParserListener interface {
 	// EnterPrint_prod is called when entering the print_prod production.
 	EnterPrint_prod(c *Print_prodContext)
 
+	// EnterListVars is called when entering the listVars production.
+	EnterListVars(c *ListVarsContext)
+
 	// EnterDeclaration_prod is called when entering the declaration_prod production.
 	EnterDeclaration_prod(c *Declaration_prodContext)
 
 	// EnterAssign_prod is called when entering the assign_prod production.
 	EnterAssign_prod(c *Assign_prodContext)
 
+	// EnterListIds is called when entering the listIds production.
+	EnterListIds(c *ListIdsContext)
+
 	// EnterConditional_prod is called when entering the conditional_prod production.
 	EnterConditional_prod(c *Conditional_prodContext)
 
 	// EnterBloq is called when entering the bloq production.
 	EnterBloq(c *BloqContext)
-
-	// EnterListIds is called when entering the listIds production.
-	EnterListIds(c *ListIdsContext)
-
-	// EnterTypeDataVar is called when entering the typeDataVar production.
-	EnterTypeDataVar(c *TypeDataVarContext)
 
 	// EnterExpression is called when entering the expression production.
 	EnterExpression(c *ExpressionContext)
@@ -65,23 +65,23 @@ type ProjectParserListener interface {
 	// ExitPrint_prod is called when exiting the print_prod production.
 	ExitPrint_prod(c *Print_prodContext)
 
+	// ExitListVars is called when exiting the listVars production.
+	ExitListVars(c *ListVarsContext)
+
 	// ExitDeclaration_prod is called when exiting the declaration_prod production.
 	ExitDeclaration_prod(c *Declaration_prodContext)
 
 	// ExitAssign_prod is called when exiting the assign_prod production.
 	ExitAssign_prod(c *Assign_prodContext)
 
+	// ExitListIds is called when exiting the listIds production.
+	ExitListIds(c *ListIdsContext)
+
 	// ExitConditional_prod is called when exiting the conditional_prod production.
 	ExitConditional_prod(c *Conditional_prodContext)
 
 	// ExitBloq is called when exiting the bloq production.
 	ExitBloq(c *BloqContext)
-
-	// ExitListIds is called when exiting the listIds production.
-	ExitListIds(c *ListIdsContext)
-
-	// ExitTypeDataVar is called when exiting the typeDataVar production.
-	ExitTypeDataVar(c *TypeDataVarContext)
 
 	// ExitExpression is called when exiting the expression production.
 	ExitExpression(c *ExpressionContext)
