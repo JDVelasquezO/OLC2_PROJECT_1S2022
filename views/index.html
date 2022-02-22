@@ -41,9 +41,24 @@
 
     <div class="navbar-menu ml-6">
         <div class="navbar-start">
-            <a class="navbar-item has-text-black has-background-light">
+            {{ if (eq .Res "") }}
+            <a href="http://localhost:3000"
+                    class="navbar-item has-text-black has-background-light">
                 Editor
             </a>
+            <a class="navbar-item has-text-black">
+                Ejecucion
+            </a>
+
+            {{ else }}
+            <a href="http://localhost:3000"
+               class="navbar-item has-text-black">
+                Editor
+            </a>
+            <a class="navbar-item has-text-black has-background-light">
+                Ejecucion
+            </a>
+            {{ end }}
 
             <a class="navbar-item has-text-black">
                 Reportes
@@ -96,7 +111,7 @@
 <footer style="border-top: solid 1px white;" class="footer has-background-dark">
     <div class="content has-text-centered">
         <p class="has-text-light">
-            <strong class="has-text-light">Antlr-Go</strong> by JDVelasquezO
+            Rust<strong class="has-text-light">DB</strong> by JDVelasquezO
         </p>
     </div>
 </footer>

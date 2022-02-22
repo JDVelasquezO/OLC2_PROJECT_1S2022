@@ -7,6 +7,7 @@ import (
 	"OLC2_Project1/server/interpreter/errors"
 	"fmt"
 	"strconv"
+	"strings"
 )
 
 type Print struct {
@@ -34,6 +35,18 @@ func (p Print) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 	}
 
 	if p.ExpressionAfter != nil {
+
+		strToConcat := fmt.Sprintf("%v", p.ExpressionAfter.GetValue(symbolTable).Value)
+		strToCompare := fmt.Sprintf("%v", p.Expressions.GetValue(symbolTable).Value)
+		if strings.Contains(strToCompare, "{}") {
+			words := strings.Split(strToCompare, "{}")
+			finalMsg := words[0] + strToConcat
+			if p.isBreakLine {
+				finalMsg = finalMsg + "\n"
+			}
+
+			interpreter.Console += fmt.Sprintf("%v", finalMsg)
+		}
 
 	} else {
 		varDec := p.Expressions.GetValue(symbolTable)
