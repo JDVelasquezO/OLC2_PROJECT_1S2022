@@ -5,7 +5,7 @@ type DataType int
 const (
 	INTEGER DataType = iota
 	FLOAT
-	STRING
+	STR
 	CHAR
 	BOOLEAN
 	NULL

@@ -67,11 +67,11 @@ listVars returns [*arrayList.List list]
     ;
 
 declaration_prod returns [Abstract.Instruction instr]
-    : DECLARAR listIds EQUAL expression SEMICOLON {
-        $instr = Natives.NewDeclarationInit($listIds.list, $expression.p)
+    : DECLARAR ids_type EQUAL expression SEMICOLON {
+        $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p)
         }
-    | DECLARAR listIds SEMICOLON {
-        $instr = Natives.NewDeclaration($listIds.list)
+    | DECLARAR ids_type SEMICOLON {
+        $instr = Natives.NewDeclaration($ids_type.list)
     }
     ;
 
@@ -79,6 +79,12 @@ assign_prod returns [Abstract.Instruction instr]
     : listIds EQUAL expression SEMICOLON {
         $instr = Natives.NewAssign($listIds.list, $expression.p)
     }
+    ;
+
+ids_type returns [*arrayList.List list]
+    : listIds { $list = $listIds.list }
+    | listIds COLON RSTRING { $list = $listIds.list }
+    | listIds COLON REFERENCE RSTR { $list = $listIds.list }
     ;
 
 listIds returns [*arrayList.List list]
@@ -158,7 +164,7 @@ primitive returns [Abstract.Expression p]
     }
     | STRING {
         str := $STRING.text[1:len($STRING.text)-1]
-        $p = Expression.NewPrimitive(str, SymbolTable.STRING, $STRING.line, localctx.(*PrimitiveContext).Get_STRING().GetColumn())
+        $p = Expression.NewPrimitive(str, SymbolTable.STR, $STRING.line, localctx.(*PrimitiveContext).Get_STRING().GetColumn())
     }
     | CHAR {
         chr := $CHAR.text[1:len($CHAR.text)-1]

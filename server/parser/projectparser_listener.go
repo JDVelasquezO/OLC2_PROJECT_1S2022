@@ -29,6 +29,9 @@ type ProjectParserListener interface {
 	// EnterAssign_prod is called when entering the assign_prod production.
 	EnterAssign_prod(c *Assign_prodContext)
 
+	// EnterIds_type is called when entering the ids_type production.
+	EnterIds_type(c *Ids_typeContext)
+
 	// EnterListIds is called when entering the listIds production.
 	EnterListIds(c *ListIdsContext)
 
@@ -73,6 +76,9 @@ type ProjectParserListener interface {
 
 	// ExitAssign_prod is called when exiting the assign_prod production.
 	ExitAssign_prod(c *Assign_prodContext)
+
+	// ExitIds_type is called when exiting the ids_type production.
+	ExitIds_type(c *Ids_typeContext)
 
 	// ExitListIds is called when exiting the listIds production.
 	ExitListIds(c *ListIdsContext)

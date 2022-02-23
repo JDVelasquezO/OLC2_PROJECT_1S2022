@@ -36,14 +36,25 @@ func (p Print) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 		return nil
 	}
 
+	if p.ListIds == nil {
+		row := p.Row
+		col := p.Col
+		errors.CounterError += 1
+		msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No tiene el formato especificado la variable ID: "
+		err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
+		errors.TypeError = append(errors.TypeError, err)
+		interpreter.Console += fmt.Sprintf("%v", err.Msg)
+		return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
+	}
+
 	if p.ListIds.Len() > 0 {
 
 		finalMsg := ""
 		for i := 0; i < p.ListIds.Len(); i++ {
-			strFromList := p.ListIds.GetValue(i).(Abstract.Expression).GetValue(symbolTable).Value
+			strFromList := p.ListIds.GetValue(i).(Abstract.Expression).GetValue(symbolTable)
 
 			// Validacion si no existe el ID
-			if strFromList == nil {
+			if strFromList.Value == nil {
 				row := p.Row
 				col := p.Col
 				errors.CounterError += 1
@@ -54,7 +65,12 @@ func (p Print) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 				return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
 			}
 
-			strToConcat := fmt.Sprintf("%v", strFromList)
+			if strFromList.Type == SymbolTable.ERROR {
+				interpreter.Console += strFromList.Value.(errors.Error).Msg
+				return strFromList
+			}
+
+			strToConcat := fmt.Sprintf("%v", strFromList.Value)
 			strToCompare := fmt.Sprintf("%v", p.Expressions.GetValue(symbolTable).Value)
 			numberRepKeys := strings.Count(strToCompare, "{}")
 
@@ -79,7 +95,7 @@ func (p Print) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 
 	} else {
 		varDec := p.Expressions.GetValue(symbolTable)
-		if varDec.Type == SymbolTable.STRING {
+		if varDec.Type == SymbolTable.STR {
 			returnExp := p.Expressions.GetValue(symbolTable)
 
 			finalMsg := fmt.Sprintf("%v", returnExp.Value)

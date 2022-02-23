@@ -63,6 +63,12 @@ func (s *BaseProjectParserListener) EnterAssign_prod(ctx *Assign_prodContext) {}
 // ExitAssign_prod is called when production assign_prod is exited.
 func (s *BaseProjectParserListener) ExitAssign_prod(ctx *Assign_prodContext) {}
 
+// EnterIds_type is called when production ids_type is entered.
+func (s *BaseProjectParserListener) EnterIds_type(ctx *Ids_typeContext) {}
+
+// ExitIds_type is called when production ids_type is exited.
+func (s *BaseProjectParserListener) ExitIds_type(ctx *Ids_typeContext) {}
+
 // EnterListIds is called when production listIds is entered.
 func (s *BaseProjectParserListener) EnterListIds(ctx *ListIdsContext) {}
 

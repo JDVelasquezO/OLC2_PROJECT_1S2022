@@ -15,7 +15,7 @@ import (
 var typeDef = [6][6]SymbolTable.DataType{
 	{SymbolTable.INTEGER, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
 	{SymbolTable.FLOAT, SymbolTable.FLOAT, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
-	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.STRING, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
+	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.STR, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
 	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.CHAR, SymbolTable.NULL, SymbolTable.NULL},
 	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.BOOLEAN, SymbolTable.NULL},
 	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
@@ -54,8 +54,8 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 			d.DataType = SymbolTable.INTEGER
 		case SymbolTable.FLOAT:
 			d.DataType = SymbolTable.FLOAT
-		case SymbolTable.STRING:
-			d.DataType = SymbolTable.STRING
+		case SymbolTable.STR:
+			d.DataType = SymbolTable.STR
 		case SymbolTable.CHAR:
 			d.DataType = SymbolTable.CHAR
 		case SymbolTable.BOOLEAN:

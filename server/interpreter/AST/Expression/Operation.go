@@ -10,10 +10,10 @@ import (
 )
 
 var sum = [5][5]SymbolTable.DataType{
-	{SymbolTable.INTEGER, SymbolTable.FLOAT, SymbolTable.STRING, SymbolTable.NULL, SymbolTable.NULL},
-	{SymbolTable.FLOAT, SymbolTable.FLOAT, SymbolTable.STRING, SymbolTable.NULL, SymbolTable.NULL},
-	{SymbolTable.STRING, SymbolTable.STRING, SymbolTable.STRING, SymbolTable.STRING, SymbolTable.NULL},
-	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.STRING, SymbolTable.NULL, SymbolTable.NULL},
+	{SymbolTable.INTEGER, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
+	{SymbolTable.NULL, SymbolTable.FLOAT, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
+	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
+	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
 	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
 }
 
@@ -104,7 +104,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			op2, _ := strconv.ParseFloat(fmt.Sprintf("%v", retRight.Value), 64)
 			return SymbolTable.ReturnType{Type: priority, Value: op1 + op2}
 
-		} else if priority == SymbolTable.STRING {
+		} else if priority == SymbolTable.STR {
 			r1 := fmt.Sprintf("%v", retLeft.Value)
 			r2 := fmt.Sprintf("%v", retRight.Value)
 
@@ -117,9 +117,9 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			return SymbolTable.ReturnType{Type: retLeft.Type, Value: value}
 		}
 
-		if retLeft.Type == SymbolTable.STRING ||
+		if retLeft.Type == SymbolTable.STR ||
 			retLeft.Type == SymbolTable.BOOLEAN ||
-			retRight.Type == SymbolTable.STRING ||
+			retRight.Type == SymbolTable.STR ||
 			retRight.Type == SymbolTable.BOOLEAN ||
 			retRight.Type == SymbolTable.NULL ||
 			retLeft.Type == SymbolTable.NULL {
@@ -141,9 +141,9 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 
 	case "*":
-		if retLeft.Type == SymbolTable.STRING ||
+		if retLeft.Type == SymbolTable.STR ||
 			retLeft.Type == SymbolTable.BOOLEAN ||
-			retRight.Type == SymbolTable.STRING ||
+			retRight.Type == SymbolTable.STR ||
 			retRight.Type == SymbolTable.BOOLEAN ||
 			retRight.Type == SymbolTable.NULL ||
 			retLeft.Type == SymbolTable.NULL {
@@ -165,9 +165,9 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 
 	case "/":
-		if retLeft.Type == SymbolTable.STRING ||
+		if retLeft.Type == SymbolTable.STR ||
 			retLeft.Type == SymbolTable.BOOLEAN ||
-			retRight.Type == SymbolTable.STRING ||
+			retRight.Type == SymbolTable.STR ||
 			retRight.Type == SymbolTable.BOOLEAN ||
 			retRight.Type == SymbolTable.NULL ||
 			retLeft.Type == SymbolTable.NULL {
@@ -189,9 +189,9 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 
 	case "%":
-		if retLeft.Type == SymbolTable.STRING ||
+		if retLeft.Type == SymbolTable.STR ||
 			retLeft.Type == SymbolTable.BOOLEAN ||
-			retRight.Type == SymbolTable.STRING ||
+			retRight.Type == SymbolTable.STR ||
 			retRight.Type == SymbolTable.BOOLEAN ||
 			retRight.Type == SymbolTable.NULL ||
 			retLeft.Type == SymbolTable.NULL {
@@ -213,9 +213,9 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 
 	case ">":
-		if retLeft.Type == SymbolTable.STRING ||
+		if retLeft.Type == SymbolTable.STR ||
 			retLeft.Type == SymbolTable.BOOLEAN ||
-			retRight.Type == SymbolTable.STRING ||
+			retRight.Type == SymbolTable.STR ||
 			retRight.Type == SymbolTable.BOOLEAN ||
 			retRight.Type == SymbolTable.NULL ||
 			retLeft.Type == SymbolTable.NULL {
@@ -237,9 +237,9 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 
 	case "<":
-		if retLeft.Type == SymbolTable.STRING ||
+		if retLeft.Type == SymbolTable.STR ||
 			retLeft.Type == SymbolTable.BOOLEAN ||
-			retRight.Type == SymbolTable.STRING ||
+			retRight.Type == SymbolTable.STR ||
 			retRight.Type == SymbolTable.BOOLEAN ||
 			retRight.Type == SymbolTable.NULL ||
 			retLeft.Type == SymbolTable.NULL {
@@ -261,9 +261,9 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 
 	case ">=":
-		if retLeft.Type == SymbolTable.STRING ||
+		if retLeft.Type == SymbolTable.STR ||
 			retLeft.Type == SymbolTable.BOOLEAN ||
-			retRight.Type == SymbolTable.STRING ||
+			retRight.Type == SymbolTable.STR ||
 			retRight.Type == SymbolTable.BOOLEAN ||
 			retRight.Type == SymbolTable.NULL ||
 			retLeft.Type == SymbolTable.NULL {
@@ -285,9 +285,9 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 
 	case "<=":
-		if retLeft.Type == SymbolTable.STRING ||
+		if retLeft.Type == SymbolTable.STR ||
 			retLeft.Type == SymbolTable.BOOLEAN ||
-			retRight.Type == SymbolTable.STRING ||
+			retRight.Type == SymbolTable.STR ||
 			retRight.Type == SymbolTable.BOOLEAN ||
 			retRight.Type == SymbolTable.NULL ||
 			retLeft.Type == SymbolTable.NULL {
@@ -343,7 +343,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			}
 			return SymbolTable.ReturnType{Type: priority, Value: left == right}
 
-		} else if priority == SymbolTable.STRING {
+		} else if priority == SymbolTable.STR {
 			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(string) == retRight.Value.(string)}
 		}
 
@@ -354,8 +354,8 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			retRight.Type == SymbolTable.INTEGER ||
 			retLeft.Type == SymbolTable.FLOAT ||
 			retRight.Type == SymbolTable.FLOAT ||
-			retLeft.Type == SymbolTable.STRING ||
-			retRight.Type == SymbolTable.STRING {
+			retLeft.Type == SymbolTable.STR ||
+			retRight.Type == SymbolTable.STR {
 
 			row := strconv.Itoa(p.Row)
 			col := strconv.Itoa(p.Col)
@@ -388,8 +388,8 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			retRight.Type == SymbolTable.INTEGER ||
 			retLeft.Type == SymbolTable.FLOAT ||
 			retRight.Type == SymbolTable.FLOAT ||
-			retLeft.Type == SymbolTable.STRING ||
-			retRight.Type == SymbolTable.STRING {
+			retLeft.Type == SymbolTable.STR ||
+			retRight.Type == SymbolTable.STR {
 
 			row := strconv.Itoa(p.Row)
 			col := strconv.Itoa(p.Col)
@@ -416,5 +416,11 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 
 	}
 
-	return SymbolTable.ReturnType{Type: SymbolTable.NULL, Value: nil}
+	row := strconv.Itoa(p.Row)
+	col := strconv.Itoa(p.Col)
+	errors.CounterError += 1
+	msg := "(" + row + ", " + col + ") Error: tipos de datos no soportados "
+	err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
+	errors.TypeError = append(errors.TypeError, err)
+	return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 }

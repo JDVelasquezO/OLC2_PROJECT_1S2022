@@ -13,6 +13,7 @@ RSTRING:    'String';
 RINTEGER:   'Integer';
 RREAL:      'Real';
 RBOOLEAN:   'Boolean';
+RSTR:       'str';
 
 // Conditional Structures
 RIF:        'If';
@@ -41,6 +42,7 @@ SEMICOLON:              ';';
 COMMA:                  ',';
 COLON:                  ':';
 ADMIRATION:             '!';
+REFERENCE:              '&';
 
 // Grouping Operators
 LEFT_PAR:               '(';
