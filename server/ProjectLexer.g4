@@ -10,10 +10,11 @@ DECLARAR:  'let';
 
 // Data Type of Vars
 RSTRING:    'String';
-RINTEGER:   'Integer';
-RREAL:      'Real';
+RINTEGER:   'i64';
+RREAL:      'f64';
 RBOOLEAN:   'Boolean';
 RSTR:       'str';
+RAS:        'as';
 
 // Conditional Structures
 RIF:        'If';
@@ -61,11 +62,13 @@ GREATER_EQUALTHAN:      '>=';
 LESS_EQUEALTHAN:        '<=';
 
 // Aritmethic Operators
-MUL: '*';
-DIV: '/';
-ADD: '+';
-SUB: '-';
-MOD: '%';
+MUL:                    '*';
+DIV:                    '/';
+ADD:                    '+';
+SUB:                    '-';
+MOD:                    '%';
+POWI:                   'pow';
+POWF:                   'powf';
 
 // White spaces
 WHITESPACE: [ \r\n\t]+ -> skip;

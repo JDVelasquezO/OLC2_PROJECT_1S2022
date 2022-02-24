@@ -99,17 +99,29 @@ func (s *BaseProjectParserListener) EnterExpr_rel(ctx *Expr_relContext) {}
 // ExitExpr_rel is called when production expr_rel is exited.
 func (s *BaseProjectParserListener) ExitExpr_rel(ctx *Expr_relContext) {}
 
+// EnterExpr_arit is called when production expr_arit is entered.
+func (s *BaseProjectParserListener) EnterExpr_arit(ctx *Expr_aritContext) {}
+
+// ExitExpr_arit is called when production expr_arit is exited.
+func (s *BaseProjectParserListener) ExitExpr_arit(ctx *Expr_aritContext) {}
+
 // EnterExpr_logic is called when production expr_logic is entered.
 func (s *BaseProjectParserListener) EnterExpr_logic(ctx *Expr_logicContext) {}
 
 // ExitExpr_logic is called when production expr_logic is exited.
 func (s *BaseProjectParserListener) ExitExpr_logic(ctx *Expr_logicContext) {}
 
-// EnterExpr_arit is called when production expr_arit is entered.
-func (s *BaseProjectParserListener) EnterExpr_arit(ctx *Expr_aritContext) {}
+// EnterExpr_cast is called when production expr_cast is entered.
+func (s *BaseProjectParserListener) EnterExpr_cast(ctx *Expr_castContext) {}
 
-// ExitExpr_arit is called when production expr_arit is exited.
-func (s *BaseProjectParserListener) ExitExpr_arit(ctx *Expr_aritContext) {}
+// ExitExpr_cast is called when production expr_cast is exited.
+func (s *BaseProjectParserListener) ExitExpr_cast(ctx *Expr_castContext) {}
+
+// EnterNumber_data_type is called when production number_data_type is entered.
+func (s *BaseProjectParserListener) EnterNumber_data_type(ctx *Number_data_typeContext) {}
+
+// ExitNumber_data_type is called when production number_data_type is exited.
+func (s *BaseProjectParserListener) ExitNumber_data_type(ctx *Number_data_typeContext) {}
 
 // EnterPrimitive is called when production primitive is entered.
 func (s *BaseProjectParserListener) EnterPrimitive(ctx *PrimitiveContext) {}

@@ -125,18 +125,15 @@ bloq returns [*arrayList.List content]
     ;
 
 expression returns [Abstract.Expression p]
-    : expr_rel   { $p = $expr_rel.p }
-    | expr_arit  { $p = $expr_arit.p }
-    | expr_logic { $p = $expr_logic.p }
+    : expr_rel    { $p = $expr_rel.p }
+    | expr_arit   { $p = $expr_arit.p }
+    | expr_logic  { $p = $expr_logic.p }
+    | expr_cast   { $p = $expr_cast.p }
 ;
 
 expr_rel returns[Abstract.Expression p]
     : opLeft = expr_rel op=( GREATER_THAN | LESS_THAN | GREATER_EQUALTHAN | LESS_EQUEALTHAN | EQUEAL_EQUAL ) opRight = expr_rel { $p = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_relContext).GetOp().GetColumn() )}
     | expr_arit { $p = $expr_arit.p }
-    ;
-
-expr_logic returns[Abstract.Expression p]
-    : opLeft = expr_rel op=( RAND | ROR ) opRight = expr_rel { $p = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_logicContext).GetOp().GetColumn() )}
     ;
 
 expr_arit returns [Abstract.Expression p]
@@ -146,6 +143,35 @@ expr_arit returns [Abstract.Expression p]
     | primitive {$p = $primitive.p}
     | LEFT_PAR expression RIGHT_PAR {$p = $expression.p}
 ;
+
+expr_logic returns[Abstract.Expression p]
+    : opLeft = expr_rel op=( RAND | ROR ) opRight = expr_rel { $p = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_logicContext).GetOp().GetColumn() )}
+    ;
+
+expr_cast returns[Abstract.Expression p]
+    : LEFT_PAR expression RAS number_data_type RIGHT_PAR {
+        if $number_data_type.data == "i64" {
+            $p = Expression.NewCast($expression.p, SymbolTable.INTEGER)
+        } else if $number_data_type.data == "f64" {
+            $p = Expression.NewCast($expression.p, SymbolTable.FLOAT)
+        }
+    }
+    ;
+
+number_data_type returns[string data]
+    : RINTEGER { $data = $RINTEGER.text }
+    | RREAL { $data = $RREAL.text }
+    ;
+
+//type_number returns [string type_num]
+//    : RINTEGER { type_num = $RINTEGER.text }
+//    | RREAL { type_num = $RREAL.text }
+//    ;
+
+//type_power returns [string mod_pow]
+//    : POWI { mod_pow = $POWI.text }
+//    | POWF { mod_pow = $POWF.text }
+//    ;
 
 primitive returns [Abstract.Expression p]
     :INTEGER{

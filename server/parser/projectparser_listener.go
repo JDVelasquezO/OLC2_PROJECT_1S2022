@@ -47,11 +47,17 @@ type ProjectParserListener interface {
 	// EnterExpr_rel is called when entering the expr_rel production.
 	EnterExpr_rel(c *Expr_relContext)
 
+	// EnterExpr_arit is called when entering the expr_arit production.
+	EnterExpr_arit(c *Expr_aritContext)
+
 	// EnterExpr_logic is called when entering the expr_logic production.
 	EnterExpr_logic(c *Expr_logicContext)
 
-	// EnterExpr_arit is called when entering the expr_arit production.
-	EnterExpr_arit(c *Expr_aritContext)
+	// EnterExpr_cast is called when entering the expr_cast production.
+	EnterExpr_cast(c *Expr_castContext)
+
+	// EnterNumber_data_type is called when entering the number_data_type production.
+	EnterNumber_data_type(c *Number_data_typeContext)
 
 	// EnterPrimitive is called when entering the primitive production.
 	EnterPrimitive(c *PrimitiveContext)
@@ -95,11 +101,17 @@ type ProjectParserListener interface {
 	// ExitExpr_rel is called when exiting the expr_rel production.
 	ExitExpr_rel(c *Expr_relContext)
 
+	// ExitExpr_arit is called when exiting the expr_arit production.
+	ExitExpr_arit(c *Expr_aritContext)
+
 	// ExitExpr_logic is called when exiting the expr_logic production.
 	ExitExpr_logic(c *Expr_logicContext)
 
-	// ExitExpr_arit is called when exiting the expr_arit production.
-	ExitExpr_arit(c *Expr_aritContext)
+	// ExitExpr_cast is called when exiting the expr_cast production.
+	ExitExpr_cast(c *Expr_castContext)
+
+	// ExitNumber_data_type is called when exiting the number_data_type production.
+	ExitNumber_data_type(c *Number_data_typeContext)
 
 	// ExitPrimitive is called when exiting the primitive production.
 	ExitPrimitive(c *PrimitiveContext)

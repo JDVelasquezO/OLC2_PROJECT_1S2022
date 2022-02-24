@@ -78,7 +78,7 @@ func (p Print) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 				row := p.Row
 				col := p.Col
 				errors.CounterError += 1
-				msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No está el forma especificado"
+				msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No está el formato especificada"
 				err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
 				errors.TypeError = append(errors.TypeError, err)
 				interpreter.Console += fmt.Sprintf("%v", err.Msg)
