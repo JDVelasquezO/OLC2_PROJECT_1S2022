@@ -212,6 +212,39 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			return SymbolTable.ReturnType{Type: priority, Value: math.Mod(retLeft.Value.(float64), retRight.Value.(float64))}
 		}
 
+	case "pow", "powf":
+		if retLeft.Type == SymbolTable.STR ||
+			retLeft.Type == SymbolTable.BOOLEAN ||
+			retRight.Type == SymbolTable.STR ||
+			retRight.Type == SymbolTable.BOOLEAN ||
+			retRight.Type == SymbolTable.NULL ||
+			retLeft.Type == SymbolTable.NULL {
+
+			row := strconv.Itoa(p.Row)
+			col := strconv.Itoa(p.Col)
+			errors.CounterError += 1
+			msg := "(" + row + ", " + col + ") Error: Operación 'pow' no soportada para este tipo de dato"
+			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
+			errors.TypeError = append(errors.TypeError, err)
+			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
+		}
+
+		priority = relational[retLeft.Type][retRight.Type]
+		if priority == SymbolTable.INTEGER && p.Operator == "pow" {
+			return SymbolTable.ReturnType{Type: priority, Value: math.Pow(float64(retLeft.Value.(int)), float64(retRight.Value.(int)))}
+		} else if priority == SymbolTable.FLOAT && p.Operator == "powf" {
+			return SymbolTable.ReturnType{Type: priority, Value: math.Pow(retLeft.Value.(float64), retRight.Value.(float64))}
+		} else {
+
+			row := strconv.Itoa(p.Row)
+			col := strconv.Itoa(p.Col)
+			errors.CounterError += 1
+			msg := "(" + row + ", " + col + ") Error: el operador " + p.Operator + " no puede operarse con este tipo de dato "
+			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
+			errors.TypeError = append(errors.TypeError, err)
+			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
+		}
+
 	case ">":
 		if retLeft.Type == SymbolTable.STR ||
 			retLeft.Type == SymbolTable.BOOLEAN ||

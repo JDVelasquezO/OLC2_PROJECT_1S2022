@@ -105,6 +105,12 @@ func (s *BaseProjectParserListener) EnterExpr_arit(ctx *Expr_aritContext) {}
 // ExitExpr_arit is called when production expr_arit is exited.
 func (s *BaseProjectParserListener) ExitExpr_arit(ctx *Expr_aritContext) {}
 
+// EnterPow_op is called when production pow_op is entered.
+func (s *BaseProjectParserListener) EnterPow_op(ctx *Pow_opContext) {}
+
+// ExitPow_op is called when production pow_op is exited.
+func (s *BaseProjectParserListener) ExitPow_op(ctx *Pow_opContext) {}
+
 // EnterExpr_logic is called when production expr_logic is entered.
 func (s *BaseProjectParserListener) EnterExpr_logic(ctx *Expr_logicContext) {}
 

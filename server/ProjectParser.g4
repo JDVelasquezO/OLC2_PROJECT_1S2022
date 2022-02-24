@@ -138,11 +138,17 @@ expr_rel returns[Abstract.Expression p]
 
 expr_arit returns [Abstract.Expression p]
     : '-' opU = expression { $p = Expression.NewOperation($opU.p, "-", nil, true, localctx.(*Expr_aritContext).GetOpU().GetStart().GetLine(), localctx.(*Expr_aritContext).GetOpU().GetStart().GetColumn() ) }
+    | pow_op LEFT_PAR opLeft = expr_arit COMMA opRight = expr_arit RIGHT_PAR { $p = Expression.NewOperation($opLeft.p, $pow_op.op, $opRight.p, false, localctx.(*Expr_aritContext).Get_pow_op().GetStart().GetLine(), localctx.(*Expr_aritContext).Get_pow_op().GetStart().GetColumn()) }
     | opLeft = expr_arit op=('*'|'/'|'%') opRight = expr_arit {$p = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_aritContext).GetOp().GetColumn() )}
     | opLeft = expr_arit op=('+'|'-') opRight = expr_arit {$p = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_aritContext).GetOp().GetColumn() )}
     | primitive {$p = $primitive.p}
     | LEFT_PAR expression RIGHT_PAR {$p = $expression.p}
 ;
+
+pow_op returns [string op]
+    : RINTEGER HERITAGE POWI { $op = $POWI.text }
+    | RREAL HERITAGE POWF { $op = $POWF.text }
+    ;
 
 expr_logic returns[Abstract.Expression p]
     : opLeft = expr_rel op=( RAND | ROR ) opRight = expr_rel { $p = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_logicContext).GetOp().GetColumn() )}

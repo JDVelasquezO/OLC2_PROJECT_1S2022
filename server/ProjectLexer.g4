@@ -24,6 +24,10 @@ RELSE:      'entonces';
 RAND:       'AND';
 ROR:        'OR';
 
+// Mathematic Operators
+POWI:                   'pow';
+POWF:                   'powf';
+
 // Comments
 MULTILINE:      '/*' (~[/])+ '*/' -> skip;
 INLINE:         '//'(~[\n])+ -> skip;
@@ -44,6 +48,7 @@ COMMA:                  ',';
 COLON:                  ':';
 ADMIRATION:             '!';
 REFERENCE:              '&';
+HERITAGE:               '::';
 
 // Grouping Operators
 LEFT_PAR:               '(';
@@ -64,11 +69,9 @@ LESS_EQUEALTHAN:        '<=';
 // Aritmethic Operators
 MUL:                    '*';
 DIV:                    '/';
+MOD:                    '%';
 ADD:                    '+';
 SUB:                    '-';
-MOD:                    '%';
-POWI:                   'pow';
-POWF:                   'powf';
 
 // White spaces
 WHITESPACE: [ \r\n\t]+ -> skip;
