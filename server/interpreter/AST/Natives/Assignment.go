@@ -32,7 +32,8 @@ func (d *Assign) Execute(table SymbolTable.SymbolTable) interface{} {
 		row := d.ListIds.GetValue(0).(Expression.Identifier).Row
 		col := d.ListIds.GetValue(0).(Expression.Identifier).Col
 		errors.CounterError += 1
-		err := errors.Error{Id: errors.CounterError, Line: row, Col: col, Msg: "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No se puede mezclar esos tipos de datos", Type: "Semantic", Ambit: "global"}
+		msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No se puede mezclar esos tipos de datos \n"
+		err := errors.NewError(errors.CounterError, row, col, msg, table.Name)
 		errors.TypeError = append(errors.TypeError, err)
 		interpreter.Console += fmt.Sprintf("%v", err.Msg)
 		return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
@@ -43,6 +44,16 @@ func (d *Assign) Execute(table SymbolTable.SymbolTable) interface{} {
 	varDec := d.ListIds.GetValue(0).(Expression.Identifier).Id
 	val := table.GetSymbol(varDec)
 
+	if !val.IsConst {
+		row := d.Val.(Expression.Primitive).Row
+		col := d.Val.(Expression.Primitive).Col
+		errors.CounterError += 1
+		msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No se puede asignar valor a un no mut \n"
+		err := errors.NewError(errors.CounterError, row, col, msg, table.Name)
+		interpreter.Console += fmt.Sprintf("%v", err.Msg)
+		return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
+	}
+
 	typeDec := val.DataType
 	typeRes := typeDef[typeDec][typeExpr]
 
@@ -50,8 +61,8 @@ func (d *Assign) Execute(table SymbolTable.SymbolTable) interface{} {
 		row := d.Val.(Expression.Primitive).Row
 		col := d.Val.(Expression.Primitive).Col
 		errors.CounterError += 1
-		err := errors.Error{Id: errors.CounterError, Line: row, Col: col, Msg: "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No se puede mezclar esos tipos de datos", Type: "Semantic", Ambit: "global"}
-		errors.TypeError = append(errors.TypeError, err)
+		msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No se puede mezclar esos tipos de datos \n"
+		err := errors.NewError(errors.CounterError, row, col, msg, table.Name)
 		interpreter.Console += fmt.Sprintf("%v", err.Msg)
 		return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
 	}

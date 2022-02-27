@@ -67,11 +67,19 @@ listVars returns [*arrayList.List list]
     ;
 
 declaration_prod returns [Abstract.Instruction instr]
-    : DECLARAR ids_type EQUAL expression SEMICOLON {
-        $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p)
+    : DECLARAR MUT? ids_type (COLON data_type)? EQUAL expression SEMICOLON {
+            if ($MUT.text != "") {
+                $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, true)
+            } else {
+                $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, false)
+            }
         }
-    | DECLARAR ids_type SEMICOLON {
-        $instr = Natives.NewDeclaration($ids_type.list)
+    | DECLARAR MUT? ids_type (COLON data_type)? SEMICOLON {
+        if ($MUT.text != "") {
+            $instr = Natives.NewDeclaration($ids_type.list, true)
+        } else {
+            $instr = Natives.NewDeclaration($ids_type.list, false)
+        }
     }
     ;
 
@@ -142,6 +150,7 @@ expr_arit returns [Abstract.Expression p]
     | opLeft = expr_arit op=('*'|'/'|'%') opRight = expr_arit {$p = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_aritContext).GetOp().GetColumn() )}
     | opLeft = expr_arit op=('+'|'-') opRight = expr_arit {$p = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_aritContext).GetOp().GetColumn() )}
     | primitive {$p = $primitive.p}
+    | expr_cast   { $p = $expr_cast.p }
     | LEFT_PAR expression RIGHT_PAR {$p = $expression.p}
 ;
 
@@ -151,22 +160,26 @@ pow_op returns [string op]
     ;
 
 expr_logic returns[Abstract.Expression p]
-    : opLeft = expr_rel op=( RAND | ROR ) opRight = expr_rel { $p = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_logicContext).GetOp().GetColumn() )}
+    : ADMIRATION opU=expression { $p = Expression.NewOperation($opU.p, "!", nil, true, localctx.(*Expr_logicContext).GetOpU().GetStart().GetLine(), localctx.(*Expr_logicContext).GetOpU().GetStart().GetColumn()) }
+    | opLeft = expr_rel op=( AND | OR ) opRight = expr_rel { $p = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_logicContext).GetOp().GetColumn() )}
     ;
 
 expr_cast returns[Abstract.Expression p]
-    : LEFT_PAR expression RAS number_data_type RIGHT_PAR {
-        if $number_data_type.data == "i64" {
+    : LEFT_PAR expression RAS data_type RIGHT_PAR {
+        if $data_type.data == "i64" {
             $p = Expression.NewCast($expression.p, SymbolTable.INTEGER)
-        } else if $number_data_type.data == "f64" {
+        } else if $data_type.data == "f64" {
             $p = Expression.NewCast($expression.p, SymbolTable.FLOAT)
         }
     }
     ;
 
-number_data_type returns[string data]
+data_type returns[string data]
     : RINTEGER { $data = $RINTEGER.text }
     | RREAL { $data = $RREAL.text }
+    | RSTRING { $data = $RSTRING.text }
+    | RBOOLEAN { $data = $RBOOLEAN.text }
+    | RCHAR { $data = $RCHAR.text }
     ;
 
 //type_number returns [string type_num]

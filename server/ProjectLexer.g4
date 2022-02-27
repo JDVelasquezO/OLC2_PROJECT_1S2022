@@ -7,22 +7,20 @@ PRINT:     'print';
 
 // Variables
 DECLARAR:  'let';
+MUT:       'mut';
 
 // Data Type of Vars
 RSTRING:    'String';
 RINTEGER:   'i64';
 RREAL:      'f64';
-RBOOLEAN:   'Boolean';
-RSTR:       'str';
+RBOOLEAN:   'bool';
+RCHAR:      'char';
+RSTR:       '&str';
 RAS:        'as';
 
 // Conditional Structures
 RIF:        'If';
 RELSE:      'entonces';
-
-// Logical Operators
-RAND:       'AND';
-ROR:        'OR';
 
 // Mathematic Operators
 POWI:                   'pow';
@@ -72,6 +70,10 @@ DIV:                    '/';
 MOD:                    '%';
 ADD:                    '+';
 SUB:                    '-';
+
+// Logic Operators
+AND:                    '&&';
+OR:                     '||';
 
 // White spaces
 WHITESPACE: [ \r\n\t]+ -> skip;

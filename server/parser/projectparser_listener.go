@@ -59,8 +59,8 @@ type ProjectParserListener interface {
 	// EnterExpr_cast is called when entering the expr_cast production.
 	EnterExpr_cast(c *Expr_castContext)
 
-	// EnterNumber_data_type is called when entering the number_data_type production.
-	EnterNumber_data_type(c *Number_data_typeContext)
+	// EnterData_type is called when entering the data_type production.
+	EnterData_type(c *Data_typeContext)
 
 	// EnterPrimitive is called when entering the primitive production.
 	EnterPrimitive(c *PrimitiveContext)
@@ -116,8 +116,8 @@ type ProjectParserListener interface {
 	// ExitExpr_cast is called when exiting the expr_cast production.
 	ExitExpr_cast(c *Expr_castContext)
 
-	// ExitNumber_data_type is called when exiting the number_data_type production.
-	ExitNumber_data_type(c *Number_data_typeContext)
+	// ExitData_type is called when exiting the data_type production.
+	ExitData_type(c *Data_typeContext)
 
 	// ExitPrimitive is called when exiting the primitive production.
 	ExitPrimitive(c *PrimitiveContext)

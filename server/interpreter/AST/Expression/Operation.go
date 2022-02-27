@@ -34,9 +34,9 @@ var sub = [5][5]SymbolTable.DataType{
 }
 
 var relational = [5][5]SymbolTable.DataType{
-	{SymbolTable.INTEGER, SymbolTable.FLOAT, SymbolTable.NULL, SymbolTable.BOOLEAN, SymbolTable.NULL},
-	{SymbolTable.FLOAT, SymbolTable.FLOAT, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
-	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
+	{SymbolTable.INTEGER, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
+	{SymbolTable.NULL, SymbolTable.FLOAT, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
+	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.STR, SymbolTable.NULL, SymbolTable.NULL},
 	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.BOOLEAN, SymbolTable.NULL},
 	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
 }
@@ -65,7 +65,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		row := strconv.Itoa(p.Row)
 		col := strconv.Itoa(p.Col)
 		errors.CounterError += 1
-		msg := "(" + row + ", " + col + ") ID " + p.OpLeft.(Identifier).Id + " no declarado o asignado"
+		msg := "(" + row + ", " + col + ") ID " + p.OpLeft.(Identifier).Id + " no declarado o asignado \n"
 		err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
 		errors.TypeError = append(errors.TypeError, err)
 		return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
@@ -78,7 +78,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			row := strconv.Itoa(p.Row)
 			col := strconv.Itoa(p.Col)
 			errors.CounterError += 1
-			msg := "(" + row + ", " + col + ") ID " + p.OpRight.(Identifier).Id + " no asignado"
+			msg := "(" + row + ", " + col + ") ID " + p.OpRight.(Identifier).Id + " no asignado \n"
 			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
 			errors.TypeError = append(errors.TypeError, err)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
@@ -92,6 +92,16 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 
 	switch p.Operator {
 	case "+":
+		if retLeft.Type == SymbolTable.BOOLEAN ||
+			retLeft.Type == SymbolTable.NULL ||
+			retLeft.Type == SymbolTable.CHAR ||
+			retRight.Type == SymbolTable.BOOLEAN ||
+			retRight.Type == SymbolTable.NULL ||
+			retRight.Type == SymbolTable.CHAR {
+
+			goto ErrorDataType
+		}
+
 		priority = sum[retLeft.Type][retRight.Type]
 
 		if priority == SymbolTable.INTEGER {
@@ -122,15 +132,11 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			retRight.Type == SymbolTable.STR ||
 			retRight.Type == SymbolTable.BOOLEAN ||
 			retRight.Type == SymbolTable.NULL ||
-			retLeft.Type == SymbolTable.NULL {
+			retLeft.Type == SymbolTable.NULL ||
+			retRight.Type == SymbolTable.CHAR ||
+			retLeft.Type == SymbolTable.CHAR {
 
-			row := strconv.Itoa(p.Row)
-			col := strconv.Itoa(p.Col)
-			errors.CounterError += 1
-			msg := "(" + row + ", " + col + ") Error: Operación '-' no soportada"
-			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
-			errors.TypeError = append(errors.TypeError, err)
-			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
+			goto ErrorDataType
 		}
 
 		priority = sub[retLeft.Type][retRight.Type]
@@ -146,15 +152,11 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			retRight.Type == SymbolTable.STR ||
 			retRight.Type == SymbolTable.BOOLEAN ||
 			retRight.Type == SymbolTable.NULL ||
-			retLeft.Type == SymbolTable.NULL {
+			retLeft.Type == SymbolTable.NULL ||
+			retRight.Type == SymbolTable.CHAR ||
+			retLeft.Type == SymbolTable.CHAR {
 
-			row := strconv.Itoa(p.Row)
-			col := strconv.Itoa(p.Col)
-			errors.CounterError += 1
-			msg := "(" + row + ", " + col + ") Error: Operación '*' no soportada"
-			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
-			errors.TypeError = append(errors.TypeError, err)
-			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
+			goto ErrorDataType
 		}
 
 		priority = multiDiv[retLeft.Type][retRight.Type]
@@ -170,15 +172,11 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			retRight.Type == SymbolTable.STR ||
 			retRight.Type == SymbolTable.BOOLEAN ||
 			retRight.Type == SymbolTable.NULL ||
-			retLeft.Type == SymbolTable.NULL {
+			retLeft.Type == SymbolTable.NULL ||
+			retRight.Type == SymbolTable.CHAR ||
+			retLeft.Type == SymbolTable.CHAR {
 
-			row := strconv.Itoa(p.Row)
-			col := strconv.Itoa(p.Col)
-			errors.CounterError += 1
-			msg := "(" + row + ", " + col + ") Error: Operación '/' no soportada"
-			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
-			errors.TypeError = append(errors.TypeError, err)
-			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
+			goto ErrorDataType
 		}
 
 		priority = multiDiv[retLeft.Type][retRight.Type]
@@ -194,15 +192,11 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			retRight.Type == SymbolTable.STR ||
 			retRight.Type == SymbolTable.BOOLEAN ||
 			retRight.Type == SymbolTable.NULL ||
-			retLeft.Type == SymbolTable.NULL {
+			retLeft.Type == SymbolTable.NULL ||
+			retRight.Type == SymbolTable.CHAR ||
+			retLeft.Type == SymbolTable.CHAR {
 
-			row := strconv.Itoa(p.Row)
-			col := strconv.Itoa(p.Col)
-			errors.CounterError += 1
-			msg := "(" + row + ", " + col + ") Error: Operación '%' no soportada"
-			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
-			errors.TypeError = append(errors.TypeError, err)
-			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
+			goto ErrorDataType
 		}
 
 		priority = multiDiv[retLeft.Type][retRight.Type]
@@ -218,15 +212,11 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			retRight.Type == SymbolTable.STR ||
 			retRight.Type == SymbolTable.BOOLEAN ||
 			retRight.Type == SymbolTable.NULL ||
-			retLeft.Type == SymbolTable.NULL {
+			retLeft.Type == SymbolTable.NULL ||
+			retRight.Type == SymbolTable.CHAR ||
+			retLeft.Type == SymbolTable.CHAR {
 
-			row := strconv.Itoa(p.Row)
-			col := strconv.Itoa(p.Col)
-			errors.CounterError += 1
-			msg := "(" + row + ", " + col + ") Error: Operación 'pow' no soportada para este tipo de dato"
-			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
-			errors.TypeError = append(errors.TypeError, err)
-			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
+			goto ErrorDataType
 		}
 
 		priority = relational[retLeft.Type][retRight.Type]
@@ -239,27 +229,21 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			row := strconv.Itoa(p.Row)
 			col := strconv.Itoa(p.Col)
 			errors.CounterError += 1
-			msg := "(" + row + ", " + col + ") Error: el operador " + p.Operator + " no puede operarse con este tipo de dato "
+			msg := "(" + row + ", " + col + ") Error: el operador " + p.Operator + " no puede operarse con este tipo de dato \n"
 			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
 			errors.TypeError = append(errors.TypeError, err)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 		}
 
 	case ">":
-		if retLeft.Type == SymbolTable.STR ||
-			retLeft.Type == SymbolTable.BOOLEAN ||
-			retRight.Type == SymbolTable.STR ||
+		if retLeft.Type == SymbolTable.BOOLEAN ||
 			retRight.Type == SymbolTable.BOOLEAN ||
 			retRight.Type == SymbolTable.NULL ||
-			retLeft.Type == SymbolTable.NULL {
+			retLeft.Type == SymbolTable.NULL ||
+			retRight.Type == SymbolTable.CHAR ||
+			retLeft.Type == SymbolTable.CHAR {
 
-			row := strconv.Itoa(p.Row)
-			col := strconv.Itoa(p.Col)
-			errors.CounterError += 1
-			msg := "(" + row + ", " + col + ") Error: Operación '>' no soportada"
-			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
-			errors.TypeError = append(errors.TypeError, err)
-			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
+			goto ErrorDataType
 		}
 
 		priority = relational[retLeft.Type][retRight.Type]
@@ -267,23 +251,19 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(int) > retRight.Value.(int)}
 		} else if priority == SymbolTable.FLOAT {
 			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(float64) > retRight.Value.(float64)}
+		} else if priority == SymbolTable.STR {
+			return SymbolTable.ReturnType{Type: priority, Value: len(retLeft.Value.(string)) > len(retRight.Value.(string))}
 		}
 
 	case "<":
-		if retLeft.Type == SymbolTable.STR ||
-			retLeft.Type == SymbolTable.BOOLEAN ||
-			retRight.Type == SymbolTable.STR ||
+		if retLeft.Type == SymbolTable.BOOLEAN ||
 			retRight.Type == SymbolTable.BOOLEAN ||
 			retRight.Type == SymbolTable.NULL ||
-			retLeft.Type == SymbolTable.NULL {
+			retLeft.Type == SymbolTable.NULL ||
+			retRight.Type == SymbolTable.CHAR ||
+			retLeft.Type == SymbolTable.CHAR {
 
-			row := strconv.Itoa(p.Row)
-			col := strconv.Itoa(p.Col)
-			errors.CounterError += 1
-			msg := "(" + row + ", " + col + ") Error: Operación '<' no soportada"
-			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
-			errors.TypeError = append(errors.TypeError, err)
-			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
+			goto ErrorDataType
 		}
 
 		priority = relational[retLeft.Type][retRight.Type]
@@ -291,23 +271,19 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(int) < retRight.Value.(int)}
 		} else if priority == SymbolTable.FLOAT {
 			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(float64) < retRight.Value.(float64)}
+		} else if priority == SymbolTable.STR {
+			return SymbolTable.ReturnType{Type: priority, Value: len(retLeft.Value.(string)) < len(retRight.Value.(string))}
 		}
 
 	case ">=":
-		if retLeft.Type == SymbolTable.STR ||
-			retLeft.Type == SymbolTable.BOOLEAN ||
-			retRight.Type == SymbolTable.STR ||
+		if retLeft.Type == SymbolTable.BOOLEAN ||
 			retRight.Type == SymbolTable.BOOLEAN ||
 			retRight.Type == SymbolTable.NULL ||
-			retLeft.Type == SymbolTable.NULL {
+			retLeft.Type == SymbolTable.NULL ||
+			retRight.Type == SymbolTable.CHAR ||
+			retLeft.Type == SymbolTable.CHAR {
 
-			row := strconv.Itoa(p.Row)
-			col := strconv.Itoa(p.Col)
-			errors.CounterError += 1
-			msg := "(" + row + ", " + col + ") Error: Operación '>=' no soportada"
-			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
-			errors.TypeError = append(errors.TypeError, err)
-			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
+			goto ErrorDataType
 		}
 
 		priority = relational[retLeft.Type][retRight.Type]
@@ -315,23 +291,19 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(int) >= retRight.Value.(int)}
 		} else if priority == SymbolTable.FLOAT {
 			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(float64) >= retRight.Value.(float64)}
+		} else if priority == SymbolTable.STR {
+			return SymbolTable.ReturnType{Type: priority, Value: len(retLeft.Value.(string)) >= len(retRight.Value.(string))}
 		}
 
 	case "<=":
-		if retLeft.Type == SymbolTable.STR ||
-			retLeft.Type == SymbolTable.BOOLEAN ||
-			retRight.Type == SymbolTable.STR ||
+		if retLeft.Type == SymbolTable.BOOLEAN ||
 			retRight.Type == SymbolTable.BOOLEAN ||
 			retRight.Type == SymbolTable.NULL ||
-			retLeft.Type == SymbolTable.NULL {
+			retLeft.Type == SymbolTable.NULL ||
+			retRight.Type == SymbolTable.CHAR ||
+			retLeft.Type == SymbolTable.CHAR {
 
-			row := strconv.Itoa(p.Row)
-			col := strconv.Itoa(p.Col)
-			errors.CounterError += 1
-			msg := "(" + row + ", " + col + ") Error: Operación '<=' no soportada"
-			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
-			errors.TypeError = append(errors.TypeError, err)
-			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
+			goto ErrorDataType
 		}
 
 		priority = relational[retLeft.Type][retRight.Type]
@@ -339,19 +311,19 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(int) <= retRight.Value.(int)}
 		} else if priority == SymbolTable.FLOAT {
 			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(float64) <= retRight.Value.(float64)}
+		} else if priority == SymbolTable.STR {
+			return SymbolTable.ReturnType{Type: priority, Value: len(retLeft.Value.(string)) <= len(retRight.Value.(string))}
 		}
 
 	case "==":
-		if retLeft.Type == SymbolTable.NULL ||
-			retRight.Type == SymbolTable.NULL {
+		if retLeft.Type == SymbolTable.BOOLEAN ||
+			retRight.Type == SymbolTable.BOOLEAN ||
+			retRight.Type == SymbolTable.NULL ||
+			retLeft.Type == SymbolTable.NULL ||
+			retRight.Type == SymbolTable.CHAR ||
+			retLeft.Type == SymbolTable.CHAR {
 
-			row := strconv.Itoa(p.Row)
-			col := strconv.Itoa(p.Col)
-			errors.CounterError += 1
-			msg := "(" + row + ", " + col + ") Error: Operación '==' no soportada"
-			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
-			errors.TypeError = append(errors.TypeError, err)
-			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
+			goto ErrorDataType
 		}
 
 		priority = relational[retLeft.Type][retRight.Type]
@@ -359,28 +331,11 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(int) == retRight.Value.(int)}
 		} else if priority == SymbolTable.FLOAT {
 			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(float64) == retRight.Value.(float64)}
-		} else if priority == SymbolTable.BOOLEAN {
-
-			var left bool
-			var right bool
-			if retLeft.Value == "true" {
-				left = true
-			} else {
-				left = false
-			}
-
-			if retRight.Value == "true" {
-				right = true
-			} else {
-				right = false
-			}
-			return SymbolTable.ReturnType{Type: priority, Value: left == right}
-
 		} else if priority == SymbolTable.STR {
-			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(string) == retRight.Value.(string)}
+			return SymbolTable.ReturnType{Type: priority, Value: len(retLeft.Value.(string)) == len(retRight.Value.(string))}
 		}
 
-	case "AND":
+	case "&&":
 		if retLeft.Type == SymbolTable.NULL ||
 			retRight.Type == SymbolTable.NULL ||
 			retLeft.Type == SymbolTable.INTEGER ||
@@ -393,7 +348,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			row := strconv.Itoa(p.Row)
 			col := strconv.Itoa(p.Col)
 			errors.CounterError += 1
-			msg := "(" + row + ", " + col + ") Error: Operación 'AND' no soportada"
+			msg := "(" + row + ", " + col + ") Error: Operación 'AND' no soportada \n"
 			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
 			errors.TypeError = append(errors.TypeError, err)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
@@ -414,7 +369,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 
 		return SymbolTable.ReturnType{Type: priority, Value: left && right}
 
-	case "OR":
+	case "||":
 		if retLeft.Type == SymbolTable.NULL ||
 			retRight.Type == SymbolTable.NULL ||
 			retLeft.Type == SymbolTable.INTEGER ||
@@ -427,7 +382,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			row := strconv.Itoa(p.Row)
 			col := strconv.Itoa(p.Col)
 			errors.CounterError += 1
-			msg := "(" + row + ", " + col + ") Error: Operación 'OR' no soportada"
+			msg := "(" + row + ", " + col + ") Error: Operación 'OR' no soportada \n"
 			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
 			errors.TypeError = append(errors.TypeError, err)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
@@ -447,12 +402,30 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 		return SymbolTable.ReturnType{Type: priority, Value: left || right}
 
+	case "!":
+		if retLeft.Type == SymbolTable.NULL ||
+			retLeft.Type == SymbolTable.INTEGER ||
+			retLeft.Type == SymbolTable.FLOAT ||
+			retLeft.Type == SymbolTable.STR {
+
+			goto ErrorDataType
+		}
+
+		var left bool
+		if retLeft.Value == "true" {
+			left = false
+		} else {
+			left = true
+		}
+
+		return SymbolTable.ReturnType{Type: priority, Value: left}
 	}
 
+ErrorDataType:
 	row := strconv.Itoa(p.Row)
 	col := strconv.Itoa(p.Col)
 	errors.CounterError += 1
-	msg := "(" + row + ", " + col + ") Error: tipos de datos no soportados "
+	msg := "(" + row + ", " + col + ") Error: tipos de datos no soportados \n"
 	err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
 	errors.TypeError = append(errors.TypeError, err)
 	return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}

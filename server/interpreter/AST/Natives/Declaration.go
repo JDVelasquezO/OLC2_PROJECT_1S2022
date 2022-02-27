@@ -25,18 +25,39 @@ type Declaration struct {
 	InitVal  Abstract.Expression
 	DataType SymbolTable.DataType
 	ListIds  *arrayList.List
+	IsMut    bool
 }
 
-func NewDeclaration(listIds *arrayList.List) *Declaration {
-	return &Declaration{
-		DataType: SymbolTable.NULL,
-		ListIds:  listIds,
-		InitVal:  nil,
+func NewDeclaration(listIds *arrayList.List, isMut bool, dataType string) *Declaration {
+
+	newDec := Declaration{
+		ListIds: listIds,
+		InitVal: nil,
+		IsMut:   isMut,
 	}
+
+	if dataType != "" {
+		switch dataType {
+		case "i64":
+			newDec.DataType = SymbolTable.INTEGER
+		case "f64":
+			newDec.DataType = SymbolTable.FLOAT
+		case "String":
+			newDec.DataType = SymbolTable.STRING
+		case "char":
+			newDec.DataType = SymbolTable.CHAR
+		case "bool":
+			newDec.DataType = SymbolTable.BOOLEAN
+		}
+	} else {
+		newDec.DataType = SymbolTable.NULL
+	}
+
+	return &newDec
 }
 
-func NewDeclarationInit(listIds *arrayList.List, valInit Abstract.Expression) *Declaration {
-	return &Declaration{DataType: SymbolTable.NULL, ListIds: listIds, InitVal: valInit}
+func NewDeclarationInit(listIds *arrayList.List, valInit Abstract.Expression, isMut bool) *Declaration {
+	return &Declaration{DataType: SymbolTable.NULL, ListIds: listIds, InitVal: valInit, IsMut: isMut}
 }
 
 func (d *Declaration) IsInitialized() bool {
@@ -71,7 +92,8 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 			row := d.InitVal.(Expression.Primitive).Row
 			col := d.InitVal.(Expression.Primitive).Col
 			errors.CounterError += 1
-			err := errors.Error{Id: errors.CounterError, Line: row, Col: col, Msg: "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No concuerdan los tipos de datos", Type: "Semantic", Ambit: "global"}
+			msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No concuerdan los tipos de datos \n"
+			err := errors.NewError(errors.CounterError, row, col, msg, table.Name)
 			errors.TypeError = append(errors.TypeError, err)
 			interpreter.Console += fmt.Sprintf("%v", err.Msg)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
@@ -83,7 +105,7 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 			if table.ExistsSymbol(varDec.Id) {
 				fmt.Println("Error: Variable declarada")
 			} else {
-				symbol := SymbolTable.NewSymbolId(varDec.Id, 0, 0, typeRes, retExpr.Value)
+				symbol := SymbolTable.NewSymbolId(varDec.Id, 0, 0, typeRes, retExpr.Value, d.IsMut)
 				table.AddNewSymbol(varDec.Id, symbol)
 			}
 		}
@@ -95,7 +117,7 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 			if table.ExistsSymbol(varDec.Id) {
 				fmt.Println("Error: Variable declarada")
 			} else {
-				symbol := SymbolTable.NewSymbolId(varDec.Id, 0, 0, typeDec, nil)
+				symbol := SymbolTable.NewSymbolId(varDec.Id, 0, 0, typeDec, nil, d.IsMut)
 				table.AddNewSymbol(varDec.Id, symbol)
 			}
 		}

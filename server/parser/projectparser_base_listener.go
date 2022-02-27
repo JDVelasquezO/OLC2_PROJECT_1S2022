@@ -123,11 +123,11 @@ func (s *BaseProjectParserListener) EnterExpr_cast(ctx *Expr_castContext) {}
 // ExitExpr_cast is called when production expr_cast is exited.
 func (s *BaseProjectParserListener) ExitExpr_cast(ctx *Expr_castContext) {}
 
-// EnterNumber_data_type is called when production number_data_type is entered.
-func (s *BaseProjectParserListener) EnterNumber_data_type(ctx *Number_data_typeContext) {}
+// EnterData_type is called when production data_type is entered.
+func (s *BaseProjectParserListener) EnterData_type(ctx *Data_typeContext) {}
 
-// ExitNumber_data_type is called when production number_data_type is exited.
-func (s *BaseProjectParserListener) ExitNumber_data_type(ctx *Number_data_typeContext) {}
+// ExitData_type is called when production data_type is exited.
+func (s *BaseProjectParserListener) ExitData_type(ctx *Data_typeContext) {}
 
 // EnterPrimitive is called when production primitive is entered.
 func (s *BaseProjectParserListener) EnterPrimitive(ctx *PrimitiveContext) {}

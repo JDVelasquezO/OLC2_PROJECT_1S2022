@@ -6,11 +6,12 @@ type Symbol struct {
 	Value    interface{}
 	Row      int
 	Col      int
-	isConst  bool
-	isFunc   bool
+	IsConst  bool
+	IsFunc   bool
 }
 
-func NewSymbolId(id string, row int, col int, dataType DataType, value interface{}) Symbol {
-	in := Symbol{Id: id, Row: row, Col: col, isConst: false, isFunc: false, Value: value, DataType: dataType}
+func NewSymbolId(id string, row int, col int, dataType DataType, value interface{}, isConst bool) Symbol {
+	in := Symbol{Id: id, Row: row, Col: col, IsConst: isConst,
+		IsFunc: false, Value: value, DataType: dataType}
 	return in
 }
