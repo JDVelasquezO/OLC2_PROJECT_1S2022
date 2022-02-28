@@ -56,8 +56,31 @@ func NewDeclaration(listIds *arrayList.List, isMut bool, dataType string) *Decla
 	return &newDec
 }
 
-func NewDeclarationInit(listIds *arrayList.List, valInit Abstract.Expression, isMut bool) *Declaration {
-	return &Declaration{DataType: SymbolTable.NULL, ListIds: listIds, InitVal: valInit, IsMut: isMut}
+func NewDeclarationInit(listIds *arrayList.List, valInit Abstract.Expression, isMut bool, dataType string) *Declaration {
+	newDec := Declaration{
+		ListIds: listIds,
+		InitVal: valInit,
+		IsMut:   isMut,
+	}
+
+	if dataType != "" {
+		switch dataType {
+		case "i64":
+			newDec.DataType = SymbolTable.INTEGER
+		case "f64":
+			newDec.DataType = SymbolTable.FLOAT
+		case "String":
+			newDec.DataType = SymbolTable.STRING
+		case "char":
+			newDec.DataType = SymbolTable.CHAR
+		case "bool":
+			newDec.DataType = SymbolTable.BOOLEAN
+		}
+	} else {
+		newDec.DataType = SymbolTable.NULL
+	}
+
+	return &newDec
 }
 
 func (d *Declaration) IsInitialized() bool {
@@ -68,6 +91,18 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 	if d.IsInitialized() {
 		if d.ListIds.Len() > 1 {
 			return nil
+		}
+
+		dataOrigin := d.InitVal.GetValue(table).Type
+		if (dataOrigin != d.DataType) && (d.DataType != SymbolTable.NULL) {
+			row := d.InitVal.(Expression.Primitive).Row
+			col := d.InitVal.(Expression.Primitive).Col
+			errors.CounterError += 1
+			msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") Tipos de datos incorrectos. \n"
+			err := errors.NewError(errors.CounterError, row, col, msg, table.Name)
+			errors.TypeError = append(errors.TypeError, err)
+			interpreter.Console += fmt.Sprintf("%v", err.Msg)
+			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
 		}
 
 		switch d.InitVal.GetValue(table).Type {

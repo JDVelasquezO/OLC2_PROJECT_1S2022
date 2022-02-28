@@ -23,7 +23,7 @@ var _ = reflect.Copy
 var _ = strconv.Itoa
 
 var parserATN = []uint16{
-	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 53, 321,
+	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 53, 322,
 	4, 2, 9, 2, 4, 3, 9, 3, 4, 4, 9, 4, 4, 5, 9, 5, 4, 6, 9, 6, 4, 7, 9, 7,
 	4, 8, 9, 8, 4, 9, 9, 9, 4, 10, 9, 10, 4, 11, 9, 11, 4, 12, 9, 12, 4, 13,
 	9, 13, 4, 14, 9, 14, 4, 15, 9, 15, 4, 16, 9, 16, 4, 17, 9, 17, 4, 18, 9,
@@ -53,16 +53,16 @@ var parserATN = []uint16{
 	3, 16, 3, 16, 5, 16, 275, 10, 16, 3, 17, 3, 17, 3, 17, 3, 17, 3, 17, 3,
 	17, 3, 17, 3, 17, 3, 17, 5, 17, 286, 10, 17, 3, 18, 3, 18, 3, 18, 3, 18,
 	3, 18, 3, 18, 3, 18, 3, 19, 3, 19, 3, 19, 3, 19, 3, 19, 3, 19, 3, 19, 3,
-	19, 3, 19, 3, 19, 5, 19, 305, 10, 19, 3, 20, 3, 20, 3, 20, 3, 20, 3, 20,
-	3, 20, 3, 20, 3, 20, 3, 20, 3, 20, 3, 20, 3, 20, 5, 20, 319, 10, 20, 3,
-	20, 2, 6, 10, 18, 26, 28, 21, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24,
-	26, 28, 30, 32, 34, 36, 38, 2, 6, 4, 2, 40, 40, 42, 45, 3, 2, 46, 48, 3,
-	2, 49, 50, 3, 2, 51, 52, 2, 339, 2, 40, 3, 2, 2, 2, 4, 46, 3, 2, 2, 2,
-	6, 63, 3, 2, 2, 2, 8, 101, 3, 2, 2, 2, 10, 103, 3, 2, 2, 2, 12, 143, 3,
-	2, 2, 2, 14, 145, 3, 2, 2, 2, 16, 165, 3, 2, 2, 2, 18, 167, 3, 2, 2, 2,
-	20, 180, 3, 2, 2, 2, 22, 195, 3, 2, 2, 2, 24, 209, 3, 2, 2, 2, 26, 211,
+	19, 3, 19, 3, 19, 3, 19, 5, 19, 306, 10, 19, 3, 20, 3, 20, 3, 20, 3, 20,
+	3, 20, 3, 20, 3, 20, 3, 20, 3, 20, 3, 20, 3, 20, 3, 20, 5, 20, 320, 10,
+	20, 3, 20, 2, 6, 10, 18, 26, 28, 21, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20,
+	22, 24, 26, 28, 30, 32, 34, 36, 38, 2, 6, 4, 2, 40, 40, 42, 45, 3, 2, 46,
+	48, 3, 2, 49, 50, 3, 2, 51, 52, 2, 341, 2, 40, 3, 2, 2, 2, 4, 46, 3, 2,
+	2, 2, 6, 63, 3, 2, 2, 2, 8, 101, 3, 2, 2, 2, 10, 103, 3, 2, 2, 2, 12, 143,
+	3, 2, 2, 2, 14, 145, 3, 2, 2, 2, 16, 165, 3, 2, 2, 2, 18, 167, 3, 2, 2,
+	2, 20, 180, 3, 2, 2, 2, 22, 195, 3, 2, 2, 2, 24, 209, 3, 2, 2, 2, 26, 211,
 	3, 2, 2, 2, 28, 249, 3, 2, 2, 2, 30, 274, 3, 2, 2, 2, 32, 285, 3, 2, 2,
-	2, 34, 287, 3, 2, 2, 2, 36, 304, 3, 2, 2, 2, 38, 318, 3, 2, 2, 2, 40, 41,
+	2, 34, 287, 3, 2, 2, 2, 36, 305, 3, 2, 2, 2, 38, 319, 3, 2, 2, 2, 40, 41,
 	5, 4, 3, 2, 41, 42, 8, 2, 1, 2, 42, 3, 3, 2, 2, 2, 43, 45, 5, 6, 4, 2,
 	44, 43, 3, 2, 2, 2, 45, 48, 3, 2, 2, 2, 46, 44, 3, 2, 2, 2, 46, 47, 3,
 	2, 2, 2, 47, 49, 3, 2, 2, 2, 48, 46, 3, 2, 2, 2, 49, 50, 8, 3, 1, 2, 50,
@@ -149,19 +149,20 @@ var parserATN = []uint16{
 	2, 2, 285, 276, 3, 2, 2, 2, 285, 280, 3, 2, 2, 2, 286, 33, 3, 2, 2, 2,
 	287, 288, 7, 34, 2, 2, 288, 289, 5, 24, 13, 2, 289, 290, 7, 13, 2, 2, 290,
 	291, 5, 36, 19, 2, 291, 292, 7, 35, 2, 2, 292, 293, 8, 18, 1, 2, 293, 35,
-	3, 2, 2, 2, 294, 295, 7, 8, 2, 2, 295, 305, 8, 19, 1, 2, 296, 297, 7, 9,
-	2, 2, 297, 305, 8, 19, 1, 2, 298, 299, 7, 7, 2, 2, 299, 305, 8, 19, 1,
-	2, 300, 301, 7, 10, 2, 2, 301, 305, 8, 19, 1, 2, 302, 303, 7, 11, 2, 2,
-	303, 305, 8, 19, 1, 2, 304, 294, 3, 2, 2, 2, 304, 296, 3, 2, 2, 2, 304,
-	298, 3, 2, 2, 2, 304, 300, 3, 2, 2, 2, 304, 302, 3, 2, 2, 2, 305, 37, 3,
-	2, 2, 2, 306, 307, 7, 20, 2, 2, 307, 319, 8, 20, 1, 2, 308, 309, 7, 21,
-	2, 2, 309, 319, 8, 20, 1, 2, 310, 311, 7, 23, 2, 2, 311, 319, 8, 20, 1,
-	2, 312, 313, 7, 22, 2, 2, 313, 319, 8, 20, 1, 2, 314, 315, 7, 24, 2, 2,
-	315, 319, 8, 20, 1, 2, 316, 317, 7, 25, 2, 2, 317, 319, 8, 20, 1, 2, 318,
-	306, 3, 2, 2, 2, 318, 308, 3, 2, 2, 2, 318, 310, 3, 2, 2, 2, 318, 312,
-	3, 2, 2, 2, 318, 314, 3, 2, 2, 2, 318, 316, 3, 2, 2, 2, 319, 39, 3, 2,
-	2, 2, 23, 46, 63, 101, 114, 119, 124, 133, 138, 143, 165, 177, 195, 209,
-	222, 249, 261, 263, 274, 285, 304, 318,
+	3, 2, 2, 2, 294, 295, 7, 8, 2, 2, 295, 306, 8, 19, 1, 2, 296, 297, 7, 9,
+	2, 2, 297, 306, 8, 19, 1, 2, 298, 299, 7, 7, 2, 2, 299, 306, 8, 19, 1,
+	2, 300, 301, 7, 10, 2, 2, 301, 306, 8, 19, 1, 2, 302, 303, 7, 11, 2, 2,
+	303, 306, 8, 19, 1, 2, 304, 306, 3, 2, 2, 2, 305, 294, 3, 2, 2, 2, 305,
+	296, 3, 2, 2, 2, 305, 298, 3, 2, 2, 2, 305, 300, 3, 2, 2, 2, 305, 302,
+	3, 2, 2, 2, 305, 304, 3, 2, 2, 2, 306, 37, 3, 2, 2, 2, 307, 308, 7, 20,
+	2, 2, 308, 320, 8, 20, 1, 2, 309, 310, 7, 21, 2, 2, 310, 320, 8, 20, 1,
+	2, 311, 312, 7, 23, 2, 2, 312, 320, 8, 20, 1, 2, 313, 314, 7, 22, 2, 2,
+	314, 320, 8, 20, 1, 2, 315, 316, 7, 24, 2, 2, 316, 320, 8, 20, 1, 2, 317,
+	318, 7, 25, 2, 2, 318, 320, 8, 20, 1, 2, 319, 307, 3, 2, 2, 2, 319, 309,
+	3, 2, 2, 2, 319, 311, 3, 2, 2, 2, 319, 313, 3, 2, 2, 2, 319, 315, 3, 2,
+	2, 2, 319, 317, 3, 2, 2, 2, 320, 39, 3, 2, 2, 2, 23, 46, 63, 101, 114,
+	119, 124, 133, 138, 143, 165, 177, 195, 209, 222, 249, 261, 263, 274, 285,
+	305, 319,
 }
 var deserializer = antlr.NewATNDeserializer(nil)
 var deserializedATN = deserializer.DeserializeFromUInt16(parserATN)
@@ -1416,11 +1417,17 @@ type IDeclaration_prodContext interface {
 	// Get_ids_type returns the _ids_type rule contexts.
 	Get_ids_type() IIds_typeContext
 
+	// Get_data_type returns the _data_type rule contexts.
+	Get_data_type() IData_typeContext
+
 	// Get_expression returns the _expression rule contexts.
 	Get_expression() IExpressionContext
 
 	// Set_ids_type sets the _ids_type rule contexts.
 	Set_ids_type(IIds_typeContext)
+
+	// Set_data_type sets the _data_type rule contexts.
+	Set_data_type(IData_typeContext)
 
 	// Set_expression sets the _expression rule contexts.
 	Set_expression(IExpressionContext)
@@ -1441,6 +1448,7 @@ type Declaration_prodContext struct {
 	instr       Abstract.Instruction
 	_MUT        antlr.Token
 	_ids_type   IIds_typeContext
+	_data_type  IData_typeContext
 	_expression IExpressionContext
 }
 
@@ -1472,9 +1480,13 @@ func (s *Declaration_prodContext) Set_MUT(v antlr.Token) { s._MUT = v }
 
 func (s *Declaration_prodContext) Get_ids_type() IIds_typeContext { return s._ids_type }
 
+func (s *Declaration_prodContext) Get_data_type() IData_typeContext { return s._data_type }
+
 func (s *Declaration_prodContext) Get_expression() IExpressionContext { return s._expression }
 
 func (s *Declaration_prodContext) Set_ids_type(v IIds_typeContext) { s._ids_type = v }
+
+func (s *Declaration_prodContext) Set_data_type(v IData_typeContext) { s._data_type = v }
 
 func (s *Declaration_prodContext) Set_expression(v IExpressionContext) { s._expression = v }
 
@@ -1614,7 +1626,10 @@ func (p *ProjectParser) Declaration_prod() (localctx IDeclaration_prodContext) {
 			}
 			{
 				p.SetState(121)
-				p.Data_type()
+
+				var _x = p.Data_type()
+
+				localctx.(*Declaration_prodContext)._data_type = _x
 			}
 
 		}
@@ -1641,9 +1656,17 @@ func (p *ProjectParser) Declaration_prod() (localctx IDeclaration_prodContext) {
 				return localctx.(*Declaration_prodContext).Get_MUT().GetText()
 			}
 		}()) != "" {
-			localctx.(*Declaration_prodContext).instr = Natives.NewDeclarationInit(localctx.(*Declaration_prodContext).Get_ids_type().GetList(), localctx.(*Declaration_prodContext).Get_expression().GetP(), true)
+			if localctx.(*Declaration_prodContext).Get_data_type() != nil {
+				localctx.(*Declaration_prodContext).instr = Natives.NewDeclarationInit(localctx.(*Declaration_prodContext).Get_ids_type().GetList(), localctx.(*Declaration_prodContext).Get_expression().GetP(), true, localctx.(*Declaration_prodContext).Get_data_type().GetData())
+			} else {
+				localctx.(*Declaration_prodContext).instr = Natives.NewDeclarationInit(localctx.(*Declaration_prodContext).Get_ids_type().GetList(), localctx.(*Declaration_prodContext).Get_expression().GetP(), true, "")
+			}
 		} else {
-			localctx.(*Declaration_prodContext).instr = Natives.NewDeclarationInit(localctx.(*Declaration_prodContext).Get_ids_type().GetList(), localctx.(*Declaration_prodContext).Get_expression().GetP(), false)
+			if localctx.(*Declaration_prodContext).Get_data_type() != nil {
+				localctx.(*Declaration_prodContext).instr = Natives.NewDeclarationInit(localctx.(*Declaration_prodContext).Get_ids_type().GetList(), localctx.(*Declaration_prodContext).Get_expression().GetP(), true, localctx.(*Declaration_prodContext).Get_data_type().GetData())
+			} else {
+				localctx.(*Declaration_prodContext).instr = Natives.NewDeclarationInit(localctx.(*Declaration_prodContext).Get_ids_type().GetList(), localctx.(*Declaration_prodContext).Get_expression().GetP(), true, "")
+			}
 		}
 
 	case 2:
@@ -1684,7 +1707,10 @@ func (p *ProjectParser) Declaration_prod() (localctx IDeclaration_prodContext) {
 			}
 			{
 				p.SetState(135)
-				p.Data_type()
+
+				var _x = p.Data_type()
+
+				localctx.(*Declaration_prodContext)._data_type = _x
 			}
 
 		}
@@ -1700,9 +1726,9 @@ func (p *ProjectParser) Declaration_prod() (localctx IDeclaration_prodContext) {
 				return localctx.(*Declaration_prodContext).Get_MUT().GetText()
 			}
 		}()) != "" {
-			localctx.(*Declaration_prodContext).instr = Natives.NewDeclaration(localctx.(*Declaration_prodContext).Get_ids_type().GetList(), true)
+			localctx.(*Declaration_prodContext).instr = Natives.NewDeclaration(localctx.(*Declaration_prodContext).Get_ids_type().GetList(), true, localctx.(*Declaration_prodContext).Get_data_type().GetData())
 		} else {
-			localctx.(*Declaration_prodContext).instr = Natives.NewDeclaration(localctx.(*Declaration_prodContext).Get_ids_type().GetList(), false)
+			localctx.(*Declaration_prodContext).instr = Natives.NewDeclaration(localctx.(*Declaration_prodContext).Get_ids_type().GetList(), false, localctx.(*Declaration_prodContext).Get_data_type().GetData())
 		}
 
 	}
@@ -4404,7 +4430,7 @@ func (p *ProjectParser) Data_type() (localctx IData_typeContext) {
 		}
 	}()
 
-	p.SetState(302)
+	p.SetState(303)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
@@ -4492,6 +4518,9 @@ func (p *ProjectParser) Data_type() (localctx IData_typeContext) {
 				return localctx.(*Data_typeContext).Get_RCHAR().GetText()
 			}
 		}())
+
+	case ProjectParserEQUAL, ProjectParserSEMICOLON, ProjectParserRIGHT_PAR:
+		p.EnterOuterAlt(localctx, 6)
 
 	default:
 		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
@@ -4679,14 +4708,14 @@ func (p *ProjectParser) Primitive() (localctx IPrimitiveContext) {
 		}
 	}()
 
-	p.SetState(316)
+	p.SetState(317)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case ProjectParserINTEGER:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(304)
+			p.SetState(305)
 
 			var _m = p.Match(ProjectParserINTEGER)
 
@@ -4714,7 +4743,7 @@ func (p *ProjectParser) Primitive() (localctx IPrimitiveContext) {
 	case ProjectParserFLOAT:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(306)
+			p.SetState(307)
 
 			var _m = p.Match(ProjectParserFLOAT)
 
@@ -4742,7 +4771,7 @@ func (p *ProjectParser) Primitive() (localctx IPrimitiveContext) {
 	case ProjectParserSTRING:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(308)
+			p.SetState(309)
 
 			var _m = p.Match(ProjectParserSTRING)
 
@@ -4773,7 +4802,7 @@ func (p *ProjectParser) Primitive() (localctx IPrimitiveContext) {
 	case ProjectParserCHAR:
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(310)
+			p.SetState(311)
 
 			var _m = p.Match(ProjectParserCHAR)
 
@@ -4804,7 +4833,7 @@ func (p *ProjectParser) Primitive() (localctx IPrimitiveContext) {
 	case ProjectParserBOOLEAN:
 		p.EnterOuterAlt(localctx, 5)
 		{
-			p.SetState(312)
+			p.SetState(313)
 
 			var _m = p.Match(ProjectParserBOOLEAN)
 
@@ -4830,7 +4859,7 @@ func (p *ProjectParser) Primitive() (localctx IPrimitiveContext) {
 	case ProjectParserID:
 		p.EnterOuterAlt(localctx, 6)
 		{
-			p.SetState(314)
+			p.SetState(315)
 
 			var _m = p.Match(ProjectParserID)
 

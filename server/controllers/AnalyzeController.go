@@ -106,7 +106,6 @@ func Analyze(c *fiber.Ctx) error {
 				}
 			}
 		}
-
 	}
 
 	return c.Render("index", fiber.Map{

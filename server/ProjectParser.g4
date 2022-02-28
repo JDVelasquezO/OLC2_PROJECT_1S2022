@@ -68,17 +68,25 @@ listVars returns [*arrayList.List list]
 
 declaration_prod returns [Abstract.Instruction instr]
     : DECLARAR MUT? ids_type (COLON data_type)? EQUAL expression SEMICOLON {
-            if ($MUT.text != "") {
-                $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, true)
+        if ($MUT.text != "") {
+            if ($data_type.data != nil) {
+                $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, true, $data_type.data)
             } else {
-                $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, false)
+                $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, true, "")
+            }
+        } else {
+            if ($data_type.data != nil) {
+                $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, true, $data_type.data)
+            } else {
+                $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, true, "")
             }
         }
+    }
     | DECLARAR MUT? ids_type (COLON data_type)? SEMICOLON {
         if ($MUT.text != "") {
-            $instr = Natives.NewDeclaration($ids_type.list, true)
+            $instr = Natives.NewDeclaration($ids_type.list, true, $data_type.data)
         } else {
-            $instr = Natives.NewDeclaration($ids_type.list, false)
+            $instr = Natives.NewDeclaration($ids_type.list, false, $data_type.data)
         }
     }
     ;
@@ -180,6 +188,7 @@ data_type returns[string data]
     | RSTRING { $data = $RSTRING.text }
     | RBOOLEAN { $data = $RBOOLEAN.text }
     | RCHAR { $data = $RCHAR.text }
+    |
     ;
 
 //type_number returns [string type_num]
