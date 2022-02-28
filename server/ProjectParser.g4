@@ -76,9 +76,9 @@ declaration_prod returns [Abstract.Instruction instr]
             }
         } else {
             if ($data_type.data != nil) {
-                $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, true, $data_type.data)
+                $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, false, $data_type.data)
             } else {
-                $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, true, "")
+                $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, false, "")
             }
         }
     }
@@ -218,7 +218,7 @@ primitive returns [Abstract.Expression p]
     }
     | STRING {
         str := $STRING.text[1:len($STRING.text)-1]
-        $p = Expression.NewPrimitive(str, SymbolTable.STR, $STRING.line, localctx.(*PrimitiveContext).Get_STRING().GetColumn())
+        $p = Expression.NewPrimitive(str, SymbolTable.STRING, $STRING.line, localctx.(*PrimitiveContext).Get_STRING().GetColumn())
     }
     | CHAR {
         chr := $CHAR.text[1:len($CHAR.text)-1]

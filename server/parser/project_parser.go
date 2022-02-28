@@ -1663,9 +1663,9 @@ func (p *ProjectParser) Declaration_prod() (localctx IDeclaration_prodContext) {
 			}
 		} else {
 			if localctx.(*Declaration_prodContext).Get_data_type() != nil {
-				localctx.(*Declaration_prodContext).instr = Natives.NewDeclarationInit(localctx.(*Declaration_prodContext).Get_ids_type().GetList(), localctx.(*Declaration_prodContext).Get_expression().GetP(), true, localctx.(*Declaration_prodContext).Get_data_type().GetData())
+				localctx.(*Declaration_prodContext).instr = Natives.NewDeclarationInit(localctx.(*Declaration_prodContext).Get_ids_type().GetList(), localctx.(*Declaration_prodContext).Get_expression().GetP(), false, localctx.(*Declaration_prodContext).Get_data_type().GetData())
 			} else {
-				localctx.(*Declaration_prodContext).instr = Natives.NewDeclarationInit(localctx.(*Declaration_prodContext).Get_ids_type().GetList(), localctx.(*Declaration_prodContext).Get_expression().GetP(), true, "")
+				localctx.(*Declaration_prodContext).instr = Natives.NewDeclarationInit(localctx.(*Declaration_prodContext).Get_ids_type().GetList(), localctx.(*Declaration_prodContext).Get_expression().GetP(), false, "")
 			}
 		}
 
@@ -4791,7 +4791,7 @@ func (p *ProjectParser) Primitive() (localctx IPrimitiveContext) {
 				return localctx.(*PrimitiveContext).Get_STRING().GetText()
 			}
 		}()))-1]
-		localctx.(*PrimitiveContext).p = Expression.NewPrimitive(str, SymbolTable.STR, (func() int {
+		localctx.(*PrimitiveContext).p = Expression.NewPrimitive(str, SymbolTable.STRING, (func() int {
 			if localctx.(*PrimitiveContext).Get_STRING() == nil {
 				return 0
 			} else {
