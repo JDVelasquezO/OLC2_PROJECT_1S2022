@@ -191,16 +191,6 @@ data_type returns[string data]
     |
     ;
 
-//type_number returns [string type_num]
-//    : RINTEGER { type_num = $RINTEGER.text }
-//    | RREAL { type_num = $RREAL.text }
-//    ;
-
-//type_power returns [string mod_pow]
-//    : POWI { mod_pow = $POWI.text }
-//    | POWF { mod_pow = $POWF.text }
-//    ;
-
 primitive returns [Abstract.Expression p]
     :INTEGER{
         num, err := strconv.Atoi($INTEGER.text)

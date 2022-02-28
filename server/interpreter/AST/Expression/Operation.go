@@ -13,7 +13,7 @@ var sum = [5][5]SymbolTable.DataType{
 	{SymbolTable.INTEGER, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
 	{SymbolTable.NULL, SymbolTable.FLOAT, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
 	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
-	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
+	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.STRING, SymbolTable.NULL, SymbolTable.NULL},
 	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
 }
 
@@ -114,7 +114,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			op2, _ := strconv.ParseFloat(fmt.Sprintf("%v", retRight.Value), 64)
 			return SymbolTable.ReturnType{Type: priority, Value: op1 + op2}
 
-		} else if priority == SymbolTable.STR {
+		} else if priority == SymbolTable.STRING {
 			r1 := fmt.Sprintf("%v", retLeft.Value)
 			r2 := fmt.Sprintf("%v", retRight.Value)
 
