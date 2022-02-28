@@ -83,7 +83,7 @@
 
 <div class="container mt-6 mb-6" id="mirror">
 
-    <form action="http://localhost:3000/analyze" method="post">
+    <form action="http://localhost:3000/analyze" method="post" id="formCode">
         <div class="columns">
             <div class="column">
                 <p class="has-text-light">Input code:</p>
@@ -102,7 +102,7 @@
                 {{ end }}
             </div>
         </div>
-        <button class="button is-info">Interpreter</button>
+        <button class="button is-info" id="btnInterpret">Interpreter</button>
         &nbsp;<button class="button is-danger">Errors</button>
     </form>
 
@@ -117,6 +117,12 @@
 </footer>
 
 <script>
+
+    window.addEventListener('keydown', function (e) {
+        if (e.ctrlKey && e.key === "Enter") {
+            document.getElementById("formCode").submit();
+        }
+    });
 
     myCodeMirror = CodeMirror.fromTextArea(document.getElementById("writer"), {
         lineNumbers: true,

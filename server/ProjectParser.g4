@@ -216,9 +216,13 @@ primitive returns [Abstract.Expression p]
         }
         $p = Expression.NewPrimitive(num, SymbolTable.FLOAT, $FLOAT.line, localctx.(*PrimitiveContext).Get_FLOAT().GetColumn())
     }
-    | STRING {
+    | STRING ((DOT TOSTRING | DOT TOOWNED) LEFT_PAR RIGHT_PAR)? {
         str := $STRING.text[1:len($STRING.text)-1]
-        $p = Expression.NewPrimitive(str, SymbolTable.STRING, $STRING.line, localctx.(*PrimitiveContext).Get_STRING().GetColumn())
+        if $TOSTRING.text != "" || $TOOWNED.text != "" {
+            $p = Expression.NewPrimitive(str, SymbolTable.STRING, $STRING.line, localctx.(*PrimitiveContext).Get_STRING().GetColumn())
+        } else {
+            $p = Expression.NewPrimitive(str, SymbolTable.STR, $STRING.line, localctx.(*PrimitiveContext).Get_STRING().GetColumn())
+        }
     }
     | CHAR {
         chr := $CHAR.text[1:len($CHAR.text)-1]

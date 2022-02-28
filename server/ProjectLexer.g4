@@ -26,6 +26,10 @@ RELSE:      'entonces';
 POWI:                   'pow';
 POWF:                   'powf';
 
+// Text Strings
+TOSTRING:                'to_string';
+TOOWNED:                 'to_owned';
+
 // Comments
 MULTILINE:      '/*' (~[/])+ '*/' -> skip;
 INLINE:         '//'(~[\n])+ -> skip;

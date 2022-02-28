@@ -106,7 +106,7 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
 		}
 
-		switch d.InitVal.GetValue(table).Type {
+		switch dataOrigin {
 		case SymbolTable.INTEGER:
 			d.DataType = SymbolTable.INTEGER
 		case SymbolTable.FLOAT:
