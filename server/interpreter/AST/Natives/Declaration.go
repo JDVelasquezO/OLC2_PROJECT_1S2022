@@ -148,19 +148,18 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 		typeDec := d.DataType
 		typeRes := typeDef[typeDec][typeExpr]
 
+		typeVal := typeof(d.InitVal)
+		var row int
+		var col int
+		switch typeVal {
+		case "Expression.Primitive":
+			row = d.InitVal.(Expression.Primitive).Row
+			col = d.InitVal.(Expression.Primitive).Col
+		case "Expression.Operation":
+			row = d.InitVal.(Expression.Operation).Row
+			col = d.InitVal.(Expression.Operation).Col
+		}
 		if typeRes == SymbolTable.NULL {
-			typeVal := typeof(d.InitVal)
-			var row int
-			var col int
-			switch typeVal {
-			case "Expression.Primitive":
-				row = d.InitVal.(Expression.Primitive).Row
-				col = d.InitVal.(Expression.Primitive).Col
-			case "Expression.Operation":
-				row = d.InitVal.(Expression.Operation).Row
-				col = d.InitVal.(Expression.Operation).Col
-			}
-
 			errors.CounterError += 1
 			msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No concuerdan los tipos de datos \n"
 			err := errors.NewError(errors.CounterError, row, col, msg, table.Name)
@@ -172,9 +171,18 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 		for i := 0; i < d.ListIds.Len(); i++ {
 			varDec := d.ListIds.GetValue(i).(Expression.Identifier)
 
+			// Error - Variable repetida
 			if table.ExistsSymbol(varDec.Id) {
-				fmt.Println("Error: Variable declarada")
+
+				errors.CounterError += 1
+				msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") La variable con ID \"" + fmt.Sprintf("%v", varDec.Id) + "\" ya existe. \n"
+				err := errors.NewError(errors.CounterError, row, col, msg, table.Name)
+				errors.TypeError = append(errors.TypeError, err)
+				interpreter.Console += fmt.Sprintf("%v", err.Msg)
+				return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
+
 			} else {
+
 				symbol := SymbolTable.NewSymbolId(varDec.Id, 0, 0, typeRes, retExpr.Value, d.IsMut)
 				table.AddNewSymbol(varDec.Id, symbol)
 			}
