@@ -248,11 +248,11 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 
 		priority = relational[retLeft.Type][retRight.Type]
 		if priority == SymbolTable.INTEGER {
-			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(int) > retRight.Value.(int)}
+			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: retLeft.Value.(int) > retRight.Value.(int)}
 		} else if priority == SymbolTable.FLOAT {
-			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(float64) > retRight.Value.(float64)}
+			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: retLeft.Value.(float64) > retRight.Value.(float64)}
 		} else if priority == SymbolTable.STR {
-			return SymbolTable.ReturnType{Type: priority, Value: len(retLeft.Value.(string)) > len(retRight.Value.(string))}
+			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: len(retLeft.Value.(string)) > len(retRight.Value.(string))}
 		}
 
 	case "<":
@@ -268,11 +268,11 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 
 		priority = relational[retLeft.Type][retRight.Type]
 		if priority == SymbolTable.INTEGER {
-			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(int) < retRight.Value.(int)}
+			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: retLeft.Value.(int) < retRight.Value.(int)}
 		} else if priority == SymbolTable.FLOAT {
-			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(float64) < retRight.Value.(float64)}
+			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: retLeft.Value.(float64) < retRight.Value.(float64)}
 		} else if priority == SymbolTable.STR {
-			return SymbolTable.ReturnType{Type: priority, Value: len(retLeft.Value.(string)) < len(retRight.Value.(string))}
+			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: len(retLeft.Value.(string)) < len(retRight.Value.(string))}
 		}
 
 	case ">=":
@@ -288,11 +288,11 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 
 		priority = relational[retLeft.Type][retRight.Type]
 		if priority == SymbolTable.INTEGER {
-			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(int) >= retRight.Value.(int)}
+			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: retLeft.Value.(int) >= retRight.Value.(int)}
 		} else if priority == SymbolTable.FLOAT {
-			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(float64) >= retRight.Value.(float64)}
+			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: retLeft.Value.(float64) >= retRight.Value.(float64)}
 		} else if priority == SymbolTable.STR {
-			return SymbolTable.ReturnType{Type: priority, Value: len(retLeft.Value.(string)) >= len(retRight.Value.(string))}
+			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: len(retLeft.Value.(string)) >= len(retRight.Value.(string))}
 		}
 
 	case "<=":
@@ -308,11 +308,11 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 
 		priority = relational[retLeft.Type][retRight.Type]
 		if priority == SymbolTable.INTEGER {
-			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(int) <= retRight.Value.(int)}
+			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: retLeft.Value.(int) <= retRight.Value.(int)}
 		} else if priority == SymbolTable.FLOAT {
-			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(float64) <= retRight.Value.(float64)}
+			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: retLeft.Value.(float64) <= retRight.Value.(float64)}
 		} else if priority == SymbolTable.STR {
-			return SymbolTable.ReturnType{Type: priority, Value: len(retLeft.Value.(string)) <= len(retRight.Value.(string))}
+			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: len(retLeft.Value.(string)) <= len(retRight.Value.(string))}
 		}
 
 	case "==":
@@ -328,11 +328,11 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 
 		priority = relational[retLeft.Type][retRight.Type]
 		if priority == SymbolTable.INTEGER {
-			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(int) == retRight.Value.(int)}
+			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: retLeft.Value.(int) == retRight.Value.(int)}
 		} else if priority == SymbolTable.FLOAT {
-			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(float64) == retRight.Value.(float64)}
+			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: retLeft.Value.(float64) == retRight.Value.(float64)}
 		} else if priority == SymbolTable.STR {
-			return SymbolTable.ReturnType{Type: priority, Value: len(retLeft.Value.(string)) == len(retRight.Value.(string))}
+			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: len(retLeft.Value.(string)) == len(retRight.Value.(string))}
 		}
 
 	case "&&":
