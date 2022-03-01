@@ -26,6 +26,11 @@ start returns [AST.Tree tree]
     : instructions { $tree = AST.NewTree($instructions.l) }
 ;
 
+bloq returns [*arrayList.List content]
+    : LEFT_KEY instructions RIGHT_KEY   { $content = $instructions.l }
+    | LEFT_KEY RIGHT_KEY                { $content = arrayList.New() }
+    ;
+
 instructions returns [*arrayList.List l]
     @init{
         $l = arrayList.New()
@@ -123,7 +128,7 @@ listIds returns [*arrayList.List list]
     ;
 
 conditional_prod returns [Abstract.Instruction instr]
-    : RIF LEFT_PAR expression RIGHT_PAR bloq { $instr = Natives.NewIf($expression.p, $bloq.content, nil, nil) }
+    : RIF expression bloq { $instr = Natives.NewIf($expression.p, $bloq.content, nil, nil) }
 //     | RIF LEFT_PAR expression RIGHT_PAR bif=bloq RELSE belse=bloq
 //     | RIF LEFT_PAR expression RIGHT_PAR bif=bloq list_else_if
 //     | RIF LEFT_PAR expression RIGHT_PAR bif=bloq list_else_if RELSE belse=bloq
@@ -142,11 +147,6 @@ conditional_prod returns [Abstract.Instruction instr]
 //else_if returns[Abstract.Natives instr]
 //    : RELSE RIF LEFT_PAR expression RIGHT_PAR bloq { $instr = Natives.NewIf() }
 //    ;
-
-bloq returns [*arrayList.List content]
-    : LEFT_BRACKET instructions RIGHT_BRACKET   { $content = $instructions.l }
-    | LEFT_BRACKET RIGHT_BRACKET                { $content = arrayList.New() }
-    ;
 
 expression returns [Abstract.Expression p]
     : expr_rel    { $p = $expr_rel.p }

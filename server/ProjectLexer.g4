@@ -19,8 +19,8 @@ RSTR:       '&str';
 RAS:        'as';
 
 // Conditional Structures
-RIF:        'If';
-RELSE:      'entonces';
+RIF:        'if';
+RELSE:      'else';
 
 // Mathematic Operators
 POWI:                   'pow';

@@ -34,17 +34,21 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 		return nil
 	}
 
-	if returnPrincipal.Value == "true" {
+	if returnPrincipal.Value == "true" || returnPrincipal.Value.(bool) {
 		newTable := SymbolTable.NewSymbolTable("if", &table)
 		for j := 0; j < i.ListInstructs.Len(); j++ {
 			instruct := i.ListInstructs.GetValue(j).(Abstract.Instruction)
 			instruct.Execute(newTable)
 		}
 	} else {
-		newTable := SymbolTable.NewSymbolTable("else", &table)
-		for j := 0; j < i.ListInstructsElse.Len(); j++ {
-			instruct := i.ListInstructsElse.GetValue(j).(Abstract.Instruction)
-			instruct.Execute(newTable)
+		if i.ListIfElse != nil {
+			newTable := SymbolTable.NewSymbolTable("else", &table)
+			for j := 0; j < i.ListInstructsElse.Len(); j++ {
+				instruct := i.ListInstructsElse.GetValue(j).(Abstract.Instruction)
+				instruct.Execute(newTable)
+			}
+		} else {
+			return nil
 		}
 	}
 

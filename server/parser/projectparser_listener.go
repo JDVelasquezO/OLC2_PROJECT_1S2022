@@ -11,6 +11,9 @@ type ProjectParserListener interface {
 	// EnterStart is called when entering the start production.
 	EnterStart(c *StartContext)
 
+	// EnterBloq is called when entering the bloq production.
+	EnterBloq(c *BloqContext)
+
 	// EnterInstructions is called when entering the instructions production.
 	EnterInstructions(c *InstructionsContext)
 
@@ -37,9 +40,6 @@ type ProjectParserListener interface {
 
 	// EnterConditional_prod is called when entering the conditional_prod production.
 	EnterConditional_prod(c *Conditional_prodContext)
-
-	// EnterBloq is called when entering the bloq production.
-	EnterBloq(c *BloqContext)
 
 	// EnterExpression is called when entering the expression production.
 	EnterExpression(c *ExpressionContext)
@@ -68,6 +68,9 @@ type ProjectParserListener interface {
 	// ExitStart is called when exiting the start production.
 	ExitStart(c *StartContext)
 
+	// ExitBloq is called when exiting the bloq production.
+	ExitBloq(c *BloqContext)
+
 	// ExitInstructions is called when exiting the instructions production.
 	ExitInstructions(c *InstructionsContext)
 
@@ -94,9 +97,6 @@ type ProjectParserListener interface {
 
 	// ExitConditional_prod is called when exiting the conditional_prod production.
 	ExitConditional_prod(c *Conditional_prodContext)
-
-	// ExitBloq is called when exiting the bloq production.
-	ExitBloq(c *BloqContext)
 
 	// ExitExpression is called when exiting the expression production.
 	ExitExpression(c *ExpressionContext)

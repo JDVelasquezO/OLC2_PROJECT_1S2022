@@ -27,6 +27,12 @@ func (s *BaseProjectParserListener) EnterStart(ctx *StartContext) {}
 // ExitStart is called when production start is exited.
 func (s *BaseProjectParserListener) ExitStart(ctx *StartContext) {}
 
+// EnterBloq is called when production bloq is entered.
+func (s *BaseProjectParserListener) EnterBloq(ctx *BloqContext) {}
+
+// ExitBloq is called when production bloq is exited.
+func (s *BaseProjectParserListener) ExitBloq(ctx *BloqContext) {}
+
 // EnterInstructions is called when production instructions is entered.
 func (s *BaseProjectParserListener) EnterInstructions(ctx *InstructionsContext) {}
 
@@ -80,12 +86,6 @@ func (s *BaseProjectParserListener) EnterConditional_prod(ctx *Conditional_prodC
 
 // ExitConditional_prod is called when production conditional_prod is exited.
 func (s *BaseProjectParserListener) ExitConditional_prod(ctx *Conditional_prodContext) {}
-
-// EnterBloq is called when production bloq is entered.
-func (s *BaseProjectParserListener) EnterBloq(ctx *BloqContext) {}
-
-// ExitBloq is called when production bloq is exited.
-func (s *BaseProjectParserListener) ExitBloq(ctx *BloqContext) {}
 
 // EnterExpression is called when production expression is entered.
 func (s *BaseProjectParserListener) EnterExpression(ctx *ExpressionContext) {}
