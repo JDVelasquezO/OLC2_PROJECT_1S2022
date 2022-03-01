@@ -84,9 +84,17 @@ declaration_prod returns [Abstract.Instruction instr]
     }
     | DECLARAR MUT? ids_type (COLON data_type)? SEMICOLON {
         if ($MUT.text != "") {
-            $instr = Natives.NewDeclaration($ids_type.list, true, $data_type.data)
+            if ($data_type.data != nil) {
+                $instr = Natives.NewDeclaration($ids_type.list, true, $data_type.data)
+            } else {
+                $instr = Natives.NewDeclaration($ids_type.list, true, "")
+            }
         } else {
-            $instr = Natives.NewDeclaration($ids_type.list, false, $data_type.data)
+            if ($data_type.data != nil) {
+                $instr = Natives.NewDeclaration($ids_type.list, true, $data_type.data)
+            } else {
+                $instr = Natives.NewDeclaration($ids_type.list, true, "")
+            }
         }
     }
     ;
@@ -185,10 +193,10 @@ expr_cast returns[Abstract.Expression p]
 data_type returns[string data]
     : RINTEGER { $data = $RINTEGER.text }
     | RREAL { $data = $RREAL.text }
+    | RSTR { $data = $RSTR.text }
     | RSTRING { $data = $RSTRING.text }
     | RBOOLEAN { $data = $RBOOLEAN.text }
     | RCHAR { $data = $RCHAR.text }
-    |
     ;
 
 primitive returns [Abstract.Expression p]

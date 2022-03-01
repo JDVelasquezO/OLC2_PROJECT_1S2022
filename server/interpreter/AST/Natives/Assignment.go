@@ -8,6 +8,7 @@ import (
 	"OLC2_Project1/server/interpreter/errors"
 	"fmt"
 	arrayList "github.com/colegno/arraylist"
+	"reflect"
 	"strconv"
 )
 
@@ -45,8 +46,17 @@ func (d *Assign) Execute(table SymbolTable.SymbolTable) interface{} {
 	val := table.GetSymbol(varDec)
 
 	if !val.IsConst {
-		row := d.Val.(Expression.Primitive).Row
-		col := d.Val.(Expression.Primitive).Col
+		typeVal := typeof(d.Val)
+		var row int
+		var col int
+		switch typeVal {
+		case "Expression.Primitive":
+			row = d.Val.(Expression.Primitive).Row
+			col = d.Val.(Expression.Primitive).Col
+		case "Expression.Operation":
+			row = d.Val.(Expression.Operation).Row
+			col = d.Val.(Expression.Operation).Col
+		}
 		errors.CounterError += 1
 		msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No se puede asignar valor a un no mut \n"
 		err := errors.NewError(errors.CounterError, row, col, msg, table.Name)
@@ -58,8 +68,18 @@ func (d *Assign) Execute(table SymbolTable.SymbolTable) interface{} {
 	typeRes := typeDef[typeDec][typeExpr]
 
 	if typeRes == SymbolTable.NULL {
-		row := d.Val.(Expression.Primitive).Row
-		col := d.Val.(Expression.Primitive).Col
+		typeVal := typeof(d.Val)
+		var row int
+		var col int
+		switch typeVal {
+		case "Expression.Primitive":
+			row = d.Val.(Expression.Primitive).Row
+			col = d.Val.(Expression.Primitive).Col
+		case "Expression.Operation":
+			row = d.Val.(Expression.Operation).Row
+			col = d.Val.(Expression.Operation).Col
+		}
+
 		errors.CounterError += 1
 		msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No se puede mezclar esos tipos de datos \n"
 		err := errors.NewError(errors.CounterError, row, col, msg, table.Name)
@@ -71,4 +91,8 @@ func (d *Assign) Execute(table SymbolTable.SymbolTable) interface{} {
 	table.ChangeVal(varDec, val)
 
 	return nil
+}
+
+func typeof(v interface{}) string {
+	return reflect.TypeOf(v).String()
 }

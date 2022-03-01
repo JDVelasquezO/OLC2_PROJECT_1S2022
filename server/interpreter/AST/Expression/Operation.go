@@ -428,5 +428,5 @@ ErrorDataType:
 	msg := "(" + row + ", " + col + ") Error: tipos de datos no soportados \n"
 	err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
 	errors.TypeError = append(errors.TypeError, err)
-	return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
+	return SymbolTable.ReturnType{Type: SymbolTable.NULL, Value: err}
 }

@@ -19,7 +19,7 @@ var typeDef = [7][7]SymbolTable.DataType{
 	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.STRING, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
 	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.CHAR, SymbolTable.NULL, SymbolTable.NULL},
 	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.BOOLEAN, SymbolTable.NULL},
-	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
+	{SymbolTable.INTEGER, SymbolTable.FLOAT, SymbolTable.STR, SymbolTable.STRING, SymbolTable.CHAR, SymbolTable.BOOLEAN, SymbolTable.NULL},
 }
 
 type Declaration struct {
@@ -45,6 +45,8 @@ func NewDeclaration(listIds *arrayList.List, isMut bool, dataType string) *Decla
 			newDec.DataType = SymbolTable.FLOAT
 		case "String":
 			newDec.DataType = SymbolTable.STRING
+		case "&str":
+			newDec.DataType = SymbolTable.STR
 		case "char":
 			newDec.DataType = SymbolTable.CHAR
 		case "bool":
@@ -72,6 +74,8 @@ func NewDeclarationInit(listIds *arrayList.List, valInit Abstract.Expression, is
 			newDec.DataType = SymbolTable.FLOAT
 		case "String":
 			newDec.DataType = SymbolTable.STRING
+		case "&str":
+			newDec.DataType = SymbolTable.STR
 		case "char":
 			newDec.DataType = SymbolTable.CHAR
 		case "bool":
@@ -119,6 +123,24 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 			d.DataType = SymbolTable.CHAR
 		case SymbolTable.BOOLEAN:
 			d.DataType = SymbolTable.BOOLEAN
+		case SymbolTable.NULL:
+			typeVal := typeof(d.InitVal)
+			var row int
+			var col int
+			switch typeVal {
+			case "Expression.Primitive":
+				row = d.InitVal.(Expression.Primitive).Row
+				col = d.InitVal.(Expression.Primitive).Col
+			case "Expression.Operation":
+				row = d.InitVal.(Expression.Operation).Row
+				col = d.InitVal.(Expression.Operation).Col
+			}
+			errors.CounterError += 1
+			msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") Tipos de datos incorrectos. \n"
+			err := errors.NewError(errors.CounterError, row, col, msg, table.Name)
+			errors.TypeError = append(errors.TypeError, err)
+			interpreter.Console += fmt.Sprintf("%v", err.Msg)
+			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
 		}
 
 		retExpr := d.InitVal.GetValue(table)
@@ -127,8 +149,18 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 		typeRes := typeDef[typeDec][typeExpr]
 
 		if typeRes == SymbolTable.NULL {
-			row := d.InitVal.(Expression.Primitive).Row
-			col := d.InitVal.(Expression.Primitive).Col
+			typeVal := typeof(d.InitVal)
+			var row int
+			var col int
+			switch typeVal {
+			case "Expression.Primitive":
+				row = d.InitVal.(Expression.Primitive).Row
+				col = d.InitVal.(Expression.Primitive).Col
+			case "Expression.Operation":
+				row = d.InitVal.(Expression.Operation).Row
+				col = d.InitVal.(Expression.Operation).Col
+			}
+
 			errors.CounterError += 1
 			msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No concuerdan los tipos de datos \n"
 			err := errors.NewError(errors.CounterError, row, col, msg, table.Name)
