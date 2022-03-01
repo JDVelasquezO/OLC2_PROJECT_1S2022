@@ -389,13 +389,13 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 		var left bool
 		var right bool
-		if retLeft.Value == "true" {
+		if retLeft.Value == "true" || retLeft.Value.(bool) == true {
 			left = true
 		} else {
 			left = false
 		}
 
-		if retRight.Value == "true" {
+		if retRight.Value == "true" || retRight.Value.(bool) == true {
 			right = true
 		} else {
 			right = false
@@ -412,7 +412,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 
 		var left bool
-		if retLeft.Value == "true" {
+		if retLeft.Value == "true" || retLeft.Value.(bool) {
 			left = false
 		} else {
 			left = true
