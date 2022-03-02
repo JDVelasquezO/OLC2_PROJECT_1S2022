@@ -50,6 +50,12 @@ type Operation struct {
 	Col      int
 }
 
+func (p Operation) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
+	res := p.GetValue(symbolTable)
+
+	return res
+}
+
 func NewOperation(OpLeft Abstract.Expression, Operator string, OpRight Abstract.Expression,
 	unary bool, row int, col int) Operation {
 	e := Operation{OpLeft, Operator, OpRight, unary, row, col}

@@ -25,6 +25,18 @@ func NewIf(condition Abstract.Expression, listInstructs *arrayList.List,
 	}
 }
 
+func (i If) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.ReturnType {
+	val := i.Execute(symbolTable)
+	if val != nil {
+		return val.(SymbolTable.ReturnType)
+	}
+
+	return SymbolTable.ReturnType{
+		Type:  SymbolTable.ERROR,
+		Value: nil,
+	}
+}
+
 func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 
 	returnPrincipal := i.Condition.GetValue(table)
@@ -34,11 +46,12 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 		return nil
 	}
 
+	var retVal interface{}
 	if returnPrincipal.Value == "true" || returnPrincipal.Value.(bool) {
 		newTable := SymbolTable.NewSymbolTable("if", &table)
 		for j := 0; j < i.ListInstructs.Len(); j++ {
 			instruct := i.ListInstructs.GetValue(j).(Abstract.Instruction)
-			instruct.Execute(newTable)
+			retVal = instruct.Execute(newTable)
 		}
 	} else {
 		if i.ListIfElse != nil {
@@ -71,5 +84,5 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 		}
 	}
 
-	return nil
+	return retVal
 }

@@ -49,6 +49,7 @@ instruction returns [Abstract.Instruction instr]
     | declaration_prod  { $instr = $declaration_prod.instr }
     | assign_prod       { $instr = $assign_prod.instr }
     | conditional_prod  { $instr = $conditional_prod.instr }
+    | expr_arit         { $instr = $expr_arit.instr }
     ;
 
 print_prod returns [Abstract.Instruction instr]
@@ -127,11 +128,18 @@ listIds returns [*arrayList.List list]
     | ID  {  $list.Add(Expression.NewIdentifier($ID.text, $ID.line, localctx.(*ListIdsContext).Get_ID().GetColumn())) }
     ;
 
-conditional_prod returns [Abstract.Instruction instr]
-    : RIF expression bloq { $instr = Natives.NewIf($expression.p, $bloq.content, nil, nil) }
-    | RIF expression bif=bloq RELSE belse=bloq { $instr = Natives.NewIf($expression.p, $bif.content, nil, $belse.content) }
+conditional_prod returns [Abstract.Instruction instr, Abstract.Expression p]
+    : RIF expression bloq {
+        $instr = Natives.NewIf($expression.p, $bloq.content, nil, nil)
+        $p = Natives.NewIf($expression.p, $bloq.content, nil, nil)
+    }
+    | RIF expression bif=bloq RELSE belse=bloq {
+        $instr = Natives.NewIf($expression.p, $bif.content, nil, $belse.content)
+        $p = Natives.NewIf($expression.p, $bif.content, nil, $belse.content)
+    }
     | RIF expression bif=bloq list_else_if RELSE belse=bloq {
         $instr = Natives.NewIf($expression.p, $bif.content, $list_else_if.list, $belse.content )
+        $p = Natives.NewIf($expression.p, $bif.content, $list_else_if.list, $belse.content )
     }
     ;
 
@@ -152,10 +160,11 @@ else_if returns [Abstract.Instruction instr]
     ;
 
 expression returns [Abstract.Expression p]
-    : expr_rel    { $p = $expr_rel.p }
-    | expr_arit   { $p = $expr_arit.p }
-    | expr_logic  { $p = $expr_logic.p }
-    | expr_cast   { $p = $expr_cast.p }
+    : conditional_prod           { $p = $conditional_prod.p }
+    | expr_rel                   { $p = $expr_rel.p }
+    | expr_arit                  { $p = $expr_arit.p }
+    | expr_logic                 { $p = $expr_logic.p }
+    | expr_cast                  { $p = $expr_cast.p }
 ;
 
 expr_rel returns[Abstract.Expression p]
@@ -163,15 +172,40 @@ expr_rel returns[Abstract.Expression p]
     | expr_arit { $p = $expr_arit.p }
     ;
 
-expr_arit returns [Abstract.Expression p]
-    : '-' opU = expression { $p = Expression.NewOperation($opU.p, "-", nil, true, localctx.(*Expr_aritContext).GetOpU().GetStart().GetLine(), localctx.(*Expr_aritContext).GetOpU().GetStart().GetColumn() ) }
-    | pow_op LEFT_PAR opLeft = expr_arit COMMA opRight = expr_arit RIGHT_PAR { $p = Expression.NewOperation($opLeft.p, $pow_op.op, $opRight.p, false, localctx.(*Expr_aritContext).Get_pow_op().GetStart().GetLine(), localctx.(*Expr_aritContext).Get_pow_op().GetStart().GetColumn()) }
-    | opLeft = expr_arit op=('*'|'/'|'%') opRight = expr_arit {$p = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_aritContext).GetOp().GetColumn() )}
-    | opLeft = expr_arit op=('+'|'-') opRight = expr_arit {$p = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_aritContext).GetOp().GetColumn() )}
-    | primitive {$p = $primitive.p}
-    | expr_cast   { $p = $expr_cast.p }
-    | LEFT_PAR expression RIGHT_PAR {$p = $expression.p}
+expr_arit returns [Abstract.Expression p, Abstract.Instruction instr]
+    : '-' opU = expression {
+        $p = Expression.NewOperation($opU.p, "-", nil, true, localctx.(*Expr_aritContext).GetOpU().GetStart().GetLine(), localctx.(*Expr_aritContext).GetOpU().GetStart().GetColumn() )
+        $instr = Expression.NewOperation($opU.p, "-", nil, true, localctx.(*Expr_aritContext).GetOpU().GetStart().GetLine(), localctx.(*Expr_aritContext).GetOpU().GetStart().GetColumn() )
+        }
+    | pow_op LEFT_PAR opLeft = expr_arit COMMA opRight = expr_arit RIGHT_PAR {
+        $p = Expression.NewOperation($opLeft.p, $pow_op.op, $opRight.p, false, localctx.(*Expr_aritContext).Get_pow_op().GetStart().GetLine(), localctx.(*Expr_aritContext).Get_pow_op().GetStart().GetColumn())
+        $instr = Expression.NewOperation($opLeft.p, $pow_op.op, $opRight.p, false, localctx.(*Expr_aritContext).Get_pow_op().GetStart().GetLine(), localctx.(*Expr_aritContext).Get_pow_op().GetStart().GetColumn())
+        }
+    | opLeft = expr_arit op=('*'|'/'|'%') opRight = expr_arit {
+        $p = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_aritContext).GetOp().GetColumn() )
+        $instr = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_aritContext).GetOp().GetColumn() )
+        }
+    | opLeft = expr_arit op=('+'|'-') opRight = expr_arit {
+        $p = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_aritContext).GetOp().GetColumn() )
+        $instr = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_aritContext).GetOp().GetColumn() )
+        }
+    | expr_value {
+        $p = $expr_value.p
+        $instr = nil
+        }
+    | expr_cast   {
+        $p = $expr_cast.p
+        $instr = nil
+        }
+    | LEFT_PAR expression RIGHT_PAR {
+        $p = $expression.p
+        $instr = nil
+        }
 ;
+
+expr_value returns [Abstract.Expression p]
+    : primitive { $p = $primitive.p }
+    ;
 
 pow_op returns [string op]
     : RINTEGER HERITAGE POWI { $op = $POWI.text }

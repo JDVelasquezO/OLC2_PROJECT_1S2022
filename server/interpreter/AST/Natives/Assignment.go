@@ -90,7 +90,7 @@ func (d *Assign) Execute(table SymbolTable.SymbolTable) interface{} {
 	val.Value = d.Val.GetValue(table).Value
 	table.ChangeVal(varDec, val)
 
-	return nil
+	return val
 }
 
 func typeof(v interface{}) string {
