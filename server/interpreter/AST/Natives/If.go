@@ -42,6 +42,25 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 		}
 	} else {
 		if i.ListIfElse != nil {
+			for _, instr := range i.ListIfElse.ToArray() {
+				newIf := instr.(If)
+				returnConditionNewIf := newIf.Condition.GetValue(table)
+				if returnConditionNewIf.Type != SymbolTable.BOOLEAN {
+					return nil
+				}
+
+				if returnConditionNewIf.Value.(bool) {
+					tableNewIf := SymbolTable.NewSymbolTable("Else-If", &table)
+					for j := 0; j < newIf.ListInstructs.Len(); j++ {
+						instr := newIf.ListInstructs.GetValue(j).(Abstract.Instruction)
+						instr.Execute(tableNewIf)
+					}
+					return nil
+				}
+			}
+		}
+
+		if i.ListInstructsElse != nil {
 			newTable := SymbolTable.NewSymbolTable("else", &table)
 			for j := 0; j < i.ListInstructsElse.Len(); j++ {
 				instruct := i.ListInstructsElse.GetValue(j).(Abstract.Instruction)

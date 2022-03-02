@@ -129,24 +129,27 @@ listIds returns [*arrayList.List list]
 
 conditional_prod returns [Abstract.Instruction instr]
     : RIF expression bloq { $instr = Natives.NewIf($expression.p, $bloq.content, nil, nil) }
-//     | RIF LEFT_PAR expression RIGHT_PAR bif=bloq RELSE belse=bloq
-//     | RIF LEFT_PAR expression RIGHT_PAR bif=bloq list_else_if
-//     | RIF LEFT_PAR expression RIGHT_PAR bif=bloq list_else_if RELSE belse=bloq
+    | RIF expression bif=bloq RELSE belse=bloq { $instr = Natives.NewIf($expression.p, $bif.content, nil, $belse.content) }
+    | RIF expression bif=bloq list_else_if RELSE belse=bloq {
+        $instr = Natives.NewIf($expression.p, $bif.content, $list_else_if.list, $belse.content )
+    }
     ;
 
-//list_else_if returns [*arrayList.List list]
-//    : l += else_if+ {
-//        acumulator := localctx.(*List_else_ifContext).GetList()
-//
-//        for _, e := range acumulator {
-//            $l.Add(e.GetInstr)
-//        }
-//    }
-//    ;
+list_else_if returns [*arrayList.List list]
+    @init {
+        $list = arrayList.New()
+    }
+    : newList += else_if+ {
+        listInt := localctx.(*List_else_ifContext).GetNewList()
+        for _, e := range listInt {
+            $list.Add(e.GetInstr())
+        }
+    }
+    ;
 
-//else_if returns[Abstract.Natives instr]
-//    : RELSE RIF LEFT_PAR expression RIGHT_PAR bloq { $instr = Natives.NewIf() }
-//    ;
+else_if returns [Abstract.Instruction instr]
+    : RELSE RIF expression bloq { $instr = Natives.NewIf($expression.p, $bloq.content, nil, nil) }
+    ;
 
 expression returns [Abstract.Expression p]
     : expr_rel    { $p = $expr_rel.p }

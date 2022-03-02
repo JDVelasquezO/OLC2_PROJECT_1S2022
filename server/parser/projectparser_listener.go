@@ -41,6 +41,12 @@ type ProjectParserListener interface {
 	// EnterConditional_prod is called when entering the conditional_prod production.
 	EnterConditional_prod(c *Conditional_prodContext)
 
+	// EnterList_else_if is called when entering the list_else_if production.
+	EnterList_else_if(c *List_else_ifContext)
+
+	// EnterElse_if is called when entering the else_if production.
+	EnterElse_if(c *Else_ifContext)
+
 	// EnterExpression is called when entering the expression production.
 	EnterExpression(c *ExpressionContext)
 
@@ -97,6 +103,12 @@ type ProjectParserListener interface {
 
 	// ExitConditional_prod is called when exiting the conditional_prod production.
 	ExitConditional_prod(c *Conditional_prodContext)
+
+	// ExitList_else_if is called when exiting the list_else_if production.
+	ExitList_else_if(c *List_else_ifContext)
+
+	// ExitElse_if is called when exiting the else_if production.
+	ExitElse_if(c *Else_ifContext)
 
 	// ExitExpression is called when exiting the expression production.
 	ExitExpression(c *ExpressionContext)
