@@ -51,6 +51,7 @@ instruction returns [Abstract.Instruction instr]
     | conditional_prod  { $instr = $conditional_prod.instr }
     | expr_arit         { $instr = $expr_arit.instr }
     | primitive         { $instr = $primitive.instr }
+    | expr_cast         { $instr = $expr_cast.instr }
     ;
 
 print_prod returns [Abstract.Instruction instr]
@@ -196,7 +197,7 @@ expr_arit returns [Abstract.Expression p, Abstract.Instruction instr]
         }
     | expr_cast   {
         $p = $expr_cast.p
-        $instr = nil
+        $instr = $expr_cast.instr
         }
     | LEFT_PAR expression RIGHT_PAR {
         $p = $expression.p
@@ -214,12 +215,14 @@ expr_logic returns[Abstract.Expression p]
     | opLeft = expr_rel op=( AND | OR ) opRight = expr_rel { $p = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_logicContext).GetOp().GetColumn() )}
     ;
 
-expr_cast returns[Abstract.Expression p]
+expr_cast returns[Abstract.Expression p, Abstract.Instruction instr]
     : LEFT_PAR expression RAS data_type RIGHT_PAR {
         if $data_type.data == "i64" {
             $p = Expression.NewCast($expression.p, SymbolTable.INTEGER)
+            $instr = Expression.NewCast($expression.p, SymbolTable.INTEGER)
         } else if $data_type.data == "f64" {
             $p = Expression.NewCast($expression.p, SymbolTable.FLOAT)
+            $instr = Expression.NewCast($expression.p, SymbolTable.FLOAT)
         }
     }
     ;

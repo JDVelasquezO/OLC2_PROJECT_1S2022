@@ -10,6 +10,12 @@ type Cast struct {
 	Type       SymbolTable.DataType
 }
 
+func (c Cast) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
+	res := c.GetValue(symbolTable)
+
+	return res
+}
+
 func NewCast(expr Abstract.Expression, dataType SymbolTable.DataType) Cast {
 	return Cast{
 		Expression: expr,

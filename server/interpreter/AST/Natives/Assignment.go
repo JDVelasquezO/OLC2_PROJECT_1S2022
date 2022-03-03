@@ -56,6 +56,9 @@ func (d *Assign) Execute(table SymbolTable.SymbolTable) interface{} {
 		case "Expression.Operation":
 			row = d.Val.(Expression.Operation).Row
 			col = d.Val.(Expression.Operation).Col
+		case "Expression.Identifier":
+			row = d.Val.(Expression.Identifier).Row
+			col = d.Val.(Expression.Identifier).Col
 		}
 		errors.CounterError += 1
 		msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No se puede asignar valor a un no mut \n"
@@ -78,6 +81,9 @@ func (d *Assign) Execute(table SymbolTable.SymbolTable) interface{} {
 		case "Expression.Operation":
 			row = d.Val.(Expression.Operation).Row
 			col = d.Val.(Expression.Operation).Col
+		case "Expression.Identifier":
+			row = d.Val.(Expression.Identifier).Row
+			col = d.Val.(Expression.Identifier).Col
 		}
 
 		errors.CounterError += 1

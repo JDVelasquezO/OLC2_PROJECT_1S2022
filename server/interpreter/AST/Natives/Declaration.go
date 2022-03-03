@@ -111,6 +111,9 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 			case "Expression.Operation":
 				row = d.InitVal.(Expression.Operation).Row
 				col = d.InitVal.(Expression.Operation).Col
+			case "Expression.Identifier":
+				row = d.InitVal.(Expression.Identifier).Row
+				col = d.InitVal.(Expression.Identifier).Col
 			}
 
 			errors.CounterError += 1
@@ -145,6 +148,9 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 			case "Expression.Operation":
 				row = d.InitVal.(Expression.Operation).Row
 				col = d.InitVal.(Expression.Operation).Col
+			case "Expression.Identifier":
+				row = d.InitVal.(Expression.Identifier).Row
+				col = d.InitVal.(Expression.Identifier).Col
 			}
 			errors.CounterError += 1
 			msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") Tipos de datos incorrectos. \n"
@@ -169,6 +175,9 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 		case "Expression.Operation":
 			row = d.InitVal.(Expression.Operation).Row
 			col = d.InitVal.(Expression.Operation).Col
+		case "Expression.Identifier":
+			row = d.InitVal.(Expression.Identifier).Row
+			col = d.InitVal.(Expression.Identifier).Col
 		}
 		if typeRes == SymbolTable.NULL {
 			errors.CounterError += 1
