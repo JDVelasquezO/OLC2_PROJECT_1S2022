@@ -132,16 +132,16 @@ listIds returns [*arrayList.List list]
 
 conditional_prod returns [Abstract.Instruction instr, Abstract.Expression p]
     : RIF expression bloq {
-        $instr = Natives.NewIf($expression.p, $bloq.content, nil, nil)
-        $p = Natives.NewIf($expression.p, $bloq.content, nil, nil)
+        $instr = Natives.NewIf($expression.p, $bloq.content, nil, nil, $RIF.line, localctx.(*Conditional_prodContext).Get_RIF().GetColumn())
+        $p = Natives.NewIf($expression.p, $bloq.content, nil, nil, $RIF.line, localctx.(*Conditional_prodContext).Get_RIF().GetColumn())
     }
     | RIF expression bif=bloq RELSE belse=bloq {
-        $instr = Natives.NewIf($expression.p, $bif.content, nil, $belse.content)
-        $p = Natives.NewIf($expression.p, $bif.content, nil, $belse.content)
+        $instr = Natives.NewIf($expression.p, $bif.content, nil, $belse.content, $RIF.line, localctx.(*Conditional_prodContext).Get_RIF().GetColumn())
+        $p = Natives.NewIf($expression.p, $bif.content, nil, $belse.content, $RIF.line, localctx.(*Conditional_prodContext).Get_RIF().GetColumn())
     }
     | RIF expression bif=bloq list_else_if RELSE belse=bloq {
-        $instr = Natives.NewIf($expression.p, $bif.content, $list_else_if.list, $belse.content )
-        $p = Natives.NewIf($expression.p, $bif.content, $list_else_if.list, $belse.content )
+        $instr = Natives.NewIf($expression.p, $bif.content, $list_else_if.list, $belse.content, $RIF.line, localctx.(*Conditional_prodContext).Get_RIF().GetColumn() )
+        $p = Natives.NewIf($expression.p, $bif.content, $list_else_if.list, $belse.content, $RIF.line, localctx.(*Conditional_prodContext).Get_RIF().GetColumn() )
     }
     ;
 
@@ -158,7 +158,7 @@ list_else_if returns [*arrayList.List list]
     ;
 
 else_if returns [Abstract.Instruction instr]
-    : RELSE RIF expression bloq { $instr = Natives.NewIf($expression.p, $bloq.content, nil, nil) }
+    : RELSE RIF expression bloq { $instr = Natives.NewIf($expression.p, $bloq.content, nil, nil, $RIF.line, localctx.(*Else_ifContext).Get_RIF().GetColumn()) }
     ;
 
 expression returns [Abstract.Expression p]

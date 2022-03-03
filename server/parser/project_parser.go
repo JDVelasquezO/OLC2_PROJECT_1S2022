@@ -2605,6 +2605,12 @@ type IConditional_prodContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Get_RIF returns the _RIF token.
+	Get_RIF() antlr.Token
+
+	// Set_RIF sets the _RIF token.
+	Set_RIF(antlr.Token)
+
 	// Get_expression returns the _expression rule contexts.
 	Get_expression() IExpressionContext
 
@@ -2656,6 +2662,7 @@ type Conditional_prodContext struct {
 	parser        antlr.Parser
 	instr         Abstract.Instruction
 	p             Abstract.Expression
+	_RIF          antlr.Token
 	_expression   IExpressionContext
 	_bloq         IBloqContext
 	bif           IBloqContext
@@ -2684,6 +2691,10 @@ func NewConditional_prodContext(parser antlr.Parser, parent antlr.ParserRuleCont
 }
 
 func (s *Conditional_prodContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *Conditional_prodContext) Get_RIF() antlr.Token { return s._RIF }
+
+func (s *Conditional_prodContext) Set_RIF(v antlr.Token) { s._RIF = v }
 
 func (s *Conditional_prodContext) Get_expression() IExpressionContext { return s._expression }
 
@@ -2811,7 +2822,10 @@ func (p *ProjectParser) Conditional_prod() (localctx IConditional_prodContext) {
 		p.EnterOuterAlt(localctx, 1)
 		{
 			p.SetState(201)
-			p.Match(ProjectParserRIF)
+
+			var _m = p.Match(ProjectParserRIF)
+
+			localctx.(*Conditional_prodContext)._RIF = _m
 		}
 		{
 			p.SetState(202)
@@ -2828,14 +2842,29 @@ func (p *ProjectParser) Conditional_prod() (localctx IConditional_prodContext) {
 			localctx.(*Conditional_prodContext)._bloq = _x
 		}
 
-		localctx.(*Conditional_prodContext).instr = Natives.NewIf(localctx.(*Conditional_prodContext).Get_expression().GetP(), localctx.(*Conditional_prodContext).Get_bloq().GetContent(), nil, nil)
-		localctx.(*Conditional_prodContext).p = Natives.NewIf(localctx.(*Conditional_prodContext).Get_expression().GetP(), localctx.(*Conditional_prodContext).Get_bloq().GetContent(), nil, nil)
+		localctx.(*Conditional_prodContext).instr = Natives.NewIf(localctx.(*Conditional_prodContext).Get_expression().GetP(), localctx.(*Conditional_prodContext).Get_bloq().GetContent(), nil, nil, (func() int {
+			if localctx.(*Conditional_prodContext).Get_RIF() == nil {
+				return 0
+			} else {
+				return localctx.(*Conditional_prodContext).Get_RIF().GetLine()
+			}
+		}()), localctx.(*Conditional_prodContext).Get_RIF().GetColumn())
+		localctx.(*Conditional_prodContext).p = Natives.NewIf(localctx.(*Conditional_prodContext).Get_expression().GetP(), localctx.(*Conditional_prodContext).Get_bloq().GetContent(), nil, nil, (func() int {
+			if localctx.(*Conditional_prodContext).Get_RIF() == nil {
+				return 0
+			} else {
+				return localctx.(*Conditional_prodContext).Get_RIF().GetLine()
+			}
+		}()), localctx.(*Conditional_prodContext).Get_RIF().GetColumn())
 
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
 			p.SetState(206)
-			p.Match(ProjectParserRIF)
+
+			var _m = p.Match(ProjectParserRIF)
+
+			localctx.(*Conditional_prodContext)._RIF = _m
 		}
 		{
 			p.SetState(207)
@@ -2863,14 +2892,29 @@ func (p *ProjectParser) Conditional_prod() (localctx IConditional_prodContext) {
 			localctx.(*Conditional_prodContext).belse = _x
 		}
 
-		localctx.(*Conditional_prodContext).instr = Natives.NewIf(localctx.(*Conditional_prodContext).Get_expression().GetP(), localctx.(*Conditional_prodContext).GetBif().GetContent(), nil, localctx.(*Conditional_prodContext).GetBelse().GetContent())
-		localctx.(*Conditional_prodContext).p = Natives.NewIf(localctx.(*Conditional_prodContext).Get_expression().GetP(), localctx.(*Conditional_prodContext).GetBif().GetContent(), nil, localctx.(*Conditional_prodContext).GetBelse().GetContent())
+		localctx.(*Conditional_prodContext).instr = Natives.NewIf(localctx.(*Conditional_prodContext).Get_expression().GetP(), localctx.(*Conditional_prodContext).GetBif().GetContent(), nil, localctx.(*Conditional_prodContext).GetBelse().GetContent(), (func() int {
+			if localctx.(*Conditional_prodContext).Get_RIF() == nil {
+				return 0
+			} else {
+				return localctx.(*Conditional_prodContext).Get_RIF().GetLine()
+			}
+		}()), localctx.(*Conditional_prodContext).Get_RIF().GetColumn())
+		localctx.(*Conditional_prodContext).p = Natives.NewIf(localctx.(*Conditional_prodContext).Get_expression().GetP(), localctx.(*Conditional_prodContext).GetBif().GetContent(), nil, localctx.(*Conditional_prodContext).GetBelse().GetContent(), (func() int {
+			if localctx.(*Conditional_prodContext).Get_RIF() == nil {
+				return 0
+			} else {
+				return localctx.(*Conditional_prodContext).Get_RIF().GetLine()
+			}
+		}()), localctx.(*Conditional_prodContext).Get_RIF().GetColumn())
 
 	case 3:
 		p.EnterOuterAlt(localctx, 3)
 		{
 			p.SetState(213)
-			p.Match(ProjectParserRIF)
+
+			var _m = p.Match(ProjectParserRIF)
+
+			localctx.(*Conditional_prodContext)._RIF = _m
 		}
 		{
 			p.SetState(214)
@@ -2905,8 +2949,20 @@ func (p *ProjectParser) Conditional_prod() (localctx IConditional_prodContext) {
 			localctx.(*Conditional_prodContext).belse = _x
 		}
 
-		localctx.(*Conditional_prodContext).instr = Natives.NewIf(localctx.(*Conditional_prodContext).Get_expression().GetP(), localctx.(*Conditional_prodContext).GetBif().GetContent(), localctx.(*Conditional_prodContext).Get_list_else_if().GetList(), localctx.(*Conditional_prodContext).GetBelse().GetContent())
-		localctx.(*Conditional_prodContext).p = Natives.NewIf(localctx.(*Conditional_prodContext).Get_expression().GetP(), localctx.(*Conditional_prodContext).GetBif().GetContent(), localctx.(*Conditional_prodContext).Get_list_else_if().GetList(), localctx.(*Conditional_prodContext).GetBelse().GetContent())
+		localctx.(*Conditional_prodContext).instr = Natives.NewIf(localctx.(*Conditional_prodContext).Get_expression().GetP(), localctx.(*Conditional_prodContext).GetBif().GetContent(), localctx.(*Conditional_prodContext).Get_list_else_if().GetList(), localctx.(*Conditional_prodContext).GetBelse().GetContent(), (func() int {
+			if localctx.(*Conditional_prodContext).Get_RIF() == nil {
+				return 0
+			} else {
+				return localctx.(*Conditional_prodContext).Get_RIF().GetLine()
+			}
+		}()), localctx.(*Conditional_prodContext).Get_RIF().GetColumn())
+		localctx.(*Conditional_prodContext).p = Natives.NewIf(localctx.(*Conditional_prodContext).Get_expression().GetP(), localctx.(*Conditional_prodContext).GetBif().GetContent(), localctx.(*Conditional_prodContext).Get_list_else_if().GetList(), localctx.(*Conditional_prodContext).GetBelse().GetContent(), (func() int {
+			if localctx.(*Conditional_prodContext).Get_RIF() == nil {
+				return 0
+			} else {
+				return localctx.(*Conditional_prodContext).Get_RIF().GetLine()
+			}
+		}()), localctx.(*Conditional_prodContext).Get_RIF().GetColumn())
 
 	}
 
@@ -3091,6 +3147,12 @@ type IElse_ifContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Get_RIF returns the _RIF token.
+	Get_RIF() antlr.Token
+
+	// Set_RIF sets the _RIF token.
+	Set_RIF(antlr.Token)
+
 	// Get_expression returns the _expression rule contexts.
 	Get_expression() IExpressionContext
 
@@ -3117,6 +3179,7 @@ type Else_ifContext struct {
 	*antlr.BaseParserRuleContext
 	parser      antlr.Parser
 	instr       Abstract.Instruction
+	_RIF        antlr.Token
 	_expression IExpressionContext
 	_bloq       IBloqContext
 }
@@ -3142,6 +3205,10 @@ func NewElse_ifContext(parser antlr.Parser, parent antlr.ParserRuleContext, invo
 }
 
 func (s *Else_ifContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *Else_ifContext) Get_RIF() antlr.Token { return s._RIF }
+
+func (s *Else_ifContext) Set_RIF(v antlr.Token) { s._RIF = v }
 
 func (s *Else_ifContext) Get_expression() IExpressionContext { return s._expression }
 
@@ -3230,7 +3297,10 @@ func (p *ProjectParser) Else_if() (localctx IElse_ifContext) {
 	}
 	{
 		p.SetState(231)
-		p.Match(ProjectParserRIF)
+
+		var _m = p.Match(ProjectParserRIF)
+
+		localctx.(*Else_ifContext)._RIF = _m
 	}
 	{
 		p.SetState(232)
@@ -3246,7 +3316,13 @@ func (p *ProjectParser) Else_if() (localctx IElse_ifContext) {
 
 		localctx.(*Else_ifContext)._bloq = _x
 	}
-	localctx.(*Else_ifContext).instr = Natives.NewIf(localctx.(*Else_ifContext).Get_expression().GetP(), localctx.(*Else_ifContext).Get_bloq().GetContent(), nil, nil)
+	localctx.(*Else_ifContext).instr = Natives.NewIf(localctx.(*Else_ifContext).Get_expression().GetP(), localctx.(*Else_ifContext).Get_bloq().GetContent(), nil, nil, (func() int {
+		if localctx.(*Else_ifContext).Get_RIF() == nil {
+			return 0
+		} else {
+			return localctx.(*Else_ifContext).Get_RIF().GetLine()
+		}
+	}()), localctx.(*Else_ifContext).Get_RIF().GetColumn())
 
 	return localctx
 }

@@ -2,9 +2,13 @@ package Natives
 
 import (
 	"OLC2_Project1/server/interpreter"
+	"OLC2_Project1/server/interpreter/AST/Expression"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
+	"OLC2_Project1/server/interpreter/errors"
+	"fmt"
 	arrayList "github.com/colegno/arraylist"
+	"strconv"
 )
 
 type If struct {
@@ -12,16 +16,20 @@ type If struct {
 	ListInstructs     *arrayList.List
 	ListIfElse        *arrayList.List
 	ListInstructsElse *arrayList.List
+	Row               int
+	Col               int
 }
 
 func NewIf(condition Abstract.Expression, listInstructs *arrayList.List,
-	listIfElse *arrayList.List, listInstructsElse *arrayList.List) If {
+	listIfElse *arrayList.List, listInstructsElse *arrayList.List, row int, col int) If {
 
 	return If{
 		Condition:         condition,
 		ListInstructs:     listInstructs,
 		ListIfElse:        listIfElse,
 		ListInstructsElse: listInstructsElse,
+		Row:               row,
+		Col:               col,
 	}
 }
 
@@ -51,6 +59,37 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 		newTable := SymbolTable.NewSymbolTable("if", &table)
 		for j := 0; j < i.ListInstructs.Len(); j++ {
 			instruct := i.ListInstructs.GetValue(j).(Abstract.Instruction)
+
+			typeOfIn := typeof(instruct)
+			switch typeOfIn {
+			case "Expression.Primitive":
+			case "Expression.Identifier":
+			case "Expression.Operation":
+
+				goto IfAsExpression
+			}
+			goto ContinueIf
+
+		IfAsExpression:
+			if i.ListInstructsElse != nil {
+				instr := i.ListInstructsElse.GetValue(j).(Abstract.Instruction)
+				if instruct.Execute(newTable).(SymbolTable.ReturnType).Type !=
+					instr.Execute(newTable).(SymbolTable.ReturnType).Type {
+
+					return ValidateElseInstructs(instr, newTable)
+				}
+			}
+
+			if i.ListIfElse != nil {
+				instr := i.ListIfElse.GetValue(j).(Abstract.Instruction)
+				if instruct.Execute(newTable).(SymbolTable.ReturnType).Type !=
+					instr.Execute(newTable).(SymbolTable.ReturnType).Type {
+
+					return ValidateElseInstructs(instr, newTable)
+				}
+			}
+
+		ContinueIf:
 			return instruct.Execute(newTable)
 		}
 	} else {
@@ -85,4 +124,27 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 	}
 
 	return nil
+}
+
+func ValidateElseInstructs(instr Abstract.Instruction, newTable SymbolTable.SymbolTable) SymbolTable.ReturnType {
+	typeVal := typeof(instr)
+	var row int
+	var col int
+	switch typeVal {
+	case "Expression.Primitive":
+		row = instr.(Expression.Primitive).Row
+		col = instr.(Expression.Primitive).Col
+	case "Expression.Operation":
+		row = instr.(Expression.Operation).Row
+		col = instr.(Expression.Operation).Col
+	case "Expression.Identifier":
+		row = instr.(Expression.Identifier).Row
+		col = instr.(Expression.Identifier).Col
+	}
+	errors.CounterError += 1
+	msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ")  Tipos de datos en IF incorrectos \n"
+	err := errors.NewError(errors.CounterError, 0, 0, msg, newTable.Name)
+	errors.TypeError = append(errors.TypeError, err)
+	interpreter.Console += fmt.Sprintf("%v", msg)
+	return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 }

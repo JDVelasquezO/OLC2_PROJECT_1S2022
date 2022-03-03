@@ -98,8 +98,9 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 			return nil
 		}
 
-		dataOrigin := d.InitVal.GetValue(table).Type
-		if (dataOrigin != d.DataType) && (d.DataType != SymbolTable.NULL) {
+		dataOrigin := d.InitVal.GetValue(table)
+		dataOriginType := dataOrigin.Type
+		if (dataOriginType != d.DataType) && (d.DataType != SymbolTable.NULL) {
 
 			typeVal := typeof(d.InitVal)
 			var row int
@@ -124,7 +125,7 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
 		}
 
-		switch dataOrigin {
+		switch dataOrigin.Type {
 		case SymbolTable.INTEGER:
 			d.DataType = SymbolTable.INTEGER
 		case SymbolTable.FLOAT:
@@ -158,10 +159,11 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 			errors.TypeError = append(errors.TypeError, err)
 			interpreter.Console += fmt.Sprintf("%v", err.Msg)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
+		case SymbolTable.ERROR:
+			return dataOrigin
 		}
 
-		retExpr := d.InitVal.GetValue(table)
-		typeExpr := retExpr.Type
+		typeExpr := dataOrigin.Type
 		typeDec := d.DataType
 		typeRes := typeDef[typeDec][typeExpr]
 
@@ -203,7 +205,7 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 
 			} else {
 
-				symbol := SymbolTable.NewSymbolId(varDec.Id, 0, 0, typeRes, retExpr.Value, d.IsMut)
+				symbol := SymbolTable.NewSymbolId(varDec.Id, 0, 0, typeRes, dataOrigin.Value, d.IsMut)
 				table.AddNewSymbol(varDec.Id, symbol)
 			}
 		}
