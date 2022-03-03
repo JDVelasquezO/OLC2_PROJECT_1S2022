@@ -11,6 +11,12 @@ type Primitive struct {
 	Col   int
 }
 
+func (p Primitive) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
+	res := p.GetValue(symbolTable)
+
+	return res
+}
+
 func (p Primitive) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.ReturnType {
 	return SymbolTable.ReturnType{
 		Type:  p.Type,

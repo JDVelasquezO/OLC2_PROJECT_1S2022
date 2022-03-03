@@ -56,9 +56,6 @@ type ProjectParserListener interface {
 	// EnterExpr_arit is called when entering the expr_arit production.
 	EnterExpr_arit(c *Expr_aritContext)
 
-	// EnterExpr_value is called when entering the expr_value production.
-	EnterExpr_value(c *Expr_valueContext)
-
 	// EnterPow_op is called when entering the pow_op production.
 	EnterPow_op(c *Pow_opContext)
 
@@ -121,9 +118,6 @@ type ProjectParserListener interface {
 
 	// ExitExpr_arit is called when exiting the expr_arit production.
 	ExitExpr_arit(c *Expr_aritContext)
-
-	// ExitExpr_value is called when exiting the expr_value production.
-	ExitExpr_value(c *Expr_valueContext)
 
 	// ExitPow_op is called when exiting the pow_op production.
 	ExitPow_op(c *Pow_opContext)

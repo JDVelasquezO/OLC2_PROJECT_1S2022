@@ -10,6 +10,12 @@ type Identifier struct {
 	Col int
 }
 
+func (id Identifier) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
+	res := id.GetValue(symbolTable)
+
+	return res
+}
+
 func NewIdentifier(id string, row int, col int) Identifier {
 	return Identifier{
 		Id:  id,

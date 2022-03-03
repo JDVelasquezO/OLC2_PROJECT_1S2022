@@ -100,8 +100,19 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 
 		dataOrigin := d.InitVal.GetValue(table).Type
 		if (dataOrigin != d.DataType) && (d.DataType != SymbolTable.NULL) {
-			row := d.InitVal.(Expression.Primitive).Row
-			col := d.InitVal.(Expression.Primitive).Col
+
+			typeVal := typeof(d.InitVal)
+			var row int
+			var col int
+			switch typeVal {
+			case "Expression.Primitive":
+				row = d.InitVal.(Expression.Primitive).Row
+				col = d.InitVal.(Expression.Primitive).Col
+			case "Expression.Operation":
+				row = d.InitVal.(Expression.Operation).Row
+				col = d.InitVal.(Expression.Operation).Col
+			}
+
 			errors.CounterError += 1
 			msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") Tipos de datos incorrectos. \n"
 			err := errors.NewError(errors.CounterError, row, col, msg, table.Name)

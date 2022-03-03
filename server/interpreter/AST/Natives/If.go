@@ -46,12 +46,12 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 		return nil
 	}
 
-	var retVal interface{}
+	//var retVal interface{}
 	if returnPrincipal.Value == "true" || returnPrincipal.Value.(bool) {
 		newTable := SymbolTable.NewSymbolTable("if", &table)
 		for j := 0; j < i.ListInstructs.Len(); j++ {
 			instruct := i.ListInstructs.GetValue(j).(Abstract.Instruction)
-			retVal = instruct.Execute(newTable)
+			return instruct.Execute(newTable)
 		}
 	} else {
 		if i.ListIfElse != nil {
@@ -66,9 +66,9 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 					tableNewIf := SymbolTable.NewSymbolTable("Else-If", &table)
 					for j := 0; j < newIf.ListInstructs.Len(); j++ {
 						instr := newIf.ListInstructs.GetValue(j).(Abstract.Instruction)
-						instr.Execute(tableNewIf)
+						return instr.Execute(tableNewIf)
 					}
-					return nil
+					//return nil
 				}
 			}
 		}
@@ -77,12 +77,12 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 			newTable := SymbolTable.NewSymbolTable("else", &table)
 			for j := 0; j < i.ListInstructsElse.Len(); j++ {
 				instruct := i.ListInstructsElse.GetValue(j).(Abstract.Instruction)
-				instruct.Execute(newTable)
+				return instruct.Execute(newTable)
 			}
 		} else {
 			return nil
 		}
 	}
 
-	return retVal
+	return nil
 }

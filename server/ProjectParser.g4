@@ -50,6 +50,7 @@ instruction returns [Abstract.Instruction instr]
     | assign_prod       { $instr = $assign_prod.instr }
     | conditional_prod  { $instr = $conditional_prod.instr }
     | expr_arit         { $instr = $expr_arit.instr }
+    | primitive         { $instr = $primitive.instr }
     ;
 
 print_prod returns [Abstract.Instruction instr]
@@ -189,9 +190,9 @@ expr_arit returns [Abstract.Expression p, Abstract.Instruction instr]
         $p = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_aritContext).GetOp().GetColumn() )
         $instr = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_aritContext).GetOp().GetColumn() )
         }
-    | expr_value {
-        $p = $expr_value.p
-        $instr = nil
+    | primitive {
+        $p = $primitive.p
+        $instr = $primitive.instr
         }
     | expr_cast   {
         $p = $expr_cast.p
@@ -202,10 +203,6 @@ expr_arit returns [Abstract.Expression p, Abstract.Instruction instr]
         $instr = nil
         }
 ;
-
-expr_value returns [Abstract.Expression p]
-    : primitive { $p = $primitive.p }
-    ;
 
 pow_op returns [string op]
     : RINTEGER HERITAGE POWI { $op = $POWI.text }
@@ -236,13 +233,14 @@ data_type returns[string data]
     | RCHAR { $data = $RCHAR.text }
     ;
 
-primitive returns [Abstract.Expression p]
+primitive returns [Abstract.Expression p, Abstract.Instruction instr]
     :INTEGER{
         num, err := strconv.Atoi($INTEGER.text)
         if err != nil {
             fmt.Println(err)
         }
         $p = Expression.NewPrimitive(num, SymbolTable.INTEGER, $INTEGER.line, localctx.(*PrimitiveContext).Get_INTEGER().GetColumn())
+        $instr = Expression.NewPrimitive(num, SymbolTable.INTEGER, $INTEGER.line, localctx.(*PrimitiveContext).Get_INTEGER().GetColumn())
     }
     | FLOAT {
         num, err := strconv.ParseFloat($FLOAT.text, 64)
@@ -250,23 +248,31 @@ primitive returns [Abstract.Expression p]
             fmt.Println(err)
         }
         $p = Expression.NewPrimitive(num, SymbolTable.FLOAT, $FLOAT.line, localctx.(*PrimitiveContext).Get_FLOAT().GetColumn())
+        $instr = Expression.NewPrimitive(num, SymbolTable.FLOAT, $FLOAT.line, localctx.(*PrimitiveContext).Get_FLOAT().GetColumn())
     }
     | STRING ((DOT TOSTRING | DOT TOOWNED) LEFT_PAR RIGHT_PAR)? {
         str := $STRING.text[1:len($STRING.text)-1]
         if $TOSTRING.text != "" || $TOOWNED.text != "" {
             $p = Expression.NewPrimitive(str, SymbolTable.STRING, $STRING.line, localctx.(*PrimitiveContext).Get_STRING().GetColumn())
+            $instr = Expression.NewPrimitive(str, SymbolTable.STRING, $STRING.line, localctx.(*PrimitiveContext).Get_STRING().GetColumn())
         } else {
             $p = Expression.NewPrimitive(str, SymbolTable.STR, $STRING.line, localctx.(*PrimitiveContext).Get_STRING().GetColumn())
+            $instr = Expression.NewPrimitive(str, SymbolTable.STR, $STRING.line, localctx.(*PrimitiveContext).Get_STRING().GetColumn())
         }
     }
     | CHAR {
         chr := $CHAR.text[1:len($CHAR.text)-1]
         $p = Expression.NewPrimitive(chr, SymbolTable.CHAR, $CHAR.line, localctx.(*PrimitiveContext).Get_CHAR().GetColumn())
+        $instr = Expression.NewPrimitive(chr, SymbolTable.CHAR, $CHAR.line, localctx.(*PrimitiveContext).Get_CHAR().GetColumn())
     }
     | BOOLEAN {
         str := $BOOLEAN.text
         fmt.Println(str)
         $p = Expression.NewPrimitive(str, SymbolTable.BOOLEAN, $BOOLEAN.line, localctx.(*PrimitiveContext).Get_BOOLEAN().GetColumn())
+        $instr = Expression.NewPrimitive(str, SymbolTable.BOOLEAN, $BOOLEAN.line, localctx.(*PrimitiveContext).Get_BOOLEAN().GetColumn())
     }
-    | ID { $p = Expression.NewIdentifier($ID.text, $ID.line, localctx.(*PrimitiveContext).Get_ID().GetColumn() ) }
+    | ID {
+        $p = Expression.NewIdentifier($ID.text, $ID.line, localctx.(*PrimitiveContext).Get_ID().GetColumn() )
+        $instr = Expression.NewIdentifier($ID.text, $ID.line, localctx.(*PrimitiveContext).Get_ID().GetColumn() )
+        }
 ;
