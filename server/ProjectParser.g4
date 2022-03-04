@@ -52,6 +52,8 @@ instruction returns [Abstract.Instruction instr]
     | expr_arit         { $instr = $expr_arit.instr }
     | primitive         { $instr = $primitive.instr }
     | expr_cast         { $instr = $expr_cast.instr }
+    | expr_rel          { $instr = $expr_rel.instr }
+    | expr_logic        { $instr = $expr_logic.instr }
     ;
 
 print_prod returns [Abstract.Instruction instr]
@@ -169,9 +171,15 @@ expression returns [Abstract.Expression p]
     | expr_cast                  { $p = $expr_cast.p }
 ;
 
-expr_rel returns[Abstract.Expression p]
-    : opLeft = expr_rel op=( GREATER_THAN | LESS_THAN | GREATER_EQUALTHAN | LESS_EQUEALTHAN | EQUEAL_EQUAL ) opRight = expr_rel { $p = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_relContext).GetOp().GetColumn() )}
-    | expr_arit { $p = $expr_arit.p }
+expr_rel returns[Abstract.Expression p, Abstract.Instruction instr]
+    : opLeft = expr_rel op=( GREATER_THAN | LESS_THAN | GREATER_EQUALTHAN | LESS_EQUEALTHAN | EQUEAL_EQUAL ) opRight = expr_rel {
+        $p = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_relContext).GetOp().GetColumn() )
+        $instr = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_relContext).GetOp().GetColumn() )
+        }
+    | expr_arit {
+        $p = $expr_arit.p
+        $instr = $expr_arit.instr
+        }
     ;
 
 expr_arit returns [Abstract.Expression p, Abstract.Instruction instr]
@@ -210,9 +218,15 @@ pow_op returns [string op]
     | RREAL HERITAGE POWF { $op = $POWF.text }
     ;
 
-expr_logic returns[Abstract.Expression p]
-    : ADMIRATION opU=expression { $p = Expression.NewOperation($opU.p, "!", nil, true, localctx.(*Expr_logicContext).GetOpU().GetStart().GetLine(), localctx.(*Expr_logicContext).GetOpU().GetStart().GetColumn()) }
-    | opLeft = expr_rel op=( AND | OR ) opRight = expr_rel { $p = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_logicContext).GetOp().GetColumn() )}
+expr_logic returns[Abstract.Expression p, Abstract.Instruction instr]
+    : ADMIRATION opU=expression {
+        $p = Expression.NewOperation($opU.p, "!", nil, true, localctx.(*Expr_logicContext).GetOpU().GetStart().GetLine(), localctx.(*Expr_logicContext).GetOpU().GetStart().GetColumn())
+        $instr = Expression.NewOperation($opU.p, "!", nil, true, localctx.(*Expr_logicContext).GetOpU().GetStart().GetLine(), localctx.(*Expr_logicContext).GetOpU().GetStart().GetColumn())
+        }
+    | opLeft = expr_rel op=( AND | OR ) opRight = expr_rel {
+        $p = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_logicContext).GetOp().GetColumn() )
+        $instr = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_logicContext).GetOp().GetColumn() )
+    }
     ;
 
 expr_cast returns[Abstract.Expression p, Abstract.Instruction instr]

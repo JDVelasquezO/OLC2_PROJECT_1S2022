@@ -375,7 +375,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			right = false
 		}
 
-		return SymbolTable.ReturnType{Type: priority, Value: left && right}
+		return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: left && right}
 
 	case "||":
 		if retLeft.Type == SymbolTable.NULL ||
@@ -408,7 +408,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		} else {
 			right = false
 		}
-		return SymbolTable.ReturnType{Type: priority, Value: left || right}
+		return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: left || right}
 
 	case "!":
 		if retLeft.Type == SymbolTable.NULL ||
@@ -426,7 +426,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			left = true
 		}
 
-		return SymbolTable.ReturnType{Type: priority, Value: left}
+		return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: left}
 	}
 
 ErrorDataType:
