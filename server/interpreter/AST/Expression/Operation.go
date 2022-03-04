@@ -1,6 +1,7 @@
 package Expression
 
 import (
+	"OLC2_Project1/server/interpreter"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	"OLC2_Project1/server/interpreter/errors"
@@ -238,6 +239,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			msg := "(" + row + ", " + col + ") Error: el operador " + p.Operator + " no puede operarse con este tipo de dato \n"
 			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
 			errors.TypeError = append(errors.TypeError, err)
+			interpreter.Console += fmt.Sprintf("%v", err.Msg)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 		}
 
@@ -434,5 +436,6 @@ ErrorDataType:
 	msg := "(" + row + ", " + col + ") Error: tipos de datos no soportados \n"
 	err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
 	errors.TypeError = append(errors.TypeError, err)
+	interpreter.Console += fmt.Sprintf("%v", err.Msg)
 	return SymbolTable.ReturnType{Type: SymbolTable.NULL, Value: err}
 }

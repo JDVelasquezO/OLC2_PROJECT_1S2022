@@ -26,8 +26,11 @@ func NewCast(expr Abstract.Expression, dataType SymbolTable.DataType) Cast {
 func (c Cast) GetValue(table SymbolTable.SymbolTable) SymbolTable.ReturnType {
 	var resRet SymbolTable.ReturnType
 	if c.Type == SymbolTable.INTEGER {
-		newVal := int(c.Expression.GetValue(table).Value.(float64))
-		resRet.Value = newVal
+		newVal := c.Expression.GetValue(table)
+		if newVal.Type == SymbolTable.ERROR {
+			return newVal
+		}
+		resRet.Value = int(newVal.Value.(float64))
 		resRet.Type = SymbolTable.INTEGER
 
 	} else if c.Type == SymbolTable.FLOAT {
