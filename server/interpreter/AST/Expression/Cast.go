@@ -8,6 +8,8 @@ import (
 type Cast struct {
 	Expression Abstract.Expression
 	Type       SymbolTable.DataType
+	Row        int
+	Col        int
 }
 
 func (c Cast) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
@@ -16,10 +18,12 @@ func (c Cast) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 	return res
 }
 
-func NewCast(expr Abstract.Expression, dataType SymbolTable.DataType) Cast {
+func NewCast(expr Abstract.Expression, dataType SymbolTable.DataType, row int, col int) Cast {
 	return Cast{
 		Expression: expr,
 		Type:       dataType,
+		Row:        row,
+		Col:        col,
 	}
 }
 

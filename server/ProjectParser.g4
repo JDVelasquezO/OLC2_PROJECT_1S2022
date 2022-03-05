@@ -232,11 +232,11 @@ expr_logic returns[Abstract.Expression p, Abstract.Instruction instr]
 expr_cast returns[Abstract.Expression p, Abstract.Instruction instr]
     : LEFT_PAR expression RAS data_type RIGHT_PAR {
         if $data_type.data == "i64" {
-            $p = Expression.NewCast($expression.p, SymbolTable.INTEGER)
-            $instr = Expression.NewCast($expression.p, SymbolTable.INTEGER)
+            $p = Expression.NewCast($expression.p, SymbolTable.INTEGER, $RAS.line, localctx.(*Expr_castContext).GetRas().GetColumn() )
+            $instr = Expression.NewCast($expression.p, SymbolTable.INTEGER, $RAS.line, localctx.(*Expr_castContext).Get_RAS().GetColumn())
         } else if $data_type.data == "f64" {
-            $p = Expression.NewCast($expression.p, SymbolTable.FLOAT)
-            $instr = Expression.NewCast($expression.p, SymbolTable.FLOAT)
+            $p = Expression.NewCast($expression.p, SymbolTable.FLOAT, $RAS.line, localctx.(*Expr_castContext).GetRas().GetColumn())
+            $instr = Expression.NewCast($expression.p, SymbolTable.FLOAT, $RAS.line, localctx.(*Expr_castContext).Get_RAS().GetColumn())
         }
     }
     ;

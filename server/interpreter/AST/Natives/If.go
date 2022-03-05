@@ -63,9 +63,10 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 			typeOfIn := typeof(instruct)
 			switch typeOfIn {
 			case "Expression.Primitive":
+				goto IfAsExpression
 			case "Expression.Identifier":
+				goto IfAsExpression
 			case "Expression.Operation":
-
 				goto IfAsExpression
 			}
 			goto ContinueIf

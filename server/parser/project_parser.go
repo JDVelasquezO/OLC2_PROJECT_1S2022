@@ -4982,6 +4982,12 @@ type IExpr_castContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Get_RAS returns the _RAS token.
+	Get_RAS() antlr.Token
+
+	// Set_RAS sets the _RAS token.
+	Set_RAS(antlr.Token)
+
 	// Get_expression returns the _expression rule contexts.
 	Get_expression() IExpressionContext
 
@@ -5016,6 +5022,7 @@ type Expr_castContext struct {
 	p           Abstract.Expression
 	instr       Abstract.Instruction
 	_expression IExpressionContext
+	_RAS        antlr.Token
 	_data_type  IData_typeContext
 }
 
@@ -5040,6 +5047,10 @@ func NewExpr_castContext(parser antlr.Parser, parent antlr.ParserRuleContext, in
 }
 
 func (s *Expr_castContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *Expr_castContext) Get_RAS() antlr.Token { return s._RAS }
+
+func (s *Expr_castContext) Set_RAS(v antlr.Token) { s._RAS = v }
 
 func (s *Expr_castContext) Get_expression() IExpressionContext { return s._expression }
 
@@ -5143,7 +5154,10 @@ func (p *ProjectParser) Expr_cast() (localctx IExpr_castContext) {
 	}
 	{
 		p.SetState(337)
-		p.Match(ProjectParserRAS)
+
+		var _m = p.Match(ProjectParserRAS)
+
+		localctx.(*Expr_castContext)._RAS = _m
 	}
 	{
 		p.SetState(338)
@@ -5158,11 +5172,35 @@ func (p *ProjectParser) Expr_cast() (localctx IExpr_castContext) {
 	}
 
 	if localctx.(*Expr_castContext).Get_data_type().GetData() == "i64" {
-		localctx.(*Expr_castContext).p = Expression.NewCast(localctx.(*Expr_castContext).Get_expression().GetP(), SymbolTable.INTEGER)
-		localctx.(*Expr_castContext).instr = Expression.NewCast(localctx.(*Expr_castContext).Get_expression().GetP(), SymbolTable.INTEGER)
+		localctx.(*Expr_castContext).p = Expression.NewCast(localctx.(*Expr_castContext).Get_expression().GetP(), SymbolTable.INTEGER, (func() int {
+			if localctx.(*Expr_castContext).Get_RAS() == nil {
+				return 0
+			} else {
+				return localctx.(*Expr_castContext).Get_RAS().GetLine()
+			}
+		}()), localctx.(*Expr_castContext).Get_RAS().GetColumn())
+		localctx.(*Expr_castContext).instr = Expression.NewCast(localctx.(*Expr_castContext).Get_expression().GetP(), SymbolTable.INTEGER, (func() int {
+			if localctx.(*Expr_castContext).Get_RAS() == nil {
+				return 0
+			} else {
+				return localctx.(*Expr_castContext).Get_RAS().GetLine()
+			}
+		}()), localctx.(*Expr_castContext).Get_RAS().GetColumn())
 	} else if localctx.(*Expr_castContext).Get_data_type().GetData() == "f64" {
-		localctx.(*Expr_castContext).p = Expression.NewCast(localctx.(*Expr_castContext).Get_expression().GetP(), SymbolTable.FLOAT)
-		localctx.(*Expr_castContext).instr = Expression.NewCast(localctx.(*Expr_castContext).Get_expression().GetP(), SymbolTable.FLOAT)
+		localctx.(*Expr_castContext).p = Expression.NewCast(localctx.(*Expr_castContext).Get_expression().GetP(), SymbolTable.FLOAT, (func() int {
+			if localctx.(*Expr_castContext).Get_RAS() == nil {
+				return 0
+			} else {
+				return localctx.(*Expr_castContext).Get_RAS().GetLine()
+			}
+		}()), localctx.(*Expr_castContext).Get_RAS().GetColumn())
+		localctx.(*Expr_castContext).instr = Expression.NewCast(localctx.(*Expr_castContext).Get_expression().GetP(), SymbolTable.FLOAT, (func() int {
+			if localctx.(*Expr_castContext).Get_RAS() == nil {
+				return 0
+			} else {
+				return localctx.(*Expr_castContext).Get_RAS().GetLine()
+			}
+		}()), localctx.(*Expr_castContext).Get_RAS().GetColumn())
 	}
 
 	return localctx

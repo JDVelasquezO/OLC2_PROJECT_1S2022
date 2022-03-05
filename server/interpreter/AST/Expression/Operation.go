@@ -7,6 +7,7 @@ import (
 	"OLC2_Project1/server/interpreter/errors"
 	"fmt"
 	"math"
+	"reflect"
 	"strconv"
 )
 
@@ -438,4 +439,8 @@ ErrorDataType:
 	errors.TypeError = append(errors.TypeError, err)
 	interpreter.Console += fmt.Sprintf("%v", err.Msg)
 	return SymbolTable.ReturnType{Type: SymbolTable.NULL, Value: err}
+}
+
+func typeof(v interface{}) string {
+	return reflect.TypeOf(v).String()
 }
