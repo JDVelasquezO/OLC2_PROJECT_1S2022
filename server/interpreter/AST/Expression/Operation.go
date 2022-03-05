@@ -421,10 +421,19 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 
 		var left bool
-		if retLeft.Value == "true" || retLeft.Value.(bool) {
-			left = false
-		} else {
-			left = true
+		typeOfVal := typeof(retLeft.Value)
+		if typeOfVal == "string" {
+			if retLeft.Value == "true" {
+				left = false
+			} else {
+				left = true
+			}
+		} else if typeOfVal == "bool" {
+			if retLeft.Value.(bool) {
+				left = false
+			} else {
+				left = true
+			}
 		}
 
 		return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: left}

@@ -22,6 +22,9 @@ RAS:        'as';
 RIF:        'if';
 RELSE:      'else';
 
+// Bucle Structures
+RWHILE:     'while';
+
 // Mathematic Operators
 POWI:                   'pow';
 POWF:                   'powf';

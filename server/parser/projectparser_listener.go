@@ -47,6 +47,9 @@ type ProjectParserListener interface {
 	// EnterElse_if is called when entering the else_if production.
 	EnterElse_if(c *Else_ifContext)
 
+	// EnterBucle_prod is called when entering the bucle_prod production.
+	EnterBucle_prod(c *Bucle_prodContext)
+
 	// EnterExpression is called when entering the expression production.
 	EnterExpression(c *ExpressionContext)
 
@@ -109,6 +112,9 @@ type ProjectParserListener interface {
 
 	// ExitElse_if is called when exiting the else_if production.
 	ExitElse_if(c *Else_ifContext)
+
+	// ExitBucle_prod is called when exiting the bucle_prod production.
+	ExitBucle_prod(c *Bucle_prodContext)
 
 	// ExitExpression is called when exiting the expression production.
 	ExitExpression(c *ExpressionContext)

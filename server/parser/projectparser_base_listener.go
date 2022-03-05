@@ -99,6 +99,12 @@ func (s *BaseProjectParserListener) EnterElse_if(ctx *Else_ifContext) {}
 // ExitElse_if is called when production else_if is exited.
 func (s *BaseProjectParserListener) ExitElse_if(ctx *Else_ifContext) {}
 
+// EnterBucle_prod is called when production bucle_prod is entered.
+func (s *BaseProjectParserListener) EnterBucle_prod(ctx *Bucle_prodContext) {}
+
+// ExitBucle_prod is called when production bucle_prod is exited.
+func (s *BaseProjectParserListener) ExitBucle_prod(ctx *Bucle_prodContext) {}
+
 // EnterExpression is called when production expression is entered.
 func (s *BaseProjectParserListener) EnterExpression(ctx *ExpressionContext) {}
 
