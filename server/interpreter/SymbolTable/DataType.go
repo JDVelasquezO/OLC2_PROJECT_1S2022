@@ -11,6 +11,7 @@ const (
 	BOOLEAN
 	NULL
 	ERROR
+	VOID
 )
 
 type ReturnType struct {

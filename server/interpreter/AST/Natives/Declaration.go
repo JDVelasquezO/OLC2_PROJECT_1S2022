@@ -163,9 +163,9 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 			return dataOrigin
 		}
 
-		typeExpr := dataOrigin.Type
+		//typeExpr := dataOrigin.Type
 		typeDec := d.DataType
-		typeRes := typeDef[typeDec][typeExpr]
+		typeRes := typeDef[typeDec][dataOriginType]
 
 		typeVal := typeof(d.InitVal)
 		var row int

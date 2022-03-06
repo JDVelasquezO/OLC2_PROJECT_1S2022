@@ -10,6 +10,7 @@ options {
     import "OLC2_Project1/server/interpreter/AST/Expression"
     import "OLC2_Project1/server/interpreter/AST/Natives"
     import "OLC2_Project1/server/interpreter/SymbolTable"
+    import "OLC2_Project1/server/interpreter/SymbolTable/Environment"
     import arrayList "github.com/colegno/arraylist"
 }
 
@@ -23,8 +24,30 @@ options {
 
 // Rules
 start returns [AST.Tree tree]
-    : instructions { $tree = AST.NewTree($instructions.l) }
+    : listFuncs { $tree = AST.NewTree($listFuncs.l) }
 ;
+
+listFuncs returns[*arrayList.List l]
+    @init {
+        $l = arrayList.New()
+    }
+    : subList = listFuncs function {
+        $subList.l.Add($function.instr)
+        $l = $subList.l
+    }
+    | function  { $l.Add($function.instr) }
+    ;
+
+function returns[Abstract.Instruction instr]
+    @init { listParams := arrayList.New() }
+    : funcMain      { $instr = $funcMain.instr }
+    | RFN ID LEFT_PAR RIGHT_PAR bloq   { $instr = Environment.NewFunction($ID.text, listParams, $bloq.content, SymbolTable.VOID) }
+    ;
+
+funcMain returns [Abstract.Instruction instr]
+    @init { listParams := arrayList.New() }
+    : RFN RMAIN LEFT_PAR RIGHT_PAR bloq { $instr = Environment.NewFunction("main", listParams, $bloq.content, SymbolTable.VOID) }
+    ;
 
 bloq returns [*arrayList.List content]
     : LEFT_KEY instructions RIGHT_KEY   { $content = $instructions.l }

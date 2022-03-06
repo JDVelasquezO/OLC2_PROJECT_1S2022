@@ -27,6 +27,24 @@ func (s *BaseProjectParserListener) EnterStart(ctx *StartContext) {}
 // ExitStart is called when production start is exited.
 func (s *BaseProjectParserListener) ExitStart(ctx *StartContext) {}
 
+// EnterListFuncs is called when production listFuncs is entered.
+func (s *BaseProjectParserListener) EnterListFuncs(ctx *ListFuncsContext) {}
+
+// ExitListFuncs is called when production listFuncs is exited.
+func (s *BaseProjectParserListener) ExitListFuncs(ctx *ListFuncsContext) {}
+
+// EnterFunction is called when production function is entered.
+func (s *BaseProjectParserListener) EnterFunction(ctx *FunctionContext) {}
+
+// ExitFunction is called when production function is exited.
+func (s *BaseProjectParserListener) ExitFunction(ctx *FunctionContext) {}
+
+// EnterFuncMain is called when production funcMain is entered.
+func (s *BaseProjectParserListener) EnterFuncMain(ctx *FuncMainContext) {}
+
+// ExitFuncMain is called when production funcMain is exited.
+func (s *BaseProjectParserListener) ExitFuncMain(ctx *FuncMainContext) {}
+
 // EnterBloq is called when production bloq is entered.
 func (s *BaseProjectParserListener) EnterBloq(ctx *BloqContext) {}
 

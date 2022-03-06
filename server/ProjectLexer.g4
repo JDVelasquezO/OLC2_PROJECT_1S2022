@@ -33,6 +33,10 @@ POWF:                   'powf';
 TOSTRING:                'to_string';
 TOOWNED:                 'to_owned';
 
+// Functions
+RMAIN:                   'main';
+RFN:                     'fn';
+
 // Comments
 MULTILINE:      '/*' (~[/])+ '*/' -> skip;
 INLINE:         '//'(~[\n])+ -> skip;
@@ -54,6 +58,7 @@ COLON:                  ':';
 ADMIRATION:             '!';
 REFERENCE:              '&';
 HERITAGE:               '::';
+ARROW:                  '->';
 
 // Grouping Operators
 LEFT_PAR:               '(';

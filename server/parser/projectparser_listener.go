@@ -11,6 +11,15 @@ type ProjectParserListener interface {
 	// EnterStart is called when entering the start production.
 	EnterStart(c *StartContext)
 
+	// EnterListFuncs is called when entering the listFuncs production.
+	EnterListFuncs(c *ListFuncsContext)
+
+	// EnterFunction is called when entering the function production.
+	EnterFunction(c *FunctionContext)
+
+	// EnterFuncMain is called when entering the funcMain production.
+	EnterFuncMain(c *FuncMainContext)
+
 	// EnterBloq is called when entering the bloq production.
 	EnterBloq(c *BloqContext)
 
@@ -76,6 +85,15 @@ type ProjectParserListener interface {
 
 	// ExitStart is called when exiting the start production.
 	ExitStart(c *StartContext)
+
+	// ExitListFuncs is called when exiting the listFuncs production.
+	ExitListFuncs(c *ListFuncsContext)
+
+	// ExitFunction is called when exiting the function production.
+	ExitFunction(c *FunctionContext)
+
+	// ExitFuncMain is called when exiting the funcMain production.
+	ExitFuncMain(c *FuncMainContext)
 
 	// ExitBloq is called when exiting the bloq production.
 	ExitBloq(c *BloqContext)
