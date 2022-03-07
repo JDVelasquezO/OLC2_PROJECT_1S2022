@@ -36,7 +36,26 @@ func (c CallFunction) GetValue(table SymbolTable.SymbolTable) SymbolTable.Return
 
 	envFunction := SymbolTable.NewSymbolTable("function", &table)
 	function := table.GetFunction(c.IdFunction).(Environment.Function)
-	cloneFunc := Environment.NewFunction(0, 0, function.Id, function.ListParams.Clone(), function.ListInstructs.Clone(), function.DataType)
+
+	var newDataType string
+	switch function.DataType {
+	case SymbolTable.INTEGER:
+		newDataType = "i64"
+	case SymbolTable.FLOAT:
+		newDataType = "f64"
+	case SymbolTable.STRING:
+		newDataType = "String"
+	case SymbolTable.STR:
+		newDataType = "&str"
+	case SymbolTable.CHAR:
+		newDataType = "char"
+	case SymbolTable.BOOLEAN:
+		newDataType = "bool"
+	case SymbolTable.VOID:
+		newDataType = "void"
+	}
+
+	cloneFunc := Environment.NewFunction(0, 0, function.Id, function.ListParams.Clone(), function.ListInstructs.Clone(), newDataType)
 	finished := cloneFunc.ExecuteParams(envFunction, c.ListExpressions)
 
 	if !finished {

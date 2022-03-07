@@ -31,8 +31,27 @@ type Function struct {
 }
 
 func NewFunction(line int, col int, name string, listParams *arrayList.List, listInstructs *arrayList.List,
-	dataType SymbolTable.DataType) Function {
-	funcSymbol := SymbolTable.NewSymbolFunction(line, col, name, dataType, listParams)
+	dataType string) Function {
+
+	var newDataType SymbolTable.DataType
+	switch dataType {
+	case "i64":
+		newDataType = SymbolTable.INTEGER
+	case "f64":
+		newDataType = SymbolTable.FLOAT
+	case "String":
+		newDataType = SymbolTable.STRING
+	case "&str":
+		newDataType = SymbolTable.STR
+	case "char":
+		newDataType = SymbolTable.CHAR
+	case "bool":
+		newDataType = SymbolTable.BOOLEAN
+	case "void":
+		newDataType = SymbolTable.VOID
+	}
+
+	funcSymbol := SymbolTable.NewSymbolFunction(line, col, name, newDataType, listParams)
 
 	return Function{
 		ListInstructs: listInstructs,

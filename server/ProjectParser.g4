@@ -43,16 +43,22 @@ function returns[Abstract.Instruction instr]
     @init { listParams := arrayList.New() }
     : funcMain      { $instr = $funcMain.instr }
     | RFN ID LEFT_PAR RIGHT_PAR bloq   {
-        $instr = Environment.NewFunction($RFN.line, localctx.(*FunctionContext).Get_RFN().GetColumn(), $ID.text, listParams, $bloq.content, SymbolTable.VOID)
+        $instr = Environment.NewFunction($RFN.line, localctx.(*FunctionContext).Get_RFN().GetColumn(), $ID.text, listParams, $bloq.content, "void")
      }
+    | RFN ID LEFT_PAR RIGHT_PAR ARROW data_type bloq {
+        $instr = Environment.NewFunction($RFN.line, localctx.(*FunctionContext).Get_RFN().GetColumn(), $ID.text, listParams, $bloq.content, $data_type.data)
+    }
     | RFN ID LEFT_PAR listParams RIGHT_PAR bloq   {
-         $instr = Environment.NewFunction($RFN.line, localctx.(*FunctionContext).Get_RFN().GetColumn(), $ID.text, $listParams.l, $bloq.content, SymbolTable.VOID)
-     }
+         $instr = Environment.NewFunction($RFN.line, localctx.(*FunctionContext).Get_RFN().GetColumn(), $ID.text, $listParams.l, $bloq.content, "void")
+    }
+    | RFN ID LEFT_PAR listParams RIGHT_PAR ARROW data_type bloq {
+        $instr = Environment.NewFunction($RFN.line, localctx.(*FunctionContext).Get_RFN().GetColumn(), $ID.text, $listParams.l, $bloq.content, $data_type.data)
+    }
     ;
 
 funcMain returns [Abstract.Instruction instr]
     @init { listParams := arrayList.New() }
-    : RFN RMAIN LEFT_PAR RIGHT_PAR bloq { $instr = Environment.NewFunction($RFN.line, localctx.(*FuncMainContext).Get_RFN().GetColumn(), "main", listParams, $bloq.content, SymbolTable.VOID) }
+    : RFN RMAIN LEFT_PAR RIGHT_PAR bloq { $instr = Environment.NewFunction($RFN.line, localctx.(*FuncMainContext).Get_RFN().GetColumn(), "main", listParams, $bloq.content, "void") }
     ;
 
 bloq returns [*arrayList.List content]
@@ -149,28 +155,28 @@ listVars returns [*arrayList.List list]
     ;
 
 declaration_prod returns [Abstract.Instruction instr]
-    : DECLARAR MUT? ids_type EQUAL expression SEMICOLON {
+    : DECLARAR MUT? ids_type EQUAL expression SEMICOLON? {
         if ($MUT.text != "") {
             $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, true, "")
         } else {
             $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, false, "")
         }
     }
-    | DECLARAR MUT? ids_type COLON data_type EQUAL expression SEMICOLON {
+    | DECLARAR MUT? ids_type COLON data_type EQUAL expression SEMICOLON? {
         if ($MUT.text != "") {
             $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, true, $data_type.data)
         } else {
             $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, false, $data_type.data)
         }
     }
-    | DECLARAR MUT? ids_type SEMICOLON {
+    | DECLARAR MUT? ids_type SEMICOLON? {
         if ($MUT.text != "") {
             $instr = Natives.NewDeclaration($ids_type.list, true, "")
         } else {
             $instr = Natives.NewDeclaration($ids_type.list, true, "")
         }
     }
-    | DECLARAR MUT? ids_type COLON data_type SEMICOLON {
+    | DECLARAR MUT? ids_type COLON data_type SEMICOLON? {
         if ($MUT.text != "") {
             $instr = Natives.NewDeclaration($ids_type.list, true, $data_type.data)
         } else {
@@ -180,7 +186,7 @@ declaration_prod returns [Abstract.Instruction instr]
     ;
 
 assign_prod returns [Abstract.Instruction instr]
-    : listIds EQUAL expression SEMICOLON {
+    : listIds EQUAL expression SEMICOLON? {
         $instr = Natives.NewAssign($listIds.list, $expression.p)
     }
     ;
@@ -243,6 +249,7 @@ expression returns [Abstract.Expression p]
     | expr_arit                  { $p = $expr_arit.p }
     | expr_logic                 { $p = $expr_logic.p }
     | expr_cast                  { $p = $expr_cast.p }
+    | called_func                { $p = $called_func.p }
 ;
 
 expr_rel returns[Abstract.Expression p, Abstract.Instruction instr]
