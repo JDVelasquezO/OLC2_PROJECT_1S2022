@@ -41,12 +41,12 @@ listFuncs returns[*arrayList.List l]
 function returns[Abstract.Instruction instr]
     @init { listParams := arrayList.New() }
     : funcMain      { $instr = $funcMain.instr }
-    | RFN ID LEFT_PAR RIGHT_PAR bloq   { $instr = Environment.NewFunction($ID.text, listParams, $bloq.content, SymbolTable.VOID) }
+    | RFN ID LEFT_PAR RIGHT_PAR bloq   { $instr = Environment.NewFunction($RFN.line, localctx.(*FunctionContext).Get_RFN().GetColumn(), $ID.text, listParams, $bloq.content, SymbolTable.VOID) }
     ;
 
 funcMain returns [Abstract.Instruction instr]
     @init { listParams := arrayList.New() }
-    : RFN RMAIN LEFT_PAR RIGHT_PAR bloq { $instr = Environment.NewFunction("main", listParams, $bloq.content, SymbolTable.VOID) }
+    : RFN RMAIN LEFT_PAR RIGHT_PAR bloq { $instr = Environment.NewFunction($RFN.line, localctx.(*FuncMainContext).Get_RFN().GetColumn(), "main", listParams, $bloq.content, SymbolTable.VOID) }
     ;
 
 bloq returns [*arrayList.List content]

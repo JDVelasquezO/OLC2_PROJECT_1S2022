@@ -23,10 +23,13 @@ type Function struct {
 	SymbolTable.Symbol
 	ListParams    *arrayList.List
 	ListInstructs *arrayList.List
+	Line          int
+	Col           int
 }
 
-func NewFunction(name string, listParams *arrayList.List, listInstructs *arrayList.List, dataType SymbolTable.DataType) Function {
-	funcSymbol := SymbolTable.NewSymbolFunction(0, 0, name, dataType, listParams)
+func NewFunction(line int, col int, name string, listParams *arrayList.List, listInstructs *arrayList.List,
+	dataType SymbolTable.DataType) Function {
+	funcSymbol := SymbolTable.NewSymbolFunction(line, col, name, dataType, listParams)
 
 	return Function{
 		ListInstructs: listInstructs,

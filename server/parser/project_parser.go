@@ -688,8 +688,14 @@ type IFunctionContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Get_RFN returns the _RFN token.
+	Get_RFN() antlr.Token
+
 	// Get_ID returns the _ID token.
 	Get_ID() antlr.Token
+
+	// Set_RFN sets the _RFN token.
+	Set_RFN(antlr.Token)
 
 	// Set_ID sets the _ID token.
 	Set_ID(antlr.Token)
@@ -721,6 +727,7 @@ type FunctionContext struct {
 	parser    antlr.Parser
 	instr     Abstract.Instruction
 	_funcMain IFuncMainContext
+	_RFN      antlr.Token
 	_ID       antlr.Token
 	_bloq     IBloqContext
 }
@@ -747,7 +754,11 @@ func NewFunctionContext(parser antlr.Parser, parent antlr.ParserRuleContext, inv
 
 func (s *FunctionContext) GetParser() antlr.Parser { return s.parser }
 
+func (s *FunctionContext) Get_RFN() antlr.Token { return s._RFN }
+
 func (s *FunctionContext) Get_ID() antlr.Token { return s._ID }
+
+func (s *FunctionContext) Set_RFN(v antlr.Token) { s._RFN = v }
 
 func (s *FunctionContext) Set_ID(v antlr.Token) { s._ID = v }
 
@@ -858,7 +869,10 @@ func (p *ProjectParser) Function() (localctx IFunctionContext) {
 		p.EnterOuterAlt(localctx, 2)
 		{
 			p.SetState(69)
-			p.Match(ProjectParserRFN)
+
+			var _m = p.Match(ProjectParserRFN)
+
+			localctx.(*FunctionContext)._RFN = _m
 		}
 		{
 			p.SetState(70)
@@ -882,7 +896,13 @@ func (p *ProjectParser) Function() (localctx IFunctionContext) {
 
 			localctx.(*FunctionContext)._bloq = _x
 		}
-		localctx.(*FunctionContext).instr = Environment.NewFunction((func() string {
+		localctx.(*FunctionContext).instr = Environment.NewFunction((func() int {
+			if localctx.(*FunctionContext).Get_RFN() == nil {
+				return 0
+			} else {
+				return localctx.(*FunctionContext).Get_RFN().GetLine()
+			}
+		}()), localctx.(*FunctionContext).Get_RFN().GetColumn(), (func() string {
 			if localctx.(*FunctionContext).Get_ID() == nil {
 				return ""
 			} else {
@@ -901,6 +921,12 @@ type IFuncMainContext interface {
 
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
+
+	// Get_RFN returns the _RFN token.
+	Get_RFN() antlr.Token
+
+	// Set_RFN sets the _RFN token.
+	Set_RFN(antlr.Token)
 
 	// Get_bloq returns the _bloq rule contexts.
 	Get_bloq() IBloqContext
@@ -922,6 +948,7 @@ type FuncMainContext struct {
 	*antlr.BaseParserRuleContext
 	parser antlr.Parser
 	instr  Abstract.Instruction
+	_RFN   antlr.Token
 	_bloq  IBloqContext
 }
 
@@ -946,6 +973,10 @@ func NewFuncMainContext(parser antlr.Parser, parent antlr.ParserRuleContext, inv
 }
 
 func (s *FuncMainContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *FuncMainContext) Get_RFN() antlr.Token { return s._RFN }
+
+func (s *FuncMainContext) Set_RFN(v antlr.Token) { s._RFN = v }
 
 func (s *FuncMainContext) Get_bloq() IBloqContext { return s._bloq }
 
@@ -1025,7 +1056,10 @@ func (p *ProjectParser) FuncMain() (localctx IFuncMainContext) {
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(78)
-		p.Match(ProjectParserRFN)
+
+		var _m = p.Match(ProjectParserRFN)
+
+		localctx.(*FuncMainContext)._RFN = _m
 	}
 	{
 		p.SetState(79)
@@ -1046,7 +1080,13 @@ func (p *ProjectParser) FuncMain() (localctx IFuncMainContext) {
 
 		localctx.(*FuncMainContext)._bloq = _x
 	}
-	localctx.(*FuncMainContext).instr = Environment.NewFunction("main", listParams, localctx.(*FuncMainContext).Get_bloq().GetContent(), SymbolTable.VOID)
+	localctx.(*FuncMainContext).instr = Environment.NewFunction((func() int {
+		if localctx.(*FuncMainContext).Get_RFN() == nil {
+			return 0
+		} else {
+			return localctx.(*FuncMainContext).Get_RFN().GetLine()
+		}
+	}()), localctx.(*FuncMainContext).Get_RFN().GetColumn(), "main", listParams, localctx.(*FuncMainContext).Get_bloq().GetContent(), SymbolTable.VOID)
 
 	return localctx
 }
@@ -2710,7 +2750,6 @@ func (p *ProjectParser) Declaration_prod() (localctx IDeclaration_prodContext) {
 				localctx.(*Declaration_prodContext).instr = Natives.NewDeclaration(localctx.(*Declaration_prodContext).Get_ids_type().GetList(), true, "")
 			}
 		}
-
 	}
 
 	return localctx

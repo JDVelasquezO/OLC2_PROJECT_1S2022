@@ -4,12 +4,14 @@ import (
 	"OLC2_Project1/server/interpreter"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
+	"OLC2_Project1/server/interpreter/SymbolTable/Environment"
 	"OLC2_Project1/server/interpreter/errors"
 	"OLC2_Project1/server/parser"
 	"OLC2_Project1/server/utilities"
 	"fmt"
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 	"github.com/gofiber/fiber/v2"
+	"reflect"
 	"strconv"
 )
 
@@ -89,9 +91,6 @@ func Analyze(c *fiber.Ctx) error {
 	}
 
 	var listener = utilities.NewTreeShapeListener()
-	//if len(lexicalErrors.Errors) == 0 && len(parseErrors.Errors) == 0 {
-	//	antlr.ParseTreeWalkerDefault.Walk(listener, tree)
-	//}
 	antlr.ParseTreeWalkerDefault.Walk(listener, tree)
 
 	ast := listener.Tree
@@ -99,11 +98,30 @@ func Analyze(c *fiber.Ctx) error {
 
 	if len(lexicalErrors.Errors) == 0 && len(parseErrors.Errors) == 0 {
 		if ast.ListInstr != nil {
+			// First time for functions
 			for i := 0; i < ast.ListInstr.Len(); i++ {
 				r := ast.ListInstr.GetValue(i)
-				if r != nil {
-					r.(Abstract.Instruction).Execute(globalTable)
+				if typeof(r) == "Environment.Function" {
+					globalTable.AddNewSymbol(r.(Environment.Function).Id, r.(Environment.Function).Symbol)
 				}
+			}
+
+			// Second time for Main
+			if globalTable.ExistsSymbol("main") {
+				for i := 0; i < ast.ListInstr.Len(); i++ {
+					r := ast.ListInstr.GetValue(i)
+					if r != nil {
+						if r.(Environment.Function).Id == "main" {
+							r.(Abstract.Instruction).Execute(globalTable)
+						}
+					}
+				}
+			} else {
+				errors.CounterError += 1
+				msg := "(ERROR) No existe método MAIN \n"
+				err := errors.NewError(errors.CounterError, 0, 0, msg, globalTable.Name)
+				errors.TypeError = append(errors.TypeError, err)
+				interpreter.Console += fmt.Sprintf("%v", msg)
 			}
 		}
 	}
@@ -113,4 +131,8 @@ func Analyze(c *fiber.Ctx) error {
 		"Res":    interpreter.Console,
 		"Err":    errors.TypeError,
 	})
+}
+
+func typeof(v interface{}) string {
+	return reflect.TypeOf(v).String()
 }
