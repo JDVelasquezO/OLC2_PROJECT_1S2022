@@ -344,6 +344,26 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: len(retLeft.Value.(string)) == len(retRight.Value.(string))}
 		}
 
+	case "!=":
+		if retLeft.Type == SymbolTable.BOOLEAN ||
+			retRight.Type == SymbolTable.BOOLEAN ||
+			retRight.Type == SymbolTable.NULL ||
+			retLeft.Type == SymbolTable.NULL ||
+			retRight.Type == SymbolTable.CHAR ||
+			retLeft.Type == SymbolTable.CHAR {
+
+			goto ErrorDataType
+		}
+
+		priority = relational[retLeft.Type][retRight.Type]
+		if priority == SymbolTable.INTEGER {
+			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: retLeft.Value.(int) != retRight.Value.(int)}
+		} else if priority == SymbolTable.FLOAT {
+			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: retLeft.Value.(float64) != retRight.Value.(float64)}
+		} else if priority == SymbolTable.STR {
+			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: len(retLeft.Value.(string)) != len(retRight.Value.(string))}
+		}
+
 	case "&&":
 		if retLeft.Type == SymbolTable.NULL ||
 			retRight.Type == SymbolTable.NULL ||

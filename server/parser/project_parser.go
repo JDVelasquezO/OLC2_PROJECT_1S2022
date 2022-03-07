@@ -81,13 +81,13 @@ var parserATN = []uint16{
 	525, 10, 29, 3, 29, 3, 29, 5, 29, 529, 10, 29, 3, 29, 3, 29, 3, 29, 3,
 	29, 3, 29, 3, 29, 3, 29, 5, 29, 538, 10, 29, 3, 29, 2, 9, 4, 14, 16, 24,
 	32, 44, 46, 30, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30,
-	32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 2, 6, 4, 2, 46, 46,
-	48, 51, 3, 2, 52, 54, 3, 2, 55, 56, 3, 2, 57, 58, 2, 579, 2, 58, 3, 2,
-	2, 2, 4, 61, 3, 2, 2, 2, 6, 111, 3, 2, 2, 2, 8, 113, 3, 2, 2, 2, 10, 128,
-	3, 2, 2, 2, 12, 142, 3, 2, 2, 2, 14, 144, 3, 2, 2, 2, 16, 162, 3, 2, 2,
-	2, 18, 179, 3, 2, 2, 2, 20, 217, 3, 2, 2, 2, 22, 255, 3, 2, 2, 2, 24, 257,
-	3, 2, 2, 2, 26, 319, 3, 2, 2, 2, 28, 321, 3, 2, 2, 2, 30, 343, 3, 2, 2,
-	2, 32, 345, 3, 2, 2, 2, 34, 378, 3, 2, 2, 2, 36, 381, 3, 2, 2, 2, 38, 387,
+	32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56, 2, 6, 3, 2, 46, 51,
+	3, 2, 52, 54, 3, 2, 55, 56, 3, 2, 57, 58, 2, 579, 2, 58, 3, 2, 2, 2, 4,
+	61, 3, 2, 2, 2, 6, 111, 3, 2, 2, 2, 8, 113, 3, 2, 2, 2, 10, 128, 3, 2,
+	2, 2, 12, 142, 3, 2, 2, 2, 14, 144, 3, 2, 2, 2, 16, 162, 3, 2, 2, 2, 18,
+	179, 3, 2, 2, 2, 20, 217, 3, 2, 2, 2, 22, 255, 3, 2, 2, 2, 24, 257, 3,
+	2, 2, 2, 26, 319, 3, 2, 2, 2, 28, 321, 3, 2, 2, 2, 30, 343, 3, 2, 2, 2,
+	32, 345, 3, 2, 2, 2, 34, 378, 3, 2, 2, 2, 36, 381, 3, 2, 2, 2, 38, 387,
 	3, 2, 2, 2, 40, 393, 3, 2, 2, 2, 42, 416, 3, 2, 2, 2, 44, 418, 3, 2, 2,
 	2, 46, 456, 3, 2, 2, 2, 48, 481, 3, 2, 2, 2, 50, 492, 3, 2, 2, 2, 52, 494,
 	3, 2, 2, 2, 54, 513, 3, 2, 2, 2, 56, 537, 3, 2, 2, 2, 58, 59, 5, 4, 3,
@@ -5809,6 +5809,10 @@ func (s *Expr_relContext) EQUEAL_EQUAL() antlr.TerminalNode {
 	return s.GetToken(ProjectParserEQUEAL_EQUAL, 0)
 }
 
+func (s *Expr_relContext) NOTEQUAL() antlr.TerminalNode {
+	return s.GetToken(ProjectParserNOTEQUAL, 0)
+}
+
 func (s *Expr_relContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
@@ -5901,7 +5905,7 @@ func (p *ProjectParser) expr_rel(_p int) (localctx IExpr_relContext) {
 
 				_la = p.GetTokenStream().LA(1)
 
-				if !(((_la-44)&-(0x1f+1)) == 0 && ((1<<uint((_la-44)))&((1<<(ProjectParserEQUEAL_EQUAL-44))|(1<<(ProjectParserGREATER_THAN-44))|(1<<(ProjectParserLESS_THAN-44))|(1<<(ProjectParserGREATER_EQUALTHAN-44))|(1<<(ProjectParserLESS_EQUEALTHAN-44)))) != 0) {
+				if !(((_la-44)&-(0x1f+1)) == 0 && ((1<<uint((_la-44)))&((1<<(ProjectParserEQUEAL_EQUAL-44))|(1<<(ProjectParserNOTEQUAL-44))|(1<<(ProjectParserGREATER_THAN-44))|(1<<(ProjectParserLESS_THAN-44))|(1<<(ProjectParserGREATER_EQUALTHAN-44))|(1<<(ProjectParserLESS_EQUEALTHAN-44)))) != 0) {
 					var _ri = p.GetErrorHandler().RecoverInline(p)
 
 					localctx.(*Expr_relContext).op = _ri

@@ -57,6 +57,7 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 	//var retVal interface{}
 	if returnPrincipal.Value == "true" || returnPrincipal.Value.(bool) {
 		newTable := SymbolTable.NewSymbolTable("if", &table)
+		var valueRet interface{}
 		for j := 0; j < i.ListInstructs.Len(); j++ {
 			instruct := i.ListInstructs.GetValue(j).(Abstract.Instruction)
 
@@ -91,10 +92,12 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 			}
 
 		ContinueIf:
-			return instruct.Execute(newTable)
+			valueRet = instruct.Execute(newTable)
 		}
+		return valueRet
 	} else {
 		if i.ListIfElse != nil {
+			var valueRet interface{}
 			for _, instr := range i.ListIfElse.ToArray() {
 				newIf := instr.(If)
 				returnConditionNewIf := newIf.Condition.GetValue(table)
@@ -106,19 +109,22 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 					tableNewIf := SymbolTable.NewSymbolTable("Else-If", &table)
 					for j := 0; j < newIf.ListInstructs.Len(); j++ {
 						instr := newIf.ListInstructs.GetValue(j).(Abstract.Instruction)
-						return instr.Execute(tableNewIf)
+						valueRet = instr.Execute(tableNewIf)
 					}
 					//return nil
 				}
 			}
+			return valueRet
 		}
 
 		if i.ListInstructsElse != nil {
 			newTable := SymbolTable.NewSymbolTable("else", &table)
+			var valueRet interface{}
 			for j := 0; j < i.ListInstructsElse.Len(); j++ {
 				instruct := i.ListInstructsElse.GetValue(j).(Abstract.Instruction)
-				return instruct.Execute(newTable)
+				valueRet = instruct.Execute(newTable)
 			}
+			return valueRet
 		} else {
 			return nil
 		}
