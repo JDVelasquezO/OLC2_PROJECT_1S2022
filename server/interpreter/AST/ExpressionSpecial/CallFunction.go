@@ -1,8 +1,11 @@
 package ExpressionSpecial
 
 import (
+	"OLC2_Project1/server/interpreter"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment"
+	"OLC2_Project1/server/interpreter/errors"
+	"fmt"
 	arrayList "github.com/colegno/arraylist"
 	"reflect"
 )
@@ -23,10 +26,12 @@ func (c CallFunction) GetValue(table SymbolTable.SymbolTable) SymbolTable.Return
 	existsFunction := table.ExistsFunction(c.IdFunction)
 
 	if !existsFunction {
-		return SymbolTable.ReturnType{
-			Value: -1,
-			Type:  SymbolTable.NULL,
-		}
+		errors.CounterError += 1
+		msg := "La funcion \"" + c.IdFunction + "\" No existe \n"
+		err := errors.NewError(errors.CounterError, 0, 0, msg, table.Name)
+		errors.TypeError = append(errors.TypeError, err)
+		interpreter.Console += fmt.Sprintf("%v", err.Msg)
+		return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
 	}
 
 	envFunction := SymbolTable.NewSymbolTable("function", &table)

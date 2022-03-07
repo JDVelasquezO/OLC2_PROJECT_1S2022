@@ -1,12 +1,15 @@
 package Environment
 
 import (
+	"OLC2_Project1/server/interpreter"
 	"OLC2_Project1/server/interpreter/AST/Natives"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
+	"OLC2_Project1/server/interpreter/errors"
 	"fmt"
 	arrayList "github.com/colegno/arraylist"
 	"reflect"
+	"strconv"
 )
 
 var typeDef = [7][7]SymbolTable.DataType{
@@ -42,14 +45,22 @@ func (f Function) ExecuteParams(table SymbolTable.SymbolTable, expression *array
 	declarations := f.ListParams.Clone()
 
 	if declarations.Len() != expression.Len() {
-		fmt.Println("Error en variables")
+		errors.CounterError += 1
+		msg := "Se esperaban " + strconv.Itoa(expression.Len()) + " parametros. Llegaron " + strconv.Itoa(declarations.Len()) + " \n"
+		err := errors.NewError(errors.CounterError, 0, 0, msg, table.Name)
+		errors.TypeError = append(errors.TypeError, err)
+		interpreter.Console += fmt.Sprintf("%v", err.Msg)
 		return false
 	}
 
 	for i := 0; i < declarations.Len(); i++ {
 		pivot := declarations.GetValue(i).(*Natives.Declaration)
 		pivot.InitVal = expression.GetValue(i).(Abstract.Expression)
-		pivot.Execute(table)
+		res := pivot.Execute(table)
+
+		if res.(SymbolTable.ReturnType).Type == SymbolTable.ERROR {
+			return false
+		}
 	}
 
 	return true
