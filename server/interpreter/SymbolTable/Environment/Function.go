@@ -58,8 +58,10 @@ func (f Function) ExecuteParams(table SymbolTable.SymbolTable, expression *array
 		pivot.InitVal = expression.GetValue(i).(Abstract.Expression)
 		res := pivot.Execute(table)
 
-		if res.(SymbolTable.ReturnType).Type == SymbolTable.ERROR {
-			return false
+		if res != nil {
+			if res.(SymbolTable.ReturnType).Type == SymbolTable.ERROR {
+				return false
+			}
 		}
 	}
 
@@ -100,4 +102,8 @@ func (f Function) Execute(table SymbolTable.SymbolTable) interface{} {
 		Type:  SymbolTable.NULL,
 		Value: -1,
 	}
+}
+
+func typeof(v interface{}) string {
+	return reflect.TypeOf(v).String()
 }
