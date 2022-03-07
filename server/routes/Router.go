@@ -8,7 +8,7 @@ import (
 func Setup(app *fiber.App) {
 	app.Get("/", func(c *fiber.Ctx) error {
 		return c.Render("index", fiber.Map{
-			"Parser": "",
+			"Parser": "fn main() {\n    let x = 10;\n    let y = 25;\n\n    let z = x + y;\n\n    println!(\"Suma de x + y = {} \",z);\n}",
 			"Res":    "",
 			"Err":    "",
 		})

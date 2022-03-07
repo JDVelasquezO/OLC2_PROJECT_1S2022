@@ -26,6 +26,9 @@ type ProjectParserListener interface {
 	// EnterCalled_func is called when entering the called_func production.
 	EnterCalled_func(c *Called_funcContext)
 
+	// EnterListParams is called when entering the listParams production.
+	EnterListParams(c *ListParamsContext)
+
 	// EnterListExpressions is called when entering the listExpressions production.
 	EnterListExpressions(c *ListExpressionsContext)
 
@@ -106,6 +109,9 @@ type ProjectParserListener interface {
 
 	// ExitCalled_func is called when exiting the called_func production.
 	ExitCalled_func(c *Called_funcContext)
+
+	// ExitListParams is called when exiting the listParams production.
+	ExitListParams(c *ListParamsContext)
 
 	// ExitListExpressions is called when exiting the listExpressions production.
 	ExitListExpressions(c *ListExpressionsContext)

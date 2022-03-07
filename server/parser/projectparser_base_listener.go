@@ -57,6 +57,12 @@ func (s *BaseProjectParserListener) EnterCalled_func(ctx *Called_funcContext) {}
 // ExitCalled_func is called when production called_func is exited.
 func (s *BaseProjectParserListener) ExitCalled_func(ctx *Called_funcContext) {}
 
+// EnterListParams is called when production listParams is entered.
+func (s *BaseProjectParserListener) EnterListParams(ctx *ListParamsContext) {}
+
+// ExitListParams is called when production listParams is exited.
+func (s *BaseProjectParserListener) ExitListParams(ctx *ListParamsContext) {}
+
 // EnterListExpressions is called when production listExpressions is entered.
 func (s *BaseProjectParserListener) EnterListExpressions(ctx *ListExpressionsContext) {}
 

@@ -42,7 +42,12 @@ listFuncs returns[*arrayList.List l]
 function returns[Abstract.Instruction instr]
     @init { listParams := arrayList.New() }
     : funcMain      { $instr = $funcMain.instr }
-    | RFN ID LEFT_PAR RIGHT_PAR bloq   { $instr = Environment.NewFunction($RFN.line, localctx.(*FunctionContext).Get_RFN().GetColumn(), $ID.text, listParams, $bloq.content, SymbolTable.VOID) }
+    | RFN ID LEFT_PAR RIGHT_PAR bloq   {
+        $instr = Environment.NewFunction($RFN.line, localctx.(*FunctionContext).Get_RFN().GetColumn(), $ID.text, listParams, $bloq.content, SymbolTable.VOID)
+     }
+    | RFN ID LEFT_PAR listParams RIGHT_PAR bloq   {
+         $instr = Environment.NewFunction($RFN.line, localctx.(*FunctionContext).Get_RFN().GetColumn(), $ID.text, $listParams.l, $bloq.content, SymbolTable.VOID)
+     }
     ;
 
 funcMain returns [Abstract.Instruction instr]
@@ -66,6 +71,25 @@ called_func returns [Abstract.Instruction instr, Abstract.Expression p]
     }
     ;
 
+listParams returns [*arrayList.List l]
+    @init {
+        $l = arrayList.New()
+    }
+    : List = listParams COMMA ID COLON data_type {
+        listIds := arrayList.New()
+        listIds.Add(Expression.NewIdentifier($ID.text, $ID.line, localctx.(*ListParamsContext).Get_ID().GetColumn()))
+        newDec := Natives.NewDeclaration(listIds, false, $data_type.data)
+        $List.l.Add(newDec)
+        $l = $List.l
+    }
+    | ID COLON data_type {
+        listIds := arrayList.New()
+        listIds.Add(Expression.NewIdentifier($ID.text, $ID.line, localctx.(*ListParamsContext).Get_ID().GetColumn()))
+        newDec := Natives.NewDeclaration(listIds, false, $data_type.data)
+        $l.Add(newDec)
+    }
+    ;
+
 listExpressions returns [*arrayList.List l]
     @init {
         $l = arrayList.New()
@@ -74,9 +98,7 @@ listExpressions returns [*arrayList.List l]
         $List.l.Add($expression.p)
         $l = $List.l
     }
-    | expression {
-        $l.Add($expression.p)
-    }
+    | expression { $l.Add($expression.p) }
     ;
 
 instructions returns [*arrayList.List l]
@@ -127,34 +149,32 @@ listVars returns [*arrayList.List list]
     ;
 
 declaration_prod returns [Abstract.Instruction instr]
-    : DECLARAR MUT? ids_type (COLON data_type)? EQUAL expression SEMICOLON {
+    : DECLARAR MUT? ids_type EQUAL expression SEMICOLON {
         if ($MUT.text != "") {
-            if ($data_type.data != nil) {
-                $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, true, $data_type.data)
-            } else {
-                $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, true, "")
-            }
+            $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, true, "")
         } else {
-            if ($data_type.data != nil) {
-                $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, false, $data_type.data)
-            } else {
-                $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, false, "")
-            }
+            $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, false, "")
         }
     }
-    | DECLARAR MUT? ids_type (COLON data_type)? SEMICOLON {
+    | DECLARAR MUT? ids_type COLON data_type EQUAL expression SEMICOLON {
         if ($MUT.text != "") {
-            if ($data_type.data != nil) {
-                $instr = Natives.NewDeclaration($ids_type.list, true, $data_type.data)
-            } else {
-                $instr = Natives.NewDeclaration($ids_type.list, true, "")
-            }
+            $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, true, $data_type.data)
         } else {
-            if ($data_type.data != nil) {
-                $instr = Natives.NewDeclaration($ids_type.list, true, $data_type.data)
-            } else {
-                $instr = Natives.NewDeclaration($ids_type.list, true, "")
-            }
+            $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, false, $data_type.data)
+        }
+    }
+    | DECLARAR MUT? ids_type SEMICOLON {
+        if ($MUT.text != "") {
+            $instr = Natives.NewDeclaration($ids_type.list, true, "")
+        } else {
+            $instr = Natives.NewDeclaration($ids_type.list, true, "")
+        }
+    }
+    | DECLARAR MUT? ids_type COLON data_type SEMICOLON {
+        if ($MUT.text != "") {
+            $instr = Natives.NewDeclaration($ids_type.list, true, $data_type.data)
+        } else {
+            $instr = Natives.NewDeclaration($ids_type.list, true, $data_type.data)
         }
     }
     ;
