@@ -23,6 +23,12 @@ type ProjectParserListener interface {
 	// EnterBloq is called when entering the bloq production.
 	EnterBloq(c *BloqContext)
 
+	// EnterCalled_func is called when entering the called_func production.
+	EnterCalled_func(c *Called_funcContext)
+
+	// EnterListExpressions is called when entering the listExpressions production.
+	EnterListExpressions(c *ListExpressionsContext)
+
 	// EnterInstructions is called when entering the instructions production.
 	EnterInstructions(c *InstructionsContext)
 
@@ -97,6 +103,12 @@ type ProjectParserListener interface {
 
 	// ExitBloq is called when exiting the bloq production.
 	ExitBloq(c *BloqContext)
+
+	// ExitCalled_func is called when exiting the called_func production.
+	ExitCalled_func(c *Called_funcContext)
+
+	// ExitListExpressions is called when exiting the listExpressions production.
+	ExitListExpressions(c *ListExpressionsContext)
 
 	// ExitInstructions is called when exiting the instructions production.
 	ExitInstructions(c *InstructionsContext)

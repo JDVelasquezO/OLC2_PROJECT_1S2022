@@ -102,19 +102,16 @@ func Analyze(c *fiber.Ctx) error {
 			for i := 0; i < ast.ListInstr.Len(); i++ {
 				r := ast.ListInstr.GetValue(i)
 				if typeof(r) == "Environment.Function" {
-					globalTable.AddNewSymbol(r.(Environment.Function).Id, r.(Environment.Function).Symbol)
+					globalTable.AddFunction(r.(Environment.Function).Id, r.(Environment.Function))
 				}
 			}
 
 			// Second time for Main
-			if globalTable.ExistsSymbol("main") {
-				for i := 0; i < ast.ListInstr.Len(); i++ {
-					r := ast.ListInstr.GetValue(i)
-					if r != nil {
-						if r.(Environment.Function).Id == "main" {
-							r.(Abstract.Instruction).Execute(globalTable)
-						}
-					}
+			if globalTable.ExistsFunction("main") {
+				listInstructs := globalTable.GetFunction("main").(Environment.Function).ListInstructs
+				for i := 0; i < listInstructs.Len(); i++ {
+					r := listInstructs.GetValue(i)
+					r.(Abstract.Instruction).Execute(globalTable)
 				}
 			} else {
 				errors.CounterError += 1

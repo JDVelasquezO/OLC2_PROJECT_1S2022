@@ -3,14 +3,23 @@ package SymbolTable
 import "strings"
 
 type SymbolTable struct {
-	Name   string
-	Before *SymbolTable
-	Table  map[string]interface{} // string: Abstract
+	Name          string
+	Before        *SymbolTable
+	Table         map[string]interface{} // string: Abstract
+	FunctionTable map[string]interface{}
 }
 
 func NewSymbolTable(name string, before *SymbolTable) SymbolTable {
-	in := SymbolTable{Name: name, Before: before}
-	in.Table = make(map[string]interface{})
+	table := make(map[string]interface{})
+	funcTable := make(map[string]interface{})
+
+	in := SymbolTable{
+		Name:          name,
+		Before:        before,
+		Table:         table,
+		FunctionTable: funcTable,
+	}
+
 	return in
 }
 
@@ -62,4 +71,37 @@ func (table *SymbolTable) ChangeVal(id string, newSymbol Symbol) {
 			}
 		}
 	}
+}
+
+func (table *SymbolTable) AddFunction(id string, symbol interface{}) {
+	idFinal := strings.ToLower(id)
+	table.FunctionTable[idFinal] = symbol
+}
+
+func (table *SymbolTable) ExistsFunction(id string) bool {
+	idFinal := strings.ToLower(id)
+
+	for env := table; env != nil; env = env.Before {
+		for key, _ := range env.FunctionTable {
+			if key == idFinal {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
+func (table *SymbolTable) GetFunction(id string) interface{} {
+	idFinal := strings.ToLower(id)
+
+	for actualTable := table; actualTable != nil; actualTable = actualTable.Before {
+		for key, symbol := range actualTable.FunctionTable {
+			if key == idFinal {
+				return symbol
+			}
+		}
+	}
+
+	return nil
 }

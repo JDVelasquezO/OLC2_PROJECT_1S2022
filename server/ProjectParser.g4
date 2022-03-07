@@ -11,6 +11,7 @@ options {
     import "OLC2_Project1/server/interpreter/AST/Natives"
     import "OLC2_Project1/server/interpreter/SymbolTable"
     import "OLC2_Project1/server/interpreter/SymbolTable/Environment"
+    import "OLC2_Project1/server/interpreter/AST/ExpressionSpecial"
     import arrayList "github.com/colegno/arraylist"
 }
 
@@ -54,6 +55,30 @@ bloq returns [*arrayList.List content]
     | LEFT_KEY RIGHT_KEY                { $content = arrayList.New() }
     ;
 
+called_func returns [Abstract.Instruction instr, Abstract.Expression p]
+    : ID LEFT_PAR RIGHT_PAR SEMICOLON {
+        $instr = ExpressionSpecial.NewCallFunction($ID.text, arrayList.New())
+        $p = ExpressionSpecial.NewCallFunction($ID.text, arrayList.New())
+    }
+    | ID LEFT_PAR listExpressions RIGHT_PAR SEMICOLON {
+        $instr = ExpressionSpecial.NewCallFunction($ID.text, $listExpressions.l)
+        $p = ExpressionSpecial.NewCallFunction($ID.text, $listExpressions.l)
+    }
+    ;
+
+listExpressions returns [*arrayList.List l]
+    @init {
+        $l = arrayList.New()
+    }
+    : List = listExpressions COMMA expression {
+        $List.l.Add($expression.p)
+        $l = $List.l
+    }
+    | expression {
+        $l.Add($expression.p)
+    }
+    ;
+
 instructions returns [*arrayList.List l]
     @init{
         $l = arrayList.New()
@@ -78,6 +103,7 @@ instruction returns [Abstract.Instruction instr]
     | expr_cast         { $instr = $expr_cast.instr }
     | expr_rel          { $instr = $expr_rel.instr }
     | expr_logic        { $instr = $expr_logic.instr }
+    | called_func       { $instr = $called_func.instr }
     ;
 
 print_prod returns [Abstract.Instruction instr]

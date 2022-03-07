@@ -1,7 +1,6 @@
 package AST
 
 import (
-	"OLC2_Project1/server/interpreter/SymbolTable/Environment"
 	arrayList "github.com/colegno/arraylist"
 )
 
@@ -16,8 +15,4 @@ func NewTree(list *arrayList.List) Tree {
 		ListFunctions: nil,
 	}
 	return tree
-}
-
-func (t *Tree) AddFunction(nameFunc Environment.Function) {
-	t.ListFunctions.Add(nameFunc)
 }
