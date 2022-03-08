@@ -93,7 +93,7 @@ func (d *Assign) Execute(table SymbolTable.SymbolTable) interface{} {
 		return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
 	}
 
-	val.Value = d.Val.GetValue(table).Value
+	val.Value = retExpr.Value
 	table.ChangeVal(varDec, val)
 
 	return val

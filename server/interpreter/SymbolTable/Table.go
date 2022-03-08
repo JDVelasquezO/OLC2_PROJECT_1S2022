@@ -66,7 +66,7 @@ func (table *SymbolTable) ChangeVal(id string, newSymbol Symbol) {
 
 		for key, _ := range actualTable.Table {
 			if key == newId {
-				table.Table[newId] = newSymbol
+				actualTable.Table[newId] = newSymbol
 				return
 			}
 		}

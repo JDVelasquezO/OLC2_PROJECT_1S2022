@@ -93,6 +93,9 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 
 		ContinueIf:
 			valueRet = instruct.Execute(newTable)
+			if valueRet != nil && typeof(valueRet) != "SymbolTable.ReturnType" {
+				newTable.AddNewSymbol(valueRet.(SymbolTable.Symbol).Id, valueRet.(SymbolTable.Symbol))
+			}
 		}
 		return valueRet
 	} else {
