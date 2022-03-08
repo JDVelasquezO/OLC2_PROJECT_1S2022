@@ -31,6 +31,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/powershell/powershell.min.js"
             integrity="sha512-LqqYYiphtlUW/A/ctvWI7aJspzPsy3ZhoUT59+3X5vpNVp8u+U+kMkA5Isl/l8jmZX2lRyUBInVKjxYbWwab/w=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <style>
+        .code_mirror {
+            resize: vertical;
+            overflow: auto !important;
+        }
+    </style>
 </head>
 
 <body class="has-background-dark">
@@ -85,7 +92,7 @@
 
     <form action="http://localhost:3000/analyze" method="post" id="formCode">
         <div class="columns">
-            <div class="column">
+            <div class="column code_mirror">
                 <p class="has-text-light">Input code:</p>
                 {{ if (eq .Parser "") }}
                 <textarea autofocus name="code" id="writer"></textarea>
@@ -93,7 +100,7 @@
                 <textarea autofocus name="code" id="writer">{{ .Parser }}</textarea>
                 {{ end }}
             </div>
-            <div class="column">
+            <div class="column code_mirror">
                 <p class="has-text-light">Output:</p>
                 {{ if (eq .Res "") }}
                 <textarea id="reader"></textarea>

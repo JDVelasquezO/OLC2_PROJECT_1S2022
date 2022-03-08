@@ -43,6 +43,18 @@ func (table *SymbolTable) ExistsSymbol(id string) bool {
 	return false
 }
 
+func (table *SymbolTable) ExistsSymbolInEnvironment(id string) bool {
+	newId := strings.ToLower(id)
+
+	for key, _ := range table.Table {
+		if key == newId {
+			return true
+		}
+	}
+
+	return false
+}
+
 func (table *SymbolTable) GetSymbol(id string) Symbol {
 	newId := strings.ToLower(id)
 

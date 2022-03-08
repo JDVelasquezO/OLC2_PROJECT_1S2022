@@ -194,7 +194,7 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 			varDec := d.ListIds.GetValue(i).(Expression.Identifier)
 
 			// Error - Variable repetida
-			if table.ExistsSymbol(varDec.Id) {
+			if table.ExistsSymbolInEnvironment(varDec.Id) {
 
 				errors.CounterError += 1
 				msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") La variable con ID \"" + fmt.Sprintf("%v", varDec.Id) + "\" ya existe. \n"
