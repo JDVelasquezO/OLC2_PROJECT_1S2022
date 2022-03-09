@@ -376,8 +376,13 @@ primitive returns [Abstract.Expression p, Abstract.Instruction instr]
     | BOOLEAN {
         str := $BOOLEAN.text
         fmt.Println(str)
-        $p = Expression.NewPrimitive(str, SymbolTable.BOOLEAN, $BOOLEAN.line, localctx.(*PrimitiveContext).Get_BOOLEAN().GetColumn())
-        $instr = Expression.NewPrimitive(str, SymbolTable.BOOLEAN, $BOOLEAN.line, localctx.(*PrimitiveContext).Get_BOOLEAN().GetColumn())
+        if str == "true" {
+            $p = Expression.NewPrimitive(true, SymbolTable.BOOLEAN, $BOOLEAN.line, localctx.(*PrimitiveContext).Get_BOOLEAN().GetColumn())
+            $instr = Expression.NewPrimitive(true, SymbolTable.BOOLEAN, $BOOLEAN.line, localctx.(*PrimitiveContext).Get_BOOLEAN().GetColumn())
+        } else {
+            $p = Expression.NewPrimitive(false, SymbolTable.BOOLEAN, $BOOLEAN.line, localctx.(*PrimitiveContext).Get_BOOLEAN().GetColumn())
+            $instr = Expression.NewPrimitive(false, SymbolTable.BOOLEAN, $BOOLEAN.line, localctx.(*PrimitiveContext).Get_BOOLEAN().GetColumn())
+        }
     }
     | ID {
         $p = Expression.NewIdentifier($ID.text, $ID.line, localctx.(*PrimitiveContext).Get_ID().GetColumn() )

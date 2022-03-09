@@ -75,6 +75,6 @@ func (c CallFunction) GetValue(table SymbolTable.SymbolTable) SymbolTable.Return
 }
 
 func (c CallFunction) Execute(table SymbolTable.SymbolTable) interface{} {
-	c.GetValue(table)
-	return nil
+	valRet := c.GetValue(table)
+	return valRet
 }

@@ -380,21 +380,21 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			errors.TypeError = append(errors.TypeError, err)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 		}
-		var left bool
-		var right bool
-		if retLeft.Value == "true" {
-			left = true
-		} else {
-			left = false
-		}
+		//var left bool
+		//var right bool
+		//if retLeft.Value == "true" {
+		//	left = true
+		//} else {
+		//	left = false
+		//}
+		//
+		//if retRight.Value == "true" {
+		//	right = true
+		//} else {
+		//	right = false
+		//}
 
-		if retRight.Value == "true" {
-			right = true
-		} else {
-			right = false
-		}
-
-		return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: left && right}
+		return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: retLeft.Value.(bool) && retRight.Value.(bool)}
 
 	case "||":
 		if retLeft.Type == SymbolTable.NULL ||
@@ -414,20 +414,8 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			errors.TypeError = append(errors.TypeError, err)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 		}
-		var left bool
-		var right bool
-		if retLeft.Value == "true" || retLeft.Value.(bool) == true {
-			left = true
-		} else {
-			left = false
-		}
 
-		if retRight.Value == "true" || retRight.Value.(bool) == true {
-			right = true
-		} else {
-			right = false
-		}
-		return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: left || right}
+		return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: retLeft.Value.(bool) || retRight.Value.(bool)}
 
 	case "!":
 		if retLeft.Type == SymbolTable.NULL ||
@@ -438,23 +426,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			goto ErrorDataType
 		}
 
-		var left bool
-		typeOfVal := typeof(retLeft.Value)
-		if typeOfVal == "string" {
-			if retLeft.Value == "true" {
-				left = false
-			} else {
-				left = true
-			}
-		} else if typeOfVal == "bool" {
-			if retLeft.Value.(bool) {
-				left = false
-			} else {
-				left = true
-			}
-		}
-
-		return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: left}
+		return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: !retLeft.Value.(bool)}
 	}
 
 ErrorDataType:

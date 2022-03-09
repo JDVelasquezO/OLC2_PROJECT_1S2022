@@ -8110,20 +8110,37 @@ func (p *ProjectParser) Primitive() (localctx IPrimitiveContext) {
 			}
 		}())
 		fmt.Println(str)
-		localctx.(*PrimitiveContext).p = Expression.NewPrimitive(str, SymbolTable.BOOLEAN, (func() int {
-			if localctx.(*PrimitiveContext).Get_BOOLEAN() == nil {
-				return 0
-			} else {
-				return localctx.(*PrimitiveContext).Get_BOOLEAN().GetLine()
-			}
-		}()), localctx.(*PrimitiveContext).Get_BOOLEAN().GetColumn())
-		localctx.(*PrimitiveContext).instr = Expression.NewPrimitive(str, SymbolTable.BOOLEAN, (func() int {
-			if localctx.(*PrimitiveContext).Get_BOOLEAN() == nil {
-				return 0
-			} else {
-				return localctx.(*PrimitiveContext).Get_BOOLEAN().GetLine()
-			}
-		}()), localctx.(*PrimitiveContext).Get_BOOLEAN().GetColumn())
+		if str == "true" {
+			localctx.(*PrimitiveContext).p = Expression.NewPrimitive(true, SymbolTable.BOOLEAN, (func() int {
+				if localctx.(*PrimitiveContext).Get_BOOLEAN() == nil {
+					return 0
+				} else {
+					return localctx.(*PrimitiveContext).Get_BOOLEAN().GetLine()
+				}
+			}()), localctx.(*PrimitiveContext).Get_BOOLEAN().GetColumn())
+			localctx.(*PrimitiveContext).instr = Expression.NewPrimitive(true, SymbolTable.BOOLEAN, (func() int {
+				if localctx.(*PrimitiveContext).Get_BOOLEAN() == nil {
+					return 0
+				} else {
+					return localctx.(*PrimitiveContext).Get_BOOLEAN().GetLine()
+				}
+			}()), localctx.(*PrimitiveContext).Get_BOOLEAN().GetColumn())
+		} else {
+			localctx.(*PrimitiveContext).p = Expression.NewPrimitive(false, SymbolTable.BOOLEAN, (func() int {
+				if localctx.(*PrimitiveContext).Get_BOOLEAN() == nil {
+					return 0
+				} else {
+					return localctx.(*PrimitiveContext).Get_BOOLEAN().GetLine()
+				}
+			}()), localctx.(*PrimitiveContext).Get_BOOLEAN().GetColumn())
+			localctx.(*PrimitiveContext).instr = Expression.NewPrimitive(false, SymbolTable.BOOLEAN, (func() int {
+				if localctx.(*PrimitiveContext).Get_BOOLEAN() == nil {
+					return 0
+				} else {
+					return localctx.(*PrimitiveContext).Get_BOOLEAN().GetLine()
+				}
+			}()), localctx.(*PrimitiveContext).Get_BOOLEAN().GetColumn())
+		}
 
 	case ProjectParserID:
 		p.EnterOuterAlt(localctx, 6)

@@ -13,6 +13,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"reflect"
 	"strconv"
+	"time"
 )
 
 type CodeToSend struct {
@@ -94,33 +95,37 @@ func Analyze(c *fiber.Ctx) error {
 	antlr.ParseTreeWalkerDefault.Walk(listener, tree)
 
 	ast := listener.Tree
-	globalTable := SymbolTable.NewSymbolTable("global", nil)
+	interpreter.GlobalTable = SymbolTable.NewSymbolTable("global", nil)
 
 	if len(lexicalErrors.Errors) == 0 && len(parseErrors.Errors) == 0 {
+		start := time.Now()
 		if ast.ListInstr != nil {
 			// First time for functions
 			for i := 0; i < ast.ListInstr.Len(); i++ {
 				r := ast.ListInstr.GetValue(i)
 				if typeof(r) == "Environment.Function" {
-					globalTable.AddFunction(r.(Environment.Function).Id, r.(Environment.Function))
+					interpreter.GlobalTable.AddFunction(r.(Environment.Function).Id, r.(Environment.Function))
 				}
 			}
 
 			// Second time for Main
-			if globalTable.ExistsFunction("main") {
-				listInstructs := globalTable.GetFunction("main").(Environment.Function).ListInstructs
+			if interpreter.GlobalTable.ExistsFunction("main") {
+				listInstructs := interpreter.GlobalTable.GetFunction("main").(Environment.Function).ListInstructs
 				for i := 0; i < listInstructs.Len(); i++ {
 					r := listInstructs.GetValue(i)
-					r.(Abstract.Instruction).Execute(globalTable)
+					r.(Abstract.Instruction).Execute(interpreter.GlobalTable)
 				}
 			} else {
 				errors.CounterError += 1
 				msg := "(ERROR) No existe método MAIN \n"
-				err := errors.NewError(errors.CounterError, 0, 0, msg, globalTable.Name)
+				err := errors.NewError(errors.CounterError, 0, 0, msg, interpreter.GlobalTable.Name)
 				errors.TypeError = append(errors.TypeError, err)
 				interpreter.Console += fmt.Sprintf("%v", msg)
 			}
 		}
+		t := time.Now()
+		elapsed := t.Sub(start)
+		interpreter.Console += "\n\n Ejecutado en " + elapsed.Round(elapsed).String()
 	}
 
 	return c.Render("index", fiber.Map{

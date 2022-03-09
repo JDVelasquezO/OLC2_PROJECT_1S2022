@@ -54,36 +54,22 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 		return nil
 	}
 
+	if returnPrincipal.Value == "true" {
+		returnPrincipal.Value = true
+		returnPrincipal.Type = SymbolTable.BOOLEAN
+	}
+
+	if returnPrincipal.Value == "false" {
+		returnPrincipal.Value = false
+		returnPrincipal.Type = SymbolTable.BOOLEAN
+	}
+
 	//var retVal interface{}
-	if returnPrincipal.Value == "true" || returnPrincipal.Value.(bool) {
+	if returnPrincipal.Value.(bool) {
 		newTable := SymbolTable.NewSymbolTable("if", &table)
 		var valueRet interface{}
 		for j := 0; j < i.ListInstructs.Len(); j++ {
 			instruct := i.ListInstructs.GetValue(j).(Abstract.Instruction)
-
-			typeOfIn := typeof(instruct)
-			switch typeOfIn {
-			case "Expression.Primitive":
-				goto IfAsExpression
-			case "Expression.Identifier":
-				goto IfAsExpression
-			case "Expression.Operation":
-				goto IfAsExpression
-			}
-			goto ContinueIf
-
-		IfAsExpression:
-			//if i.ListInstructsElse != nil {
-			//	instr := i.ListInstructsElse.GetValue(j).(Abstract.Instruction)
-			//	return ValidateElseInstructs(instr, newTable)
-			//}
-			//
-			//if i.ListIfElse != nil {
-			//	instr := i.ListIfElse.GetValue(j).(Abstract.Instruction)
-			//	return ValidateElseInstructs(instr, newTable)
-			//}
-
-		ContinueIf:
 			valueRet = instruct.Execute(newTable)
 			if valueRet != nil && typeof(valueRet) != "SymbolTable.ReturnType" {
 				newTable.AddNewSymbol(valueRet.(SymbolTable.Symbol).Id, valueRet.(SymbolTable.Symbol))
@@ -106,10 +92,9 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 						instr := newIf.ListInstructs.GetValue(j).(Abstract.Instruction)
 						valueRet = instr.Execute(tableNewIf)
 					}
-					//return nil
+					return valueRet
 				}
 			}
-			return valueRet
 		}
 
 		if i.ListInstructsElse != nil {
