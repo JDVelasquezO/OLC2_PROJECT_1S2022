@@ -54,7 +54,6 @@ type Operation struct {
 
 func (p Operation) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 	res := p.GetValue(symbolTable)
-
 	return res
 }
 
@@ -65,10 +64,10 @@ func NewOperation(OpLeft Abstract.Expression, Operator string, OpRight Abstract.
 }
 
 func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.ReturnType {
-	var retLeft SymbolTable.ReturnType
+	retLeft := p.OpLeft.GetValue(symbolTable)
 	var retRight SymbolTable.ReturnType
 
-	if p.OpLeft.GetValue(symbolTable).Value == nil {
+	if retLeft.Value == nil {
 
 		row := strconv.Itoa(p.Row)
 		col := strconv.Itoa(p.Col)
@@ -92,7 +91,6 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 		}
 
-		retLeft = p.OpLeft.GetValue(symbolTable)
 		retRight = p.OpRight.GetValue(symbolTable)
 	}
 

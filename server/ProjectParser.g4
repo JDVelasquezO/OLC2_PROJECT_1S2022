@@ -66,17 +66,6 @@ bloq returns [*arrayList.List content]
     | LEFT_KEY RIGHT_KEY                { $content = arrayList.New() }
     ;
 
-called_func returns [Abstract.Instruction instr, Abstract.Expression p]
-    : ID LEFT_PAR RIGHT_PAR SEMICOLON {
-        $instr = ExpressionSpecial.NewCallFunction($ID.text, arrayList.New())
-        $p = ExpressionSpecial.NewCallFunction($ID.text, arrayList.New())
-    }
-    | ID LEFT_PAR listExpressions RIGHT_PAR SEMICOLON {
-        $instr = ExpressionSpecial.NewCallFunction($ID.text, $listExpressions.l)
-        $p = ExpressionSpecial.NewCallFunction($ID.text, $listExpressions.l)
-    }
-    ;
-
 listParams returns [*arrayList.List l]
     @init {
         $l = arrayList.New()
@@ -94,17 +83,6 @@ listParams returns [*arrayList.List l]
         newDec := Natives.NewDeclaration(listIds, false, $data_type.data)
         $l.Add(newDec)
     }
-    ;
-
-listExpressions returns [*arrayList.List l]
-    @init {
-        $l = arrayList.New()
-    }
-    : List = listExpressions COMMA expression {
-        $List.l.Add($expression.p)
-        $l = $List.l
-    }
-    | expression { $l.Add($expression.p) }
     ;
 
 instructions returns [*arrayList.List l]
@@ -126,12 +104,12 @@ instruction returns [Abstract.Instruction instr]
     | assign_prod       { $instr = $assign_prod.instr }
     | conditional_prod  { $instr = $conditional_prod.instr }
     | bucle_prod        { $instr = $bucle_prod.instr }
+    | called_func       { $instr = $called_func.instr }
     | expr_arit         { $instr = $expr_arit.instr }
     | primitive         { $instr = $primitive.instr }
     | expr_cast         { $instr = $expr_cast.instr }
     | expr_rel          { $instr = $expr_rel.instr }
     | expr_logic        { $instr = $expr_logic.instr }
-    | called_func       { $instr = $called_func.instr }
     ;
 
 print_prod returns [Abstract.Instruction instr]
@@ -243,13 +221,34 @@ bucle_prod returns [Abstract.Instruction instr]
     : RWHILE expression bloq { $instr = Natives.NewWhile($expression.p, $bloq.content, $RWHILE.line, localctx.(*Bucle_prodContext).Get_RWHILE().GetColumn()) }
     ;
 
+called_func returns [Abstract.Instruction instr, Abstract.Expression p]
+    : ID LEFT_PAR RIGHT_PAR {
+        $instr = ExpressionSpecial.NewCallFunction($ID.text, arrayList.New())
+        $p = ExpressionSpecial.NewCallFunction($ID.text, arrayList.New())
+    }
+    | ID LEFT_PAR listExpressions RIGHT_PAR {
+        $instr = ExpressionSpecial.NewCallFunction($ID.text, $listExpressions.l)
+        $p = ExpressionSpecial.NewCallFunction($ID.text, $listExpressions.l)
+    }
+    ;
+
+listExpressions returns [*arrayList.List l]
+    @init {
+        $l = arrayList.New()
+    }
+    : List = listExpressions COMMA expression {
+        $List.l.Add($expression.p)
+        $l = $List.l
+    }
+    | expression { $l.Add($expression.p) }
+    ;
+
 expression returns [Abstract.Expression p]
-    : conditional_prod           { $p = $conditional_prod.p }
+    : expr_valor                 { $p = $expr_valor.p }
+    | conditional_prod           { $p = $conditional_prod.p }
     | expr_rel                   { $p = $expr_rel.p }
     | expr_arit                  { $p = $expr_arit.p }
     | expr_logic                 { $p = $expr_logic.p }
-    | expr_cast                  { $p = $expr_cast.p }
-    | called_func                { $p = $called_func.p }
 ;
 
 expr_rel returns[Abstract.Expression p, Abstract.Instruction instr]
@@ -280,19 +279,30 @@ expr_arit returns [Abstract.Expression p, Abstract.Instruction instr]
         $p = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_aritContext).GetOp().GetColumn() )
         $instr = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_aritContext).GetOp().GetColumn() )
         }
-    | primitive {
-        $p = $primitive.p
-        $instr = $primitive.instr
-        }
-    | expr_cast   {
-        $p = $expr_cast.p
-        $instr = $expr_cast.instr
-        }
+    | expr_valor {
+        $p = $expr_valor.p
+        $instr = $expr_valor.instr
+    }
     | LEFT_PAR expression RIGHT_PAR {
         $p = $expression.p
         $instr = nil
         }
 ;
+
+expr_valor returns [Abstract.Expression p, Abstract.Instruction instr]
+    : called_func {
+        $p = $called_func.p
+        $instr = $called_func.instr
+    }
+    | primitive {
+          $p = $primitive.p
+          $instr = $primitive.instr
+    }
+    | expr_cast   {
+        $p = $expr_cast.p
+        $instr = $expr_cast.instr
+    }
+    ;
 
 pow_op returns [string op]
     : RINTEGER HERITAGE POWI { $op = $POWI.text }
@@ -372,5 +382,5 @@ primitive returns [Abstract.Expression p, Abstract.Instruction instr]
     | ID {
         $p = Expression.NewIdentifier($ID.text, $ID.line, localctx.(*PrimitiveContext).Get_ID().GetColumn() )
         $instr = Expression.NewIdentifier($ID.text, $ID.line, localctx.(*PrimitiveContext).Get_ID().GetColumn() )
-        }
+    }
 ;

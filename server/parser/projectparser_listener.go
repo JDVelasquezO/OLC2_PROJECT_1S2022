@@ -23,14 +23,8 @@ type ProjectParserListener interface {
 	// EnterBloq is called when entering the bloq production.
 	EnterBloq(c *BloqContext)
 
-	// EnterCalled_func is called when entering the called_func production.
-	EnterCalled_func(c *Called_funcContext)
-
 	// EnterListParams is called when entering the listParams production.
 	EnterListParams(c *ListParamsContext)
-
-	// EnterListExpressions is called when entering the listExpressions production.
-	EnterListExpressions(c *ListExpressionsContext)
 
 	// EnterInstructions is called when entering the instructions production.
 	EnterInstructions(c *InstructionsContext)
@@ -68,6 +62,12 @@ type ProjectParserListener interface {
 	// EnterBucle_prod is called when entering the bucle_prod production.
 	EnterBucle_prod(c *Bucle_prodContext)
 
+	// EnterCalled_func is called when entering the called_func production.
+	EnterCalled_func(c *Called_funcContext)
+
+	// EnterListExpressions is called when entering the listExpressions production.
+	EnterListExpressions(c *ListExpressionsContext)
+
 	// EnterExpression is called when entering the expression production.
 	EnterExpression(c *ExpressionContext)
 
@@ -76,6 +76,9 @@ type ProjectParserListener interface {
 
 	// EnterExpr_arit is called when entering the expr_arit production.
 	EnterExpr_arit(c *Expr_aritContext)
+
+	// EnterExpr_valor is called when entering the expr_valor production.
+	EnterExpr_valor(c *Expr_valorContext)
 
 	// EnterPow_op is called when entering the pow_op production.
 	EnterPow_op(c *Pow_opContext)
@@ -107,14 +110,8 @@ type ProjectParserListener interface {
 	// ExitBloq is called when exiting the bloq production.
 	ExitBloq(c *BloqContext)
 
-	// ExitCalled_func is called when exiting the called_func production.
-	ExitCalled_func(c *Called_funcContext)
-
 	// ExitListParams is called when exiting the listParams production.
 	ExitListParams(c *ListParamsContext)
-
-	// ExitListExpressions is called when exiting the listExpressions production.
-	ExitListExpressions(c *ListExpressionsContext)
 
 	// ExitInstructions is called when exiting the instructions production.
 	ExitInstructions(c *InstructionsContext)
@@ -152,6 +149,12 @@ type ProjectParserListener interface {
 	// ExitBucle_prod is called when exiting the bucle_prod production.
 	ExitBucle_prod(c *Bucle_prodContext)
 
+	// ExitCalled_func is called when exiting the called_func production.
+	ExitCalled_func(c *Called_funcContext)
+
+	// ExitListExpressions is called when exiting the listExpressions production.
+	ExitListExpressions(c *ListExpressionsContext)
+
 	// ExitExpression is called when exiting the expression production.
 	ExitExpression(c *ExpressionContext)
 
@@ -160,6 +163,9 @@ type ProjectParserListener interface {
 
 	// ExitExpr_arit is called when exiting the expr_arit production.
 	ExitExpr_arit(c *Expr_aritContext)
+
+	// ExitExpr_valor is called when exiting the expr_valor production.
+	ExitExpr_valor(c *Expr_valorContext)
 
 	// ExitPow_op is called when exiting the pow_op production.
 	ExitPow_op(c *Pow_opContext)

@@ -51,23 +51,11 @@ func (s *BaseProjectParserListener) EnterBloq(ctx *BloqContext) {}
 // ExitBloq is called when production bloq is exited.
 func (s *BaseProjectParserListener) ExitBloq(ctx *BloqContext) {}
 
-// EnterCalled_func is called when production called_func is entered.
-func (s *BaseProjectParserListener) EnterCalled_func(ctx *Called_funcContext) {}
-
-// ExitCalled_func is called when production called_func is exited.
-func (s *BaseProjectParserListener) ExitCalled_func(ctx *Called_funcContext) {}
-
 // EnterListParams is called when production listParams is entered.
 func (s *BaseProjectParserListener) EnterListParams(ctx *ListParamsContext) {}
 
 // ExitListParams is called when production listParams is exited.
 func (s *BaseProjectParserListener) ExitListParams(ctx *ListParamsContext) {}
-
-// EnterListExpressions is called when production listExpressions is entered.
-func (s *BaseProjectParserListener) EnterListExpressions(ctx *ListExpressionsContext) {}
-
-// ExitListExpressions is called when production listExpressions is exited.
-func (s *BaseProjectParserListener) ExitListExpressions(ctx *ListExpressionsContext) {}
 
 // EnterInstructions is called when production instructions is entered.
 func (s *BaseProjectParserListener) EnterInstructions(ctx *InstructionsContext) {}
@@ -141,6 +129,18 @@ func (s *BaseProjectParserListener) EnterBucle_prod(ctx *Bucle_prodContext) {}
 // ExitBucle_prod is called when production bucle_prod is exited.
 func (s *BaseProjectParserListener) ExitBucle_prod(ctx *Bucle_prodContext) {}
 
+// EnterCalled_func is called when production called_func is entered.
+func (s *BaseProjectParserListener) EnterCalled_func(ctx *Called_funcContext) {}
+
+// ExitCalled_func is called when production called_func is exited.
+func (s *BaseProjectParserListener) ExitCalled_func(ctx *Called_funcContext) {}
+
+// EnterListExpressions is called when production listExpressions is entered.
+func (s *BaseProjectParserListener) EnterListExpressions(ctx *ListExpressionsContext) {}
+
+// ExitListExpressions is called when production listExpressions is exited.
+func (s *BaseProjectParserListener) ExitListExpressions(ctx *ListExpressionsContext) {}
+
 // EnterExpression is called when production expression is entered.
 func (s *BaseProjectParserListener) EnterExpression(ctx *ExpressionContext) {}
 
@@ -158,6 +158,12 @@ func (s *BaseProjectParserListener) EnterExpr_arit(ctx *Expr_aritContext) {}
 
 // ExitExpr_arit is called when production expr_arit is exited.
 func (s *BaseProjectParserListener) ExitExpr_arit(ctx *Expr_aritContext) {}
+
+// EnterExpr_valor is called when production expr_valor is entered.
+func (s *BaseProjectParserListener) EnterExpr_valor(ctx *Expr_valorContext) {}
+
+// ExitExpr_valor is called when production expr_valor is exited.
+func (s *BaseProjectParserListener) ExitExpr_valor(ctx *Expr_valorContext) {}
 
 // EnterPow_op is called when production pow_op is entered.
 func (s *BaseProjectParserListener) EnterPow_op(ctx *Pow_opContext) {}

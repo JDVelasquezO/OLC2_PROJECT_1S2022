@@ -73,23 +73,15 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 			goto ContinueIf
 
 		IfAsExpression:
-			if i.ListInstructsElse != nil {
-				instr := i.ListInstructsElse.GetValue(j).(Abstract.Instruction)
-				if instruct.Execute(newTable).(SymbolTable.ReturnType).Type !=
-					instr.Execute(newTable).(SymbolTable.ReturnType).Type {
-
-					return ValidateElseInstructs(instr, newTable)
-				}
-			}
-
-			if i.ListIfElse != nil {
-				instr := i.ListIfElse.GetValue(j).(Abstract.Instruction)
-				if instruct.Execute(newTable).(SymbolTable.ReturnType).Type !=
-					instr.Execute(newTable).(SymbolTable.ReturnType).Type {
-
-					return ValidateElseInstructs(instr, newTable)
-				}
-			}
+			//if i.ListInstructsElse != nil {
+			//	instr := i.ListInstructsElse.GetValue(j).(Abstract.Instruction)
+			//	return ValidateElseInstructs(instr, newTable)
+			//}
+			//
+			//if i.ListIfElse != nil {
+			//	instr := i.ListIfElse.GetValue(j).(Abstract.Instruction)
+			//	return ValidateElseInstructs(instr, newTable)
+			//}
 
 		ContinueIf:
 			valueRet = instruct.Execute(newTable)
@@ -126,14 +118,16 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 			for j := 0; j < i.ListInstructsElse.Len(); j++ {
 				instruct := i.ListInstructsElse.GetValue(j).(Abstract.Instruction)
 				valueRet = instruct.Execute(newTable)
+
+				if valueRet.(SymbolTable.ReturnType).Type == SymbolTable.ERROR {
+					return nil
+				}
 			}
 			return valueRet
 		} else {
 			return nil
 		}
 	}
-
-	return nil
 }
 
 func ValidateElseInstructs(instr Abstract.Instruction, newTable SymbolTable.SymbolTable) SymbolTable.ReturnType {
