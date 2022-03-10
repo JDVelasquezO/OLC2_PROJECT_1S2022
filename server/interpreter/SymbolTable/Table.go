@@ -23,7 +23,7 @@ func NewSymbolTable(name string, before *SymbolTable) SymbolTable {
 	return in
 }
 
-func (table *SymbolTable) AddNewSymbol(id string, symbol Symbol) {
+func (table *SymbolTable) AddNewSymbol(id string, symbol interface{}) {
 	newId := strings.ToLower(id)
 	table.Table[newId] = symbol
 }
@@ -55,14 +55,14 @@ func (table *SymbolTable) ExistsSymbolInEnvironment(id string) bool {
 	return false
 }
 
-func (table *SymbolTable) GetSymbol(id string) Symbol {
+func (table *SymbolTable) GetSymbol(id string) interface{} {
 	newId := strings.ToLower(id)
 
 	for actualTable := table; actualTable != nil; actualTable = actualTable.Before {
 
 		for key, symbol := range actualTable.Table {
 			if key == newId {
-				return symbol.(Symbol)
+				return symbol
 			}
 		}
 	}

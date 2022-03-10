@@ -12,6 +12,8 @@ options {
     import "OLC2_Project1/server/interpreter/SymbolTable"
     import "OLC2_Project1/server/interpreter/SymbolTable/Environment"
     import "OLC2_Project1/server/interpreter/AST/ExpressionSpecial"
+    import "OLC2_Project1/server/interpreter/AST/Natives/DecArrays"
+    import "OLC2_Project1/server/interpreter/AST/Expression/Access"
     import arrayList "github.com/colegno/arraylist"
 }
 
@@ -110,6 +112,7 @@ instruction returns [Abstract.Instruction instr]
     | expr_cast         { $instr = $expr_cast.instr }
     | expr_rel          { $instr = $expr_rel.instr }
     | expr_logic        { $instr = $expr_logic.instr }
+    | dec_arr           { $instr = $dec_arr.instr }
     ;
 
 print_prod returns [Abstract.Instruction instr]
@@ -243,13 +246,53 @@ listExpressions returns [*arrayList.List l]
     | expression { $l.Add($expression.p) }
     ;
 
+dec_arr returns [Abstract.Instruction instr]
+    : DECLARAR ID COLON listDim EQUAL expression SEMICOLON { $instr = DecArrays.NewDecArray($listDim.length, $ID.text, $expression.p, SymbolTable.INTEGER) }
+    ;
+
+listDim returns[int length, string data]
+    @init { $length = 0 }
+    : LEFT_BRACKET l = listDim COMMA expression RIGHT_BRACKET { $length = $l.length + 1
+                                                                 $data = $l.data
+                                                               }
+    | LEFT_BRACKET data_type SEMICOLON expression RIGHT_BRACKET { $length = 1
+                                                              $data = $data_type.data }
+    ;
+
 expression returns [Abstract.Expression p]
     : expr_valor                 { $p = $expr_valor.p }
     | conditional_prod           { $p = $conditional_prod.p }
     | expr_rel                   { $p = $expr_rel.p }
     | expr_arit                  { $p = $expr_arit.p }
     | expr_logic                 { $p = $expr_logic.p }
+    | arraydata                  { $p = $arraydata.p }
 ;
+
+arraydata returns [Abstract.Expression p]
+    : LEFT_BRACKET listExpressions RIGHT_BRACKET { $p = ExpressionSpecial.NewValueArray($listExpressions.l) }
+    ;
+
+access_array returns [Abstract.Expression p, Abstract.Instruction instr]
+    : ID listInArray {
+        $p = Access.NewAccessArray($ID.text, $listInArray.l)
+        $instr = Access.NewAccessArray($ID.text, $listInArray.l)
+    }
+    ;
+
+listInArray returns [*arrayList.List l]
+    @init {
+        $l = arrayList.New()
+    }
+    : sublist = listInArray inArray {
+        $sublist.l.Add($inArray.p)
+        $l = $sublist.l
+    }
+    | inArray { $l.Add($inArray.p) }
+    ;
+
+inArray returns[Abstract.Expression p]
+    : LEFT_BRACKET expression RIGHT_BRACKET     { $p = $expression.p }
+    ;
 
 expr_rel returns[Abstract.Expression p, Abstract.Instruction instr]
     : opLeft = expr_rel op=( GREATER_THAN | LESS_THAN | GREATER_EQUALTHAN | LESS_EQUEALTHAN | EQUEAL_EQUAL | NOTEQUAL ) opRight = expr_rel {
@@ -301,6 +344,10 @@ expr_valor returns [Abstract.Expression p, Abstract.Instruction instr]
     | expr_cast   {
         $p = $expr_cast.p
         $instr = $expr_cast.instr
+    }
+    | access_array {
+        $p = $access_array.p
+        $instr = $access_array.instr
     }
     ;
 

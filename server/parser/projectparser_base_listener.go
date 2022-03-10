@@ -141,11 +141,47 @@ func (s *BaseProjectParserListener) EnterListExpressions(ctx *ListExpressionsCon
 // ExitListExpressions is called when production listExpressions is exited.
 func (s *BaseProjectParserListener) ExitListExpressions(ctx *ListExpressionsContext) {}
 
+// EnterDec_arr is called when production dec_arr is entered.
+func (s *BaseProjectParserListener) EnterDec_arr(ctx *Dec_arrContext) {}
+
+// ExitDec_arr is called when production dec_arr is exited.
+func (s *BaseProjectParserListener) ExitDec_arr(ctx *Dec_arrContext) {}
+
+// EnterListDim is called when production listDim is entered.
+func (s *BaseProjectParserListener) EnterListDim(ctx *ListDimContext) {}
+
+// ExitListDim is called when production listDim is exited.
+func (s *BaseProjectParserListener) ExitListDim(ctx *ListDimContext) {}
+
 // EnterExpression is called when production expression is entered.
 func (s *BaseProjectParserListener) EnterExpression(ctx *ExpressionContext) {}
 
 // ExitExpression is called when production expression is exited.
 func (s *BaseProjectParserListener) ExitExpression(ctx *ExpressionContext) {}
+
+// EnterArraydata is called when production arraydata is entered.
+func (s *BaseProjectParserListener) EnterArraydata(ctx *ArraydataContext) {}
+
+// ExitArraydata is called when production arraydata is exited.
+func (s *BaseProjectParserListener) ExitArraydata(ctx *ArraydataContext) {}
+
+// EnterAccess_array is called when production access_array is entered.
+func (s *BaseProjectParserListener) EnterAccess_array(ctx *Access_arrayContext) {}
+
+// ExitAccess_array is called when production access_array is exited.
+func (s *BaseProjectParserListener) ExitAccess_array(ctx *Access_arrayContext) {}
+
+// EnterListInArray is called when production listInArray is entered.
+func (s *BaseProjectParserListener) EnterListInArray(ctx *ListInArrayContext) {}
+
+// ExitListInArray is called when production listInArray is exited.
+func (s *BaseProjectParserListener) ExitListInArray(ctx *ListInArrayContext) {}
+
+// EnterInArray is called when production inArray is entered.
+func (s *BaseProjectParserListener) EnterInArray(ctx *InArrayContext) {}
+
+// ExitInArray is called when production inArray is exited.
+func (s *BaseProjectParserListener) ExitInArray(ctx *InArrayContext) {}
 
 // EnterExpr_rel is called when production expr_rel is entered.
 func (s *BaseProjectParserListener) EnterExpr_rel(ctx *Expr_relContext) {}

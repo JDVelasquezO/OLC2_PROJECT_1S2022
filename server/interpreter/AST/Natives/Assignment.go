@@ -43,7 +43,7 @@ func (d *Assign) Execute(table SymbolTable.SymbolTable) interface{} {
 	retExpr := d.Val.GetValue(table)
 	typeExpr := retExpr.Type
 	varDec := d.ListIds.GetValue(0).(Expression.Identifier).Id
-	val := table.GetSymbol(varDec)
+	val := table.GetSymbol(varDec).(SymbolTable.Symbol)
 
 	if !val.IsConst {
 		typeVal := typeof(d.Val)

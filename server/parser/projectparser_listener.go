@@ -68,8 +68,26 @@ type ProjectParserListener interface {
 	// EnterListExpressions is called when entering the listExpressions production.
 	EnterListExpressions(c *ListExpressionsContext)
 
+	// EnterDec_arr is called when entering the dec_arr production.
+	EnterDec_arr(c *Dec_arrContext)
+
+	// EnterListDim is called when entering the listDim production.
+	EnterListDim(c *ListDimContext)
+
 	// EnterExpression is called when entering the expression production.
 	EnterExpression(c *ExpressionContext)
+
+	// EnterArraydata is called when entering the arraydata production.
+	EnterArraydata(c *ArraydataContext)
+
+	// EnterAccess_array is called when entering the access_array production.
+	EnterAccess_array(c *Access_arrayContext)
+
+	// EnterListInArray is called when entering the listInArray production.
+	EnterListInArray(c *ListInArrayContext)
+
+	// EnterInArray is called when entering the inArray production.
+	EnterInArray(c *InArrayContext)
 
 	// EnterExpr_rel is called when entering the expr_rel production.
 	EnterExpr_rel(c *Expr_relContext)
@@ -155,8 +173,26 @@ type ProjectParserListener interface {
 	// ExitListExpressions is called when exiting the listExpressions production.
 	ExitListExpressions(c *ListExpressionsContext)
 
+	// ExitDec_arr is called when exiting the dec_arr production.
+	ExitDec_arr(c *Dec_arrContext)
+
+	// ExitListDim is called when exiting the listDim production.
+	ExitListDim(c *ListDimContext)
+
 	// ExitExpression is called when exiting the expression production.
 	ExitExpression(c *ExpressionContext)
+
+	// ExitArraydata is called when exiting the arraydata production.
+	ExitArraydata(c *ArraydataContext)
+
+	// ExitAccess_array is called when exiting the access_array production.
+	ExitAccess_array(c *Access_arrayContext)
+
+	// ExitListInArray is called when exiting the listInArray production.
+	ExitListInArray(c *ListInArrayContext)
+
+	// ExitInArray is called when exiting the inArray production.
+	ExitInArray(c *InArrayContext)
 
 	// ExitExpr_rel is called when exiting the expr_rel production.
 	ExitExpr_rel(c *Expr_relContext)

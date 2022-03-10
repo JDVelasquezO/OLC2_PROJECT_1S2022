@@ -33,3 +33,18 @@ func NewSymbolFunction(line int, col int, id string, typeRet DataType, listParam
 
 	return e
 }
+
+func NewSymbolArray(line int, col int, id string, dataType DataType) Symbol {
+	e := Symbol{
+		Row:        line,
+		Col:        col,
+		Id:         id,
+		IsConst:    false,
+		IsFunc:     true,
+		Value:      nil,
+		DataType:   dataType,
+		ListParams: nil,
+	}
+
+	return e
+}

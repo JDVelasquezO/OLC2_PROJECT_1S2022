@@ -2,6 +2,7 @@ package Expression
 
 import (
 	"OLC2_Project1/server/interpreter/SymbolTable"
+	"reflect"
 )
 
 type Identifier struct {
@@ -33,5 +34,13 @@ func (id Identifier) GetValue(table SymbolTable.SymbolTable) SymbolTable.ReturnT
 
 	symbol := table.GetSymbol(id.Id)
 
-	return SymbolTable.ReturnType{Value: symbol.Value, Type: symbol.DataType}
+	if reflect.TypeOf(symbol) == reflect.TypeOf(SymbolTable.ReturnType{}) {
+		data := symbol.(SymbolTable.Symbol)
+		return SymbolTable.ReturnType{
+			Value: data.Value,
+			Type:  data.DataType,
+		}
+	}
+
+	return SymbolTable.ReturnType{Value: -1, Type: SymbolTable.NULL}
 }

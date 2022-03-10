@@ -12,6 +12,7 @@ const (
 	NULL
 	ERROR
 	VOID
+	ARRAY
 )
 
 type ReturnType struct {
