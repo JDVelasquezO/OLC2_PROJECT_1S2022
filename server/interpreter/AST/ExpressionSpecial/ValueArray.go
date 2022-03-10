@@ -87,7 +87,7 @@ func (v ValueArray) GetData(table SymbolTable.SymbolTable) (interface{}, SymbolT
 			}
 		}
 
-		s[i] = objectArray.Value
+		s[i] = objectArray.Values
 	}
 
 	object := Environment.NewArray("", SymbolTable.INTEGER, s, listDimensions)

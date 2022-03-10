@@ -3,7 +3,6 @@
 package parser // ProjectParser
 
 import (
-	"OLC2_Project1/server/interpreter/AST/Expression/Access"
 	"fmt"
 	"reflect"
 	"strconv"
@@ -19,6 +18,7 @@ import "OLC2_Project1/server/interpreter/SymbolTable"
 import "OLC2_Project1/server/interpreter/SymbolTable/Environment"
 import "OLC2_Project1/server/interpreter/AST/ExpressionSpecial"
 import "OLC2_Project1/server/interpreter/AST/Natives/DecArrays"
+import "OLC2_Project1/server/interpreter/AST/Expression/Access"
 import arrayList "github.com/colegno/arraylist"
 
 // Suppress unused import errors
@@ -224,7 +224,7 @@ var parserATN = []uint16{
 	3, 2, 2, 2, 413, 414, 7, 5, 2, 2, 414, 415, 7, 30, 2, 2, 415, 416, 7, 35,
 	2, 2, 416, 417, 5, 44, 23, 2, 417, 418, 7, 31, 2, 2, 418, 419, 5, 46, 24,
 	2, 419, 420, 7, 33, 2, 2, 420, 421, 8, 22, 1, 2, 421, 43, 3, 2, 2, 2, 422,
-	423, 7, 44, 2, 2, 423, 424, 5, 44, 23, 2, 424, 425, 7, 34, 2, 2, 425, 426,
+	423, 7, 44, 2, 2, 423, 424, 5, 44, 23, 2, 424, 425, 7, 33, 2, 2, 425, 426,
 	5, 46, 24, 2, 426, 427, 7, 45, 2, 2, 427, 428, 8, 23, 1, 2, 428, 437, 3,
 	2, 2, 2, 429, 430, 7, 44, 2, 2, 430, 431, 5, 68, 35, 2, 431, 432, 7, 33,
 	2, 2, 432, 433, 5, 46, 24, 2, 433, 434, 7, 45, 2, 2, 434, 435, 8, 23, 1,
@@ -5720,8 +5720,8 @@ func (s *ListDimContext) LEFT_BRACKET() antlr.TerminalNode {
 	return s.GetToken(ProjectParserLEFT_BRACKET, 0)
 }
 
-func (s *ListDimContext) COMMA() antlr.TerminalNode {
-	return s.GetToken(ProjectParserCOMMA, 0)
+func (s *ListDimContext) SEMICOLON() antlr.TerminalNode {
+	return s.GetToken(ProjectParserSEMICOLON, 0)
 }
 
 func (s *ListDimContext) Expression() IExpressionContext {
@@ -5756,10 +5756,6 @@ func (s *ListDimContext) Data_type() IData_typeContext {
 	}
 
 	return t.(IData_typeContext)
-}
-
-func (s *ListDimContext) SEMICOLON() antlr.TerminalNode {
-	return s.GetToken(ProjectParserSEMICOLON, 0)
 }
 
 func (s *ListDimContext) GetRuleContext() antlr.RuleContext {
@@ -5821,7 +5817,7 @@ func (p *ProjectParser) ListDim() (localctx IListDimContext) {
 		}
 		{
 			p.SetState(422)
-			p.Match(ProjectParserCOMMA)
+			p.Match(ProjectParserSEMICOLON)
 		}
 		{
 			p.SetState(423)

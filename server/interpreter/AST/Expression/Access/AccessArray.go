@@ -32,7 +32,7 @@ func (a ArrayAccess) GetValue(table SymbolTable.SymbolTable) SymbolTable.ReturnT
 	if !exists {
 		fmt.Println("No existe el arreglo")
 		return SymbolTable.ReturnType{
-			Value: 0,
+			Value: nil,
 			Type:  SymbolTable.NULL,
 		}
 	}

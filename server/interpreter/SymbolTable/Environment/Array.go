@@ -40,7 +40,7 @@ func (a Array) GetValue(list *arrayList.List, indexLevel int, values []interface
 				fmt.Println("Error 2")
 				return nil
 			} else {
-				return a.GetValue(listClone, indexLevel-1, subArray.([]interface{}))
+				return a.GetValue(listClone, indexLevel+1, subArray.([]interface{}))
 			}
 		}
 	} else {

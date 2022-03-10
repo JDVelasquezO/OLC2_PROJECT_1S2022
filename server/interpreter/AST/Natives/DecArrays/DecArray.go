@@ -1,11 +1,14 @@
 package DecArrays
 
 import (
+	"OLC2_Project1/server/interpreter"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment"
+	"OLC2_Project1/server/interpreter/errors"
 	"fmt"
 	"reflect"
+	"strconv"
 )
 
 type DecArray struct {
@@ -49,7 +52,12 @@ func (d DecArray) Execute(table SymbolTable.SymbolTable) interface{} {
 	}
 
 	if objectArray.Value.(Environment.Array).ListIntDim.Len() > d.Length {
-		fmt.Printf("Error, variable %s no es posible declarar", d.Id)
+		errors.CounterError += 1
+		msg := "(" + strconv.Itoa(0) + ", " + strconv.Itoa(0) + ")  Longitud de Arreglo Incorrecta \n"
+		err := errors.NewError(errors.CounterError, 0, 0, msg, table.Name)
+		errors.TypeError = append(errors.TypeError, err)
+		interpreter.Console += fmt.Sprintf("%v", msg)
+		return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 	}
 
 	if table.ExistsSymbol(d.Id) {

@@ -40,14 +40,20 @@ func (p Print) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 
 		finalMsg := ""
 		for i := 0; i < p.ListIds.Len(); i++ {
-			strFromList := p.ListIds.GetValue(i).(Abstract.Expression).GetValue(symbolTable)
+			strAsExpression := p.ListIds.GetValue(i).(Abstract.Expression)
+			strFromList := strAsExpression.GetValue(symbolTable)
 
 			// Validacion si no existe el ID
 			if strFromList.Value == nil {
 				row := p.Row
 				col := p.Col
 				errors.CounterError += 1
-				msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No esta asignada la variable ID: " + p.ListIds.GetValue(i).(Expression.Identifier).Id + "\n"
+				var msg string
+				if typeof(strAsExpression) == "Access.ArrayAccess" {
+					msg = "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") El arreglo no cumple las condiciones permitidas \n"
+				} else {
+					msg = "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No esta asignada la variable ID: " + strAsExpression.(Expression.Identifier).Id + "\n"
+				}
 				err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
 				errors.TypeError = append(errors.TypeError, err)
 				interpreter.Console += fmt.Sprintf("%v", err.Msg)

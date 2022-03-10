@@ -252,7 +252,7 @@ dec_arr returns [Abstract.Instruction instr]
 
 listDim returns[int length, string data]
     @init { $length = 0 }
-    : LEFT_BRACKET l = listDim COMMA expression RIGHT_BRACKET { $length = $l.length + 1
+    : LEFT_BRACKET l = listDim SEMICOLON expression RIGHT_BRACKET { $length = $l.length + 1
                                                                  $data = $l.data
                                                                }
     | LEFT_BRACKET data_type SEMICOLON expression RIGHT_BRACKET { $length = 1
