@@ -34,7 +34,7 @@ func (id Identifier) GetValue(table SymbolTable.SymbolTable) SymbolTable.ReturnT
 
 	symbol := table.GetSymbol(id.Id)
 
-	if reflect.TypeOf(symbol) == reflect.TypeOf(SymbolTable.ReturnType{}) {
+	if reflect.TypeOf(symbol) == reflect.TypeOf(SymbolTable.Symbol{}) {
 		data := symbol.(SymbolTable.Symbol)
 		return SymbolTable.ReturnType{
 			Value: data.Value,

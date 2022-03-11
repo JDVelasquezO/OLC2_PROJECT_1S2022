@@ -170,6 +170,9 @@ assign_prod returns [Abstract.Instruction instr]
     : listIds EQUAL expression SEMICOLON? {
         $instr = Natives.NewAssign($listIds.list, $expression.p)
     }
+    | ID listInArray EQUAL expression SEMICOLON? {
+        $instr = DecArrays.NewAssignArray($ID.text, $listInArray.l, $expression.p)
+    }
     ;
 
 ids_type returns [*arrayList.List list]
@@ -247,7 +250,14 @@ listExpressions returns [*arrayList.List l]
     ;
 
 dec_arr returns [Abstract.Instruction instr]
-    : DECLARAR ID COLON listDim EQUAL expression SEMICOLON { $instr = DecArrays.NewDecArray($listDim.length, $ID.text, $expression.p, SymbolTable.INTEGER) }
+    : DECLARAR MUT? ID COLON listDim EQUAL expression SEMICOLON
+    {
+        if $MUT.text != "" {
+            $instr = DecArrays.NewDecArray($listDim.length, $ID.text, $expression.p, SymbolTable.INTEGER, true)
+        } else {
+            $instr = DecArrays.NewDecArray($listDim.length, $ID.text, $expression.p, SymbolTable.INTEGER, false)
+        }
+    }
     ;
 
 listDim returns[int length, string data]

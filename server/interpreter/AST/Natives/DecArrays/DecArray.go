@@ -16,14 +16,16 @@ type DecArray struct {
 	Id           string
 	ValueInitial Abstract.Expression
 	Type         SymbolTable.DataType
+	IsMut        bool
 }
 
-func NewDecArray(length int, id string, init Abstract.Expression, dataType SymbolTable.DataType) DecArray {
+func NewDecArray(length int, id string, init Abstract.Expression, dataType SymbolTable.DataType, isMut bool) DecArray {
 	return DecArray{
 		Length:       length,
 		Id:           id,
 		ValueInitial: init,
 		Type:         dataType,
+		IsMut:        isMut,
 	}
 }
 
