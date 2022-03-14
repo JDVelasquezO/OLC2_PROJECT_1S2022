@@ -253,20 +253,32 @@ dec_arr returns [Abstract.Instruction instr]
     : DECLARAR MUT? ID COLON listDim EQUAL expression SEMICOLON
     {
         if $MUT.text != "" {
-            $instr = DecArrays.NewDecArray($listDim.length, $ID.text, $expression.p, SymbolTable.INTEGER, true)
+            $instr = DecArrays.NewDecArray($listDim.length, $ID.text, $expression.p, $listDim.data, true)
         } else {
-            $instr = DecArrays.NewDecArray($listDim.length, $ID.text, $expression.p, SymbolTable.INTEGER, false)
+            $instr = DecArrays.NewDecArray($listDim.length, $ID.text, $expression.p, $listDim.data, false)
         }
     }
     ;
 
-listDim returns[int length, string data]
+listDim returns[int length, SymbolTable.DataType data]
     @init { $length = 0 }
     : LEFT_BRACKET l = listDim SEMICOLON expression RIGHT_BRACKET { $length = $l.length + 1
                                                                  $data = $l.data
                                                                }
     | LEFT_BRACKET data_type SEMICOLON expression RIGHT_BRACKET { $length = 1
-                                                              $data = $data_type.data }
+        switch ($data_type.data) {
+            case "i64":
+                $data = SymbolTable.INTEGER
+            case "f64":
+                $data = SymbolTable.FLOAT
+            case "&str":
+                $data = SymbolTable.STR
+            case "String":
+                $data = SymbolTable.STRING
+            case "bool":
+                $data = SymbolTable.BOOLEAN
+        }
+    }
     ;
 
 expression returns [Abstract.Expression p]

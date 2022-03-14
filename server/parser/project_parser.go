@@ -5763,7 +5763,7 @@ func (p *ProjectParser) Dec_arr() (localctx IDec_arrContext) {
 			} else {
 				return localctx.(*Dec_arrContext).Get_ID().GetText()
 			}
-		}()), localctx.(*Dec_arrContext).Get_expression().GetP(), SymbolTable.INTEGER, true)
+		}()), localctx.(*Dec_arrContext).Get_expression().GetP(), localctx.(*Dec_arrContext).Get_listDim().GetData(), true)
 	} else {
 		localctx.(*Dec_arrContext).instr = DecArrays.NewDecArray(localctx.(*Dec_arrContext).Get_listDim().GetLength(), (func() string {
 			if localctx.(*Dec_arrContext).Get_ID() == nil {
@@ -5771,7 +5771,7 @@ func (p *ProjectParser) Dec_arr() (localctx IDec_arrContext) {
 			} else {
 				return localctx.(*Dec_arrContext).Get_ID().GetText()
 			}
-		}()), localctx.(*Dec_arrContext).Get_expression().GetP(), SymbolTable.INTEGER, false)
+		}()), localctx.(*Dec_arrContext).Get_expression().GetP(), localctx.(*Dec_arrContext).Get_listDim().GetData(), false)
 	}
 
 	return localctx
@@ -5800,13 +5800,13 @@ type IListDimContext interface {
 	GetLength() int
 
 	// GetData returns the data attribute.
-	GetData() string
+	GetData() SymbolTable.DataType
 
 	// SetLength sets the length attribute.
 	SetLength(int)
 
 	// SetData sets the data attribute.
-	SetData(string)
+	SetData(SymbolTable.DataType)
 
 	// IsListDimContext differentiates from other interfaces.
 	IsListDimContext()
@@ -5816,7 +5816,7 @@ type ListDimContext struct {
 	*antlr.BaseParserRuleContext
 	parser     antlr.Parser
 	length     int
-	data       string
+	data       SymbolTable.DataType
 	l          IListDimContext
 	_data_type IData_typeContext
 }
@@ -5853,11 +5853,11 @@ func (s *ListDimContext) Set_data_type(v IData_typeContext) { s._data_type = v }
 
 func (s *ListDimContext) GetLength() int { return s.length }
 
-func (s *ListDimContext) GetData() string { return s.data }
+func (s *ListDimContext) GetData() SymbolTable.DataType { return s.data }
 
 func (s *ListDimContext) SetLength(v int) { s.length = v }
 
-func (s *ListDimContext) SetData(v string) { s.data = v }
+func (s *ListDimContext) SetData(v SymbolTable.DataType) { s.data = v }
 
 func (s *ListDimContext) LEFT_BRACKET() antlr.TerminalNode {
 	return s.GetToken(ProjectParserLEFT_BRACKET, 0)
@@ -5999,7 +5999,18 @@ func (p *ProjectParser) ListDim() (localctx IListDimContext) {
 			p.Match(ProjectParserRIGHT_BRACKET)
 		}
 		localctx.(*ListDimContext).length = 1
-		localctx.(*ListDimContext).data = localctx.(*ListDimContext).Get_data_type().GetData()
+		switch localctx.(*ListDimContext).Get_data_type().GetData() {
+		case "i64":
+			localctx.(*ListDimContext).data = SymbolTable.INTEGER
+		case "f64":
+			localctx.(*ListDimContext).data = SymbolTable.FLOAT
+		case "&str":
+			localctx.(*ListDimContext).data = SymbolTable.STR
+		case "String":
+			localctx.(*ListDimContext).data = SymbolTable.STRING
+		case "bool":
+			localctx.(*ListDimContext).data = SymbolTable.BOOLEAN
+		}
 
 	}
 
