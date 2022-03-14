@@ -3,7 +3,7 @@ package Access
 import (
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
-	"OLC2_Project1/server/interpreter/SymbolTable/Environment"
+	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Array"
 	"encoding/json"
 	"fmt"
 	arrayList "github.com/colegno/arraylist"
@@ -32,7 +32,7 @@ func (i InstanceArray) GetValue(table SymbolTable.SymbolTable) SymbolTable.Retur
 
 	stringQuery := string(data)
 	fmt.Printf("data %v", stringQuery)
-	object := Environment.NewArray("", SymbolTable.INTEGER, values, listIntDimensions)
+	object := Array.NewArray("", SymbolTable.INTEGER, values, listIntDimensions)
 	objectVal := SymbolTable.ReturnType{
 		Value: object,
 		Type:  SymbolTable.INTEGER,

@@ -2,6 +2,7 @@ package Expression
 
 import (
 	"OLC2_Project1/server/interpreter/SymbolTable"
+	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Array"
 	"reflect"
 )
 
@@ -39,6 +40,15 @@ func (id Identifier) GetValue(table SymbolTable.SymbolTable) SymbolTable.ReturnT
 		return SymbolTable.ReturnType{
 			Value: data.Value,
 			Type:  data.DataType,
+		}
+	}
+
+	if typeof(symbol) == "Array.Array" {
+		dataType := symbol.(Array.Array).Symbol.DataType
+		values := symbol.(Array.Array).Values
+		return SymbolTable.ReturnType{
+			Value: values,
+			Type:  dataType,
 		}
 	}
 

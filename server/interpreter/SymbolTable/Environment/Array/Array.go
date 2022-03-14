@@ -1,4 +1,4 @@
-package Environment
+package Array
 
 import (
 	"OLC2_Project1/server/interpreter/Abstract"

@@ -3,7 +3,7 @@ package ExpressionSpecial
 import (
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
-	"OLC2_Project1/server/interpreter/SymbolTable/Environment"
+	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Array"
 	"fmt"
 	arrayList "github.com/colegno/arraylist"
 )
@@ -75,7 +75,7 @@ func (v ValueArray) GetData(table SymbolTable.SymbolTable) (interface{}, SymbolT
 		}
 
 		valObject := valueData.Value.(SymbolTable.ReturnType)
-		objectArray := valObject.Value.(Environment.Array)
+		objectArray := valObject.Value.(Array.Array)
 
 		if i == 0 {
 			dataType = valObject.Type
@@ -90,7 +90,7 @@ func (v ValueArray) GetData(table SymbolTable.SymbolTable) (interface{}, SymbolT
 		s[i] = objectArray.Values
 	}
 
-	object := Environment.NewArray("", SymbolTable.INTEGER, s, listDimensions)
+	object := Array.NewArray("", SymbolTable.INTEGER, s, listDimensions)
 	objectVal := SymbolTable.ReturnType{
 		Value: object,
 		Type:  dataType,

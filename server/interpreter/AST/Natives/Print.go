@@ -67,7 +67,13 @@ func (p Print) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 
 			strToConcat := fmt.Sprintf("%v", strFromList.Value)
 			strToCompare := fmt.Sprintf("%v", p.Expressions.GetValue(symbolTable).Value)
-			numberRepKeys := strings.Count(strToCompare, "{}")
+			var numberRepKeys int
+			if typeof(strAsExpression) == "Access.ArrayAccess" ||
+				typeof(strFromList.Value) == "[]interface {}" {
+				numberRepKeys = strings.Count(strToCompare, "{:?}")
+			} else {
+				numberRepKeys = strings.Count(strToCompare, "{}")
+			}
 
 			if p.ListIds.Len() != numberRepKeys {
 				row := p.Row
@@ -80,7 +86,13 @@ func (p Print) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 				return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
 			}
 
-			words := strings.Split(strToCompare, "{}")
+			var words []string
+			if typeof(strAsExpression) == "Access.ArrayAccess" ||
+				typeof(strFromList.Value) == "[]interface {}" {
+				words = strings.Split(strToCompare, "{:?}")
+			} else {
+				words = strings.Split(strToCompare, "{}")
+			}
 			finalMsg += words[i] + strToConcat
 		}
 		if p.isBreakLine {

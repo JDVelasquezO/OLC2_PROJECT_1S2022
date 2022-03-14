@@ -1,6 +1,9 @@
 package SymbolTable
 
-import "strings"
+import (
+	"reflect"
+	"strings"
+)
 
 type SymbolTable struct {
 	Name          string
@@ -116,4 +119,8 @@ func (table *SymbolTable) GetFunction(id string) interface{} {
 	}
 
 	return nil
+}
+
+func typeof(v interface{}) string {
+	return reflect.TypeOf(v).String()
 }

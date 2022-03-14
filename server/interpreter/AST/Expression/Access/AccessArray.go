@@ -3,7 +3,7 @@ package Access
 import (
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
-	"OLC2_Project1/server/interpreter/SymbolTable/Environment"
+	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Array"
 	"fmt"
 	arrayList "github.com/colegno/arraylist"
 	"reflect"
@@ -38,7 +38,7 @@ func (a ArrayAccess) GetValue(table SymbolTable.SymbolTable) SymbolTable.ReturnT
 	}
 
 	symbol := table.GetSymbol(a.Id)
-	if reflect.TypeOf(symbol) != reflect.TypeOf(Environment.Array{}) {
+	if reflect.TypeOf(symbol) != reflect.TypeOf(Array.Array{}) {
 		fmt.Println("No es un arreglo")
 		return SymbolTable.ReturnType{
 			Value: 0,
@@ -46,9 +46,9 @@ func (a ArrayAccess) GetValue(table SymbolTable.SymbolTable) SymbolTable.ReturnT
 		}
 	}
 
-	objectArr := symbol.(Environment.Array)
+	objectArr := symbol.(Array.Array)
 
-	if objectArr.ListIntDim.Len() != a.Dim.Len() {
+	if objectArr.ListIntDim.Len() < a.Dim.Len() {
 		fmt.Println("Dimensiones invalidas")
 		return SymbolTable.ReturnType{
 			Value: 0,

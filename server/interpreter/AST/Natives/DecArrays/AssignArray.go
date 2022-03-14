@@ -4,7 +4,7 @@ import (
 	"OLC2_Project1/server/interpreter"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
-	"OLC2_Project1/server/interpreter/SymbolTable/Environment"
+	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Array"
 	"OLC2_Project1/server/interpreter/errors"
 	"fmt"
 	arrayList "github.com/colegno/arraylist"
@@ -30,7 +30,7 @@ func (a AssignArray) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 	}
 
 	foundSymbol := symbolTable.GetSymbol(a.Id)
-	symbolArray := foundSymbol.(Environment.Array)
+	symbolArray := foundSymbol.(Array.Array)
 	dimensions := a.GetIntDimensions(symbolTable)
 	symbolArray.ChangeValue(dimensions, 0, symbolArray.Values, a.Val, symbolTable)
 	return symbolArray

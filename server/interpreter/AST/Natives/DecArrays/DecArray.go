@@ -4,7 +4,7 @@ import (
 	"OLC2_Project1/server/interpreter"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
-	"OLC2_Project1/server/interpreter/SymbolTable/Environment"
+	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Array"
 	"OLC2_Project1/server/interpreter/errors"
 	"fmt"
 	"reflect"
@@ -53,7 +53,7 @@ func (d DecArray) Execute(table SymbolTable.SymbolTable) interface{} {
 		return nil
 	}
 
-	if objectArray.Value.(Environment.Array).ListIntDim.Len() > d.Length {
+	if objectArray.Value.(Array.Array).ListIntDim.Len() > d.Length {
 		errors.CounterError += 1
 		msg := "(" + strconv.Itoa(0) + ", " + strconv.Itoa(0) + ")  Longitud de Arreglo Incorrecta \n"
 		err := errors.NewError(errors.CounterError, 0, 0, msg, table.Name)
@@ -65,7 +65,7 @@ func (d DecArray) Execute(table SymbolTable.SymbolTable) interface{} {
 	if table.ExistsSymbol(d.Id) {
 		fmt.Printf("Error, variable %s ya declarada", d.Id)
 	} else {
-		symbol := objectArray.Value.(Environment.Array)
+		symbol := objectArray.Value.(Array.Array)
 		symbol.Id = d.Id
 		table.AddNewSymbol(d.Id, symbol)
 	}
