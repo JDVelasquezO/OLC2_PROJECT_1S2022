@@ -2,6 +2,7 @@ package DecArrays
 
 import (
 	"OLC2_Project1/server/interpreter"
+	"OLC2_Project1/server/interpreter/AST/Expression"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Array"
@@ -17,19 +18,24 @@ type DecArray struct {
 	ValueInitial Abstract.Expression
 	Type         SymbolTable.DataType
 	IsMut        bool
+	Positions    Abstract.Expression
 }
 
-func NewDecArray(length int, id string, init Abstract.Expression, dataType SymbolTable.DataType, isMut bool) DecArray {
+func NewDecArray(length int, id string, init Abstract.Expression,
+	dataType SymbolTable.DataType, isMut bool, positions Abstract.Expression) DecArray {
 	return DecArray{
 		Length:       length,
 		Id:           id,
 		ValueInitial: init,
 		Type:         dataType,
 		IsMut:        isMut,
+		Positions:    positions,
 	}
 }
 
 func (d DecArray) Execute(table SymbolTable.SymbolTable) interface{} {
+	intPos := d.Positions.GetValue(table).Value.(int)
+	fmt.Println(intPos)
 	valueDec := d.ValueInitial.GetValue(table)
 
 	//if valueDec.Type != SymbolTable.VOID {
@@ -56,6 +62,15 @@ func (d DecArray) Execute(table SymbolTable.SymbolTable) interface{} {
 	if objectArray.Value.(Array.Array).ListIntDim.Len() > d.Length {
 		errors.CounterError += 1
 		msg := "(" + strconv.Itoa(0) + ", " + strconv.Itoa(0) + ")  Longitud de Arreglo Incorrecta \n"
+		err := errors.NewError(errors.CounterError, 0, 0, msg, table.Name)
+		errors.TypeError = append(errors.TypeError, err)
+		interpreter.Console += fmt.Sprintf("%v", msg)
+		return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
+	}
+
+	if objectArray.Value.(Array.Array).ListIntDim.GetValue(0) != d.Positions.(Expression.Primitive).Value {
+		errors.CounterError += 1
+		msg := "(" + strconv.Itoa(0) + ", " + strconv.Itoa(0) + ")  No cumplen las posiciones \n"
 		err := errors.NewError(errors.CounterError, 0, 0, msg, table.Name)
 		errors.TypeError = append(errors.TypeError, err)
 		interpreter.Console += fmt.Sprintf("%v", msg)
