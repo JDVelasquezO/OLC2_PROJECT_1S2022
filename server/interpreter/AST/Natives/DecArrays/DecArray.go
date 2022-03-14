@@ -32,9 +32,9 @@ func NewDecArray(length int, id string, init Abstract.Expression, dataType Symbo
 func (d DecArray) Execute(table SymbolTable.SymbolTable) interface{} {
 	valueDec := d.ValueInitial.GetValue(table)
 
-	if valueDec.Type != SymbolTable.VOID {
-		fmt.Printf("%v", valueDec)
-	}
+	//if valueDec.Type != SymbolTable.VOID {
+	//	fmt.Printf("%v", valueDec)
+	//}
 
 	if valueDec.Type != SymbolTable.ARRAY {
 		fmt.Println("Err1")
