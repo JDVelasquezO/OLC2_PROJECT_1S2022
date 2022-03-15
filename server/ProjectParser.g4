@@ -242,7 +242,7 @@ listExpressions returns [*arrayList.List l]
     @init {
         $l = arrayList.New()
     }
-    : List = listExpressions COMMA expression {
+    : List = listExpressions (COMMA | SEMICOLON) expression {
         $List.l.Add($expression.p)
         $l = $List.l
     }
