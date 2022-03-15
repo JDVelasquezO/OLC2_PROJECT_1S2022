@@ -53,11 +53,26 @@ type ProjectParserListener interface {
 	// EnterConditional_prod is called when entering the conditional_prod production.
 	EnterConditional_prod(c *Conditional_prodContext)
 
+	// EnterIf_prod is called when entering the if_prod production.
+	EnterIf_prod(c *If_prodContext)
+
 	// EnterList_else_if is called when entering the list_else_if production.
 	EnterList_else_if(c *List_else_ifContext)
 
 	// EnterElse_if is called when entering the else_if production.
 	EnterElse_if(c *Else_ifContext)
+
+	// EnterMatch_prod is called when entering the match_prod production.
+	EnterMatch_prod(c *Match_prodContext)
+
+	// EnterList_instr_match is called when entering the list_instr_match production.
+	EnterList_instr_match(c *List_instr_matchContext)
+
+	// EnterInstr_match is called when entering the instr_match production.
+	EnterInstr_match(c *Instr_matchContext)
+
+	// EnterExpr_match is called when entering the expr_match production.
+	EnterExpr_match(c *Expr_matchContext)
 
 	// EnterBucle_prod is called when entering the bucle_prod production.
 	EnterBucle_prod(c *Bucle_prodContext)
@@ -158,11 +173,26 @@ type ProjectParserListener interface {
 	// ExitConditional_prod is called when exiting the conditional_prod production.
 	ExitConditional_prod(c *Conditional_prodContext)
 
+	// ExitIf_prod is called when exiting the if_prod production.
+	ExitIf_prod(c *If_prodContext)
+
 	// ExitList_else_if is called when exiting the list_else_if production.
 	ExitList_else_if(c *List_else_ifContext)
 
 	// ExitElse_if is called when exiting the else_if production.
 	ExitElse_if(c *Else_ifContext)
+
+	// ExitMatch_prod is called when exiting the match_prod production.
+	ExitMatch_prod(c *Match_prodContext)
+
+	// ExitList_instr_match is called when exiting the list_instr_match production.
+	ExitList_instr_match(c *List_instr_matchContext)
+
+	// ExitInstr_match is called when exiting the instr_match production.
+	ExitInstr_match(c *Instr_matchContext)
+
+	// ExitExpr_match is called when exiting the expr_match production.
+	ExitExpr_match(c *Expr_matchContext)
 
 	// ExitBucle_prod is called when exiting the bucle_prod production.
 	ExitBucle_prod(c *Bucle_prodContext)

@@ -193,17 +193,28 @@ listIds returns [*arrayList.List list]
     ;
 
 conditional_prod returns [Abstract.Instruction instr, Abstract.Expression p]
+    : if_prod {
+        $instr = $if_prod.instr
+        $p = $if_prod.p
+    }
+    | match_prod {
+        $instr = $match_prod.instr
+        $p = $match_prod.p
+    }
+    ;
+
+if_prod returns [Abstract.Instruction instr, Abstract.Expression p]
     : RIF expression bloq {
-        $instr = Natives.NewIf($expression.p, $bloq.content, nil, nil, $RIF.line, localctx.(*Conditional_prodContext).Get_RIF().GetColumn())
-        $p = Natives.NewIf($expression.p, $bloq.content, nil, nil, $RIF.line, localctx.(*Conditional_prodContext).Get_RIF().GetColumn())
+        $instr = Natives.NewIf($expression.p, $bloq.content, nil, nil, $RIF.line, localctx.(*If_prodContext).Get_RIF().GetColumn())
+        $p = Natives.NewIf($expression.p, $bloq.content, nil, nil, $RIF.line, localctx.(*If_prodContext).Get_RIF().GetColumn())
     }
     | RIF expression bif=bloq RELSE belse=bloq {
-        $instr = Natives.NewIf($expression.p, $bif.content, nil, $belse.content, $RIF.line, localctx.(*Conditional_prodContext).Get_RIF().GetColumn())
-        $p = Natives.NewIf($expression.p, $bif.content, nil, $belse.content, $RIF.line, localctx.(*Conditional_prodContext).Get_RIF().GetColumn())
+        $instr = Natives.NewIf($expression.p, $bif.content, nil, $belse.content, $RIF.line, localctx.(*If_prodContext).Get_RIF().GetColumn())
+        $p = Natives.NewIf($expression.p, $bif.content, nil, $belse.content, $RIF.line, localctx.(*If_prodContext).Get_RIF().GetColumn())
     }
     | RIF expression bif=bloq list_else_if RELSE belse=bloq {
-        $instr = Natives.NewIf($expression.p, $bif.content, $list_else_if.list, $belse.content, $RIF.line, localctx.(*Conditional_prodContext).Get_RIF().GetColumn() )
-        $p = Natives.NewIf($expression.p, $bif.content, $list_else_if.list, $belse.content, $RIF.line, localctx.(*Conditional_prodContext).Get_RIF().GetColumn() )
+        $instr = Natives.NewIf($expression.p, $bif.content, $list_else_if.list, $belse.content, $RIF.line, localctx.(*If_prodContext).Get_RIF().GetColumn() )
+        $p = Natives.NewIf($expression.p, $bif.content, $list_else_if.list, $belse.content, $RIF.line, localctx.(*If_prodContext).Get_RIF().GetColumn() )
     }
     ;
 
@@ -221,6 +232,43 @@ list_else_if returns [*arrayList.List list]
 
 else_if returns [Abstract.Instruction instr]
     : RELSE RIF expression bloq { $instr = Natives.NewIf($expression.p, $bloq.content, nil, nil, $RIF.line, localctx.(*Else_ifContext).Get_RIF().GetColumn()) }
+    ;
+
+match_prod returns [Abstract.Instruction instr, Abstract.Expression p]
+    : RMATCH expression LEFT_KEY list_instr_match RIGHT_KEY {
+        $instr = Natives.NewMatch($expression.p, $list_instr_match.list)
+        $p = Natives.NewMatch($expression.p, $list_instr_match.list)
+    }
+    ;
+
+list_instr_match returns [*arrayList.List list]
+    @init {
+        $list = arrayList.New()
+    }
+    : sub = list_instr_match instr_match {
+        $sub.list.Add($instr_match.instr)
+        $list = $sub.list
+     }
+    | instr_match { $list.Add($instr_match.instr) }
+    ;
+
+instr_match returns [Abstract.Instruction instr]
+    : expr_match EQUAL_ARROW bloq {
+        $instr = Natives.NewCase($expr_match.list, $bloq.content)
+    }
+    ;
+
+expr_match returns [*arrayList.List list]
+    @init {
+        $list = arrayList.New()
+    }
+    : sub = expr_match PIPE expression {
+            $sub.list.Add($expression.p)
+            $list = $sub.list
+    }
+    | expression {
+            $list.Add($expression.p)
+    }
     ;
 
 bucle_prod returns [Abstract.Instruction instr]

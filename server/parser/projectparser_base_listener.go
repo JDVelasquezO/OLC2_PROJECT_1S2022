@@ -111,6 +111,12 @@ func (s *BaseProjectParserListener) EnterConditional_prod(ctx *Conditional_prodC
 // ExitConditional_prod is called when production conditional_prod is exited.
 func (s *BaseProjectParserListener) ExitConditional_prod(ctx *Conditional_prodContext) {}
 
+// EnterIf_prod is called when production if_prod is entered.
+func (s *BaseProjectParserListener) EnterIf_prod(ctx *If_prodContext) {}
+
+// ExitIf_prod is called when production if_prod is exited.
+func (s *BaseProjectParserListener) ExitIf_prod(ctx *If_prodContext) {}
+
 // EnterList_else_if is called when production list_else_if is entered.
 func (s *BaseProjectParserListener) EnterList_else_if(ctx *List_else_ifContext) {}
 
@@ -122,6 +128,30 @@ func (s *BaseProjectParserListener) EnterElse_if(ctx *Else_ifContext) {}
 
 // ExitElse_if is called when production else_if is exited.
 func (s *BaseProjectParserListener) ExitElse_if(ctx *Else_ifContext) {}
+
+// EnterMatch_prod is called when production match_prod is entered.
+func (s *BaseProjectParserListener) EnterMatch_prod(ctx *Match_prodContext) {}
+
+// ExitMatch_prod is called when production match_prod is exited.
+func (s *BaseProjectParserListener) ExitMatch_prod(ctx *Match_prodContext) {}
+
+// EnterList_instr_match is called when production list_instr_match is entered.
+func (s *BaseProjectParserListener) EnterList_instr_match(ctx *List_instr_matchContext) {}
+
+// ExitList_instr_match is called when production list_instr_match is exited.
+func (s *BaseProjectParserListener) ExitList_instr_match(ctx *List_instr_matchContext) {}
+
+// EnterInstr_match is called when production instr_match is entered.
+func (s *BaseProjectParserListener) EnterInstr_match(ctx *Instr_matchContext) {}
+
+// ExitInstr_match is called when production instr_match is exited.
+func (s *BaseProjectParserListener) ExitInstr_match(ctx *Instr_matchContext) {}
+
+// EnterExpr_match is called when production expr_match is entered.
+func (s *BaseProjectParserListener) EnterExpr_match(ctx *Expr_matchContext) {}
+
+// ExitExpr_match is called when production expr_match is exited.
+func (s *BaseProjectParserListener) ExitExpr_match(ctx *Expr_matchContext) {}
 
 // EnterBucle_prod is called when production bucle_prod is entered.
 func (s *BaseProjectParserListener) EnterBucle_prod(ctx *Bucle_prodContext) {}

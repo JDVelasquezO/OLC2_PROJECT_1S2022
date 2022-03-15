@@ -21,6 +21,7 @@ RAS:        'as';
 // Conditional Structures
 RIF:        'if';
 RELSE:      'else';
+RMATCH:     'match';
 
 // Bucle Structures
 RWHILE:     'while';
@@ -47,7 +48,7 @@ FLOAT:                  [0-9]+'.'[0-9]+;
 CHAR:                   '\''~["]'\'';
 STRING:                 '"'~["]*'"';
 BOOLEAN:                ('true' | 'false');
-ID:                     [a-zñA-ZÑ_][a-zñA-ZÑ0-9]*;
+ID:                     [a-zñA-ZÑ_][_a-zñA-ZÑ0-9]*;
 
 // General Operators
 EQUAL:                  '=';
@@ -86,6 +87,11 @@ SUB:                    '-';
 // Logic Operators
 AND:                    '&&';
 OR:                     '||';
+
+// Match Operators
+PIPE:                   '|';
+EQUAL_ARROW:            '=>';
+UNDERSCORE:             '_';
 
 // White spaces
 WHITESPACE: [ \r\n\t]+ -> skip;
