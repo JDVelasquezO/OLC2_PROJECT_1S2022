@@ -104,6 +104,10 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 				instruct := i.ListInstructsElse.GetValue(j).(Abstract.Instruction)
 				valueRet = instruct.Execute(newTable)
 
+				if valueRet == nil {
+					return nil
+				}
+
 				if valueRet.(SymbolTable.ReturnType).Type == SymbolTable.ERROR {
 					return nil
 				}

@@ -39,6 +39,7 @@ func (p Print) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 	if p.ListIds.Len() > 0 {
 
 		finalMsg := ""
+		var lastWord string
 		for i := 0; i < p.ListIds.Len(); i++ {
 			strAsExpression := p.ListIds.GetValue(i).(Abstract.Expression)
 			strFromList := strAsExpression.GetValue(symbolTable)
@@ -94,7 +95,9 @@ func (p Print) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 				words = strings.Split(strToCompare, "{}")
 			}
 			finalMsg += words[i] + strToConcat
+			lastWord = words[i+1]
 		}
+		finalMsg = finalMsg + lastWord
 		if p.isBreakLine {
 			finalMsg = finalMsg + "\n"
 		}
