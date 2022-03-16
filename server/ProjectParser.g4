@@ -46,7 +46,7 @@ function returns[Abstract.Instruction instr]
     : funcMain      { $instr = $funcMain.instr }
     | RFN ID LEFT_PAR RIGHT_PAR bloq   {
         $instr = Environment.NewFunction($RFN.line, localctx.(*FunctionContext).Get_RFN().GetColumn(), $ID.text, listParams, $bloq.content, "void")
-     }
+    }
     | RFN ID LEFT_PAR RIGHT_PAR ARROW data_type bloq {
         $instr = Environment.NewFunction($RFN.line, localctx.(*FunctionContext).Get_RFN().GetColumn(), $ID.text, listParams, $bloq.content, $data_type.data)
     }
@@ -111,12 +111,7 @@ instruction returns [Abstract.Instruction instr]
     | assign_prod       { $instr = $assign_prod.instr }
     | conditional_prod  { $instr = $conditional_prod.instr }
     | bucle_prod        { $instr = $bucle_prod.instr }
-    | called_func       { $instr = $called_func.instr }
-    | expr_arit         { $instr = $expr_arit.instr }
-    | primitive         { $instr = $primitive.instr }
-    | expr_cast         { $instr = $expr_cast.instr }
-    | expr_rel          { $instr = $expr_rel.instr }
-    | expr_logic        { $instr = $expr_logic.instr }
+    | expr_rel COMMA?   { $instr = $expr_rel.instr }
     | dec_arr           { $instr = $dec_arr.instr }
     ;
 

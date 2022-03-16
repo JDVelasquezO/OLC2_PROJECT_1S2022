@@ -24,7 +24,15 @@ func NewMatch(exprValue Abstract.Expression, listMatches *arrayList.List) Match 
 }
 
 func (m Match) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.ReturnType {
-	return SymbolTable.ReturnType{}
+	val := m.Execute(symbolTable)
+	if val != nil {
+		return val.(SymbolTable.ReturnType)
+	}
+
+	return SymbolTable.ReturnType{
+		Type:  SymbolTable.ERROR,
+		Value: nil,
+	}
 }
 
 func (m Match) Execute(table SymbolTable.SymbolTable) interface{} {
@@ -69,7 +77,10 @@ func (m Match) Execute(table SymbolTable.SymbolTable) interface{} {
 				if valCase == nil && valCaseId == "_" {
 					for k := 0; k < valInstructs.Len(); k++ {
 						newTable := SymbolTable.NewSymbolTable("Default", &table)
-						valInstructs.GetValue(k).(Abstract.Instruction).Execute(newTable)
+						instr := valInstructs.GetValue(k).(Abstract.Instruction).Execute(newTable)
+						if instr != nil {
+							return instr
+						}
 						return nil
 					}
 				}
@@ -80,12 +91,15 @@ func (m Match) Execute(table SymbolTable.SymbolTable) interface{} {
 			case valCase:
 				for k := 0; k < valInstructs.Len(); k++ {
 					newTable := SymbolTable.NewSymbolTable("Match", &table)
-					valInstructs.GetValue(k).(Abstract.Instruction).Execute(newTable)
+					instr := valInstructs.GetValue(k).(Abstract.Instruction).Execute(newTable)
+					if instr != nil {
+						return instr
+					}
 					return nil
 				}
 			}
 		}
 	}
 
-	return returnPrincipal
+	return nil
 }
