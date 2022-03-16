@@ -23,6 +23,9 @@ type ProjectParserListener interface {
 	// EnterBloq is called when entering the bloq production.
 	EnterBloq(c *BloqContext)
 
+	// EnterBloq_match is called when entering the bloq_match production.
+	EnterBloq_match(c *Bloq_matchContext)
+
 	// EnterListParams is called when entering the listParams production.
 	EnterListParams(c *ListParamsContext)
 
@@ -142,6 +145,9 @@ type ProjectParserListener interface {
 
 	// ExitBloq is called when exiting the bloq production.
 	ExitBloq(c *BloqContext)
+
+	// ExitBloq_match is called when exiting the bloq_match production.
+	ExitBloq_match(c *Bloq_matchContext)
 
 	// ExitListParams is called when exiting the listParams production.
 	ExitListParams(c *ListParamsContext)

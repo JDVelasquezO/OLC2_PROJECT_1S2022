@@ -94,19 +94,23 @@
         <div class="columns">
             <div class="column code_mirror">
                 <p class="has-text-light">Input code:</p>
-                {{ if (eq .Parser "") }}
-                <textarea autofocus name="code" id="writer"></textarea>
-                {{ else }}
-                <textarea autofocus name="code" id="writer">{{ .Parser }}</textarea>
-                {{ end }}
+                <div style="border: 5px solid hsl(348, 100%, 61%); width: 100%">
+                    {{ if (eq .Parser "") }}
+                    <textarea autofocus name="code" id="writer"></textarea>
+                    {{ else }}
+                    <textarea autofocus name="code" id="writer">{{ .Parser }}</textarea>
+                    {{ end }}
+                </div>
             </div>
             <div class="column code_mirror">
                 <p class="has-text-light">Output:</p>
-                {{ if (eq .Res "") }}
-                <textarea id="reader"></textarea>
-                {{ else }}
-                <textarea id="reader">{{ .Res }}</textarea>
-                {{ end }}
+                <div style="border: 5px solid hsl(348, 100%, 61%); width: 100%">
+                    {{ if (eq .Res "") }}
+                    <textarea id="reader"></textarea>
+                    {{ else }}
+                    <textarea id="reader">{{ .Res }}</textarea>
+                    {{ end }}
+                </div>
             </div>
         </div>
         <button class="button is-info" id="btnInterpret">Interpreter</button>

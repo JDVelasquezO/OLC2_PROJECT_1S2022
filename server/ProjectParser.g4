@@ -68,6 +68,11 @@ bloq returns [*arrayList.List content]
     | LEFT_KEY RIGHT_KEY                { $content = arrayList.New() }
     ;
 
+bloq_match returns [*arrayList.List content]
+    : LEFT_KEY instructions RIGHT_KEY    { $content = $instructions.l }
+    | instructions                       { $content = $instructions.l }
+    ;
+
 listParams returns [*arrayList.List l]
     @init {
         $l = arrayList.New()
@@ -116,10 +121,10 @@ instruction returns [Abstract.Instruction instr]
     ;
 
 print_prod returns [Abstract.Instruction instr]
-    : PRINT ADMIRATION LEFT_PAR expression RIGHT_PAR SEMICOLON { $instr = Natives.NewPrint($expression.p, false, $LEFT_PAR.line, localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn()) }
-    | PRINT ADMIRATION LEFT_PAR opBefore = expression COMMA listVars RIGHT_PAR SEMICOLON { $instr = Natives.NewPrintWithAfter($opBefore.p, $listVars.list, false, $LEFT_PAR.line, localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn()) }
-    | PRINTLN ADMIRATION LEFT_PAR expression RIGHT_PAR SEMICOLON { $instr = Natives.NewPrint($expression.p, true, $LEFT_PAR.line, localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn()) }
-    | PRINTLN ADMIRATION LEFT_PAR opBefore = expression COMMA listVars RIGHT_PAR SEMICOLON { $instr = Natives.NewPrintWithAfter($opBefore.p, $listVars.list, true, $LEFT_PAR.line, localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn()) }
+    : PRINT ADMIRATION LEFT_PAR expression RIGHT_PAR (SEMICOLON|COMMA) { $instr = Natives.NewPrint($expression.p, false, $LEFT_PAR.line, localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn()) }
+    | PRINT ADMIRATION LEFT_PAR opBefore = expression COMMA listVars RIGHT_PAR (SEMICOLON|COMMA) { $instr = Natives.NewPrintWithAfter($opBefore.p, $listVars.list, false, $LEFT_PAR.line, localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn()) }
+    | PRINTLN ADMIRATION LEFT_PAR expression RIGHT_PAR (SEMICOLON|COMMA) { $instr = Natives.NewPrint($expression.p, true, $LEFT_PAR.line, localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn()) }
+    | PRINTLN ADMIRATION LEFT_PAR opBefore = expression COMMA listVars RIGHT_PAR (SEMICOLON|COMMA) { $instr = Natives.NewPrintWithAfter($opBefore.p, $listVars.list, true, $LEFT_PAR.line, localctx.(*Print_prodContext).Get_LEFT_PAR().GetColumn()) }
     ;
 
 listVars returns [*arrayList.List list]
@@ -136,28 +141,28 @@ listVars returns [*arrayList.List list]
     ;
 
 declaration_prod returns [Abstract.Instruction instr]
-    : DECLARAR MUT? ids_type EQUAL expression SEMICOLON? {
+    : DECLARAR MUT? ids_type EQUAL expression (SEMICOLON|COMMA)? {
         if ($MUT.text != "") {
             $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, true, "")
         } else {
             $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, false, "")
         }
     }
-    | DECLARAR MUT? ids_type COLON data_type EQUAL expression SEMICOLON? {
+    | DECLARAR MUT? ids_type COLON data_type EQUAL expression (SEMICOLON|COMMA)? {
         if ($MUT.text != "") {
             $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, true, $data_type.data)
         } else {
             $instr = Natives.NewDeclarationInit($ids_type.list, $expression.p, false, $data_type.data)
         }
     }
-    | DECLARAR MUT? ids_type SEMICOLON? {
+    | DECLARAR MUT? ids_type (SEMICOLON|COMMA)? {
         if ($MUT.text != "") {
             $instr = Natives.NewDeclaration($ids_type.list, true, "")
         } else {
             $instr = Natives.NewDeclaration($ids_type.list, true, "")
         }
     }
-    | DECLARAR MUT? ids_type COLON data_type SEMICOLON? {
+    | DECLARAR MUT? ids_type COLON data_type (SEMICOLON|COMMA)? {
         if ($MUT.text != "") {
             $instr = Natives.NewDeclaration($ids_type.list, true, $data_type.data)
         } else {
@@ -167,10 +172,10 @@ declaration_prod returns [Abstract.Instruction instr]
     ;
 
 assign_prod returns [Abstract.Instruction instr]
-    : listIds EQUAL expression SEMICOLON? {
+    : listIds EQUAL expression (SEMICOLON|COMMA)? {
         $instr = Natives.NewAssign($listIds.list, $expression.p)
     }
-    | ID listInArray EQUAL expression SEMICOLON? {
+    | ID listInArray EQUAL expression (SEMICOLON|COMMA)? {
         $instr = DecArrays.NewAssignArray($ID.text, $listInArray.l, $expression.p)
     }
     ;
@@ -253,8 +258,8 @@ list_instr_match returns [*arrayList.List list]
     ;
 
 instr_match returns [Abstract.Instruction instr]
-    : expr_match EQUAL_ARROW bloq {
-        $instr = Natives.NewCase($expr_match.list, $bloq.content)
+    : expr_match EQUAL_ARROW bloq_match {
+        $instr = Natives.NewCase($expr_match.list, $bloq_match.content, $EQUAL_ARROW.line, localctx.(*Instr_matchContext).Get_EQUAL_ARROW().GetColumn())
     }
     ;
 
@@ -298,7 +303,7 @@ listExpressions returns [*arrayList.List l]
     ;
 
 dec_arr returns [Abstract.Instruction instr]
-    : DECLARAR MUT? ID (COLON listDim)? EQUAL expression SEMICOLON
+    : DECLARAR MUT? ID (COLON listDim)? EQUAL expression (SEMICOLON|COMMA)
     {
         if $MUT.text != "" {
             $instr = DecArrays.NewDecArray($listDim.length, $ID.text, $expression.p, $listDim.data, true, $listDim.pos)

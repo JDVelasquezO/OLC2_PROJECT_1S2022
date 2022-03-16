@@ -8,12 +8,16 @@ import (
 type Case struct {
 	Expressions  *arrayList.List
 	Instructions *arrayList.List
+	Row          int
+	Col          int
 }
 
-func NewCase(expressions *arrayList.List, instructions *arrayList.List) Case {
+func NewCase(expressions *arrayList.List, instructions *arrayList.List, row int, col int) Case {
 	return Case{
 		Instructions: instructions,
 		Expressions:  expressions,
+		Row:          row,
+		Col:          col,
 	}
 }
 

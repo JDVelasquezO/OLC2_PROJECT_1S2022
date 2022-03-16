@@ -51,6 +51,12 @@ func (s *BaseProjectParserListener) EnterBloq(ctx *BloqContext) {}
 // ExitBloq is called when production bloq is exited.
 func (s *BaseProjectParserListener) ExitBloq(ctx *BloqContext) {}
 
+// EnterBloq_match is called when production bloq_match is entered.
+func (s *BaseProjectParserListener) EnterBloq_match(ctx *Bloq_matchContext) {}
+
+// ExitBloq_match is called when production bloq_match is exited.
+func (s *BaseProjectParserListener) ExitBloq_match(ctx *Bloq_matchContext) {}
+
 // EnterListParams is called when production listParams is entered.
 func (s *BaseProjectParserListener) EnterListParams(ctx *ListParamsContext) {}
 
