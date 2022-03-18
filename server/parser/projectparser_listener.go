@@ -101,6 +101,9 @@ type ProjectParserListener interface {
 	// EnterContinue_instr is called when entering the continue_instr production.
 	EnterContinue_instr(c *Continue_instrContext)
 
+	// EnterReturn_instr is called when entering the return_instr production.
+	EnterReturn_instr(c *Return_instrContext)
+
 	// EnterExpression is called when entering the expression production.
 	EnterExpression(c *ExpressionContext)
 
@@ -232,6 +235,9 @@ type ProjectParserListener interface {
 
 	// ExitContinue_instr is called when exiting the continue_instr production.
 	ExitContinue_instr(c *Continue_instrContext)
+
+	// ExitReturn_instr is called when exiting the return_instr production.
+	ExitReturn_instr(c *Return_instrContext)
 
 	// ExitExpression is called when exiting the expression production.
 	ExitExpression(c *ExpressionContext)

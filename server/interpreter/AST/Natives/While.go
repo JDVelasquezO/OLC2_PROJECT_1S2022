@@ -57,6 +57,10 @@ StartLoop:
 				if typeof(newSymbol) == "Natives.Continue" {
 					break
 				}
+
+				if typeof(newSymbol) == "SymbolTable.ReturnType" {
+					return newSymbol
+				}
 				newTable.AddNewSymbol(newSymbol.(SymbolTable.Symbol).Id, newSymbol.(SymbolTable.Symbol))
 			}
 			//fmt.Println(otherTable)

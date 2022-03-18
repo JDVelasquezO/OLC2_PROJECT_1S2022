@@ -207,6 +207,12 @@ func (s *BaseProjectParserListener) EnterContinue_instr(ctx *Continue_instrConte
 // ExitContinue_instr is called when production continue_instr is exited.
 func (s *BaseProjectParserListener) ExitContinue_instr(ctx *Continue_instrContext) {}
 
+// EnterReturn_instr is called when production return_instr is entered.
+func (s *BaseProjectParserListener) EnterReturn_instr(ctx *Return_instrContext) {}
+
+// ExitReturn_instr is called when production return_instr is exited.
+func (s *BaseProjectParserListener) ExitReturn_instr(ctx *Return_instrContext) {}
+
 // EnterExpression is called when production expression is entered.
 func (s *BaseProjectParserListener) EnterExpression(ctx *ExpressionContext) {}
 
