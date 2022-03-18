@@ -92,6 +92,15 @@ type ProjectParserListener interface {
 	// EnterListDim is called when entering the listDim production.
 	EnterListDim(c *ListDimContext)
 
+	// EnterTransfer_prod is called when entering the transfer_prod production.
+	EnterTransfer_prod(c *Transfer_prodContext)
+
+	// EnterBreak_instr is called when entering the break_instr production.
+	EnterBreak_instr(c *Break_instrContext)
+
+	// EnterContinue_instr is called when entering the continue_instr production.
+	EnterContinue_instr(c *Continue_instrContext)
+
 	// EnterExpression is called when entering the expression production.
 	EnterExpression(c *ExpressionContext)
 
@@ -214,6 +223,15 @@ type ProjectParserListener interface {
 
 	// ExitListDim is called when exiting the listDim production.
 	ExitListDim(c *ListDimContext)
+
+	// ExitTransfer_prod is called when exiting the transfer_prod production.
+	ExitTransfer_prod(c *Transfer_prodContext)
+
+	// ExitBreak_instr is called when exiting the break_instr production.
+	ExitBreak_instr(c *Break_instrContext)
+
+	// ExitContinue_instr is called when exiting the continue_instr production.
+	ExitContinue_instr(c *Continue_instrContext)
 
 	// ExitExpression is called when exiting the expression production.
 	ExitExpression(c *ExpressionContext)

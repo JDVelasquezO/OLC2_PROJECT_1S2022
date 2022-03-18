@@ -48,7 +48,15 @@ StartLoop:
 		for j := 0; j < w.ListInstructs.Len(); j++ {
 			instruct := w.ListInstructs.GetValue(j).(Abstract.Instruction)
 			newSymbol := instruct.Execute(newTable)
+
 			if newSymbol != nil {
+				if typeof(newSymbol) == "Natives.Break" {
+					goto EndLoop
+				}
+
+				if typeof(newSymbol) == "Natives.Continue" {
+					break
+				}
 				newTable.AddNewSymbol(newSymbol.(SymbolTable.Symbol).Id, newSymbol.(SymbolTable.Symbol))
 			}
 			//fmt.Println(otherTable)
@@ -61,5 +69,6 @@ StartLoop:
 		}
 	}
 
+EndLoop:
 	return nil
 }

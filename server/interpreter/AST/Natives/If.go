@@ -58,6 +58,11 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 			instruct := i.ListInstructs.GetValue(j).(Abstract.Instruction)
 			valueRet = instruct.Execute(newTable)
 			if valueRet != nil && typeof(valueRet) != "SymbolTable.ReturnType" {
+
+				if typeof(valueRet) == "Natives.Break" || typeof(valueRet) == "Natives.Continue" {
+					return valueRet
+				}
+
 				newTable.AddNewSymbol(valueRet.(SymbolTable.Symbol).Id, valueRet.(SymbolTable.Symbol))
 			}
 		}

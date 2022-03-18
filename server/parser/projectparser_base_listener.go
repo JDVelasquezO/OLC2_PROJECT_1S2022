@@ -189,6 +189,24 @@ func (s *BaseProjectParserListener) EnterListDim(ctx *ListDimContext) {}
 // ExitListDim is called when production listDim is exited.
 func (s *BaseProjectParserListener) ExitListDim(ctx *ListDimContext) {}
 
+// EnterTransfer_prod is called when production transfer_prod is entered.
+func (s *BaseProjectParserListener) EnterTransfer_prod(ctx *Transfer_prodContext) {}
+
+// ExitTransfer_prod is called when production transfer_prod is exited.
+func (s *BaseProjectParserListener) ExitTransfer_prod(ctx *Transfer_prodContext) {}
+
+// EnterBreak_instr is called when production break_instr is entered.
+func (s *BaseProjectParserListener) EnterBreak_instr(ctx *Break_instrContext) {}
+
+// ExitBreak_instr is called when production break_instr is exited.
+func (s *BaseProjectParserListener) ExitBreak_instr(ctx *Break_instrContext) {}
+
+// EnterContinue_instr is called when production continue_instr is entered.
+func (s *BaseProjectParserListener) EnterContinue_instr(ctx *Continue_instrContext) {}
+
+// ExitContinue_instr is called when production continue_instr is exited.
+func (s *BaseProjectParserListener) ExitContinue_instr(ctx *Continue_instrContext) {}
+
 // EnterExpression is called when production expression is entered.
 func (s *BaseProjectParserListener) EnterExpression(ctx *ExpressionContext) {}
 

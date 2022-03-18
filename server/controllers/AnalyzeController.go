@@ -113,6 +113,16 @@ func Analyze(c *fiber.Ctx) error {
 				listInstructs := interpreter.GlobalTable.GetFunction("main").(Environment.Function).ListInstructs
 				for i := 0; i < listInstructs.Len(); i++ {
 					r := listInstructs.GetValue(i)
+
+					if typeof(r) == "Natives.Break" {
+						errors.CounterError += 1
+						msg := "(ERROR) No se puede declarar Break sin un ciclo \n"
+						err := errors.NewError(errors.CounterError, 0, 0, msg, interpreter.GlobalTable.Name)
+						errors.TypeError = append(errors.TypeError, err)
+						interpreter.Console += fmt.Sprintf("%v", msg)
+						continue
+					}
+
 					r.(Abstract.Instruction).Execute(interpreter.GlobalTable)
 				}
 			} else {

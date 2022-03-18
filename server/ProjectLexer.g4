@@ -26,6 +26,11 @@ RMATCH:     'match';
 // Bucle Structures
 RWHILE:     'while';
 
+// Transfer Instructions
+RBREAK:     'break';
+RCONTINUE:  'continue';
+RRETURN:    'return';
+
 // Mathematic Operators
 POWI:                   'pow';
 POWF:                   'powf';

@@ -113,6 +113,7 @@ instruction returns [Abstract.Instruction instr]
     | bucle_prod        { $instr = $bucle_prod.instr }
     | expr_rel COMMA?   { $instr = $expr_rel.instr }
     | dec_arr           { $instr = $dec_arr.instr }
+    | transfer_prod     { $instr = $transfer_prod.instr }
     ;
 
 print_prod returns [Abstract.Instruction instr]
@@ -330,6 +331,19 @@ listDim returns[int length, SymbolTable.DataType data, Abstract.Expression pos]
                 $data = SymbolTable.BOOLEAN
         }
     }
+    ;
+
+transfer_prod returns[Abstract.Instruction instr]
+    : break_instr                { $instr = $break_instr.instr }
+    | continue_instr             { $instr = $continue_instr.instr }
+    ;
+
+break_instr returns[Abstract.Instruction instr]
+    : RBREAK SEMICOLON { $instr = Natives.NewBreak($RBREAK.line, localctx.(*Break_instrContext).Get_RBREAK().GetColumn()) }
+    ;
+
+continue_instr returns[Abstract.Instruction instr]
+    : RCONTINUE SEMICOLON { $instr = Natives.NewContinue($RCONTINUE.line, localctx.(*Continue_instrContext).Get_RCONTINUE().GetColumn()) }
     ;
 
 expression returns [Abstract.Expression p]
