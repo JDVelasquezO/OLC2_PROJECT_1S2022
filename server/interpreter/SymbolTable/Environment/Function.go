@@ -90,6 +90,16 @@ func (f Function) ExecuteParams(table SymbolTable.SymbolTable, expression *array
 func (f Function) Execute(table SymbolTable.SymbolTable) interface{} {
 	for i := 0; i < f.ListInstructs.Len(); i++ {
 		instrPivot := f.ListInstructs.GetValue(i).(Abstract.Instruction)
+
+		if typeof(instrPivot) == "Natives.Break" || typeof(instrPivot) == "Natives.Continue" || typeof(instrPivot) == "Natives.return" {
+			errors.CounterError += 1
+			msg := "(ERROR) No se puede declarar Break sin un ciclo \n"
+			err := errors.NewError(errors.CounterError, 0, 0, msg, interpreter.GlobalTable.Name)
+			errors.TypeError = append(errors.TypeError, err)
+			interpreter.Console += fmt.Sprintf("%v", msg)
+			continue
+		}
+
 		valInstr := instrPivot.Execute(table)
 		typeRet := f.DataType
 

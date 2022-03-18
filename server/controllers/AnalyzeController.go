@@ -114,7 +114,7 @@ func Analyze(c *fiber.Ctx) error {
 				for i := 0; i < listInstructs.Len(); i++ {
 					r := listInstructs.GetValue(i)
 
-					if typeof(r) == "Natives.Break" {
+					if typeof(r) == "Natives.Break" || typeof(r) == "Natives.Continue" || typeof(r) == "Natives.return" {
 						errors.CounterError += 1
 						msg := "(ERROR) No se puede declarar Break sin un ciclo \n"
 						err := errors.NewError(errors.CounterError, 0, 0, msg, interpreter.GlobalTable.Name)

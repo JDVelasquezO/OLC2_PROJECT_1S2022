@@ -273,7 +273,18 @@ expr_match returns [*arrayList.List list]
     ;
 
 bucle_prod returns [Abstract.Instruction instr]
-    : RWHILE expression bloq { $instr = Natives.NewWhile($expression.p, $bloq.content, $RWHILE.line, localctx.(*Bucle_prodContext).Get_RWHILE().GetColumn()) }
+    : while_prod { $instr = $while_prod.instr }
+    | loop_prod  { $instr = $loop_prod.instr }
+    ;
+
+while_prod returns[Abstract.Instruction instr]
+    : RWHILE expression bloq { $instr = Natives.NewWhile($expression.p, $bloq.content, $RWHILE.line, localctx.(*While_prodContext).Get_RWHILE().GetColumn()) }
+    ;
+
+loop_prod returns[Abstract.Instruction instr, Abstract.Expression p]
+    : RLOOP bloq {
+        $instr = Natives.NewLoop($bloq.content)
+    }
     ;
 
 called_func returns [Abstract.Instruction instr, Abstract.Expression p]

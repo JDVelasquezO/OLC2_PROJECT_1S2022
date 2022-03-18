@@ -80,6 +80,12 @@ type ProjectParserListener interface {
 	// EnterBucle_prod is called when entering the bucle_prod production.
 	EnterBucle_prod(c *Bucle_prodContext)
 
+	// EnterWhile_prod is called when entering the while_prod production.
+	EnterWhile_prod(c *While_prodContext)
+
+	// EnterLoop_prod is called when entering the loop_prod production.
+	EnterLoop_prod(c *Loop_prodContext)
+
 	// EnterCalled_func is called when entering the called_func production.
 	EnterCalled_func(c *Called_funcContext)
 
@@ -214,6 +220,12 @@ type ProjectParserListener interface {
 
 	// ExitBucle_prod is called when exiting the bucle_prod production.
 	ExitBucle_prod(c *Bucle_prodContext)
+
+	// ExitWhile_prod is called when exiting the while_prod production.
+	ExitWhile_prod(c *While_prodContext)
+
+	// ExitLoop_prod is called when exiting the loop_prod production.
+	ExitLoop_prod(c *Loop_prodContext)
 
 	// ExitCalled_func is called when exiting the called_func production.
 	ExitCalled_func(c *Called_funcContext)

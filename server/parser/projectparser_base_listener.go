@@ -165,6 +165,18 @@ func (s *BaseProjectParserListener) EnterBucle_prod(ctx *Bucle_prodContext) {}
 // ExitBucle_prod is called when production bucle_prod is exited.
 func (s *BaseProjectParserListener) ExitBucle_prod(ctx *Bucle_prodContext) {}
 
+// EnterWhile_prod is called when production while_prod is entered.
+func (s *BaseProjectParserListener) EnterWhile_prod(ctx *While_prodContext) {}
+
+// ExitWhile_prod is called when production while_prod is exited.
+func (s *BaseProjectParserListener) ExitWhile_prod(ctx *While_prodContext) {}
+
+// EnterLoop_prod is called when production loop_prod is entered.
+func (s *BaseProjectParserListener) EnterLoop_prod(ctx *Loop_prodContext) {}
+
+// ExitLoop_prod is called when production loop_prod is exited.
+func (s *BaseProjectParserListener) ExitLoop_prod(ctx *Loop_prodContext) {}
+
 // EnterCalled_func is called when production called_func is entered.
 func (s *BaseProjectParserListener) EnterCalled_func(ctx *Called_funcContext) {}
 

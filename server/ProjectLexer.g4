@@ -25,6 +25,7 @@ RMATCH:     'match';
 
 // Bucle Structures
 RWHILE:     'while';
+RLOOP:      'loop';
 
 // Transfer Instructions
 RBREAK:     'break';
