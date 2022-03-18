@@ -17,7 +17,15 @@ func NewLoop(instructions *arrayList.List) Loop {
 }
 
 func (l Loop) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.ReturnType {
-	return SymbolTable.ReturnType{}
+	val := l.Execute(symbolTable)
+	if val != nil {
+		return val.(SymbolTable.ReturnType)
+	}
+
+	return SymbolTable.ReturnType{
+		Type:  SymbolTable.ERROR,
+		Value: nil,
+	}
 }
 
 func (l Loop) Execute(symbolTable SymbolTable.SymbolTable) interface{} {

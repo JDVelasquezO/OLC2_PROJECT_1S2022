@@ -284,6 +284,7 @@ while_prod returns[Abstract.Instruction instr]
 loop_prod returns[Abstract.Instruction instr, Abstract.Expression p]
     : RLOOP bloq {
         $instr = Natives.NewLoop($bloq.content)
+        $p = Natives.NewLoop($bloq.content)
     }
     ;
 
@@ -351,7 +352,8 @@ transfer_prod returns[Abstract.Instruction instr]
     ;
 
 break_instr returns[Abstract.Instruction instr]
-    : RBREAK SEMICOLON { $instr = Natives.NewBreak($RBREAK.line, localctx.(*Break_instrContext).Get_RBREAK().GetColumn()) }
+    : RBREAK SEMICOLON { $instr = Natives.NewBreak($RBREAK.line, localctx.(*Break_instrContext).Get_RBREAK().GetColumn(), nil) }
+    | RBREAK expression SEMICOLON { $instr = Natives.NewBreak($RBREAK.line, localctx.(*Break_instrContext).Get_RBREAK().GetColumn(), $expression.p) }
     ;
 
 continue_instr returns[Abstract.Instruction instr]
@@ -366,8 +368,8 @@ return_instr returns[Abstract.Instruction instr]
 expression returns [Abstract.Expression p]
     : expr_valor                 { $p = $expr_valor.p }
     | conditional_prod           { $p = $conditional_prod.p }
+    | loop_prod                  { $p = $loop_prod.p }
     | expr_rel                   { $p = $expr_rel.p }
-    | expr_arit                  { $p = $expr_arit.p }
     | expr_logic                 { $p = $expr_logic.p }
     | arraydata                  { $p = $arraydata.p }
 ;

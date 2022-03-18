@@ -1,21 +1,33 @@
 package Natives
 
 import (
+	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 )
 
 type Break struct {
-	Row int
-	Col int
+	Row        int
+	Col        int
+	Expression Abstract.Expression
 }
 
 func (b Break) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
-	return b
+	if b.Expression == nil {
+		return b
+	}
+
+	value := b.Expression.GetValue(symbolTable)
+
+	return SymbolTable.ReturnType{
+		Type:  value.Type,
+		Value: value.Value,
+	}
 }
 
-func NewBreak(row int, col int) Break {
+func NewBreak(row int, col int, expression Abstract.Expression) Break {
 	return Break{
-		Row: row,
-		Col: col,
+		Row:        row,
+		Col:        col,
+		Expression: expression,
 	}
 }
