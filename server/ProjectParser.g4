@@ -291,6 +291,7 @@ loop_prod returns[Abstract.Instruction instr, Abstract.Expression p]
 
 forin_prod returns[Abstract.Instruction instr]
     : RFOR expression RIN range_prod bloq { $instr = Natives.NewForIn($expression.p, $range_prod.p, $bloq.content) }
+    | RFOR expression RIN arraydata bloq { $instr = Natives.NewForIn($expression.p, $arraydata.p, $bloq.content) }
     ;
 
 range_prod returns[Abstract.Expression p]
