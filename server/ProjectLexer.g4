@@ -46,6 +46,13 @@ TOOWNED:                 'to_owned';
 RMAIN:                   'main';
 RFN:                     'fn';
 
+// Vectors
+RVECTOR:                 'vector';
+RVEC:                    'Vec';
+RNEW:                    'new';
+REVECTORNEW:             'Vec::new()';
+RPUSH:                   'push';
+
 // Comments
 MULTILINE:      '/*' (~[/])+ '*/' -> skip;
 INLINE:         '//'(~[\n])+ -> skip;

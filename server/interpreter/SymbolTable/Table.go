@@ -74,7 +74,7 @@ func (table *SymbolTable) GetSymbol(id string) interface{} {
 	return symbolNil
 }
 
-func (table *SymbolTable) ChangeVal(id string, newSymbol Symbol) {
+func (table *SymbolTable) ChangeVal(id string, newSymbol interface{}) {
 	newId := strings.ToLower(id)
 
 	for actualTable := table; actualTable != nil; actualTable = actualTable.Before {

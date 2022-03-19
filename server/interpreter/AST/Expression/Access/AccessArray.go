@@ -4,6 +4,7 @@ import (
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Array"
+	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Vector"
 	"fmt"
 	arrayList "github.com/colegno/arraylist"
 	"reflect"
@@ -38,6 +39,15 @@ func (a ArrayAccess) GetValue(table SymbolTable.SymbolTable) SymbolTable.ReturnT
 	}
 
 	symbol := table.GetSymbol(a.Id)
+
+	if reflect.TypeOf(symbol) == reflect.TypeOf(Vector.Vector{}) {
+		val := symbol.(Vector.Vector).GetValue(a.Dim, table)
+		return SymbolTable.ReturnType{
+			Value: val.(Abstract.Expression).GetValue(table).Value,
+			Type:  val.(Abstract.Expression).GetValue(table).Type,
+		}
+	}
+
 	if reflect.TypeOf(symbol) != reflect.TypeOf(Array.Array{}) {
 		fmt.Println("No es un arreglo")
 		return SymbolTable.ReturnType{

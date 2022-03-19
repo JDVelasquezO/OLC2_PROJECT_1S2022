@@ -213,6 +213,24 @@ func (s *BaseProjectParserListener) EnterListDim(ctx *ListDimContext) {}
 // ExitListDim is called when production listDim is exited.
 func (s *BaseProjectParserListener) ExitListDim(ctx *ListDimContext) {}
 
+// EnterVector_instr is called when production vector_instr is entered.
+func (s *BaseProjectParserListener) EnterVector_instr(ctx *Vector_instrContext) {}
+
+// ExitVector_instr is called when production vector_instr is exited.
+func (s *BaseProjectParserListener) ExitVector_instr(ctx *Vector_instrContext) {}
+
+// EnterDec_vector is called when production dec_vector is entered.
+func (s *BaseProjectParserListener) EnterDec_vector(ctx *Dec_vectorContext) {}
+
+// ExitDec_vector is called when production dec_vector is exited.
+func (s *BaseProjectParserListener) ExitDec_vector(ctx *Dec_vectorContext) {}
+
+// EnterPush_vector is called when production push_vector is entered.
+func (s *BaseProjectParserListener) EnterPush_vector(ctx *Push_vectorContext) {}
+
+// ExitPush_vector is called when production push_vector is exited.
+func (s *BaseProjectParserListener) ExitPush_vector(ctx *Push_vectorContext) {}
+
 // EnterTransfer_prod is called when production transfer_prod is entered.
 func (s *BaseProjectParserListener) EnterTransfer_prod(ctx *Transfer_prodContext) {}
 

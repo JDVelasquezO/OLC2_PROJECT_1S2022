@@ -9,10 +9,12 @@ options {
     import "OLC2_Project1/server/interpreter/Abstract"
     import "OLC2_Project1/server/interpreter/AST/Expression"
     import "OLC2_Project1/server/interpreter/AST/Natives"
+    import "OLC2_Project1/server/interpreter/AST/Natives/BucleForIn"
     import "OLC2_Project1/server/interpreter/SymbolTable"
     import "OLC2_Project1/server/interpreter/SymbolTable/Environment"
     import "OLC2_Project1/server/interpreter/AST/ExpressionSpecial"
     import "OLC2_Project1/server/interpreter/AST/Natives/DecArrays"
+    import "OLC2_Project1/server/interpreter/AST/Natives/DecVectors"
     import "OLC2_Project1/server/interpreter/AST/Expression/Access"
     import arrayList "github.com/colegno/arraylist"
 }
@@ -113,6 +115,7 @@ instruction returns [Abstract.Instruction instr]
     | bucle_prod        { $instr = $bucle_prod.instr }
     | expr_rel COMMA?   { $instr = $expr_rel.instr }
     | dec_arr           { $instr = $dec_arr.instr }
+    | vector_instr      { $instr = $vector_instr.instr }
     | transfer_prod     { $instr = $transfer_prod.instr }
     ;
 
@@ -290,8 +293,8 @@ loop_prod returns[Abstract.Instruction instr, Abstract.Expression p]
     ;
 
 forin_prod returns[Abstract.Instruction instr]
-    : RFOR expression RIN range_prod bloq { $instr = Natives.NewForIn($expression.p, $range_prod.p, $bloq.content) }
-    | RFOR expression RIN arraydata bloq { $instr = Natives.NewForIn($expression.p, $arraydata.p, $bloq.content) }
+    : RFOR expression RIN range_prod bloq { $instr = BucleForIn.NewForIn($expression.p, $range_prod.p, $bloq.content) }
+    | RFOR expression RIN arraydata bloq { $instr = BucleForIn.NewForIn($expression.p, $arraydata.p, $bloq.content) }
     ;
 
 range_prod returns[Abstract.Expression p]
@@ -357,6 +360,39 @@ listDim returns[int length, SymbolTable.DataType data, Abstract.Expression pos]
     }
     ;
 
+vector_instr returns[Abstract.Instruction instr]
+    : dec_vector { $instr = $dec_vector.instr }
+    | push_vector { $instr = $push_vector.instr }
+    ;
+
+dec_vector returns[Abstract.Instruction instr]
+    : DECLARAR MUT? ID COLON RVEC LESS_THAN data_type GREATER_THAN EQUAL REVECTORNEW SEMICOLON {
+        var data SymbolTable.DataType
+        switch ($data_type.data) {
+            case "i64":
+                data = SymbolTable.INTEGER
+            case "f64":
+                data = SymbolTable.FLOAT
+            case "&str":
+                data = SymbolTable.STR
+            case "String":
+                data = SymbolTable.STRING
+            case "bool":
+                data = SymbolTable.BOOLEAN
+        }
+
+        if $MUT.text != "" {
+            $instr = DecVectors.NewDecVector(1, $ID.text, nil, data, true)
+        } else {
+            $instr = DecVectors.NewDecVector(1, $ID.text, nil, data, false)
+        }
+    }
+    ;
+
+push_vector returns[Abstract.Instruction instr]
+    : ID DOT RPUSH LEFT_PAR expression RIGHT_PAR SEMICOLON { $instr = DecVectors.NewPush($ID.text, $expression.p) }
+    ;
+
 transfer_prod returns[Abstract.Instruction instr]
     : break_instr                { $instr = $break_instr.instr }
     | continue_instr             { $instr = $continue_instr.instr }
@@ -409,6 +445,28 @@ listInArray returns [*arrayList.List l]
     ;
 
 inArray returns[Abstract.Expression p]
+    : LEFT_BRACKET expression RIGHT_BRACKET     { $p = $expression.p }
+    ;
+
+access_vector returns[Abstract.Expression p, Abstract.Instruction instr]
+    : ID listInVector {
+        $p = Access.NewAccessVector($ID.text, $listInArray.l)
+        $instr = Access.NewAccessVector($ID.text, $listInArray.l)
+    }
+    ;
+
+listInVector returns [*arrayList.List l]
+    @init {
+            $l = arrayList.New()
+    }
+    : sublist = listInVector inVector {
+        $sublist.l.Add($inArray.p)
+        $l = $sublist.l
+    }
+    | inVector { $l.Add($inArray.p) }
+    ;
+
+inVector returns [Abstract.Expression p]
     : LEFT_BRACKET expression RIGHT_BRACKET     { $p = $expression.p }
     ;
 
@@ -466,6 +524,10 @@ expr_valor returns [Abstract.Expression p, Abstract.Instruction instr]
     | access_array {
         $p = $access_array.p
         $instr = $access_array.instr
+    }
+    | access_vector {
+        $p = $access_vector.p
+        $instr = $access_vector.instr
     }
     ;
 

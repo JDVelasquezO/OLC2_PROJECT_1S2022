@@ -104,6 +104,15 @@ type ProjectParserListener interface {
 	// EnterListDim is called when entering the listDim production.
 	EnterListDim(c *ListDimContext)
 
+	// EnterVector_instr is called when entering the vector_instr production.
+	EnterVector_instr(c *Vector_instrContext)
+
+	// EnterDec_vector is called when entering the dec_vector production.
+	EnterDec_vector(c *Dec_vectorContext)
+
+	// EnterPush_vector is called when entering the push_vector production.
+	EnterPush_vector(c *Push_vectorContext)
+
 	// EnterTransfer_prod is called when entering the transfer_prod production.
 	EnterTransfer_prod(c *Transfer_prodContext)
 
@@ -250,6 +259,15 @@ type ProjectParserListener interface {
 
 	// ExitListDim is called when exiting the listDim production.
 	ExitListDim(c *ListDimContext)
+
+	// ExitVector_instr is called when exiting the vector_instr production.
+	ExitVector_instr(c *Vector_instrContext)
+
+	// ExitDec_vector is called when exiting the dec_vector production.
+	ExitDec_vector(c *Dec_vectorContext)
+
+	// ExitPush_vector is called when exiting the push_vector production.
+	ExitPush_vector(c *Push_vectorContext)
 
 	// ExitTransfer_prod is called when exiting the transfer_prod production.
 	ExitTransfer_prod(c *Transfer_prodContext)

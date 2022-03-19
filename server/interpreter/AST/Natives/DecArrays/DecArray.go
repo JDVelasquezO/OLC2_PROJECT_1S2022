@@ -85,6 +85,6 @@ func (d DecArray) Execute(table SymbolTable.SymbolTable) interface{} {
 		table.AddNewSymbol(d.Id, symbol)
 	}
 
-	fmt.Printf("%v", table.Table)
+	//fmt.Printf("%v", table.Table)
 	return nil
 }
