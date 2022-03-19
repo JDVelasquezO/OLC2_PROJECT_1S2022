@@ -26,6 +26,8 @@ RMATCH:     'match';
 // Bucle Structures
 RWHILE:     'while';
 RLOOP:      'loop';
+RFOR:       'for';
+RIN:        'in';
 
 // Transfer Instructions
 RBREAK:     'break';
@@ -66,6 +68,7 @@ ADMIRATION:             '!';
 REFERENCE:              '&';
 HERITAGE:               '::';
 ARROW:                  '->';
+RANGE:                  '..';
 
 // Grouping Operators
 LEFT_PAR:               '(';

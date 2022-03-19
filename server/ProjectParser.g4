@@ -275,6 +275,7 @@ expr_match returns [*arrayList.List list]
 bucle_prod returns [Abstract.Instruction instr]
     : while_prod { $instr = $while_prod.instr }
     | loop_prod  { $instr = $loop_prod.instr }
+    | forin_prod { $instr = $forin_prod.instr }
     ;
 
 while_prod returns[Abstract.Instruction instr]
@@ -286,6 +287,16 @@ loop_prod returns[Abstract.Instruction instr, Abstract.Expression p]
         $instr = Natives.NewLoop($bloq.content)
         $p = Natives.NewLoop($bloq.content)
     }
+    ;
+
+forin_prod returns[Abstract.Instruction instr]
+    : RFOR expression RIN range_prod bloq { $instr = Natives.NewForIn($expression.p, $range_prod.p, $bloq.content) }
+    ;
+
+range_prod returns[Abstract.Expression p]
+    : e1 = expression RANGE e2 = expression {
+        $p = Expression.NewRange($RANGE.line, localctx.(*Range_prodContext).Get_RANGE().GetColumn(), $e1.p, $e2.p)
+     }
     ;
 
 called_func returns [Abstract.Instruction instr, Abstract.Expression p]
@@ -362,7 +373,7 @@ continue_instr returns[Abstract.Instruction instr]
 
 return_instr returns[Abstract.Instruction instr]
     : RRETURN SEMICOLON { $instr = Natives.NewReturn($RRETURN.line, localctx.(*Return_instrContext).Get_RRETURN().GetColumn(), nil) }
-    | RRETURN expression SEMICOLON { $instr = Natives.NewReturn($RRETURN.line, localctx.(*Return_instrContext).Get_RRETURN().GetColumn(), $expression.p) }
+    | RRETURN expression SEMICOLON? { $instr = Natives.NewReturn($RRETURN.line, localctx.(*Return_instrContext).Get_RRETURN().GetColumn(), $expression.p) }
     ;
 
 expression returns [Abstract.Expression p]

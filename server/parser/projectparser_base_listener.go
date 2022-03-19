@@ -177,6 +177,18 @@ func (s *BaseProjectParserListener) EnterLoop_prod(ctx *Loop_prodContext) {}
 // ExitLoop_prod is called when production loop_prod is exited.
 func (s *BaseProjectParserListener) ExitLoop_prod(ctx *Loop_prodContext) {}
 
+// EnterForin_prod is called when production forin_prod is entered.
+func (s *BaseProjectParserListener) EnterForin_prod(ctx *Forin_prodContext) {}
+
+// ExitForin_prod is called when production forin_prod is exited.
+func (s *BaseProjectParserListener) ExitForin_prod(ctx *Forin_prodContext) {}
+
+// EnterRange_prod is called when production range_prod is entered.
+func (s *BaseProjectParserListener) EnterRange_prod(ctx *Range_prodContext) {}
+
+// ExitRange_prod is called when production range_prod is exited.
+func (s *BaseProjectParserListener) ExitRange_prod(ctx *Range_prodContext) {}
+
 // EnterCalled_func is called when production called_func is entered.
 func (s *BaseProjectParserListener) EnterCalled_func(ctx *Called_funcContext) {}
 

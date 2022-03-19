@@ -86,6 +86,12 @@ type ProjectParserListener interface {
 	// EnterLoop_prod is called when entering the loop_prod production.
 	EnterLoop_prod(c *Loop_prodContext)
 
+	// EnterForin_prod is called when entering the forin_prod production.
+	EnterForin_prod(c *Forin_prodContext)
+
+	// EnterRange_prod is called when entering the range_prod production.
+	EnterRange_prod(c *Range_prodContext)
+
 	// EnterCalled_func is called when entering the called_func production.
 	EnterCalled_func(c *Called_funcContext)
 
@@ -226,6 +232,12 @@ type ProjectParserListener interface {
 
 	// ExitLoop_prod is called when exiting the loop_prod production.
 	ExitLoop_prod(c *Loop_prodContext)
+
+	// ExitForin_prod is called when exiting the forin_prod production.
+	ExitForin_prod(c *Forin_prodContext)
+
+	// ExitRange_prod is called when exiting the range_prod production.
+	ExitRange_prod(c *Range_prodContext)
 
 	// ExitCalled_func is called when exiting the called_func production.
 	ExitCalled_func(c *Called_funcContext)
