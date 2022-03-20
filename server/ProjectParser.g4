@@ -318,7 +318,7 @@ listExpressions returns [*arrayList.List l]
     @init {
         $l = arrayList.New()
     }
-    : List = listExpressions (COMMA | SEMICOLON) expression {
+    : List = listExpressions (COMMA) expression {
         $List.l.Add($expression.p)
         $l = $List.l
     }
@@ -387,16 +387,44 @@ dec_vector returns[Abstract.Instruction instr]
         }
 
         if $MUT.text != "" {
-            $instr = DecVectors.NewDecVector(1, $ID.text, nil, data, true)
+            $instr = DecVectors.NewDecVector(1, nil, $ID.text, nil, data, true)
         } else {
-            $instr = DecVectors.NewDecVector(1, $ID.text, nil, data, false)
+            $instr = DecVectors.NewDecVector(1, nil, $ID.text, nil, data, false)
         }
     }
     | DECLARAR MUT? ID EQUAL expr_vector (SEMICOLON|COMMA) {
         if $MUT.text != "" {
-            $instr = DecVectors.NewDecVector(1, $ID.text, $expr_vector.p, SymbolTable.NULL, true)
+            $instr = DecVectors.NewDecVector(1, nil, $ID.text, $expr_vector.p, SymbolTable.NULL, true)
         } else {
-            $instr = DecVectors.NewDecVector(1, $ID.text, $expr_vector.p, SymbolTable.NULL, false)
+            $instr = DecVectors.NewDecVector(1, nil, $ID.text, $expr_vector.p, SymbolTable.NULL, false)
+        }
+    }
+    | DECLARAR MUT? ID COLON RVECMayus LESS_THAN data_type GREATER_THAN EQUAL REVECCAPACITY LEFT_PAR expression RIGHT_PAR SEMICOLON {
+        var data SymbolTable.DataType
+        switch ($data_type.data) {
+            case "i64":
+                data = SymbolTable.INTEGER
+            case "f64":
+                data = SymbolTable.FLOAT
+            case "&str":
+                data = SymbolTable.STR
+            case "String":
+                data = SymbolTable.STRING
+            case "bool":
+                data = SymbolTable.BOOLEAN
+        }
+
+        if $MUT.text != "" {
+            $instr = DecVectors.NewDecVector(0, $expression.p, $ID.text, nil, data, true)
+        } else {
+            $instr = DecVectors.NewDecVector(0, $expression.p, $ID.text, nil, data, false)
+        }
+    }
+    | DECLARAR MUT? ID EQUAL RVEC ADMIRATION LEFT_BRACKET e1=expression SEMICOLON e2=expression RIGHT_BRACKET SEMICOLON {
+        if $MUT.text != "" {
+            $instr = DecVectors.NewDecVector(0, $e2.p, $ID.text, $e1.p, SymbolTable.NULL, true)
+        } else {
+            $instr = DecVectors.NewDecVector(0, $e2.p, $ID.text, $e1.p, SymbolTable.NULL, false)
         }
     }
     ;

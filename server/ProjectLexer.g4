@@ -52,6 +52,7 @@ RVEC:                    'vec';
 RVECMayus:               'Vec';
 RNEW:                    'new';
 REVECTORNEW:             'Vec::new()';
+REVECCAPACITY:           'Vec::with_capacity';
 RPUSH:                   'push';
 
 // Comments

@@ -2,7 +2,6 @@ package DecVectors
 
 import (
 	"OLC2_Project1/server/interpreter/AST/Expression"
-	"OLC2_Project1/server/interpreter/AST/ExpressionSpecial"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Array"
@@ -13,6 +12,7 @@ import (
 
 type DecVector struct {
 	Length       int
+	LengthAsExpr Abstract.Expression
 	Id           string
 	ValueInitial Abstract.Expression
 	Type         SymbolTable.DataType
@@ -25,10 +25,11 @@ func (d DecVector) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 	panic("implement me")
 }
 
-func NewDecVector(length int, id string, init Abstract.Expression,
+func NewDecVector(length int, lengthAsExpr Abstract.Expression, id string, init Abstract.Expression,
 	dataType SymbolTable.DataType, isMut bool) DecVector {
 	return DecVector{
 		Length:       length,
+		LengthAsExpr: lengthAsExpr,
 		Id:           id,
 		ValueInitial: init,
 		Type:         dataType,
@@ -37,12 +38,19 @@ func NewDecVector(length int, id string, init Abstract.Expression,
 }
 
 func (d DecVector) Execute(table SymbolTable.SymbolTable) interface{} {
-
 	var objectVector Vector.Vector
 	listValues := make([]interface{}, 0)
 	objectVector.Value = listValues
 
-	if table.ExistsSymbol(d.Id) {
+	if !d.IsMut {
+		objectVector.IsConst = true
+	}
+
+	if d.LengthAsExpr != nil {
+		d.Length = d.LengthAsExpr.GetValue(table).Value.(int)
+	}
+
+	if table.ExistsSymbol(d.Id) && d.IsMut {
 		fmt.Printf("Error, variable %s ya declarada", d.Id)
 	} else {
 		symbol := objectVector
@@ -52,22 +60,32 @@ func (d DecVector) Execute(table SymbolTable.SymbolTable) interface{} {
 
 	if d.ValueInitial != nil {
 		valueDec := d.ValueInitial.GetValue(table).Value
-		dataType := valueDec.(SymbolTable.ReturnType).Type
-		newArr := valueDec.(SymbolTable.ReturnType).Value.(Array.Array).Values
+		dataType := d.ValueInitial.GetValue(table).Type
+		if reflect.TypeOf(valueDec) == reflect.TypeOf(SymbolTable.ReturnType{}) {
+			newArr := valueDec.(SymbolTable.ReturnType).Value.(Array.Array).Values
 
-		if reflect.TypeOf(d.ValueInitial) == reflect.TypeOf(ExpressionSpecial.ValueArray{}) {
-			for i := 0; i < newArr[1].(int); i++ {
-				newExpr := Expression.NewPrimitive(newArr[0], dataType, 0, 0)
-				newPush := NewPush(d.Id, newExpr)
-				newPush.Execute(table)
-			}
-		} else {
 			for i := 0; i < len(newArr); i++ {
 				newExpr := Expression.NewPrimitive(valueDec.(SymbolTable.ReturnType).Value.(Array.Array).Values[i], dataType, 0, 0)
 				newPush := NewPush(d.Id, newExpr)
-				newPush.Execute(table)
+				newPush.ExecuteFirstTime(table)
+			}
+		} else {
+			for i := 0; i < d.Length; i++ {
+				newExpr := Expression.NewPrimitive(valueDec, dataType, 0, 0)
+				newPush := NewPush(d.Id, newExpr)
+				newPush.ExecuteFirstTime(table)
 			}
 		}
+
+		//if reflect.TypeOf(d.ValueInitial) == reflect.TypeOf(ExpressionSpecial.ValueArray{}) {
+		//	for i := 0; i < newArr[1].(int); i++ {
+		//		newExpr := Expression.NewPrimitive(newArr[0], dataType, 0, 0)
+		//		newPush := NewPush(d.Id, newExpr)
+		//		newPush.ExecuteFirstTime(table)
+		//	}
+		//} else {
+
+		//}
 	}
 
 	return nil
