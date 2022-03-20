@@ -8670,7 +8670,7 @@ func (p *ProjectParser) Dec_vector() (localctx IDec_vectorContext) {
 				} else {
 					return localctx.(*Dec_vectorContext).Get_ID().GetText()
 				}
-			}()), nil, data, true)
+			}()), nil, data, true, false)
 		} else {
 			localctx.(*Dec_vectorContext).instr = DecVectors.NewDecVector(1, nil, (func() string {
 				if localctx.(*Dec_vectorContext).Get_ID() == nil {
@@ -8678,7 +8678,7 @@ func (p *ProjectParser) Dec_vector() (localctx IDec_vectorContext) {
 				} else {
 					return localctx.(*Dec_vectorContext).Get_ID().GetText()
 				}
-			}()), nil, data, false)
+			}()), nil, data, false, false)
 		}
 
 	case 2:
@@ -8744,7 +8744,7 @@ func (p *ProjectParser) Dec_vector() (localctx IDec_vectorContext) {
 				} else {
 					return localctx.(*Dec_vectorContext).Get_ID().GetText()
 				}
-			}()), localctx.(*Dec_vectorContext).Get_expr_vector().GetP(), SymbolTable.NULL, true)
+			}()), localctx.(*Dec_vectorContext).Get_expr_vector().GetP(), SymbolTable.NULL, true, false)
 		} else {
 			localctx.(*Dec_vectorContext).instr = DecVectors.NewDecVector(1, nil, (func() string {
 				if localctx.(*Dec_vectorContext).Get_ID() == nil {
@@ -8752,7 +8752,7 @@ func (p *ProjectParser) Dec_vector() (localctx IDec_vectorContext) {
 				} else {
 					return localctx.(*Dec_vectorContext).Get_ID().GetText()
 				}
-			}()), localctx.(*Dec_vectorContext).Get_expr_vector().GetP(), SymbolTable.NULL, false)
+			}()), localctx.(*Dec_vectorContext).Get_expr_vector().GetP(), SymbolTable.NULL, false, false)
 		}
 
 	case 3:
@@ -8860,7 +8860,7 @@ func (p *ProjectParser) Dec_vector() (localctx IDec_vectorContext) {
 				} else {
 					return localctx.(*Dec_vectorContext).Get_ID().GetText()
 				}
-			}()), nil, data, true)
+			}()), nil, data, true, true)
 		} else {
 			localctx.(*Dec_vectorContext).instr = DecVectors.NewDecVector(0, localctx.(*Dec_vectorContext).Get_expression().GetP(), (func() string {
 				if localctx.(*Dec_vectorContext).Get_ID() == nil {
@@ -8868,7 +8868,7 @@ func (p *ProjectParser) Dec_vector() (localctx IDec_vectorContext) {
 				} else {
 					return localctx.(*Dec_vectorContext).Get_ID().GetText()
 				}
-			}()), nil, data, false)
+			}()), nil, data, false, true)
 		}
 
 	case 4:
@@ -8954,7 +8954,7 @@ func (p *ProjectParser) Dec_vector() (localctx IDec_vectorContext) {
 				} else {
 					return localctx.(*Dec_vectorContext).Get_ID().GetText()
 				}
-			}()), localctx.(*Dec_vectorContext).GetE1().GetP(), SymbolTable.NULL, true)
+			}()), localctx.(*Dec_vectorContext).GetE1().GetP(), SymbolTable.NULL, true, false)
 		} else {
 			localctx.(*Dec_vectorContext).instr = DecVectors.NewDecVector(0, localctx.(*Dec_vectorContext).GetE2().GetP(), (func() string {
 				if localctx.(*Dec_vectorContext).Get_ID() == nil {
@@ -8962,7 +8962,7 @@ func (p *ProjectParser) Dec_vector() (localctx IDec_vectorContext) {
 				} else {
 					return localctx.(*Dec_vectorContext).Get_ID().GetText()
 				}
-			}()), localctx.(*Dec_vectorContext).GetE1().GetP(), SymbolTable.NULL, false)
+			}()), localctx.(*Dec_vectorContext).GetE1().GetP(), SymbolTable.NULL, false, false)
 		}
 
 	}

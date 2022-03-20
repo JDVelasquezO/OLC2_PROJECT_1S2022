@@ -11,13 +11,14 @@ import (
 )
 
 type DecVector struct {
-	Length       int
-	LengthAsExpr Abstract.Expression
-	Id           string
-	ValueInitial Abstract.Expression
-	Type         SymbolTable.DataType
-	IsMut        bool
-	Positions    Abstract.Expression
+	Length          int
+	LengthAsExpr    Abstract.Expression
+	Id              string
+	ValueInitial    Abstract.Expression
+	Type            SymbolTable.DataType
+	IsMut           bool
+	Positions       Abstract.Expression
+	IsCapacityFixed bool
 }
 
 func (d DecVector) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.ReturnType {
@@ -26,14 +27,15 @@ func (d DecVector) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 }
 
 func NewDecVector(length int, lengthAsExpr Abstract.Expression, id string, init Abstract.Expression,
-	dataType SymbolTable.DataType, isMut bool) DecVector {
+	dataType SymbolTable.DataType, isMut bool, isCapacityFixed bool) DecVector {
 	return DecVector{
-		Length:       length,
-		LengthAsExpr: lengthAsExpr,
-		Id:           id,
-		ValueInitial: init,
-		Type:         dataType,
-		IsMut:        isMut,
+		Length:          length,
+		LengthAsExpr:    lengthAsExpr,
+		Id:              id,
+		ValueInitial:    init,
+		Type:            dataType,
+		IsMut:           isMut,
+		IsCapacityFixed: isCapacityFixed,
 	}
 }
 
@@ -47,7 +49,11 @@ func (d DecVector) Execute(table SymbolTable.SymbolTable) interface{} {
 	}
 
 	if d.LengthAsExpr != nil {
-		d.Length = d.LengthAsExpr.GetValue(table).Value.(int)
+		objectVector.Length = d.LengthAsExpr.GetValue(table).Value.(int)
+	}
+
+	if d.IsCapacityFixed {
+		objectVector.IsCapacityFixed = true
 	}
 
 	if table.ExistsSymbol(d.Id) && d.IsMut {
@@ -76,16 +82,6 @@ func (d DecVector) Execute(table SymbolTable.SymbolTable) interface{} {
 				newPush.ExecuteFirstTime(table)
 			}
 		}
-
-		//if reflect.TypeOf(d.ValueInitial) == reflect.TypeOf(ExpressionSpecial.ValueArray{}) {
-		//	for i := 0; i < newArr[1].(int); i++ {
-		//		newExpr := Expression.NewPrimitive(newArr[0], dataType, 0, 0)
-		//		newPush := NewPush(d.Id, newExpr)
-		//		newPush.ExecuteFirstTime(table)
-		//	}
-		//} else {
-
-		//}
 	}
 
 	return nil

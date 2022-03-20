@@ -8,8 +8,9 @@ import (
 
 type Vector struct {
 	SymbolTable.Symbol
-	Start  *Node
-	Length int
+	Start           *Node
+	Length          int
+	IsCapacityFixed bool
 }
 
 func NewVector(start *Node) Vector {
@@ -32,7 +33,14 @@ func (v Vector) Push(value Abstract.Expression, table SymbolTable.SymbolTable) V
 	}
 
 	v.Value = append(v.Value.([]interface{}), value.GetValue(table).Value)
-	v.Length += 1
+	if v.IsCapacityFixed {
+		if len(v.Value.([]interface{})) > v.Length {
+			v.Length += v.Length
+		}
+	} else {
+		v.Length += 1
+	}
+
 	return v
 }
 
