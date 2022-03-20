@@ -20,7 +20,7 @@ func NewPush(id string, value Abstract.Expression) Push {
 
 func (p Push) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 	val := symbolTable.GetSymbol(p.Id)
-	newVal := val.(Vector.Vector).Push(p.Value)
+	newVal := val.(Vector.Vector).Push(p.Value, symbolTable)
 	symbolTable.ChangeVal(p.Id, newVal)
 	return val
 }

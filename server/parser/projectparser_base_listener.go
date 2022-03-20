@@ -285,6 +285,24 @@ func (s *BaseProjectParserListener) EnterInArray(ctx *InArrayContext) {}
 // ExitInArray is called when production inArray is exited.
 func (s *BaseProjectParserListener) ExitInArray(ctx *InArrayContext) {}
 
+// EnterAccess_vector is called when production access_vector is entered.
+func (s *BaseProjectParserListener) EnterAccess_vector(ctx *Access_vectorContext) {}
+
+// ExitAccess_vector is called when production access_vector is exited.
+func (s *BaseProjectParserListener) ExitAccess_vector(ctx *Access_vectorContext) {}
+
+// EnterListInVector is called when production listInVector is entered.
+func (s *BaseProjectParserListener) EnterListInVector(ctx *ListInVectorContext) {}
+
+// ExitListInVector is called when production listInVector is exited.
+func (s *BaseProjectParserListener) ExitListInVector(ctx *ListInVectorContext) {}
+
+// EnterInVector is called when production inVector is entered.
+func (s *BaseProjectParserListener) EnterInVector(ctx *InVectorContext) {}
+
+// ExitInVector is called when production inVector is exited.
+func (s *BaseProjectParserListener) ExitInVector(ctx *InVectorContext) {}
+
 // EnterExpr_rel is called when production expr_rel is entered.
 func (s *BaseProjectParserListener) EnterExpr_rel(ctx *Expr_relContext) {}
 

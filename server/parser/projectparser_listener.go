@@ -140,6 +140,15 @@ type ProjectParserListener interface {
 	// EnterInArray is called when entering the inArray production.
 	EnterInArray(c *InArrayContext)
 
+	// EnterAccess_vector is called when entering the access_vector production.
+	EnterAccess_vector(c *Access_vectorContext)
+
+	// EnterListInVector is called when entering the listInVector production.
+	EnterListInVector(c *ListInVectorContext)
+
+	// EnterInVector is called when entering the inVector production.
+	EnterInVector(c *InVectorContext)
+
 	// EnterExpr_rel is called when entering the expr_rel production.
 	EnterExpr_rel(c *Expr_relContext)
 
@@ -295,6 +304,15 @@ type ProjectParserListener interface {
 
 	// ExitInArray is called when exiting the inArray production.
 	ExitInArray(c *InArrayContext)
+
+	// ExitAccess_vector is called when exiting the access_vector production.
+	ExitAccess_vector(c *Access_vectorContext)
+
+	// ExitListInVector is called when exiting the listInVector production.
+	ExitListInVector(c *ListInVectorContext)
+
+	// ExitInVector is called when exiting the inVector production.
+	ExitInVector(c *InVectorContext)
 
 	// ExitExpr_rel is called when exiting the expr_rel production.
 	ExitExpr_rel(c *Expr_relContext)

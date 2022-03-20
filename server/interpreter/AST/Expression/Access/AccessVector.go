@@ -1,12 +1,23 @@
 package Access
 
 import (
+	"OLC2_Project1/server/interpreter/SymbolTable"
 	arrayList "github.com/colegno/arraylist"
 )
 
 type VectorAccess struct {
 	Id  string
 	Dim *arrayList.List
+}
+
+func (v VectorAccess) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (v VectorAccess) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.ReturnType {
+	//TODO implement me
+	panic("implement me")
 }
 
 func NewAccessVector(id string, dims *arrayList.List) VectorAccess {

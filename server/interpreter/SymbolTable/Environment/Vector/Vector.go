@@ -19,7 +19,7 @@ func NewVector(start *Node) Vector {
 	}
 }
 
-func (v Vector) Push(value Abstract.Expression) Vector {
+func (v Vector) Push(value Abstract.Expression, table SymbolTable.SymbolTable) Vector {
 	node := NewNode(value)
 	if v.isEmpty() {
 		v.Start = &node
@@ -31,6 +31,7 @@ func (v Vector) Push(value Abstract.Expression) Vector {
 		start.Next = &node
 	}
 
+	v.Value = append(v.Value.([]interface{}), value.GetValue(table).Value)
 	v.Length += 1
 	return v
 }
@@ -62,4 +63,8 @@ func (v Vector) isEmpty() bool {
 
 func (v Vector) GetLength() int {
 	return v.Length
+}
+
+func (v Vector) ChangeValue(newVal interface{}, symbolTable SymbolTable.SymbolTable) {
+
 }

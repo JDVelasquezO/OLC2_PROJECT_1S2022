@@ -366,7 +366,7 @@ vector_instr returns[Abstract.Instruction instr]
     ;
 
 dec_vector returns[Abstract.Instruction instr]
-    : DECLARAR MUT? ID COLON RVEC LESS_THAN data_type GREATER_THAN EQUAL REVECTORNEW SEMICOLON {
+    : DECLARAR MUT? ID COLON RVECMayus LESS_THAN data_type GREATER_THAN EQUAL REVECTORNEW SEMICOLON {
         var data SymbolTable.DataType
         switch ($data_type.data) {
             case "i64":
@@ -385,6 +385,13 @@ dec_vector returns[Abstract.Instruction instr]
             $instr = DecVectors.NewDecVector(1, $ID.text, nil, data, true)
         } else {
             $instr = DecVectors.NewDecVector(1, $ID.text, nil, data, false)
+        }
+    }
+    | DECLARAR MUT? ID EQUAL RVEC ADMIRATION expression (SEMICOLON|COMMA) {
+        if $MUT.text != "" {
+            $instr = DecVectors.NewDecVector(1, $ID.text, $expression.p, SymbolTable.NULL, true)
+        } else {
+            $instr = DecVectors.NewDecVector(1, $ID.text, $expression.p, SymbolTable.NULL, false)
         }
     }
     ;
@@ -450,8 +457,8 @@ inArray returns[Abstract.Expression p]
 
 access_vector returns[Abstract.Expression p, Abstract.Instruction instr]
     : ID listInVector {
-        $p = Access.NewAccessVector($ID.text, $listInArray.l)
-        $instr = Access.NewAccessVector($ID.text, $listInArray.l)
+        $p = Access.NewAccessVector($ID.text, $listInVector.l)
+        $instr = Access.NewAccessVector($ID.text, $listInVector.l)
     }
     ;
 
@@ -460,10 +467,10 @@ listInVector returns [*arrayList.List l]
             $l = arrayList.New()
     }
     : sublist = listInVector inVector {
-        $sublist.l.Add($inArray.p)
+        $sublist.l.Add($inVector.p)
         $l = $sublist.l
     }
-    | inVector { $l.Add($inArray.p) }
+    | inVector { $l.Add($inVector.p) }
     ;
 
 inVector returns [Abstract.Expression p]
