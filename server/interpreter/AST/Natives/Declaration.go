@@ -164,7 +164,12 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 
 		//typeExpr := dataOrigin.Type
 		typeDec := d.DataType
-		typeRes := typeDef[typeDec][dataOriginType]
+		var typeRes SymbolTable.DataType
+		if typeDec == SymbolTable.ARRAY {
+			typeRes = dataOriginType
+		} else {
+			typeRes = typeDef[typeDec][dataOriginType]
+		}
 
 		typeVal := typeof(d.InitVal)
 		var row int

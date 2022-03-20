@@ -2,11 +2,13 @@ package DecVectors
 
 import (
 	"OLC2_Project1/server/interpreter/AST/Expression"
+	"OLC2_Project1/server/interpreter/AST/ExpressionSpecial"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Array"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Vector"
 	"fmt"
+	"reflect"
 )
 
 type DecVector struct {
@@ -16,6 +18,11 @@ type DecVector struct {
 	Type         SymbolTable.DataType
 	IsMut        bool
 	Positions    Abstract.Expression
+}
+
+func (d DecVector) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.ReturnType {
+	//TODO implement me
+	panic("implement me")
 }
 
 func NewDecVector(length int, id string, init Abstract.Expression,
@@ -46,13 +53,21 @@ func (d DecVector) Execute(table SymbolTable.SymbolTable) interface{} {
 	if d.ValueInitial != nil {
 		valueDec := d.ValueInitial.GetValue(table).Value
 		dataType := valueDec.(SymbolTable.ReturnType).Type
-		for i := 0; i < len(valueDec.(SymbolTable.ReturnType).Value.(Array.Array).Values); i++ {
-			newExpr := Expression.NewPrimitive(valueDec.(SymbolTable.ReturnType).Value.(Array.Array).Values[i], dataType, 0, 0)
-			newPush := NewPush(d.Id, newExpr)
-			newPush.Execute(table)
-			//objectVector.Push(newExpr, table)
+		newArr := valueDec.(SymbolTable.ReturnType).Value.(Array.Array).Values
+
+		if reflect.TypeOf(d.ValueInitial) == reflect.TypeOf(ExpressionSpecial.ValueArray{}) {
+			for i := 0; i < newArr[1].(int); i++ {
+				newExpr := Expression.NewPrimitive(newArr[0], dataType, 0, 0)
+				newPush := NewPush(d.Id, newExpr)
+				newPush.Execute(table)
+			}
+		} else {
+			for i := 0; i < len(newArr); i++ {
+				newExpr := Expression.NewPrimitive(valueDec.(SymbolTable.ReturnType).Value.(Array.Array).Values[i], dataType, 0, 0)
+				newPush := NewPush(d.Id, newExpr)
+				newPush.Execute(table)
+			}
 		}
-		//objectVector.Value = valueDec
 	}
 
 	return nil

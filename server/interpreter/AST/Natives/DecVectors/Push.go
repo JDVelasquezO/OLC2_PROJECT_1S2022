@@ -11,6 +11,11 @@ type Push struct {
 	Value Abstract.Expression
 }
 
+func (p Push) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.ReturnType {
+	//TODO implement me
+	panic("implement me")
+}
+
 func NewPush(id string, value Abstract.Expression) Push {
 	return Push{
 		Id:    id,

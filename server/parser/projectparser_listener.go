@@ -110,6 +110,9 @@ type ProjectParserListener interface {
 	// EnterDec_vector is called when entering the dec_vector production.
 	EnterDec_vector(c *Dec_vectorContext)
 
+	// EnterExpr_vector is called when entering the expr_vector production.
+	EnterExpr_vector(c *Expr_vectorContext)
+
 	// EnterPush_vector is called when entering the push_vector production.
 	EnterPush_vector(c *Push_vectorContext)
 
@@ -274,6 +277,9 @@ type ProjectParserListener interface {
 
 	// ExitDec_vector is called when exiting the dec_vector production.
 	ExitDec_vector(c *Dec_vectorContext)
+
+	// ExitExpr_vector is called when exiting the expr_vector production.
+	ExitExpr_vector(c *Expr_vectorContext)
 
 	// ExitPush_vector is called when exiting the push_vector production.
 	ExitPush_vector(c *Push_vectorContext)

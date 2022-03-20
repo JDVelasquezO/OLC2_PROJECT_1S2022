@@ -360,9 +360,14 @@ listDim returns[int length, SymbolTable.DataType data, Abstract.Expression pos]
     }
     ;
 
-vector_instr returns[Abstract.Instruction instr]
-    : dec_vector { $instr = $dec_vector.instr }
-    | push_vector { $instr = $push_vector.instr }
+vector_instr returns[Abstract.Instruction instr, Abstract.Expression p]
+    : dec_vector {
+        $instr = $dec_vector.instr
+    }
+    | push_vector {
+        $instr = $push_vector.instr
+        $p = $push_vector.p
+    }
     ;
 
 dec_vector returns[Abstract.Instruction instr]
@@ -387,17 +392,26 @@ dec_vector returns[Abstract.Instruction instr]
             $instr = DecVectors.NewDecVector(1, $ID.text, nil, data, false)
         }
     }
-    | DECLARAR MUT? ID EQUAL RVEC ADMIRATION expression (SEMICOLON|COMMA) {
+    | DECLARAR MUT? ID EQUAL expr_vector (SEMICOLON|COMMA) {
         if $MUT.text != "" {
-            $instr = DecVectors.NewDecVector(1, $ID.text, $expression.p, SymbolTable.NULL, true)
+            $instr = DecVectors.NewDecVector(1, $ID.text, $expr_vector.p, SymbolTable.NULL, true)
         } else {
-            $instr = DecVectors.NewDecVector(1, $ID.text, $expression.p, SymbolTable.NULL, false)
+            $instr = DecVectors.NewDecVector(1, $ID.text, $expr_vector.p, SymbolTable.NULL, false)
         }
     }
     ;
 
-push_vector returns[Abstract.Instruction instr]
-    : ID DOT RPUSH LEFT_PAR expression RIGHT_PAR SEMICOLON { $instr = DecVectors.NewPush($ID.text, $expression.p) }
+expr_vector returns [Abstract.Expression p]
+    : RVEC ADMIRATION expression {
+        $p = $expression.p
+    }
+    ;
+
+push_vector returns[Abstract.Instruction instr, Abstract.Expression p]
+    : ID DOT RPUSH LEFT_PAR expression RIGHT_PAR SEMICOLON {
+        $instr = DecVectors.NewPush($ID.text, $expression.p)
+        $p = DecVectors.NewPush($ID.text, $expression.p)
+    }
     ;
 
 transfer_prod returns[Abstract.Instruction instr]

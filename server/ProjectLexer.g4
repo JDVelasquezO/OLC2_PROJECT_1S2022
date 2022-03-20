@@ -49,7 +49,7 @@ RFN:                     'fn';
 // Vectors
 RVECTOR:                 'vector';
 RVEC:                    'vec';
-RVECMayus:                'Vec';
+RVECMayus:               'Vec';
 RNEW:                    'new';
 REVECTORNEW:             'Vec::new()';
 RPUSH:                   'push';

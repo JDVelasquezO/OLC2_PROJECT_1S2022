@@ -225,6 +225,12 @@ func (s *BaseProjectParserListener) EnterDec_vector(ctx *Dec_vectorContext) {}
 // ExitDec_vector is called when production dec_vector is exited.
 func (s *BaseProjectParserListener) ExitDec_vector(ctx *Dec_vectorContext) {}
 
+// EnterExpr_vector is called when production expr_vector is entered.
+func (s *BaseProjectParserListener) EnterExpr_vector(ctx *Expr_vectorContext) {}
+
+// ExitExpr_vector is called when production expr_vector is exited.
+func (s *BaseProjectParserListener) ExitExpr_vector(ctx *Expr_vectorContext) {}
+
 // EnterPush_vector is called when production push_vector is entered.
 func (s *BaseProjectParserListener) EnterPush_vector(ctx *Push_vectorContext) {}
 
