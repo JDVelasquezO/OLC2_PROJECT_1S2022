@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"OLC2_Project1/server/interpreter"
+	"OLC2_Project1/server/interpreter/AST/Expression"
+	"OLC2_Project1/server/interpreter/AST/Natives"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment"
@@ -139,13 +141,41 @@ func Analyze(c *fiber.Ctx) error {
 	}
 
 	symbols := interpreter.GlobalTable
+	var listParams []interface{}
+	var listVarsFunction []interface{}
+	for _, function := range symbols.FunctionTable {
+		for i := 0; i < function.(Environment.Function).ListParams.Len(); i++ {
+			m := make(map[string]string)
+			m["Id"] = function.(Environment.Function).ListParams.GetValue(i).(*Natives.Declaration).ListIds.GetValue(0).(Expression.Identifier).Id
+			m["Col"] = fmt.Sprintf("%v", function.(Environment.Function).ListParams.GetValue(i).(*Natives.Declaration).ListIds.GetValue(0).(Expression.Identifier).Col)
+			m["Row"] = fmt.Sprintf("%v", function.(Environment.Function).ListParams.GetValue(i).(*Natives.Declaration).ListIds.GetValue(0).(Expression.Identifier).Row)
+			m["DataType"] = fmt.Sprintf("%v", function.(Environment.Function).ListParams.GetValue(i).(*Natives.Declaration).DataType)
+			listParams = append(listParams, m)
+		}
+
+		if function.(Environment.Function).Id != "main" {
+			for i := 0; i < function.(Environment.Function).ListInstructs.Len(); i++ {
+				if typeof(function.(Environment.Function).ListInstructs.GetValue(i)) == "*Natives.Declaration" {
+					m2 := make(map[string]string)
+					m2["Id"] = function.(Environment.Function).ListInstructs.GetValue(i).(*Natives.Declaration).ListIds.GetValue(0).(Expression.Identifier).Id
+					m2["Col"] = fmt.Sprintf("%v", function.(Environment.Function).ListInstructs.GetValue(i).(*Natives.Declaration).ListIds.GetValue(0).(Expression.Identifier).Col)
+					m2["Row"] = fmt.Sprintf("%v", function.(Environment.Function).ListInstructs.GetValue(i).(*Natives.Declaration).ListIds.GetValue(0).(Expression.Identifier).Row)
+					m2["DataType"] = fmt.Sprintf("%v", function.(Environment.Function).ListInstructs.GetValue(i).(*Natives.Declaration).DataType)
+					listVarsFunction = append(listVarsFunction, m2)
+				}
+			}
+		}
+	}
 	//fmt.Println(symbols)
 	return c.Render("index", fiber.Map{
-		"Parser":  data.Code,
-		"Res":     interpreter.Console,
-		"Err":     errors.TypeError,
-		"Symbols": symbols.Table,
-		"Arrays":  symbols.ArrayTable,
+		"Parser":       data.Code,
+		"Res":          interpreter.Console,
+		"Err":          errors.TypeError,
+		"Symbols":      symbols.Table,
+		"Arrays":       symbols.ArrayTable,
+		"Functions":    symbols.FunctionTable,
+		"Params":       listParams,
+		"VarsFunction": listVarsFunction,
 	})
 }
 

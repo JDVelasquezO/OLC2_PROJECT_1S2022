@@ -7860,7 +7860,13 @@ func (p *ProjectParser) Dec_arr() (localctx IDec_arrContext) {
 			} else {
 				return localctx.(*Dec_arrContext).Get_ID().GetText()
 			}
-		}()), localctx.(*Dec_arrContext).Get_expression().GetP(), localctx.(*Dec_arrContext).Get_listDim().GetData(), true, localctx.(*Dec_arrContext).Get_listDim().GetPos())
+		}()), localctx.(*Dec_arrContext).Get_expression().GetP(), localctx.(*Dec_arrContext).Get_listDim().GetData(), true, localctx.(*Dec_arrContext).Get_listDim().GetPos(), (func() int {
+			if localctx.(*Dec_arrContext).Get_ID() == nil {
+				return 0
+			} else {
+				return localctx.(*Dec_arrContext).Get_ID().GetLine()
+			}
+		}()), localctx.(*Dec_arrContext).Get_ID().GetColumn())
 	} else {
 		localctx.(*Dec_arrContext).instr = DecArrays.NewDecArray(localctx.(*Dec_arrContext).Get_listDim().GetLength(), (func() string {
 			if localctx.(*Dec_arrContext).Get_ID() == nil {
@@ -7868,7 +7874,13 @@ func (p *ProjectParser) Dec_arr() (localctx IDec_arrContext) {
 			} else {
 				return localctx.(*Dec_arrContext).Get_ID().GetText()
 			}
-		}()), localctx.(*Dec_arrContext).Get_expression().GetP(), localctx.(*Dec_arrContext).Get_listDim().GetData(), false, localctx.(*Dec_arrContext).Get_listDim().GetPos())
+		}()), localctx.(*Dec_arrContext).Get_expression().GetP(), localctx.(*Dec_arrContext).Get_listDim().GetData(), false, localctx.(*Dec_arrContext).Get_listDim().GetPos(), (func() int {
+			if localctx.(*Dec_arrContext).Get_ID() == nil {
+				return 0
+			} else {
+				return localctx.(*Dec_arrContext).Get_ID().GetLine()
+			}
+		}()), localctx.(*Dec_arrContext).Get_ID().GetColumn())
 	}
 
 	return localctx

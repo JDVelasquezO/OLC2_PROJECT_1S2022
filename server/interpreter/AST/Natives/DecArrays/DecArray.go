@@ -19,10 +19,12 @@ type DecArray struct {
 	Type         SymbolTable.DataType
 	IsMut        bool
 	Positions    Abstract.Expression
+	Row          int
+	Col          int
 }
 
 func NewDecArray(length int, id string, init Abstract.Expression,
-	dataType SymbolTable.DataType, isMut bool, positions Abstract.Expression) DecArray {
+	dataType SymbolTable.DataType, isMut bool, positions Abstract.Expression, row int, col int) DecArray {
 	return DecArray{
 		Length:       length,
 		Id:           id,
@@ -30,6 +32,8 @@ func NewDecArray(length int, id string, init Abstract.Expression,
 		Type:         dataType,
 		IsMut:        isMut,
 		Positions:    positions,
+		Row:          row,
+		Col:          col,
 	}
 }
 
@@ -82,6 +86,8 @@ func (d DecArray) Execute(table SymbolTable.SymbolTable) interface{} {
 	} else {
 		symbol := objectArray.Value.(Array.Array)
 		symbol.Id = d.Id
+		symbol.Row = d.Row
+		symbol.Col = d.Col
 
 		if !d.IsMut {
 			symbol.IsConst = true

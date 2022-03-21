@@ -129,7 +129,44 @@
                         <th><abbr class="has-text-info">Ambit</abbr></th>
                     </tr>
                     </thead>
+                    <!-- ********************* FUNCTIONS ********************* -->
                     <tbody>
+                    {{ range .Functions }}
+                    <tr>
+                        <td>{{ .Symbol.Id }}</td>
+                        <td>Function</td>
+                        <td>{{ .Symbol.DataType }}</td>
+                        <td>{{ .Symbol.Row }}</td>
+                        <td>{{ .Symbol.Col }}</td>
+                        <td>Global</td>
+                    </tr>
+                    {{ end }}
+
+                    <!-- ********************* PARAMETERS ********************* -->
+                    {{ range .Params }}
+                    <tr>
+                        <td>{{ .Id }}</td>
+                        <td>Parameter</td>
+                        <td>{{ .DataType }}</td>
+                        <td>{{ .Row }}</td>
+                        <td>{{ .Col }}</td>
+                        <td>Local</td>
+                    </tr>
+                    {{ end }}
+
+                    <!-- ********************* VARIABLES IN FUNCTIONS ********************* -->
+                    {{ range .VarsFunction }}
+                    <tr>
+                        <td>{{ .Id }}</td>
+                        <td>Variable</td>
+                        <td>{{ .DataType }}</td>
+                        <td>{{ .Row }}</td>
+                        <td>{{ .Col }}</td>
+                        <td>Local</td>
+                    </tr>
+                    {{ end }}
+
+                    <!-- ********************* VARIABLES ********************* -->
                     {{ range .Symbols }}
                     <tr>
                         <td>{{ .Id }}</td>
@@ -137,7 +174,20 @@
                         <td>{{ .DataType }}</td>
                         <td>{{ .Row }}</td>
                         <td>{{ .Col }}</td>
-                        <td>global</td>
+                        <td>Local</td>
+                    </tr>
+                    {{ end }}
+
+                    <!-- ********************* ARRAYS ********************* -->
+
+                    {{ range .Arrays }}
+                    <tr>
+                        <td>{{ .Id }}</td>
+                        <td>Array</td>
+                        <td>{{ .DataType }}</td>
+                        <td>{{ .Row }}</td>
+                        <td>{{ .Col }}</td>
+                        <td>Local</td>
                     </tr>
                     {{ end }}
                     </tbody>

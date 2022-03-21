@@ -330,9 +330,9 @@ dec_arr returns [Abstract.Instruction instr]
     : DECLARAR MUT? ID (COLON listDim)? EQUAL expression (SEMICOLON|COMMA)
     {
         if $MUT.text != "" {
-            $instr = DecArrays.NewDecArray($listDim.length, $ID.text, $expression.p, $listDim.data, true, $listDim.pos)
+            $instr = DecArrays.NewDecArray($listDim.length, $ID.text, $expression.p, $listDim.data, true, $listDim.pos, $ID.line, localctx.(*Dec_arrContext).Get_ID().GetColumn())
         } else {
-            $instr = DecArrays.NewDecArray($listDim.length, $ID.text, $expression.p, $listDim.data, false, $listDim.pos)
+            $instr = DecArrays.NewDecArray($listDim.length, $ID.text, $expression.p, $listDim.data, false, $listDim.pos, $ID.line, localctx.(*Dec_arrContext).Get_ID().GetColumn())
         }
     }
     ;
