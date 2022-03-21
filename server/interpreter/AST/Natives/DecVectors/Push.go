@@ -46,8 +46,8 @@ func (p Push) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 }
 
 func (p Push) ExecuteFirstTime(symbolTable SymbolTable.SymbolTable) interface{} {
-	val := symbolTable.GetSymbol(p.Id)
+	val := symbolTable.GetSymbolArray(p.Id)
 	newVal := val.(Vector.Vector).Push(p.Value, symbolTable)
-	symbolTable.ChangeVal(p.Id, newVal)
+	symbolTable.ChangeValVector(p.Id, newVal)
 	return val
 }

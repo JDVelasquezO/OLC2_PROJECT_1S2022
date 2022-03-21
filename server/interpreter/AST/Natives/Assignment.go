@@ -6,6 +6,7 @@ import (
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Array"
+	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Vector"
 	"OLC2_Project1/server/interpreter/errors"
 	"fmt"
 	arrayList "github.com/colegno/arraylist"
@@ -46,7 +47,12 @@ func (d *Assign) Execute(table SymbolTable.SymbolTable) interface{} {
 	varDec := d.ListIds.GetValue(0).(Expression.Identifier).Id
 	var val SymbolTable.Symbol
 	if typeExpr == SymbolTable.ARRAY {
-		val = table.GetSymbolArray(varDec).(Array.Array).Symbol
+		valBefore := table.GetSymbolArray(varDec)
+		if typeof(valBefore) == "Array.Array" {
+			val = valBefore.(Array.Array).Symbol
+		} else {
+			val = valBefore.(Vector.Vector).Symbol
+		}
 	} else {
 		val = table.GetSymbol(varDec).(SymbolTable.Symbol)
 	}
@@ -102,9 +108,10 @@ func (d *Assign) Execute(table SymbolTable.SymbolTable) interface{} {
 	if retExpr.Type == SymbolTable.ARRAY {
 		val.Value = retExpr.Value.(SymbolTable.ReturnType).Value
 		table.ChangeValArray(varDec, val)
+	} else {
+		val.Value = retExpr.Value
+		table.ChangeVal(varDec, val)
 	}
-	val.Value = retExpr.Value
-	table.ChangeVal(varDec, val)
 
 	return val
 }
