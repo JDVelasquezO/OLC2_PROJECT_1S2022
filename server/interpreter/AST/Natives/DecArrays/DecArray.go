@@ -82,7 +82,12 @@ func (d DecArray) Execute(table SymbolTable.SymbolTable) interface{} {
 	} else {
 		symbol := objectArray.Value.(Array.Array)
 		symbol.Id = d.Id
-		table.AddNewSymbol(d.Id, symbol)
+
+		if !d.IsMut {
+			symbol.IsConst = true
+		}
+
+		table.AddArray(d.Id, symbol)
 	}
 
 	//fmt.Printf("%v", table.Table)

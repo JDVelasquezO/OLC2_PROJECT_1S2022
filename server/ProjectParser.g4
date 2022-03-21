@@ -114,6 +114,7 @@ instruction returns [Abstract.Instruction instr]
     | conditional_prod  { $instr = $conditional_prod.instr }
     | bucle_prod        { $instr = $bucle_prod.instr }
     | expr_rel COMMA?   { $instr = $expr_rel.instr }
+    | expr_logic        { $instr = $expr_logic.instr }
     | dec_arr           { $instr = $dec_arr.instr }
     | vector_instr      { $instr = $vector_instr.instr }
     | transfer_prod     { $instr = $transfer_prod.instr }
@@ -463,11 +464,10 @@ return_instr returns[Abstract.Instruction instr]
     ;
 
 expression returns [Abstract.Expression p]
-    : expr_valor                 { $p = $expr_valor.p }
-    | conditional_prod           { $p = $conditional_prod.p }
+    : conditional_prod           { $p = $conditional_prod.p }
     | loop_prod                  { $p = $loop_prod.p }
-    | expr_rel                   { $p = $expr_rel.p }
     | expr_logic                 { $p = $expr_logic.p }
+    | expr_rel                   { $p = $expr_rel.p }
     | arraydata                  { $p = $arraydata.p }
 ;
 

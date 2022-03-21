@@ -29,7 +29,7 @@ func (a AssignArray) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 		return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
 	}
 
-	foundSymbol := symbolTable.GetSymbol(a.Id)
+	foundSymbol := symbolTable.GetSymbolArray(a.Id)
 	symbolArray := foundSymbol.(Array.Array)
 	dimensions := a.GetIntDimensions(symbolTable)
 	symbolArray.ChangeValue(dimensions, 0, symbolArray.Values, a.Val, symbolTable)

@@ -5,6 +5,7 @@ import (
 	"OLC2_Project1/server/interpreter/AST/Expression"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
+	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Array"
 	"OLC2_Project1/server/interpreter/errors"
 	"fmt"
 	arrayList "github.com/colegno/arraylist"
@@ -43,9 +44,14 @@ func (d *Assign) Execute(table SymbolTable.SymbolTable) interface{} {
 	retExpr := d.Val.GetValue(table)
 	typeExpr := retExpr.Type
 	varDec := d.ListIds.GetValue(0).(Expression.Identifier).Id
-	val := table.GetSymbol(varDec).(SymbolTable.Symbol)
+	var val SymbolTable.Symbol
+	if typeExpr == SymbolTable.ARRAY {
+		val = table.GetSymbolArray(varDec).(Array.Array).Symbol
+	} else {
+		val = table.GetSymbol(varDec).(SymbolTable.Symbol)
+	}
 
-	if !val.IsConst {
+	if val.IsConst {
 		typeVal := typeof(d.Val)
 		var row int
 		var col int
@@ -93,6 +99,10 @@ func (d *Assign) Execute(table SymbolTable.SymbolTable) interface{} {
 		return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
 	}
 
+	if retExpr.Type == SymbolTable.ARRAY {
+		val.Value = retExpr.Value.(SymbolTable.ReturnType).Value
+		table.ChangeValArray(varDec, val)
+	}
 	val.Value = retExpr.Value
 	table.ChangeVal(varDec, val)
 

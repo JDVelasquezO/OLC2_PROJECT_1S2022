@@ -10,17 +10,20 @@ type SymbolTable struct {
 	Before        *SymbolTable
 	Table         map[string]interface{} // string: Abstract
 	FunctionTable map[string]interface{}
+	ArrayTable    map[string]interface{}
 }
 
 func NewSymbolTable(name string, before *SymbolTable) SymbolTable {
 	table := make(map[string]interface{})
 	funcTable := make(map[string]interface{})
+	arrTable := make(map[string]interface{})
 
 	in := SymbolTable{
 		Name:          name,
 		Before:        before,
 		Table:         table,
 		FunctionTable: funcTable,
+		ArrayTable:    arrTable,
 	}
 
 	return in
@@ -74,6 +77,22 @@ func (table *SymbolTable) GetSymbol(id string) interface{} {
 	return symbolNil
 }
 
+func (table *SymbolTable) GetSymbolArray(id string) interface{} {
+	newId := strings.ToLower(id)
+
+	for actualTable := table; actualTable != nil; actualTable = actualTable.Before {
+
+		for key, symbol := range actualTable.ArrayTable {
+			if key == newId {
+				return symbol
+			}
+		}
+	}
+
+	var symbolNil Symbol
+	return symbolNil
+}
+
 func (table *SymbolTable) ChangeVal(id string, newSymbol interface{}) {
 	newId := strings.ToLower(id)
 
@@ -91,6 +110,39 @@ func (table *SymbolTable) ChangeVal(id string, newSymbol interface{}) {
 func (table *SymbolTable) AddFunction(id string, symbol interface{}) {
 	idFinal := strings.ToLower(id)
 	table.FunctionTable[idFinal] = symbol
+}
+
+func (table *SymbolTable) AddArray(id string, symbol interface{}) {
+	idFinal := strings.ToLower(id)
+	table.ArrayTable[idFinal] = symbol
+}
+
+func (table *SymbolTable) ExistsArray(id string) bool {
+	idFinal := strings.ToLower(id)
+
+	for env := table; env != nil; env = env.Before {
+		for key, _ := range env.ArrayTable {
+			if key == idFinal {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
+func (table *SymbolTable) ChangeValArray(id string, newSymbol interface{}) {
+	newId := strings.ToLower(id)
+
+	for actualTable := table; actualTable != nil; actualTable = actualTable.Before {
+
+		for key, _ := range actualTable.ArrayTable {
+			if key == newId {
+				actualTable.ArrayTable[newId] = newSymbol.(Symbol).Value
+				return
+			}
+		}
+	}
 }
 
 func (table *SymbolTable) ExistsFunction(id string) bool {

@@ -31,7 +31,20 @@ func (id Identifier) GetValue(table SymbolTable.SymbolTable) SymbolTable.ReturnT
 	var founded = table.ExistsSymbol(id.Id)
 
 	if !founded {
-		return SymbolTable.ReturnType{Value: nil, Type: SymbolTable.NULL}
+		var founded2 = table.ExistsArray(id.Id)
+		if !founded2 {
+			return SymbolTable.ReturnType{Value: nil, Type: SymbolTable.NULL}
+		}
+		symbol := table.GetSymbolArray(id.Id)
+
+		if typeof(symbol) == "Array.Array" {
+			dataType := symbol.(Array.Array).Symbol.DataType
+			values := symbol.(Array.Array).Values
+			return SymbolTable.ReturnType{
+				Value: values,
+				Type:  dataType,
+			}
+		}
 	}
 
 	symbol := table.GetSymbol(id.Id)
@@ -41,15 +54,6 @@ func (id Identifier) GetValue(table SymbolTable.SymbolTable) SymbolTable.ReturnT
 		return SymbolTable.ReturnType{
 			Value: data.Value,
 			Type:  data.DataType,
-		}
-	}
-
-	if typeof(symbol) == "Array.Array" {
-		dataType := symbol.(Array.Array).Symbol.DataType
-		values := symbol.(Array.Array).Values
-		return SymbolTable.ReturnType{
-			Value: values,
-			Type:  dataType,
 		}
 	}
 

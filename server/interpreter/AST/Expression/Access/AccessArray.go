@@ -28,7 +28,7 @@ func (a ArrayAccess) Execute(table SymbolTable.SymbolTable) interface{} {
 }
 
 func (a ArrayAccess) GetValue(table SymbolTable.SymbolTable) SymbolTable.ReturnType {
-	exists := table.ExistsSymbol(a.Id)
+	exists := table.ExistsArray(a.Id)
 
 	if !exists {
 		fmt.Println("No existe el arreglo")
@@ -38,7 +38,7 @@ func (a ArrayAccess) GetValue(table SymbolTable.SymbolTable) SymbolTable.ReturnT
 		}
 	}
 
-	symbol := table.GetSymbol(a.Id)
+	symbol := table.GetSymbolArray(a.Id)
 
 	if reflect.TypeOf(symbol) == reflect.TypeOf(Vector.Vector{}) {
 		val := symbol.(Vector.Vector).GetValue(a.Dim, table)

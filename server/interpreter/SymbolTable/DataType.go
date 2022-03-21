@@ -9,10 +9,10 @@ const (
 	STRING
 	CHAR
 	BOOLEAN
+	ARRAY
 	NULL
 	ERROR
 	VOID
-	ARRAY
 )
 
 type ReturnType struct {

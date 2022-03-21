@@ -138,10 +138,14 @@ func Analyze(c *fiber.Ctx) error {
 		interpreter.Console += "\n\n Ejecutado en " + elapsed.Round(elapsed).String()
 	}
 
+	symbols := interpreter.GlobalTable
+	//fmt.Println(symbols)
 	return c.Render("index", fiber.Map{
-		"Parser": data.Code,
-		"Res":    interpreter.Console,
-		"Err":    errors.TypeError,
+		"Parser":  data.Code,
+		"Res":     interpreter.Console,
+		"Err":     errors.TypeError,
+		"Symbols": symbols.Table,
+		"Arrays":  symbols.ArrayTable,
 	})
 }
 

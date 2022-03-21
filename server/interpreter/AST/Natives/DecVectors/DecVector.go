@@ -76,7 +76,7 @@ func (d DecVector) Execute(table SymbolTable.SymbolTable) interface{} {
 				newPush.ExecuteFirstTime(table)
 			}
 		} else {
-			for i := 0; i < d.Length; i++ {
+			for i := 0; i < objectVector.Length; i++ {
 				newExpr := Expression.NewPrimitive(valueDec, dataType, 0, 0)
 				newPush := NewPush(d.Id, newExpr)
 				newPush.ExecuteFirstTime(table)

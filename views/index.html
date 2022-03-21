@@ -54,7 +54,7 @@
                 Editor
             </a>
             <a class="navbar-item has-text-black">
-                Ejecucion
+                Execute
             </a>
 
             {{ else }}
@@ -63,16 +63,12 @@
                 Editor
             </a>
             <a class="navbar-item has-text-black has-background-light">
-                Ejecucion
+                Execute
             </a>
             {{ end }}
 
             <a class="navbar-item has-text-black">
-                Reportes
-            </a>
-
-            <a class="navbar-item has-text-black">
-                Acerca de
+                About
             </a>
         </div>
     </div>
@@ -114,8 +110,66 @@
             </div>
         </div>
         <button class="button is-info" id="btnInterpret">Interpreter</button>
-        &nbsp;<button class="button is-danger">Errors</button>
     </form>
+
+    <hr>
+
+    <div class="container mt-6">
+        <div class="columns">
+            <div class="column">
+                <h2 class="has-text-white">Symbol Table:</h2>
+                <table class="table has-background-black-ter has-text-white-bis">
+                    <thead>
+                    <tr>
+                        <th class="has-text-info">ID</th>
+                        <th><abbr class="has-text-info">Type</abbr></th>
+                        <th><abbr class="has-text-info">Data Type</abbr></th>
+                        <th><abbr class="has-text-info">Line</abbr></th>
+                        <th><abbr class="has-text-info">Column</abbr></th>
+                        <th><abbr class="has-text-info">Ambit</abbr></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {{ range .Symbols }}
+                    <tr>
+                        <td>{{ .Id }}</td>
+                        <td>Variable</td>
+                        <td>{{ .DataType }}</td>
+                        <td>{{ .Row }}</td>
+                        <td>{{ .Col }}</td>
+                        <td>global</td>
+                    </tr>
+                    {{ end }}
+                    </tbody>
+                </table>
+            </div>
+            <div class="column">
+                <h2 class="has-text-white">Error Table:</h2>
+                <table class="table has-background-black-ter has-text-white-bis">
+                    <thead>
+                    <tr>
+                        <th class="has-text-info">No</th>
+                        <th><abbr class="has-text-info">Description</abbr></th>
+                        <th><abbr class="has-text-info">Line</abbr></th>
+                        <th><abbr class="has-text-info">Column</abbr></th>
+                        <th><abbr class="has-text-info">Ambit</abbr></th>
+                        <th><abbr class="has-text-info">Date</abbr></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>ID</td>
+                        <td>Type</td>
+                        <td>Message</td>
+                        <td>Line</td>
+                        <td>Column</td>
+                        <td>global</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
 </div>
 
