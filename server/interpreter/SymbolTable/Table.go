@@ -145,6 +145,20 @@ func (table *SymbolTable) ChangeValArray(id string, newSymbol interface{}) {
 	}
 }
 
+func (table *SymbolTable) ChangeValVector(id string, newSymbol interface{}) {
+	newId := strings.ToLower(id)
+
+	for actualTable := table; actualTable != nil; actualTable = actualTable.Before {
+
+		for key, _ := range actualTable.ArrayTable {
+			if key == newId {
+				actualTable.ArrayTable[newId] = newSymbol
+				return
+			}
+		}
+	}
+}
+
 func (table *SymbolTable) ExistsFunction(id string) bool {
 	idFinal := strings.ToLower(id)
 

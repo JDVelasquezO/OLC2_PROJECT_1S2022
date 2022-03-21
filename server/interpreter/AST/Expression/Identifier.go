@@ -45,6 +45,20 @@ func (id Identifier) GetValue(table SymbolTable.SymbolTable) SymbolTable.ReturnT
 				Type:  dataType,
 			}
 		}
+
+		if typeof(symbol) == "Vector.Vector" {
+			dataType := symbol.(Vector.Vector).Symbol.DataType
+			values := symbol.(Vector.Vector).Value
+
+			if len(values.([]interface{})) == 0 {
+				values = append(values.([]interface{}), "")
+			}
+
+			return SymbolTable.ReturnType{
+				Value: values,
+				Type:  dataType,
+			}
+		}
 	}
 
 	symbol := table.GetSymbol(id.Id)

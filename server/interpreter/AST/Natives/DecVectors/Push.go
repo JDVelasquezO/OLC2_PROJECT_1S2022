@@ -28,7 +28,7 @@ func NewPush(id string, value Abstract.Expression) Push {
 }
 
 func (p Push) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
-	val := symbolTable.GetSymbol(p.Id)
+	val := symbolTable.GetSymbolArray(p.Id)
 	if val.(Vector.Vector).IsConst {
 		row := val.(Vector.Vector).Row
 		col := val.(Vector.Vector).Col
@@ -41,7 +41,7 @@ func (p Push) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 		return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
 	}
 	newVal := val.(Vector.Vector).Push(p.Value, symbolTable)
-	symbolTable.ChangeVal(p.Id, newVal)
+	symbolTable.ChangeValVector(p.Id, newVal)
 	return val
 }
 

@@ -61,7 +61,7 @@ func (d DecVector) Execute(table SymbolTable.SymbolTable) interface{} {
 	} else {
 		symbol := objectVector
 		symbol.Id = d.Id
-		table.AddNewSymbol(d.Id, symbol)
+		table.AddArray(d.Id, symbol)
 	}
 
 	if d.ValueInitial != nil {

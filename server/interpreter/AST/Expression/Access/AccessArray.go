@@ -42,6 +42,14 @@ func (a ArrayAccess) GetValue(table SymbolTable.SymbolTable) SymbolTable.ReturnT
 
 	if reflect.TypeOf(symbol) == reflect.TypeOf(Vector.Vector{}) {
 		val := symbol.(Vector.Vector).GetValue(a.Dim, table)
+
+		if val == nil {
+			return SymbolTable.ReturnType{
+				Value: nil,
+				Type:  SymbolTable.ERROR,
+			}
+		}
+
 		return SymbolTable.ReturnType{
 			Value: val.(Abstract.Expression).GetValue(table).Value,
 			Type:  val.(Abstract.Expression).GetValue(table).Type,

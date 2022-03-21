@@ -469,6 +469,7 @@ expression returns [Abstract.Expression p]
     | expr_logic                 { $p = $expr_logic.p }
     | expr_rel                   { $p = $expr_rel.p }
     | arraydata                  { $p = $arraydata.p }
+    | expr_vector                { $p = $expr_vector.p }
 ;
 
 arraydata returns [Abstract.Expression p]

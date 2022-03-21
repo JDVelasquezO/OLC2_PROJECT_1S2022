@@ -51,7 +51,7 @@ StartLoop:
 
 			if newSymbol != nil {
 				if typeof(newSymbol) == "Natives.Break" {
-					goto EndLoop
+					return nil
 				}
 
 				if typeof(newSymbol) == "Natives.Continue" {
@@ -72,7 +72,5 @@ StartLoop:
 			return nil
 		}
 	}
-
-EndLoop:
 	return nil
 }
