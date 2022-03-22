@@ -91,9 +91,25 @@ func (f Function) Execute(table SymbolTable.SymbolTable) interface{} {
 	for i := 0; i < f.ListInstructs.Len(); i++ {
 		instrPivot := f.ListInstructs.GetValue(i).(Abstract.Instruction)
 
-		if typeof(instrPivot) == "Natives.Break" || typeof(instrPivot) == "Natives.Continue" || typeof(instrPivot) == "Natives.return" {
+		if typeof(instrPivot) == "Natives.Break" || typeof(instrPivot) == "Natives.Continue" {
 			errors.CounterError += 1
-			msg := "(ERROR) No se puede declarar Break sin un ciclo \n"
+
+			var row int
+			var col int
+			var transfer string
+			if typeof(instrPivot) == "Natives.Break" {
+				row = instrPivot.(Natives.Break).Row
+				col = instrPivot.(Natives.Break).Col
+				transfer = "Break"
+			}
+
+			if typeof(instrPivot) == "Natives.Continue" {
+				row = instrPivot.(Natives.Continue).Row
+				col = instrPivot.(Natives.Continue).Col
+				transfer = "Continue"
+			}
+
+			msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") Error: No se puede declarar " + transfer + " sin un ciclo \n"
 			err := errors.NewError(errors.CounterError, 0, 0, msg, interpreter.GlobalTable.Name)
 			errors.TypeError = append(errors.TypeError, err)
 			interpreter.Console += fmt.Sprintf("%v", msg)

@@ -176,7 +176,7 @@ assign_prod returns [Abstract.Instruction instr]
         $instr = Natives.NewAssign($listIds.list, $expression.p)
     }
     | ID listInArray EQUAL expression (SEMICOLON|COMMA)? {
-        $instr = DecArrays.NewAssignArray($ID.text, $listInArray.l, $expression.p)
+        $instr = DecArrays.NewAssignArray($ID.text, $listInArray.l, $expression.p, $EQUAL.line, localctx.(*Assign_prodContext).Get_EQUAL().GetColumn())
     }
     ;
 

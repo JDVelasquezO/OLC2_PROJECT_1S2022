@@ -15,6 +15,8 @@ type AssignArray struct {
 	Val       Abstract.Expression
 	Id        string
 	ListIndex *arrayList.List
+	Row       int
+	Col       int
 }
 
 func (a AssignArray) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
@@ -31,16 +33,30 @@ func (a AssignArray) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 
 	foundSymbol := symbolTable.GetSymbolArray(a.Id)
 	symbolArray := foundSymbol.(Array.Array)
+
+	if symbolArray.IsConst {
+		row := symbolArray.Row
+		col := symbolArray.Col
+		errors.CounterError += 1
+		msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No se puede declarar valor a un no MUT \n"
+		err := errors.NewError(errors.CounterError, row, col, msg, symbolTable.Name)
+		errors.TypeError = append(errors.TypeError, err)
+		interpreter.Console += fmt.Sprintf("%v", err.Msg)
+		return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
+	}
+
 	dimensions := a.GetIntDimensions(symbolTable)
-	symbolArray.ChangeValue(dimensions, 0, symbolArray.Values, a.Val, symbolTable)
+	symbolArray.ChangeValue(dimensions, 0, symbolArray.Values, a.Val, symbolTable, a.Row, a.Col)
 	return symbolArray
 }
 
-func NewAssignArray(id string, listInArray *arrayList.List, val Abstract.Expression) *AssignArray {
+func NewAssignArray(id string, listInArray *arrayList.List, val Abstract.Expression, row int, col int) *AssignArray {
 	return &AssignArray{
 		Val:       val,
 		Id:        id,
 		ListIndex: listInArray,
+		Row:       row,
+		Col:       col,
 	}
 }
 

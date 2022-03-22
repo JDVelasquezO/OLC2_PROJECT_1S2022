@@ -103,6 +103,7 @@ func (d *Assign) Execute(table SymbolTable.SymbolTable) interface{} {
 		msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No se puede mezclar esos tipos de datos \n"
 		err := errors.NewError(errors.CounterError, row, col, msg, table.Name)
 		interpreter.Console += fmt.Sprintf("%v", err.Msg)
+		errors.TypeError = append(errors.TypeError, err)
 		return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
 	}
 

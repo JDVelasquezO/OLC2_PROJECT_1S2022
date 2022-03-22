@@ -1,11 +1,14 @@
 package Array
 
 import (
+	"OLC2_Project1/server/interpreter"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
+	"OLC2_Project1/server/interpreter/errors"
 	"fmt"
 	arrayList "github.com/colegno/arraylist"
 	"reflect"
+	"strconv"
 )
 
 type Array struct {
@@ -54,7 +57,7 @@ func (a Array) GetValue(list *arrayList.List, indexLevel int, values []interface
 }
 
 func (a Array) ChangeValue(list *arrayList.List, indexLevel int, values []interface{},
-	newVal interface{}, symbolTable SymbolTable.SymbolTable) {
+	newVal interface{}, symbolTable SymbolTable.SymbolTable, row int, col int) {
 	listClone := list.Clone()
 
 	indexPiv := listClone.GetValue(0).(int)
@@ -72,7 +75,7 @@ func (a Array) ChangeValue(list *arrayList.List, indexLevel int, values []interf
 				fmt.Println("Error 2")
 				return
 			} else {
-				a.ChangeValue(listClone, indexLevel+1, subArray.([]interface{}), newVal, symbolTable)
+				a.ChangeValue(listClone, indexLevel+1, subArray.([]interface{}), newVal, symbolTable, row, col)
 			}
 		}
 	} else {
@@ -80,6 +83,18 @@ func (a Array) ChangeValue(list *arrayList.List, indexLevel int, values []interf
 			fmt.Println("Error 3")
 			return
 		}
-		values[indexPiv] = newVal.(Abstract.Expression).GetValue(symbolTable).Value
+
+		newValExpr := newVal.(Abstract.Expression)
+		//newType := newValExpr.GetValue(symbolTable).Type
+		if reflect.TypeOf(values[indexPiv]) != reflect.TypeOf(newValExpr.GetValue(symbolTable).Value) {
+			errors.CounterError += 1
+			msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") Tipos de datos incompatibles \n"
+			err := errors.NewError(errors.CounterError, row, col, msg, symbolTable.Name)
+			errors.TypeError = append(errors.TypeError, err)
+			interpreter.Console += fmt.Sprintf("%v", err.Msg)
+			return
+		} else {
+			values[indexPiv] = newValExpr.GetValue(symbolTable).Value
+		}
 	}
 }

@@ -3863,8 +3863,14 @@ type IAssign_prodContext interface {
 	// Get_ID returns the _ID token.
 	Get_ID() antlr.Token
 
+	// Get_EQUAL returns the _EQUAL token.
+	Get_EQUAL() antlr.Token
+
 	// Set_ID sets the _ID token.
 	Set_ID(antlr.Token)
+
+	// Set_EQUAL sets the _EQUAL token.
+	Set_EQUAL(antlr.Token)
 
 	// Get_listIds returns the _listIds rule contexts.
 	Get_listIds() IListIdsContext
@@ -3902,6 +3908,7 @@ type Assign_prodContext struct {
 	_expression  IExpressionContext
 	_ID          antlr.Token
 	_listInArray IListInArrayContext
+	_EQUAL       antlr.Token
 }
 
 func NewEmptyAssign_prodContext() *Assign_prodContext {
@@ -3928,7 +3935,11 @@ func (s *Assign_prodContext) GetParser() antlr.Parser { return s.parser }
 
 func (s *Assign_prodContext) Get_ID() antlr.Token { return s._ID }
 
+func (s *Assign_prodContext) Get_EQUAL() antlr.Token { return s._EQUAL }
+
 func (s *Assign_prodContext) Set_ID(v antlr.Token) { s._ID = v }
+
+func (s *Assign_prodContext) Set_EQUAL(v antlr.Token) { s._EQUAL = v }
 
 func (s *Assign_prodContext) Get_listIds() IListIdsContext { return s._listIds }
 
@@ -4094,7 +4105,10 @@ func (p *ProjectParser) Assign_prod() (localctx IAssign_prodContext) {
 		}
 		{
 			p.SetState(367)
-			p.Match(ProjectParserEQUAL)
+
+			var _m = p.Match(ProjectParserEQUAL)
+
+			localctx.(*Assign_prodContext)._EQUAL = _m
 		}
 		{
 			p.SetState(368)
@@ -4127,7 +4141,13 @@ func (p *ProjectParser) Assign_prod() (localctx IAssign_prodContext) {
 			} else {
 				return localctx.(*Assign_prodContext).Get_ID().GetText()
 			}
-		}()), localctx.(*Assign_prodContext).Get_listInArray().GetL(), localctx.(*Assign_prodContext).Get_expression().GetP())
+		}()), localctx.(*Assign_prodContext).Get_listInArray().GetL(), localctx.(*Assign_prodContext).Get_expression().GetP(), (func() int {
+			if localctx.(*Assign_prodContext).Get_EQUAL() == nil {
+				return 0
+			} else {
+				return localctx.(*Assign_prodContext).Get_EQUAL().GetLine()
+			}
+		}()), localctx.(*Assign_prodContext).Get_EQUAL().GetColumn())
 
 	}
 

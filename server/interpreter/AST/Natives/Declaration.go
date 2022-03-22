@@ -138,6 +138,8 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 			d.DataType = SymbolTable.CHAR
 		case SymbolTable.BOOLEAN:
 			d.DataType = SymbolTable.BOOLEAN
+		case SymbolTable.ARRAY:
+			d.DataType = dataOrigin.Type
 		case SymbolTable.NULL:
 			return dataOrigin
 		case SymbolTable.ERROR:
