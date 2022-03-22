@@ -306,12 +306,12 @@ range_prod returns[Abstract.Expression p]
 
 called_func returns [Abstract.Instruction instr, Abstract.Expression p]
     : ID LEFT_PAR RIGHT_PAR {
-        $instr = ExpressionSpecial.NewCallFunction($ID.text, arrayList.New())
-        $p = ExpressionSpecial.NewCallFunction($ID.text, arrayList.New())
+        $instr = ExpressionSpecial.NewCallFunction($ID.text, arrayList.New(), $ID.line, localctx.(*Called_funcContext).Get_ID().GetColumn())
+        $p = ExpressionSpecial.NewCallFunction($ID.text, arrayList.New(), $ID.line, localctx.(*Called_funcContext).Get_ID().GetColumn())
     }
     | ID LEFT_PAR listExpressions RIGHT_PAR {
-        $instr = ExpressionSpecial.NewCallFunction($ID.text, $listExpressions.l)
-        $p = ExpressionSpecial.NewCallFunction($ID.text, $listExpressions.l)
+        $instr = ExpressionSpecial.NewCallFunction($ID.text, $listExpressions.l, $ID.line, localctx.(*Called_funcContext).Get_ID().GetColumn())
+        $p = ExpressionSpecial.NewCallFunction($ID.text, $listExpressions.l, $ID.line, localctx.(*Called_funcContext).Get_ID().GetColumn())
     }
     ;
 

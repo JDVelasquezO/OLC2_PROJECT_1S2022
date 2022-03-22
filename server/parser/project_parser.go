@@ -7341,14 +7341,26 @@ func (p *ProjectParser) Called_func() (localctx ICalled_funcContext) {
 			} else {
 				return localctx.(*Called_funcContext).Get_ID().GetText()
 			}
-		}()), arrayList.New())
+		}()), arrayList.New(), (func() int {
+			if localctx.(*Called_funcContext).Get_ID() == nil {
+				return 0
+			} else {
+				return localctx.(*Called_funcContext).Get_ID().GetLine()
+			}
+		}()), localctx.(*Called_funcContext).Get_ID().GetColumn())
 		localctx.(*Called_funcContext).p = ExpressionSpecial.NewCallFunction((func() string {
 			if localctx.(*Called_funcContext).Get_ID() == nil {
 				return ""
 			} else {
 				return localctx.(*Called_funcContext).Get_ID().GetText()
 			}
-		}()), arrayList.New())
+		}()), arrayList.New(), (func() int {
+			if localctx.(*Called_funcContext).Get_ID() == nil {
+				return 0
+			} else {
+				return localctx.(*Called_funcContext).Get_ID().GetLine()
+			}
+		}()), localctx.(*Called_funcContext).Get_ID().GetColumn())
 
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
@@ -7381,14 +7393,26 @@ func (p *ProjectParser) Called_func() (localctx ICalled_funcContext) {
 			} else {
 				return localctx.(*Called_funcContext).Get_ID().GetText()
 			}
-		}()), localctx.(*Called_funcContext).Get_listExpressions().GetL())
+		}()), localctx.(*Called_funcContext).Get_listExpressions().GetL(), (func() int {
+			if localctx.(*Called_funcContext).Get_ID() == nil {
+				return 0
+			} else {
+				return localctx.(*Called_funcContext).Get_ID().GetLine()
+			}
+		}()), localctx.(*Called_funcContext).Get_ID().GetColumn())
 		localctx.(*Called_funcContext).p = ExpressionSpecial.NewCallFunction((func() string {
 			if localctx.(*Called_funcContext).Get_ID() == nil {
 				return ""
 			} else {
 				return localctx.(*Called_funcContext).Get_ID().GetText()
 			}
-		}()), localctx.(*Called_funcContext).Get_listExpressions().GetL())
+		}()), localctx.(*Called_funcContext).Get_listExpressions().GetL(), (func() int {
+			if localctx.(*Called_funcContext).Get_ID() == nil {
+				return 0
+			} else {
+				return localctx.(*Called_funcContext).Get_ID().GetLine()
+			}
+		}()), localctx.(*Called_funcContext).Get_ID().GetColumn())
 
 	}
 

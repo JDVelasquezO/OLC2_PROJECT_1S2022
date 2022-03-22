@@ -139,26 +139,7 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 		case SymbolTable.BOOLEAN:
 			d.DataType = SymbolTable.BOOLEAN
 		case SymbolTable.NULL:
-			typeVal := typeof(d.InitVal)
-			var row int
-			var col int
-			switch typeVal {
-			case "Expression.Primitive":
-				row = d.InitVal.(Expression.Primitive).Row
-				col = d.InitVal.(Expression.Primitive).Col
-			case "Expression.Operation":
-				row = d.InitVal.(Expression.Operation).Row
-				col = d.InitVal.(Expression.Operation).Col
-			case "Expression.Identifier":
-				row = d.InitVal.(Expression.Identifier).Row
-				col = d.InitVal.(Expression.Identifier).Col
-			}
-			errors.CounterError += 1
-			msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") Tipos de datos incorrectos. \n"
-			err := errors.NewError(errors.CounterError, row, col, msg, table.Name)
-			errors.TypeError = append(errors.TypeError, err)
-			interpreter.Console += fmt.Sprintf("%v", err.Msg)
-			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
+			return dataOrigin
 		case SymbolTable.ERROR:
 			return dataOrigin
 		}

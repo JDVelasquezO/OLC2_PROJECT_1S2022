@@ -62,7 +62,6 @@ func (p Print) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 			}
 
 			if strFromList.Type == SymbolTable.ERROR {
-				interpreter.Console += strFromList.Value.(errors.Error).Msg
 				return strFromList
 			}
 

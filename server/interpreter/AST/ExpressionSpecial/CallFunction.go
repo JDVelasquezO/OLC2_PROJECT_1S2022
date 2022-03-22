@@ -8,17 +8,22 @@ import (
 	"fmt"
 	arrayList "github.com/colegno/arraylist"
 	"reflect"
+	"strconv"
 )
 
 type CallFunction struct {
 	IdFunction      string
 	ListExpressions *arrayList.List
+	Row             int
+	Col             int
 }
 
-func NewCallFunction(idFunction string, listExpressions *arrayList.List) CallFunction {
+func NewCallFunction(idFunction string, listExpressions *arrayList.List, row int, col int) CallFunction {
 	return CallFunction{
 		IdFunction:      idFunction,
 		ListExpressions: listExpressions,
+		Row:             row,
+		Col:             col,
 	}
 }
 
@@ -27,8 +32,10 @@ func (c CallFunction) GetValue(table SymbolTable.SymbolTable) SymbolTable.Return
 
 	if !existsFunction {
 		errors.CounterError += 1
-		msg := "La funcion \"" + c.IdFunction + "\" No existe \n"
-		err := errors.NewError(errors.CounterError, 0, 0, msg, table.Name)
+		row := c.Row
+		col := c.Col
+		msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") Error: La funcion \"" + c.IdFunction + "\" No existe \n"
+		err := errors.NewError(errors.CounterError, row, col, msg, table.Name)
 		errors.TypeError = append(errors.TypeError, err)
 		interpreter.Console += fmt.Sprintf("%v", err.Msg)
 		return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
@@ -59,10 +66,8 @@ func (c CallFunction) GetValue(table SymbolTable.SymbolTable) SymbolTable.Return
 	finished := cloneFunc.ExecuteParams(envFunction, c.ListExpressions)
 
 	if !finished {
-		return SymbolTable.ReturnType{
-			Value: -1,
-			Type:  SymbolTable.NULL,
-		}
+		msg := "(" + strconv.Itoa(c.Row) + ", " + strconv.Itoa(c.Col) + ") El parámetro no existe ni concuerda \n"
+		return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: msg}
 	}
 
 	val := cloneFunc.Execute(envFunction)
