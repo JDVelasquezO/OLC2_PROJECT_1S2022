@@ -62,7 +62,7 @@ func (c CallFunction) GetValue(table SymbolTable.SymbolTable) SymbolTable.Return
 		newDataType = "void"
 	}
 
-	cloneFunc := Environment.NewFunction(0, 0, function.Id, function.ListParams.Clone(), function.ListInstructs.Clone(), newDataType)
+	cloneFunc := Environment.NewFunction(c.Row, c.Col, function.Id, function.ListParams.Clone(), function.ListInstructs.Clone(), newDataType)
 	finished := cloneFunc.ExecuteParams(envFunction, c.ListExpressions)
 
 	if !finished {

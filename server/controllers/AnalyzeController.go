@@ -116,10 +116,32 @@ func Analyze(c *fiber.Ctx) error {
 				for i := 0; i < listInstructs.Len(); i++ {
 					r := listInstructs.GetValue(i)
 
-					if typeof(r) == "Natives.Break" || typeof(r) == "Natives.Continue" || typeof(r) == "Natives.return" {
+					if typeof(r) == "Natives.Break" || typeof(r) == "Natives.Continue" || typeof(r) == "Natives.Return" {
 						errors.CounterError += 1
-						msg := "(ERROR) No se puede declarar Break sin un ciclo \n"
-						err := errors.NewError(errors.CounterError, 0, 0, msg, interpreter.GlobalTable.Name)
+
+						var row int
+						var col int
+						var transfer string
+						if typeof(r) == "Natives.Break" {
+							row = r.(Natives.Break).Row
+							col = r.(Natives.Break).Col
+							transfer = "Break"
+						}
+
+						if typeof(r) == "Natives.Continue" {
+							row = r.(Natives.Continue).Row
+							col = r.(Natives.Continue).Col
+							transfer = "Continue"
+						}
+
+						if typeof(r) == "Natives.Return" {
+							row = r.(Natives.Return).Row
+							col = r.(Natives.Return).Col
+							transfer = "Return"
+						}
+
+						msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") Error: No se puede declarar " + transfer + " sin un ciclo \n"
+						err := errors.NewError(errors.CounterError, row, col, msg, interpreter.GlobalTable.Name)
 						errors.TypeError = append(errors.TypeError, err)
 						interpreter.Console += fmt.Sprintf("%v", msg)
 						continue

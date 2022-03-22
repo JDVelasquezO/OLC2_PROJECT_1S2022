@@ -4,7 +4,9 @@ import (
 	"OLC2_Project1/server/interpreter"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
+	"OLC2_Project1/server/interpreter/errors"
 	arrayList "github.com/colegno/arraylist"
+	"strconv"
 )
 
 type If struct {
@@ -46,7 +48,13 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 	returnPrincipal := i.Condition.GetValue(table)
 
 	if returnPrincipal.Type != SymbolTable.BOOLEAN {
-		interpreter.Console += "Error no es booleano"
+		row := i.Row
+		col := i.Col
+		errors.CounterError += 1
+		msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") Error: La condición no es booleana"
+		err := errors.NewError(errors.CounterError, row, col, msg, table.Name)
+		errors.TypeError = append(errors.TypeError, err)
+		interpreter.Console += msg
 		return nil
 	}
 

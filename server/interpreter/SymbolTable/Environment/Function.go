@@ -116,11 +116,14 @@ func (f Function) Execute(table SymbolTable.SymbolTable) interface{} {
 			cmpTypes := typeDef[typeRet][valRet.Type]
 
 			if cmpTypes == SymbolTable.NULL {
-				fmt.Println("Error de tipos de datos")
-				return SymbolTable.ReturnType{
-					Type:  SymbolTable.NULL,
-					Value: -1,
-				}
+				errors.CounterError += 1
+				row := f.Row
+				col := f.Col
+				msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") Error: La funcion \"" + f.Id + "\" No retorna tipo de dato válido \n"
+				err := errors.NewError(errors.CounterError, row, col, msg, table.Name)
+				errors.TypeError = append(errors.TypeError, err)
+				interpreter.Console += fmt.Sprintf("%v", err.Msg)
+				return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
 			}
 
 			return valRet
