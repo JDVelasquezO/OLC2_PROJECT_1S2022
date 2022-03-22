@@ -75,6 +75,7 @@ func (d *Assign) Execute(table SymbolTable.SymbolTable) interface{} {
 		errors.CounterError += 1
 		msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No se puede asignar valor a un no mut \n"
 		err := errors.NewError(errors.CounterError, row, col, msg, table.Name)
+		errors.TypeError = append(errors.TypeError, err)
 		interpreter.Console += fmt.Sprintf("%v", err.Msg)
 		return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
 	}

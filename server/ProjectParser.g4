@@ -159,14 +159,14 @@ declaration_prod returns [Abstract.Instruction instr]
         if ($MUT.text != "") {
             $instr = Natives.NewDeclaration($ids_type.list, true, "")
         } else {
-            $instr = Natives.NewDeclaration($ids_type.list, true, "")
+            $instr = Natives.NewDeclaration($ids_type.list, false, "")
         }
     }
     | DECLARAR MUT? ids_type COLON data_type (SEMICOLON|COMMA)? {
         if ($MUT.text != "") {
             $instr = Natives.NewDeclaration($ids_type.list, true, $data_type.data)
         } else {
-            $instr = Natives.NewDeclaration($ids_type.list, true, $data_type.data)
+            $instr = Natives.NewDeclaration($ids_type.list, false, $data_type.data)
         }
     }
     ;
@@ -469,7 +469,6 @@ expression returns [Abstract.Expression p]
     | expr_logic                 { $p = $expr_logic.p }
     | expr_rel                   { $p = $expr_rel.p }
     | arraydata                  { $p = $arraydata.p }
-    | expr_vector                { $p = $expr_vector.p }
 ;
 
 arraydata returns [Abstract.Expression p]

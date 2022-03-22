@@ -210,7 +210,7 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 
 			} else {
 
-				symbol := SymbolTable.NewSymbolId(varDec.Id, varDec.Row, varDec.Col, typeRes, dataOrigin.Value, d.IsMut)
+				symbol := SymbolTable.NewSymbolId(varDec.Id, varDec.Row, varDec.Col, typeRes, dataOrigin.Value, !d.IsMut)
 				table.AddNewSymbol(varDec.Id, symbol)
 			}
 		}
@@ -222,7 +222,7 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 			if table.ExistsSymbol(varDec.Id) {
 				fmt.Println("Error: Variable declarada")
 			} else {
-				symbol := SymbolTable.NewSymbolId(varDec.Id, 0, 0, typeDec, nil, d.IsMut)
+				symbol := SymbolTable.NewSymbolId(varDec.Id, 0, 0, typeDec, nil, !d.IsMut)
 				table.AddNewSymbol(varDec.Id, symbol)
 			}
 		}

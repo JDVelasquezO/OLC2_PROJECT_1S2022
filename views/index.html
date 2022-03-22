@@ -207,14 +207,16 @@
                     </tr>
                     </thead>
                     <tbody>
+                    {{ range .Err }}
                     <tr>
-                        <td>ID</td>
-                        <td>Type</td>
-                        <td>Message</td>
-                        <td>Line</td>
-                        <td>Column</td>
-                        <td>global</td>
+                        <td>{{ .Id }}</td>
+                        <td>{{ .Msg }}</td>
+                        <td>{{ .Ambit }}</td>
+                        <td>{{ .Line }}</td>
+                        <td>{{ .Col }}</td>
+                        <td>date</td>
                     </tr>
+                    {{ end }}
                     </tbody>
                 </table>
             </div>

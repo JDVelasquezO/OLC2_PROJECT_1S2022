@@ -166,11 +166,12 @@ func Analyze(c *fiber.Ctx) error {
 			}
 		}
 	}
+	errorsArray := errors.TypeError
 	//fmt.Println(symbols)
 	return c.Render("index", fiber.Map{
 		"Parser":       data.Code,
 		"Res":          interpreter.Console,
-		"Err":          errors.TypeError,
+		"Err":          errorsArray,
 		"Symbols":      symbols.Table,
 		"Arrays":       symbols.ArrayTable,
 		"Functions":    symbols.FunctionTable,
