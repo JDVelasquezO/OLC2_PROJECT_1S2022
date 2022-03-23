@@ -11,8 +11,17 @@ type ProjectParserListener interface {
 	// EnterStart is called when entering the start production.
 	EnterStart(c *StartContext)
 
+	// EnterListInits is called when entering the listInits production.
+	EnterListInits(c *ListInitsContext)
+
 	// EnterListFuncs is called when entering the listFuncs production.
 	EnterListFuncs(c *ListFuncsContext)
+
+	// EnterListArrays is called when entering the listArrays production.
+	EnterListArrays(c *ListArraysContext)
+
+	// EnterListStructs is called when entering the listStructs production.
+	EnterListStructs(c *ListStructsContext)
 
 	// EnterFunction is called when entering the function production.
 	EnterFunction(c *FunctionContext)
@@ -128,6 +137,18 @@ type ProjectParserListener interface {
 	// EnterReturn_instr is called when entering the return_instr production.
 	EnterReturn_instr(c *Return_instrContext)
 
+	// EnterDec_struct is called when entering the dec_struct production.
+	EnterDec_struct(c *Dec_structContext)
+
+	// EnterBloq_struct is called when entering the bloq_struct production.
+	EnterBloq_struct(c *Bloq_structContext)
+
+	// EnterContent_struct is called when entering the content_struct production.
+	EnterContent_struct(c *Content_structContext)
+
+	// EnterItem_struct is called when entering the item_struct production.
+	EnterItem_struct(c *Item_structContext)
+
 	// EnterExpression is called when entering the expression production.
 	EnterExpression(c *ExpressionContext)
 
@@ -179,8 +200,17 @@ type ProjectParserListener interface {
 	// ExitStart is called when exiting the start production.
 	ExitStart(c *StartContext)
 
+	// ExitListInits is called when exiting the listInits production.
+	ExitListInits(c *ListInitsContext)
+
 	// ExitListFuncs is called when exiting the listFuncs production.
 	ExitListFuncs(c *ListFuncsContext)
+
+	// ExitListArrays is called when exiting the listArrays production.
+	ExitListArrays(c *ListArraysContext)
+
+	// ExitListStructs is called when exiting the listStructs production.
+	ExitListStructs(c *ListStructsContext)
 
 	// ExitFunction is called when exiting the function production.
 	ExitFunction(c *FunctionContext)
@@ -295,6 +325,18 @@ type ProjectParserListener interface {
 
 	// ExitReturn_instr is called when exiting the return_instr production.
 	ExitReturn_instr(c *Return_instrContext)
+
+	// ExitDec_struct is called when exiting the dec_struct production.
+	ExitDec_struct(c *Dec_structContext)
+
+	// ExitBloq_struct is called when exiting the bloq_struct production.
+	ExitBloq_struct(c *Bloq_structContext)
+
+	// ExitContent_struct is called when exiting the content_struct production.
+	ExitContent_struct(c *Content_structContext)
+
+	// ExitItem_struct is called when exiting the item_struct production.
+	ExitItem_struct(c *Item_structContext)
 
 	// ExitExpression is called when exiting the expression production.
 	ExitExpression(c *ExpressionContext)

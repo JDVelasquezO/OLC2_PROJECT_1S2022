@@ -25,6 +25,10 @@ func NewVector(start *Node) Vector {
 }
 
 func (v Vector) Push(value Abstract.Expression, table SymbolTable.SymbolTable) Vector {
+	if v.DataType != value.GetValue(table).Type {
+		
+	}
+
 	node := NewNode(value)
 	if v.isEmpty() {
 		v.Start = &node
@@ -53,8 +57,8 @@ func (v Vector) Insert(value Abstract.Expression, index int, table SymbolTable.S
 		node := NewNode(value)
 		if index == 0 {
 			first := v.Start
-			v.Start = v.Start.Next
-			first.Next = &node
+			v.Start = &node
+			node.Next = first
 		} else if index < v.Length {
 			pointer := v.Start
 			counter := 0
@@ -159,8 +163,21 @@ func (v Vector) GetValue(list *arrayList.List, table SymbolTable.SymbolTable) in
 	}
 }
 
-func (v Vector) Contains() {
+func (v Vector) Contains(value Abstract.Expression, table SymbolTable.SymbolTable) bool {
+	if !v.isEmpty() {
+		pointer := v.Start
 
+		for pointer.Next != nil {
+
+			if pointer.Value.GetValue(table).Value == value.GetValue(table).Value {
+				return true
+			}
+
+			pointer = pointer.Next
+		}
+	}
+
+	return false
 }
 
 func (v Vector) isEmpty() bool {
@@ -169,8 +186,4 @@ func (v Vector) isEmpty() bool {
 
 func (v Vector) GetLength() int {
 	return v.Length
-}
-
-func (v Vector) ChangeValue(newVal interface{}, symbolTable SymbolTable.SymbolTable) {
-
 }

@@ -27,11 +27,29 @@ func (s *BaseProjectParserListener) EnterStart(ctx *StartContext) {}
 // ExitStart is called when production start is exited.
 func (s *BaseProjectParserListener) ExitStart(ctx *StartContext) {}
 
+// EnterListInits is called when production listInits is entered.
+func (s *BaseProjectParserListener) EnterListInits(ctx *ListInitsContext) {}
+
+// ExitListInits is called when production listInits is exited.
+func (s *BaseProjectParserListener) ExitListInits(ctx *ListInitsContext) {}
+
 // EnterListFuncs is called when production listFuncs is entered.
 func (s *BaseProjectParserListener) EnterListFuncs(ctx *ListFuncsContext) {}
 
 // ExitListFuncs is called when production listFuncs is exited.
 func (s *BaseProjectParserListener) ExitListFuncs(ctx *ListFuncsContext) {}
+
+// EnterListArrays is called when production listArrays is entered.
+func (s *BaseProjectParserListener) EnterListArrays(ctx *ListArraysContext) {}
+
+// ExitListArrays is called when production listArrays is exited.
+func (s *BaseProjectParserListener) ExitListArrays(ctx *ListArraysContext) {}
+
+// EnterListStructs is called when production listStructs is entered.
+func (s *BaseProjectParserListener) EnterListStructs(ctx *ListStructsContext) {}
+
+// ExitListStructs is called when production listStructs is exited.
+func (s *BaseProjectParserListener) ExitListStructs(ctx *ListStructsContext) {}
 
 // EnterFunction is called when production function is entered.
 func (s *BaseProjectParserListener) EnterFunction(ctx *FunctionContext) {}
@@ -260,6 +278,30 @@ func (s *BaseProjectParserListener) EnterReturn_instr(ctx *Return_instrContext) 
 
 // ExitReturn_instr is called when production return_instr is exited.
 func (s *BaseProjectParserListener) ExitReturn_instr(ctx *Return_instrContext) {}
+
+// EnterDec_struct is called when production dec_struct is entered.
+func (s *BaseProjectParserListener) EnterDec_struct(ctx *Dec_structContext) {}
+
+// ExitDec_struct is called when production dec_struct is exited.
+func (s *BaseProjectParserListener) ExitDec_struct(ctx *Dec_structContext) {}
+
+// EnterBloq_struct is called when production bloq_struct is entered.
+func (s *BaseProjectParserListener) EnterBloq_struct(ctx *Bloq_structContext) {}
+
+// ExitBloq_struct is called when production bloq_struct is exited.
+func (s *BaseProjectParserListener) ExitBloq_struct(ctx *Bloq_structContext) {}
+
+// EnterContent_struct is called when production content_struct is entered.
+func (s *BaseProjectParserListener) EnterContent_struct(ctx *Content_structContext) {}
+
+// ExitContent_struct is called when production content_struct is exited.
+func (s *BaseProjectParserListener) ExitContent_struct(ctx *Content_structContext) {}
+
+// EnterItem_struct is called when production item_struct is entered.
+func (s *BaseProjectParserListener) EnterItem_struct(ctx *Item_structContext) {}
+
+// ExitItem_struct is called when production item_struct is exited.
+func (s *BaseProjectParserListener) ExitItem_struct(ctx *Item_structContext) {}
 
 // EnterExpression is called when production expression is entered.
 func (s *BaseProjectParserListener) EnterExpression(ctx *ExpressionContext) {}

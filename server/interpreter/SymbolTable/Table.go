@@ -11,12 +11,14 @@ type SymbolTable struct {
 	Table         map[string]interface{} // string: Abstract
 	FunctionTable map[string]interface{}
 	ArrayTable    map[string]interface{}
+	StructTable   map[string]interface{}
 }
 
 func NewSymbolTable(name string, before *SymbolTable) SymbolTable {
 	table := make(map[string]interface{})
 	funcTable := make(map[string]interface{})
 	arrTable := make(map[string]interface{})
+	structTable := make(map[string]interface{})
 
 	in := SymbolTable{
 		Name:          name,
@@ -24,6 +26,7 @@ func NewSymbolTable(name string, before *SymbolTable) SymbolTable {
 		Table:         table,
 		FunctionTable: funcTable,
 		ArrayTable:    arrTable,
+		StructTable:   structTable,
 	}
 
 	return in
@@ -185,6 +188,39 @@ func (table *SymbolTable) GetFunction(id string) interface{} {
 	}
 
 	return nil
+}
+
+func (table *SymbolTable) ExistsStruct(id string) bool {
+	idFinal := strings.ToLower(id)
+
+	for actualTable := table; actualTable != nil; actualTable = actualTable.Before {
+		for key, _ := range actualTable.StructTable {
+			if key == idFinal {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
+func (table *SymbolTable) GetStruct(id string) interface{} {
+	idFinal := strings.ToLower(id)
+
+	for actualTable := table; actualTable != nil; actualTable = actualTable.Before {
+		for key, structElement := range actualTable.StructTable {
+			if key == idFinal {
+				return structElement
+			}
+		}
+	}
+
+	return nil
+}
+
+func (table *SymbolTable) AddStruct(id string, symbol interface{}) {
+	idFinal := strings.ToLower(id)
+	table.StructTable[idFinal] = symbol
 }
 
 func typeof(v interface{}) string {

@@ -3,6 +3,8 @@ package DecVectors
 import (
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
+	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Vector"
+	"reflect"
 )
 
 type Natives struct {
@@ -14,9 +16,16 @@ type Natives struct {
 
 func (n Natives) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.ReturnType {
 	value := n.Execute(symbolTable)
-	return SymbolTable.ReturnType{
-		Value: value,
-		Type:  SymbolTable.INTEGER,
+	if reflect.TypeOf(value).String() == "bool" {
+		return SymbolTable.ReturnType{
+			Value: value,
+			Type:  SymbolTable.BOOLEAN,
+		}
+	} else {
+		return SymbolTable.ReturnType{
+			Value: value,
+			Type:  SymbolTable.INTEGER,
+		}
 	}
 }
 
@@ -33,10 +42,10 @@ func (n Natives) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 	switch n.Operation {
 	case "push":
 		newPush := NewPush(n.Id, n.Value)
-		return newPush.Execute(symbolTable)
+		newPush.Execute(symbolTable)
 	case "remove":
 		newRemove := NewRemove(n.Id, n.Value)
-		return newRemove.Execute(symbolTable)
+		newRemove.Execute(symbolTable)
 	case "len", "capacity":
 		newLen := NewLen(n.Id)
 		return newLen.Execute(symbolTable)
@@ -44,6 +53,9 @@ func (n Natives) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 		index := n.Index.GetValue(symbolTable).Value.(int)
 		newInsert := NewInsert(n.Id, n.Value, index)
 		newInsert.Execute(symbolTable)
+	case "contains":
+		val := symbolTable.GetSymbolArray(n.Id)
+		return val.(Vector.Vector).Contains(n.Value, symbolTable)
 	}
 	return nil
 }

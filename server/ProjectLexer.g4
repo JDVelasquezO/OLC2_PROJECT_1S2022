@@ -54,6 +54,9 @@ RNEW:                    'new';
 REVECTORNEW:             'Vec::new()';
 REVECCAPACITY:           'Vec::with_capacity';
 
+// Structs
+RSTRUCT:                 'struct';
+
 // Comments
 MULTILINE:      '/*' (~[/])+ '*/' -> skip;
 INLINE:         '//'(~[\n])+ -> skip;

@@ -15,6 +15,7 @@ options {
     import "OLC2_Project1/server/interpreter/AST/ExpressionSpecial"
     import "OLC2_Project1/server/interpreter/AST/Natives/DecArrays"
     import "OLC2_Project1/server/interpreter/AST/Natives/DecVectors"
+    import "OLC2_Project1/server/interpreter/AST/Natives/DecStructs"
     import "OLC2_Project1/server/interpreter/AST/Expression/Access"
     import arrayList "github.com/colegno/arraylist"
 }
@@ -29,8 +30,12 @@ options {
 
 // Rules
 start returns [AST.Tree tree]
-    : listFuncs { $tree = AST.NewTree($listFuncs.l) }
+    : listInits { $tree = AST.NewTree($listInits.l) }
 ;
+
+listInits returns[*arrayList.List l]
+    : listFuncs { $l = $listFuncs.l }
+    ;
 
 listFuncs returns[*arrayList.List l]
     @init {
@@ -40,7 +45,31 @@ listFuncs returns[*arrayList.List l]
         $subList.l.Add($function.instr)
         $l = $subList.l
     }
+    | listArrays { $l = $listArrays.l }
     | function  { $l.Add($function.instr) }
+    ;
+
+listArrays returns[*arrayList.List l]
+    @init {
+            $l = arrayList.New()
+    }
+    : subList = listArrays dec_arr {
+        $subList.l.Add($dec_arr.instr)
+        $l = $subList.l
+    }
+    | listStructs { $l = $listStructs.l }
+    | dec_arr  { $l.Add($dec_arr.instr) }
+    ;
+
+listStructs returns [*arrayList.List l]
+    @init {
+        $l = arrayList.New()
+    }
+    : subList = listStructs dec_struct {
+        $subList.l.Add($dec_struct.instr)
+        $l = $subList.l
+    }
+    | dec_struct  { $l.Add($dec_struct.instr) }
     ;
 
 function returns[Abstract.Instruction instr]
@@ -116,6 +145,7 @@ instruction returns [Abstract.Instruction instr]
     | expr_rel COMMA?   { $instr = $expr_rel.instr }
     | expr_logic        { $instr = $expr_logic.instr }
     | dec_arr           { $instr = $dec_arr.instr }
+    | dec_struct        { $instr = $dec_struct.instr }
     | vector_instr      { $instr = $vector_instr.instr }
     | transfer_prod     { $instr = $transfer_prod.instr }
     ;
@@ -449,6 +479,10 @@ natives_vector returns[Abstract.Instruction instr, Abstract.Expression p]
         $instr = DecVectors.NewOperation($ID.text, $e2.p, $op.text, $e1.p)
         $p = DecVectors.NewOperation($ID.text, $e2.p, $op.text, $e1.p)
     }
+    | ID DOT op=ID LEFT_PAR REFERENCE expression RIGHT_PAR SEMICOLON? {
+        $instr = DecVectors.NewOperation($ID.text, $expression.p, $op.text, nil)
+        $p = DecVectors.NewOperation($ID.text, $expression.p, $op.text, nil)
+    }
     ;
 
 transfer_prod returns[Abstract.Instruction instr]
@@ -469,6 +503,51 @@ continue_instr returns[Abstract.Instruction instr]
 return_instr returns[Abstract.Instruction instr]
     : RRETURN SEMICOLON { $instr = Natives.NewReturn($RRETURN.line, localctx.(*Return_instrContext).Get_RRETURN().GetColumn(), nil) }
     | RRETURN expression SEMICOLON? { $instr = Natives.NewReturn($RRETURN.line, localctx.(*Return_instrContext).Get_RRETURN().GetColumn(), $expression.p) }
+    ;
+
+dec_struct returns [Abstract.Instruction instr]
+    : RSTRUCT ID bloq_struct   {
+        $instr = DecStructs.NewDecStruct($ID.text, $bloq_struct.l)
+    }
+    ;
+
+bloq_struct returns [*arrayList.List l]
+    : LEFT_KEY content_struct RIGHT_KEY {
+        $l = $content_struct.l
+    }
+    ;
+
+content_struct returns [*arrayList.List l]
+    @init {
+        $l = arrayList.New()
+    }
+    : subList = content_struct item_struct {
+        $subList.l.Add($item_struct.p)
+        $l = $subList.l
+    }
+    | item_struct {
+        $l.Add($item_struct.p)
+     }
+    ;
+
+item_struct returns [Abstract.Expression p]
+    : ID COLON data_type COMMA? {
+        var data SymbolTable.DataType
+        switch ($data_type.data) {
+            case "i64":
+                data = SymbolTable.INTEGER
+            case "f64":
+                data = SymbolTable.FLOAT
+            case "&str":
+                data = SymbolTable.STR
+            case "String":
+                data = SymbolTable.STRING
+            case "bool":
+                data = SymbolTable.BOOLEAN
+        }
+
+        $p = Expression.NewItemStruct($ID.text, data, $ID.line, localctx.(*Item_structContext).Get_ID().GetColumn())
+    }
     ;
 
 expression returns [Abstract.Expression p]
