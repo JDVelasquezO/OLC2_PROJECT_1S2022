@@ -75,7 +75,12 @@ func (a ArrayAccess) GetValue(table SymbolTable.SymbolTable) SymbolTable.ReturnT
 	}
 
 	dimensions := a.GetIntDimensions(table)
-	val := objectArr.GetValue(dimensions, 0, objectArr.Values)
+	val := objectArr.GetValue(dimensions, 0, objectArr.Values, table)
+
+	if reflect.TypeOf(val) == reflect.TypeOf(SymbolTable.ReturnType{}) {
+		return val.(SymbolTable.ReturnType)
+	}
+
 	return SymbolTable.ReturnType{
 		Value: val,
 		Type:  objectArr.DataType,

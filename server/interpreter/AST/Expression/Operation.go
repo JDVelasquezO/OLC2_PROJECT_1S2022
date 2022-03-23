@@ -187,8 +187,34 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 
 		priority = multiDiv[retLeft.Type][retRight.Type]
 		if priority == SymbolTable.INTEGER {
+
+			if retRight.Value.(int) == 0 {
+				row := p.Row
+				col := p.Col
+				errors.CounterError += 1
+				msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") Error: No se puede dividir dentro de 0 \n"
+				err := errors.NewError(errors.CounterError, row, col, msg, symbolTable.Name)
+				errors.TypeError = append(errors.TypeError, err)
+				interpreter.Console += fmt.Sprintf("%v", err.Msg)
+				return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
+			}
+
 			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(int) / retRight.Value.(int)}
 		} else if priority == SymbolTable.FLOAT {
+
+			if retRight.Value.(float64) == 0 {
+				if retRight.Value.(int) == 0 {
+					row := 0
+					col := 0
+					errors.CounterError += 1
+					msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No se puede dividir dentro de 0 \n"
+					err := errors.NewError(errors.CounterError, row, col, msg, symbolTable.Name)
+					errors.TypeError = append(errors.TypeError, err)
+					interpreter.Console += fmt.Sprintf("%v", err.Msg)
+					return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
+				}
+			}
+
 			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(float64) / retRight.Value.(float64)}
 		}
 

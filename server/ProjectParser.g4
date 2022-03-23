@@ -472,7 +472,12 @@ expression returns [Abstract.Expression p]
 ;
 
 arraydata returns [Abstract.Expression p]
-    : LEFT_BRACKET listExpressions RIGHT_BRACKET { $p = ExpressionSpecial.NewValueArray($listExpressions.l) }
+    : LEFT_BRACKET listExpressions RIGHT_BRACKET {
+        $p = ExpressionSpecial.NewValueArray($listExpressions.l, nil, nil)
+    }
+    | LEFT_BRACKET e1=expression SEMICOLON e2=expression RIGHT_BRACKET {
+        $p = ExpressionSpecial.NewValueArray(nil, $e1.p, $e2.p)
+    }
     ;
 
 access_array returns [Abstract.Expression p, Abstract.Instruction instr]

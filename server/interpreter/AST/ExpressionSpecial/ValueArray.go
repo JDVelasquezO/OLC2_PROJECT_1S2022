@@ -10,11 +10,15 @@ import (
 
 type ValueArray struct {
 	Expressions *arrayList.List
+	Exp1        Abstract.Expression
+	Exp2        Abstract.Expression
 }
 
-func NewValueArray(expressions *arrayList.List) ValueArray {
+func NewValueArray(expressions *arrayList.List, exp1 Abstract.Expression, exp2 Abstract.Expression) ValueArray {
 	return ValueArray{
 		Expressions: expressions,
+		Exp1:        exp1,
+		Exp2:        exp2,
 	}
 }
 
@@ -30,19 +34,39 @@ func (v ValueArray) GetData(table SymbolTable.SymbolTable) (interface{}, SymbolT
 	dtype := SymbolTable.NULL
 	data := arrayList.New()
 
-	for i := 0; i < v.Expressions.Len(); i++ {
-		expr := v.Expressions.GetValue(i).(Abstract.Expression)
-		valExpr := expr.GetValue(table)
+	if v.Expressions != nil {
+		for i := 0; i < v.Expressions.Len(); i++ {
+			expr := v.Expressions.GetValue(i).(Abstract.Expression)
+			valExpr := expr.GetValue(table)
 
-		if i == 0 {
-			dtype = valExpr.Type
-			data.Add(valExpr)
-		} else {
-			if dtype != valExpr.Type {
-				fmt.Println("Error1")
-				return nil, SymbolTable.NULL
+			if i == 0 {
+				dtype = valExpr.Type
+				data.Add(valExpr)
+			} else {
+				if dtype != valExpr.Type {
+					fmt.Println("Error1")
+					return nil, SymbolTable.NULL
+				}
+				data.Add(valExpr)
 			}
-			data.Add(valExpr)
+		}
+	}
+
+	if v.Exp2 != nil {
+		expr := v.Exp1.GetValue(table)
+		for i := 0; i < expr.Value.(int); i++ {
+			valExpr := expr
+
+			if i == 0 {
+				dtype = valExpr.Type
+				data.Add(valExpr)
+			} else {
+				if dtype != valExpr.Type {
+					fmt.Println("Error1")
+					return nil, SymbolTable.NULL
+				}
+				data.Add(valExpr)
+			}
 		}
 	}
 

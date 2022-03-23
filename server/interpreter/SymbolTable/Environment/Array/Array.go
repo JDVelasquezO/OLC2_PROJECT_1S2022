@@ -26,7 +26,7 @@ func NewArray(id string, dataType SymbolTable.DataType, values []interface{}, li
 	}
 }
 
-func (a Array) GetValue(list *arrayList.List, indexLevel int, values []interface{}) interface{} {
+func (a Array) GetValue(list *arrayList.List, indexLevel int, values []interface{}, table SymbolTable.SymbolTable) interface{} {
 	listClone := list.Clone()
 
 	indexPiv := listClone.GetValue(0).(int)
@@ -44,13 +44,19 @@ func (a Array) GetValue(list *arrayList.List, indexLevel int, values []interface
 				fmt.Println("Error 2")
 				return nil
 			} else {
-				return a.GetValue(listClone, indexLevel+1, subArray.([]interface{}))
+				return a.GetValue(listClone, indexLevel+1, subArray.([]interface{}), table)
 			}
 		}
 	} else {
 		if indexPiv > lengthLevel-1 {
-			fmt.Println("Error 3")
-			return nil
+			row := a.Row
+			col := a.Col
+			errors.CounterError += 1
+			msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") Desbordamiento de memoria. Índice invalido \n"
+			err := errors.NewError(errors.CounterError, row, col, msg, table.Name)
+			errors.TypeError = append(errors.TypeError, err)
+			interpreter.Console += fmt.Sprintf("%v", err.Msg)
+			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
 		}
 		return values[indexPiv]
 	}
