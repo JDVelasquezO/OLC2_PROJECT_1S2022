@@ -437,11 +437,11 @@ expr_vector returns [Abstract.Expression p]
     ;
 
 natives_vector returns[Abstract.Instruction instr, Abstract.Expression p]
-    : ID DOT op=ID LEFT_PAR expression RIGHT_PAR SEMICOLON {
+    : ID DOT op=ID LEFT_PAR expression RIGHT_PAR SEMICOLON? {
         $instr = DecVectors.NewOperation($ID.text, $expression.p, $op.text)
         $p = DecVectors.NewOperation($ID.text, $expression.p, $op.text)
     }
-    | ID DOT op=ID LEFT_PAR RIGHT_PAR SEMICOLON {
+    | ID DOT op=ID LEFT_PAR RIGHT_PAR SEMICOLON? {
         $instr = DecVectors.NewOperation($ID.text, nil, $op.text)
         $p = DecVectors.NewOperation($ID.text, nil, $op.text)
     }
