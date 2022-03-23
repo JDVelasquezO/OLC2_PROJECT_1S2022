@@ -48,6 +48,54 @@ func (v Vector) Push(value Abstract.Expression, table SymbolTable.SymbolTable) V
 	return v
 }
 
+func (v Vector) Insert(value Abstract.Expression, index int, table SymbolTable.SymbolTable) interface{} {
+	if !v.isEmpty() {
+		node := NewNode(value)
+		if index == 0 {
+			first := v.Start
+			v.Start = v.Start.Next
+			first.Next = &node
+		} else if index < v.Length {
+			pointer := v.Start
+			counter := 0
+			for counter < (index - 1) {
+				pointer = pointer.Next
+				counter += 1
+			}
+
+			temp := pointer.Next
+			pointer.Next = &node
+			node.Next = temp
+		} else {
+			goto IndexError
+		}
+
+		v.Value = insert(v.Value.([]interface{}), index, value.GetValue(table).Value)
+		v.Length += 1
+	}
+
+	return v
+
+IndexError:
+	row := v.Row
+	col := v.Col
+	errors.CounterError += 1
+	msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") Error: Indice excedido: " + strconv.Itoa(index) + " \n"
+	err := errors.NewError(errors.CounterError, row, col, msg, table.Name)
+	errors.TypeError = append(errors.TypeError, err)
+	interpreter.Console += fmt.Sprintf("%v", err.Msg)
+	return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
+}
+
+func insert(a []interface{}, index int, value interface{}) []interface{} {
+	if len(a) == index { // nil or empty slice or after last element
+		return append(a, value)
+	}
+	a = append(a[:index+1], a[index:]...) // index < len(a)
+	a[index] = value
+	return a
+}
+
 func (v Vector) Remove(index int, table SymbolTable.SymbolTable) interface{} {
 	if !v.isEmpty() {
 		if index == 0 {

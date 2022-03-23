@@ -102,7 +102,7 @@ func Analyze(c *fiber.Ctx) error {
 	if len(lexicalErrors.Errors) == 0 && len(parseErrors.Errors) == 0 {
 		start := time.Now()
 		if ast.ListInstr != nil {
-			// First time for functions
+			// First time for functions and
 			for i := 0; i < ast.ListInstr.Len(); i++ {
 				r := ast.ListInstr.GetValue(i)
 				if typeof(r) == "Environment.Function" {

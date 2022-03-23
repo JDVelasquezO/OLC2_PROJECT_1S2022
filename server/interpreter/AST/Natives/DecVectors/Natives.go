@@ -9,6 +9,7 @@ type Natives struct {
 	Id        string
 	Value     Abstract.Expression
 	Operation string
+	Index     Abstract.Expression
 }
 
 func (n Natives) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.ReturnType {
@@ -19,11 +20,12 @@ func (n Natives) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Retur
 	}
 }
 
-func NewOperation(id string, value Abstract.Expression, operation string) Natives {
+func NewOperation(id string, value Abstract.Expression, operation string, index Abstract.Expression) Natives {
 	return Natives{
 		Value:     value,
 		Id:        id,
 		Operation: operation,
+		Index:     index,
 	}
 }
 
@@ -38,6 +40,10 @@ func (n Natives) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 	case "len", "capacity":
 		newLen := NewLen(n.Id)
 		return newLen.Execute(symbolTable)
+	case "insert":
+		index := n.Index.GetValue(symbolTable).Value.(int)
+		newInsert := NewInsert(n.Id, n.Value, index)
+		newInsert.Execute(symbolTable)
 	}
 	return nil
 }
