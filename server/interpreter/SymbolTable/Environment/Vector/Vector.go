@@ -111,6 +111,10 @@ func (v Vector) GetValue(list *arrayList.List, table SymbolTable.SymbolTable) in
 	}
 }
 
+func (v Vector) Contains() {
+
+}
+
 func (v Vector) isEmpty() bool {
 	return v.Start == nil
 }

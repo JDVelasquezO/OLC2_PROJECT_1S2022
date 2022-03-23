@@ -42,7 +42,11 @@ func (p Push) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 	}
 	newVal := val.(Vector.Vector).Push(p.Value, symbolTable)
 	symbolTable.ChangeValVector(p.Id, newVal)
-	return val
+	return SymbolTable.ReturnType{
+		Value: val,
+		Type:  SymbolTable.ARRAY,
+	}
+	//return val
 }
 
 func (p Push) ExecuteFirstTime(symbolTable SymbolTable.SymbolTable) interface{} {

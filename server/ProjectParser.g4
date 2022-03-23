@@ -441,6 +441,10 @@ natives_vector returns[Abstract.Instruction instr, Abstract.Expression p]
         $instr = DecVectors.NewOperation($ID.text, $expression.p, $op.text)
         $p = DecVectors.NewOperation($ID.text, $expression.p, $op.text)
     }
+    | ID DOT op=ID LEFT_PAR RIGHT_PAR SEMICOLON {
+        $instr = DecVectors.NewOperation($ID.text, nil, $op.text)
+        $p = DecVectors.NewOperation($ID.text, nil, $op.text)
+    }
     ;
 
 transfer_prod returns[Abstract.Instruction instr]
@@ -469,6 +473,7 @@ expression returns [Abstract.Expression p]
     | expr_logic                 { $p = $expr_logic.p }
     | expr_rel                   { $p = $expr_rel.p }
     | arraydata                  { $p = $arraydata.p }
+    | natives_vector             { $p = $natives_vector.p }
 ;
 
 arraydata returns [Abstract.Expression p]

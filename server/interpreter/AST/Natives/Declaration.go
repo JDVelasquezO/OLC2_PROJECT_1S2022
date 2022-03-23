@@ -101,6 +101,7 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 
 		dataOrigin := d.InitVal.GetValue(table)
 		dataOriginType := dataOrigin.Type
+
 		if (dataOriginType != d.DataType) && (d.DataType != SymbolTable.NULL) {
 			typeVal := typeof(d.InitVal)
 			var row int

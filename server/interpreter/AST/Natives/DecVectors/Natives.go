@@ -12,8 +12,11 @@ type Natives struct {
 }
 
 func (n Natives) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.ReturnType {
-	//TODO implement me
-	panic("implement me")
+	value := n.Execute(symbolTable)
+	return SymbolTable.ReturnType{
+		Value: value,
+		Type:  SymbolTable.INTEGER,
+	}
 }
 
 func NewOperation(id string, value Abstract.Expression, operation string) Natives {
@@ -28,10 +31,13 @@ func (n Natives) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 	switch n.Operation {
 	case "push":
 		newPush := NewPush(n.Id, n.Value)
-		newPush.ExecuteFirstTime(symbolTable)
+		return newPush.Execute(symbolTable)
 	case "remove":
 		newRemove := NewRemove(n.Id, n.Value)
-		newRemove.Execute(symbolTable)
+		return newRemove.Execute(symbolTable)
+	case "len", "capacity":
+		newLen := NewLen(n.Id)
+		return newLen.Execute(symbolTable)
 	}
 	return nil
 }
