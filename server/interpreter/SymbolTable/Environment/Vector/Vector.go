@@ -1,9 +1,13 @@
 package Vector
 
 import (
+	"OLC2_Project1/server/interpreter"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
+	"OLC2_Project1/server/interpreter/errors"
+	"fmt"
 	arrayList "github.com/colegno/arraylist"
+	"strconv"
 )
 
 type Vector struct {
@@ -42,6 +46,48 @@ func (v Vector) Push(value Abstract.Expression, table SymbolTable.SymbolTable) V
 	}
 
 	return v
+}
+
+func (v Vector) Remove(index int, table SymbolTable.SymbolTable) interface{} {
+	if !v.isEmpty() {
+		if index == 0 {
+			first := v.Start
+			v.Start = v.Start.Next
+			first.Next = nil
+		} else if index < v.Length {
+			pointer := v.Start
+			counter := 0
+			for counter < (index - 1) {
+				pointer = pointer.Next
+				counter += 1
+			}
+
+			temp := pointer.Next
+			pointer.Next = temp.Next
+			temp.Next = nil
+		} else {
+			goto IndexError
+		}
+
+		v.Value = removeIndex(v.Value.([]interface{}), index)
+		v.Length -= 1
+	}
+
+	return v
+
+IndexError:
+	row := v.Row
+	col := v.Col
+	errors.CounterError += 1
+	msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") Error: Indice excedido: " + strconv.Itoa(index) + " \n"
+	err := errors.NewError(errors.CounterError, row, col, msg, table.Name)
+	errors.TypeError = append(errors.TypeError, err)
+	interpreter.Console += fmt.Sprintf("%v", err.Msg)
+	return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
+}
+
+func removeIndex(s []interface{}, index int) []interface{} {
+	return append(s[:index], s[index+1:]...)
 }
 
 func (v Vector) GetValue(list *arrayList.List, table SymbolTable.SymbolTable) interface{} {

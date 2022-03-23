@@ -231,11 +231,11 @@ func (s *BaseProjectParserListener) EnterExpr_vector(ctx *Expr_vectorContext) {}
 // ExitExpr_vector is called when production expr_vector is exited.
 func (s *BaseProjectParserListener) ExitExpr_vector(ctx *Expr_vectorContext) {}
 
-// EnterPush_vector is called when production push_vector is entered.
-func (s *BaseProjectParserListener) EnterPush_vector(ctx *Push_vectorContext) {}
+// EnterNatives_vector is called when production natives_vector is entered.
+func (s *BaseProjectParserListener) EnterNatives_vector(ctx *Natives_vectorContext) {}
 
-// ExitPush_vector is called when production push_vector is exited.
-func (s *BaseProjectParserListener) ExitPush_vector(ctx *Push_vectorContext) {}
+// ExitNatives_vector is called when production natives_vector is exited.
+func (s *BaseProjectParserListener) ExitNatives_vector(ctx *Natives_vectorContext) {}
 
 // EnterTransfer_prod is called when production transfer_prod is entered.
 func (s *BaseProjectParserListener) EnterTransfer_prod(ctx *Transfer_prodContext) {}

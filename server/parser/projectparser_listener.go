@@ -113,8 +113,8 @@ type ProjectParserListener interface {
 	// EnterExpr_vector is called when entering the expr_vector production.
 	EnterExpr_vector(c *Expr_vectorContext)
 
-	// EnterPush_vector is called when entering the push_vector production.
-	EnterPush_vector(c *Push_vectorContext)
+	// EnterNatives_vector is called when entering the natives_vector production.
+	EnterNatives_vector(c *Natives_vectorContext)
 
 	// EnterTransfer_prod is called when entering the transfer_prod production.
 	EnterTransfer_prod(c *Transfer_prodContext)
@@ -281,8 +281,8 @@ type ProjectParserListener interface {
 	// ExitExpr_vector is called when exiting the expr_vector production.
 	ExitExpr_vector(c *Expr_vectorContext)
 
-	// ExitPush_vector is called when exiting the push_vector production.
-	ExitPush_vector(c *Push_vectorContext)
+	// ExitNatives_vector is called when exiting the natives_vector production.
+	ExitNatives_vector(c *Natives_vectorContext)
 
 	// ExitTransfer_prod is called when exiting the transfer_prod production.
 	ExitTransfer_prod(c *Transfer_prodContext)

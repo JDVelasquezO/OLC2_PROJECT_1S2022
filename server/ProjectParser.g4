@@ -365,9 +365,9 @@ vector_instr returns[Abstract.Instruction instr, Abstract.Expression p]
     : dec_vector {
         $instr = $dec_vector.instr
     }
-    | push_vector {
-        $instr = $push_vector.instr
-        $p = $push_vector.p
+    | natives_vector {
+        $instr = $natives_vector.instr
+        $p = $natives_vector.p
     }
     ;
 
@@ -436,10 +436,10 @@ expr_vector returns [Abstract.Expression p]
     }
     ;
 
-push_vector returns[Abstract.Instruction instr, Abstract.Expression p]
-    : ID DOT RPUSH LEFT_PAR expression RIGHT_PAR SEMICOLON {
-        $instr = DecVectors.NewPush($ID.text, $expression.p)
-        $p = DecVectors.NewPush($ID.text, $expression.p)
+natives_vector returns[Abstract.Instruction instr, Abstract.Expression p]
+    : ID DOT op=ID LEFT_PAR expression RIGHT_PAR SEMICOLON {
+        $instr = DecVectors.NewOperation($ID.text, $expression.p, $op.text)
+        $p = DecVectors.NewOperation($ID.text, $expression.p, $op.text)
     }
     ;
 
