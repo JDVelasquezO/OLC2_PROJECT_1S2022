@@ -54,7 +54,7 @@ func (v ValueArray) GetData(table SymbolTable.SymbolTable) (interface{}, SymbolT
 
 	if v.Exp2 != nil {
 		expr := v.Exp1.GetValue(table)
-		for i := 0; i < expr.Value.(int); i++ {
+		for i := 0; i < v.Exp2.GetValue(table).Value.(int); i++ {
 			valExpr := expr
 
 			if i == 0 {
