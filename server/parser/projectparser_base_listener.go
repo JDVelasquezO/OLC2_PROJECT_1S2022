@@ -351,6 +351,24 @@ func (s *BaseProjectParserListener) EnterInVector(ctx *InVectorContext) {}
 // ExitInVector is called when production inVector is exited.
 func (s *BaseProjectParserListener) ExitInVector(ctx *InVectorContext) {}
 
+// EnterType_struct is called when production type_struct is entered.
+func (s *BaseProjectParserListener) EnterType_struct(ctx *Type_structContext) {}
+
+// ExitType_struct is called when production type_struct is exited.
+func (s *BaseProjectParserListener) ExitType_struct(ctx *Type_structContext) {}
+
+// EnterDef_items is called when production def_items is entered.
+func (s *BaseProjectParserListener) EnterDef_items(ctx *Def_itemsContext) {}
+
+// ExitDef_items is called when production def_items is exited.
+func (s *BaseProjectParserListener) ExitDef_items(ctx *Def_itemsContext) {}
+
+// EnterItem is called when production item is entered.
+func (s *BaseProjectParserListener) EnterItem(ctx *ItemContext) {}
+
+// ExitItem is called when production item is exited.
+func (s *BaseProjectParserListener) ExitItem(ctx *ItemContext) {}
+
 // EnterExpr_rel is called when production expr_rel is entered.
 func (s *BaseProjectParserListener) EnterExpr_rel(ctx *Expr_relContext) {}
 

@@ -173,6 +173,15 @@ type ProjectParserListener interface {
 	// EnterInVector is called when entering the inVector production.
 	EnterInVector(c *InVectorContext)
 
+	// EnterType_struct is called when entering the type_struct production.
+	EnterType_struct(c *Type_structContext)
+
+	// EnterDef_items is called when entering the def_items production.
+	EnterDef_items(c *Def_itemsContext)
+
+	// EnterItem is called when entering the item production.
+	EnterItem(c *ItemContext)
+
 	// EnterExpr_rel is called when entering the expr_rel production.
 	EnterExpr_rel(c *Expr_relContext)
 
@@ -361,6 +370,15 @@ type ProjectParserListener interface {
 
 	// ExitInVector is called when exiting the inVector production.
 	ExitInVector(c *InVectorContext)
+
+	// ExitType_struct is called when exiting the type_struct production.
+	ExitType_struct(c *Type_structContext)
+
+	// ExitDef_items is called when exiting the def_items production.
+	ExitDef_items(c *Def_itemsContext)
+
+	// ExitItem is called when exiting the item production.
+	ExitItem(c *ItemContext)
 
 	// ExitExpr_rel is called when exiting the expr_rel production.
 	ExitExpr_rel(c *Expr_relContext)

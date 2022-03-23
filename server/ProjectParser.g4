@@ -17,6 +17,7 @@ options {
     import "OLC2_Project1/server/interpreter/AST/Natives/DecVectors"
     import "OLC2_Project1/server/interpreter/AST/Natives/DecStructs"
     import "OLC2_Project1/server/interpreter/AST/Expression/Access"
+    import "OLC2_Project1/server/interpreter/AST/Expression/Objects"
     import arrayList "github.com/colegno/arraylist"
 }
 
@@ -557,6 +558,7 @@ expression returns [Abstract.Expression p]
     | expr_rel                   { $p = $expr_rel.p }
     | arraydata                  { $p = $arraydata.p }
     | natives_vector             { $p = $natives_vector.p }
+    | type_struct                { $p = $type_struct.p }
 ;
 
 arraydata returns [Abstract.Expression p]
@@ -610,6 +612,25 @@ listInVector returns [*arrayList.List l]
 
 inVector returns [Abstract.Expression p]
     : LEFT_BRACKET expression RIGHT_BRACKET     { $p = $expression.p }
+    ;
+
+type_struct returns [Abstract.Expression p]
+    : ID LEFT_KEY def_items RIGHT_KEY SEMICOLON { $p = Objects.NewObject($ID.text, $def_items.l) }
+    ;
+
+def_items returns[*arrayList.List l]
+    @init{
+        $l = arrayList.New()
+    }
+    : subList = def_items item {
+        $subList.l.Add($item.p)
+        $l = $subList.l
+    }
+    | item { $l.Add($item.p) }
+    ;
+
+item returns[Abstract.Expression p]
+    : ID COLON expression COMMA? { $p = Objects.NewAttribute($ID.text, $expression.p); }
     ;
 
 expr_rel returns[Abstract.Expression p, Abstract.Instruction instr]

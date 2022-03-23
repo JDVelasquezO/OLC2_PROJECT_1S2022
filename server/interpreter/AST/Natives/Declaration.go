@@ -141,6 +141,8 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 			d.DataType = SymbolTable.BOOLEAN
 		case SymbolTable.ARRAY:
 			d.DataType = dataOrigin.Type
+		case SymbolTable.OBJECT:
+			d.DataType = dataOriginType
 		case SymbolTable.NULL:
 			return dataOrigin
 		case SymbolTable.ERROR:
@@ -151,6 +153,8 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 		typeDec := d.DataType
 		var typeRes SymbolTable.DataType
 		if typeDec == SymbolTable.ARRAY {
+			typeRes = dataOriginType
+		} else if typeDec == SymbolTable.OBJECT {
 			typeRes = dataOriginType
 		} else {
 			typeRes = typeDef[typeDec][dataOriginType]
@@ -193,6 +197,12 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 				return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
 
 			} else {
+
+				if dataOriginType == SymbolTable.OBJECT {
+					symbol := SymbolTable.NewSymbolId(varDec.Id, varDec.Row, varDec.Col, typeRes, dataOrigin.Value, !d.IsMut)
+					table.AddObject(symbol.Id, symbol)
+					break
+				}
 
 				symbol := SymbolTable.NewSymbolId(varDec.Id, varDec.Row, varDec.Col, typeRes, dataOrigin.Value, !d.IsMut)
 				table.AddNewSymbol(varDec.Id, symbol)

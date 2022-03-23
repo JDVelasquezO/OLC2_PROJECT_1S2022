@@ -54,7 +54,7 @@ RNEW:                    'new';
 REVECTORNEW:             'Vec::new()';
 REVECCAPACITY:           'Vec::with_capacity';
 
-// Structs
+// Objects
 RSTRUCT:                 'struct';
 
 // Comments

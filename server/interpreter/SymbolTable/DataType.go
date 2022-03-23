@@ -13,6 +13,7 @@ const (
 	NULL
 	ERROR
 	VOID
+	OBJECT
 )
 
 type ReturnType struct {
