@@ -211,6 +211,9 @@ assign_prod returns [Abstract.Instruction instr]
     | ID listInArray EQUAL expression (SEMICOLON|COMMA)? {
         $instr = DecArrays.NewAssignArray($ID.text, $listInArray.l, $expression.p, $EQUAL.line, localctx.(*Assign_prodContext).Get_EQUAL().GetColumn())
     }
+    | access_object EQUAL expression SEMICOLON {
+        $instr = DecObjects.NewAssignObject($access_object.p, $expression.p)
+    }
     ;
 
 ids_type returns [*arrayList.List list]

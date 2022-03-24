@@ -69,3 +69,7 @@ func NewObjectAccess(listAccess *arrayList.List) ObjectAccess {
 		listAccess: listAccess,
 	}
 }
+
+func (o ObjectAccess) GetId(symbolTable SymbolTable.SymbolTable, pos int) string {
+	return o.listAccess.GetValue(pos).(Expression.Identifier).Id
+}

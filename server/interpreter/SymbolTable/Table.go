@@ -243,3 +243,17 @@ func (table *SymbolTable) GetObject(id string) interface{} {
 
 	return nil
 }
+
+func (table *SymbolTable) ChangeValObject(id string, newSymbol interface{}) {
+	newId := strings.ToLower(id)
+
+	for actualTable := table; actualTable != nil; actualTable = actualTable.Before {
+
+		for key, _ := range actualTable.ObjectTable {
+			if key == newId {
+				actualTable.ObjectTable[newId] = newSymbol
+				return
+			}
+		}
+	}
+}
