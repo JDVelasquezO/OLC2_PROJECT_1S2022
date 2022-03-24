@@ -23,6 +23,12 @@ type ProjectParserListener interface {
 	// EnterListStructs is called when entering the listStructs production.
 	EnterListStructs(c *ListStructsContext)
 
+	// EnterModules is called when entering the modules production.
+	EnterModules(c *ModulesContext)
+
+	// EnterModule is called when entering the module production.
+	EnterModule(c *ModuleContext)
+
 	// EnterFunction is called when entering the function production.
 	EnterFunction(c *FunctionContext)
 
@@ -232,6 +238,12 @@ type ProjectParserListener interface {
 
 	// ExitListStructs is called when exiting the listStructs production.
 	ExitListStructs(c *ListStructsContext)
+
+	// ExitModules is called when exiting the modules production.
+	ExitModules(c *ModulesContext)
+
+	// ExitModule is called when exiting the module production.
+	ExitModule(c *ModuleContext)
 
 	// ExitFunction is called when exiting the function production.
 	ExitFunction(c *FunctionContext)

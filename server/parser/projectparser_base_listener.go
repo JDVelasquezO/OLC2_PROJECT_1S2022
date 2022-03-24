@@ -51,6 +51,18 @@ func (s *BaseProjectParserListener) EnterListStructs(ctx *ListStructsContext) {}
 // ExitListStructs is called when production listStructs is exited.
 func (s *BaseProjectParserListener) ExitListStructs(ctx *ListStructsContext) {}
 
+// EnterModules is called when production modules is entered.
+func (s *BaseProjectParserListener) EnterModules(ctx *ModulesContext) {}
+
+// ExitModules is called when production modules is exited.
+func (s *BaseProjectParserListener) ExitModules(ctx *ModulesContext) {}
+
+// EnterModule is called when production module is entered.
+func (s *BaseProjectParserListener) EnterModule(ctx *ModuleContext) {}
+
+// ExitModule is called when production module is exited.
+func (s *BaseProjectParserListener) ExitModule(ctx *ModuleContext) {}
+
 // EnterFunction is called when production function is entered.
 func (s *BaseProjectParserListener) EnterFunction(ctx *FunctionContext) {}
 

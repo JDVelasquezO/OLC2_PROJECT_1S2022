@@ -6,6 +6,7 @@ import (
 	"OLC2_Project1/server/interpreter/AST/Natives"
 	"OLC2_Project1/server/interpreter/AST/Natives/DecArrays"
 	"OLC2_Project1/server/interpreter/AST/Natives/DecStructs"
+	"OLC2_Project1/server/interpreter/AST/Natives/Module"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment"
@@ -117,6 +118,10 @@ func Analyze(c *fiber.Ctx) error {
 
 				if typeof(r) == "DecArrays.DecArray" {
 					interpreter.GlobalTable.AddArray(r.(DecArrays.DecArray).Id, r.(DecArrays.DecArray))
+				}
+
+				if typeof(r) == "Module.Module" {
+					interpreter.GlobalTable.AddModule(r.(Module.Module).Id, r.(Module.Module))
 				}
 			}
 

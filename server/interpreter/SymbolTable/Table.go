@@ -12,6 +12,7 @@ type SymbolTable struct {
 	ArrayTable    map[string]interface{}
 	StructTable   map[string]interface{}
 	ObjectTable   map[string]interface{}
+	ModuleTable   map[string]interface{}
 }
 
 func NewSymbolTable(name string, before *SymbolTable) SymbolTable {
@@ -20,6 +21,7 @@ func NewSymbolTable(name string, before *SymbolTable) SymbolTable {
 	arrTable := make(map[string]interface{})
 	structTable := make(map[string]interface{})
 	objTable := make(map[string]interface{})
+	modTable := make(map[string]interface{})
 
 	in := SymbolTable{
 		Name:          name,
@@ -29,6 +31,7 @@ func NewSymbolTable(name string, before *SymbolTable) SymbolTable {
 		ArrayTable:    arrTable,
 		StructTable:   structTable,
 		ObjectTable:   objTable,
+		ModuleTable:   modTable,
 	}
 
 	return in
@@ -256,4 +259,9 @@ func (table *SymbolTable) ChangeValObject(id string, newSymbol interface{}) {
 			}
 		}
 	}
+}
+
+func (table *SymbolTable) AddModule(id string, symbol interface{}) {
+	idFinal := strings.ToLower(id)
+	table.ModuleTable[idFinal] = symbol
 }

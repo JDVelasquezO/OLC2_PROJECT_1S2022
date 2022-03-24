@@ -17,6 +17,7 @@ options {
     import "OLC2_Project1/server/interpreter/AST/Natives/DecVectors"
     import "OLC2_Project1/server/interpreter/AST/Natives/DecStructs"
     import "OLC2_Project1/server/interpreter/AST/Natives/DecObjects"
+    import "OLC2_Project1/server/interpreter/AST/Natives/Module"
     import "OLC2_Project1/server/interpreter/AST/Expression/Access"
     import "OLC2_Project1/server/interpreter/AST/Expression/Objects"
     import arrayList "github.com/colegno/arraylist"
@@ -71,7 +72,29 @@ listStructs returns [*arrayList.List l]
         $subList.l.Add($dec_struct.instr)
         $l = $subList.l
     }
+    | modules   { $l = $modules.l }
     | dec_struct  { $l.Add($dec_struct.instr) }
+    ;
+
+modules returns [*arrayList.List l]
+    @init {
+        $l = arrayList.New()
+    }
+    : subList = modules module {
+        $subList.l.Add($module.instr)
+        $l = $subList.l
+    }
+    | module  { $l.Add($module.instr) }
+    ;
+
+module returns [Abstract.Instruction instr]
+    : RPUB? RMODULE ID LEFT_KEY listFuncs RIGHT_KEY {
+        if $RPUB.text != "" {
+            $instr = Module.NewModule($ID.text, $listFuncs.l, $RPUB.text)
+        } else {
+            $instr = Module.NewModule($ID.text, $listFuncs.l, "")
+        }
+    }
     ;
 
 function returns[Abstract.Instruction instr]

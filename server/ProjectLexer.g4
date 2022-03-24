@@ -57,6 +57,10 @@ REVECCAPACITY:           'Vec::with_capacity';
 // Objects
 RSTRUCT:                 'struct';
 
+// Modules
+RMODULE:                 'mod';
+RPUB:                    'pub';
+
 // Comments
 MULTILINE:      '/*' (~[/])+ '*/' -> skip;
 INLINE:         '//'(~[\n])+ -> skip;
