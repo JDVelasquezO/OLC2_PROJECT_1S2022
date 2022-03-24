@@ -1,7 +1,6 @@
 package SymbolTable
 
 import (
-	"reflect"
 	"strings"
 )
 
@@ -231,6 +230,16 @@ func (table *SymbolTable) AddObject(id string, symbol interface{}) {
 	table.ObjectTable[idFinal] = symbol
 }
 
-func typeof(v interface{}) string {
-	return reflect.TypeOf(v).String()
+func (table *SymbolTable) GetObject(id string) interface{} {
+	idFinal := strings.ToLower(id)
+
+	for actualTable := table; actualTable != nil; actualTable = actualTable.Before {
+		for key, structElement := range actualTable.ObjectTable {
+			if key == idFinal {
+				return structElement
+			}
+		}
+	}
+
+	return nil
 }

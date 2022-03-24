@@ -16,6 +16,7 @@ options {
     import "OLC2_Project1/server/interpreter/AST/Natives/DecArrays"
     import "OLC2_Project1/server/interpreter/AST/Natives/DecVectors"
     import "OLC2_Project1/server/interpreter/AST/Natives/DecStructs"
+    import "OLC2_Project1/server/interpreter/AST/Natives/DecObjects"
     import "OLC2_Project1/server/interpreter/AST/Expression/Access"
     import "OLC2_Project1/server/interpreter/AST/Expression/Objects"
     import arrayList "github.com/colegno/arraylist"
@@ -147,6 +148,7 @@ instruction returns [Abstract.Instruction instr]
     | expr_logic        { $instr = $expr_logic.instr }
     | dec_arr           { $instr = $dec_arr.instr }
     | dec_struct        { $instr = $dec_struct.instr }
+    | dec_object        { $instr = $dec_object.instr }
     | vector_instr      { $instr = $vector_instr.instr }
     | transfer_prod     { $instr = $transfer_prod.instr }
     ;
@@ -551,6 +553,12 @@ item_struct returns [Abstract.Expression p]
     }
     ;
 
+dec_object returns [Abstract.Instruction instr]
+    : DECLARAR MUT? ID EQUAL ob=ID LEFT_KEY def_items RIGHT_KEY {
+        $instr = DecObjects.NewDecObjects($ID.text, $ob.text, $def_items.l)
+     }
+    ;
+
 expression returns [Abstract.Expression p]
     : conditional_prod           { $p = $conditional_prod.p }
     | loop_prod                  { $p = $loop_prod.p }
@@ -559,6 +567,7 @@ expression returns [Abstract.Expression p]
     | arraydata                  { $p = $arraydata.p }
     | natives_vector             { $p = $natives_vector.p }
     | type_struct                { $p = $type_struct.p }
+    | access_object              { $p = $access_object.p }
 ;
 
 arraydata returns [Abstract.Expression p]
@@ -631,6 +640,25 @@ def_items returns[*arrayList.List l]
 
 item returns[Abstract.Expression p]
     : ID COLON expression COMMA? { $p = Objects.NewAttribute($ID.text, $expression.p); }
+    ;
+
+access_object returns [Abstract.Expression p]
+    : listAccess { $p = Access.NewObjectAccess($listAccess.l) }
+    ;
+
+listAccess returns [*arrayList.List l]
+    @init {
+        $l = arrayList.New()
+    }
+    : subList = listAccess DOT access {
+        $subList.l.Add($access.p)
+        $l = $subList.l
+    }
+    | access { $l.Add($access.p) }
+    ;
+
+access returns [Abstract.Expression p]
+    : ID { $p = Expression.NewIdentifier($ID.text, $ID.line, localctx.(*AccessContext).Get_ID().GetColumn()) }
     ;
 
 expr_rel returns[Abstract.Expression p, Abstract.Instruction instr]

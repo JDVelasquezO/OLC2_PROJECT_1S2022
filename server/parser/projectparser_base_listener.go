@@ -303,6 +303,12 @@ func (s *BaseProjectParserListener) EnterItem_struct(ctx *Item_structContext) {}
 // ExitItem_struct is called when production item_struct is exited.
 func (s *BaseProjectParserListener) ExitItem_struct(ctx *Item_structContext) {}
 
+// EnterDec_object is called when production dec_object is entered.
+func (s *BaseProjectParserListener) EnterDec_object(ctx *Dec_objectContext) {}
+
+// ExitDec_object is called when production dec_object is exited.
+func (s *BaseProjectParserListener) ExitDec_object(ctx *Dec_objectContext) {}
+
 // EnterExpression is called when production expression is entered.
 func (s *BaseProjectParserListener) EnterExpression(ctx *ExpressionContext) {}
 
@@ -368,6 +374,24 @@ func (s *BaseProjectParserListener) EnterItem(ctx *ItemContext) {}
 
 // ExitItem is called when production item is exited.
 func (s *BaseProjectParserListener) ExitItem(ctx *ItemContext) {}
+
+// EnterAccess_object is called when production access_object is entered.
+func (s *BaseProjectParserListener) EnterAccess_object(ctx *Access_objectContext) {}
+
+// ExitAccess_object is called when production access_object is exited.
+func (s *BaseProjectParserListener) ExitAccess_object(ctx *Access_objectContext) {}
+
+// EnterListAccess is called when production listAccess is entered.
+func (s *BaseProjectParserListener) EnterListAccess(ctx *ListAccessContext) {}
+
+// ExitListAccess is called when production listAccess is exited.
+func (s *BaseProjectParserListener) ExitListAccess(ctx *ListAccessContext) {}
+
+// EnterAccess is called when production access is entered.
+func (s *BaseProjectParserListener) EnterAccess(ctx *AccessContext) {}
+
+// ExitAccess is called when production access is exited.
+func (s *BaseProjectParserListener) ExitAccess(ctx *AccessContext) {}
 
 // EnterExpr_rel is called when production expr_rel is entered.
 func (s *BaseProjectParserListener) EnterExpr_rel(ctx *Expr_relContext) {}

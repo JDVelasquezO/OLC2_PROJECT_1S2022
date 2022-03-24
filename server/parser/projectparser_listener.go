@@ -149,6 +149,9 @@ type ProjectParserListener interface {
 	// EnterItem_struct is called when entering the item_struct production.
 	EnterItem_struct(c *Item_structContext)
 
+	// EnterDec_object is called when entering the dec_object production.
+	EnterDec_object(c *Dec_objectContext)
+
 	// EnterExpression is called when entering the expression production.
 	EnterExpression(c *ExpressionContext)
 
@@ -181,6 +184,15 @@ type ProjectParserListener interface {
 
 	// EnterItem is called when entering the item production.
 	EnterItem(c *ItemContext)
+
+	// EnterAccess_object is called when entering the access_object production.
+	EnterAccess_object(c *Access_objectContext)
+
+	// EnterListAccess is called when entering the listAccess production.
+	EnterListAccess(c *ListAccessContext)
+
+	// EnterAccess is called when entering the access production.
+	EnterAccess(c *AccessContext)
 
 	// EnterExpr_rel is called when entering the expr_rel production.
 	EnterExpr_rel(c *Expr_relContext)
@@ -347,6 +359,9 @@ type ProjectParserListener interface {
 	// ExitItem_struct is called when exiting the item_struct production.
 	ExitItem_struct(c *Item_structContext)
 
+	// ExitDec_object is called when exiting the dec_object production.
+	ExitDec_object(c *Dec_objectContext)
+
 	// ExitExpression is called when exiting the expression production.
 	ExitExpression(c *ExpressionContext)
 
@@ -379,6 +394,15 @@ type ProjectParserListener interface {
 
 	// ExitItem is called when exiting the item production.
 	ExitItem(c *ItemContext)
+
+	// ExitAccess_object is called when exiting the access_object production.
+	ExitAccess_object(c *Access_objectContext)
+
+	// ExitListAccess is called when exiting the listAccess production.
+	ExitListAccess(c *ListAccessContext)
+
+	// ExitAccess is called when exiting the access production.
+	ExitAccess(c *AccessContext)
 
 	// ExitExpr_rel is called when exiting the expr_rel production.
 	ExitExpr_rel(c *Expr_relContext)
