@@ -594,6 +594,7 @@ expression returns [Abstract.Expression p]
     | natives_vector             { $p = $natives_vector.p }
     | type_struct                { $p = $type_struct.p }
     | access_object              { $p = $access_object.p }
+//    | access_module              { $p = $access_module.p }
 ;
 
 arraydata returns [Abstract.Expression p]
@@ -686,6 +687,12 @@ listAccess returns [*arrayList.List l]
 access returns [Abstract.Expression p]
     : ID { $p = Expression.NewIdentifier($ID.text, $ID.line, localctx.(*AccessContext).Get_ID().GetColumn()) }
     ;
+
+//access_module returns [Abstract.Expression p]
+//    : ID HERITAGE called_func {
+//        $p = Access.NewAccessModule($ID.text, $called_func.p)
+//    }
+//    ;
 
 expr_rel returns[Abstract.Expression p, Abstract.Instruction instr]
     : opLeft = expr_rel op=( GREATER_THAN | LESS_THAN | GREATER_EQUALTHAN | LESS_EQUEALTHAN | EQUEAL_EQUAL | NOTEQUAL ) opRight = expr_rel {
