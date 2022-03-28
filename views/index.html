@@ -32,6 +32,10 @@
             integrity="sha512-LqqYYiphtlUW/A/ctvWI7aJspzPsy3ZhoUT59+3X5vpNVp8u+U+kMkA5Isl/l8jmZX2lRyUBInVKjxYbWwab/w=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+    <!-- Mode Cmake -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/clike/clike.min.js" integrity="sha512-hVV7wKBA5Cy5BNo3JkDte8hAobbeXMF8ZTgmmVrshoxcBSSfXn3Z+sigvV6o7bbk6zHSEMWp8RxCbWyPIuPB6Q=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <style>
         .code_mirror {
             resize: vertical;
@@ -99,7 +103,23 @@
                 </div>
             </div>
             <div class="column code_mirror">
-                <p class="has-text-light">Output:</p>
+                <p class="has-text-light">Output C:</p>
+                <div style="border: 5px solid hsl(348, 100%, 61%); width: 100%">
+                    {{ if (eq .Res "") }}
+                    <textarea id="reader3D"></textarea>
+                    {{ else }}
+                    <textarea id="reader3D">{{ .Res }}</textarea>
+                    {{ end }}
+                </div>
+            </div>
+        </div>
+
+        <button class="button is-link" id="btnInterpret">Compiler</button>
+        <button class="button is-info" id="btnInterpret">Interpreter</button>
+        <br><br>
+        <div class="columns">
+            <div class="column code_mirror">
+                <p class="has-text-light">Output Rust:</p>
                 <div style="border: 5px solid hsl(348, 100%, 61%); width: 100%">
                     {{ if (eq .Res "") }}
                     <textarea id="reader"></textarea>
@@ -109,7 +129,6 @@
                 </div>
             </div>
         </div>
-        <button class="button is-info" id="btnInterpret">Interpreter</button>
     </form>
 
     <hr>
@@ -254,6 +273,13 @@
         theme: 'dracula',
         mode: 'powershell',
         readOnly: true,
+    });
+
+    myCodeMirror3 = CodeMirror.fromTextArea(document.getElementById("reader3D"), {
+        lineNumbers: true,
+        theme: 'dracula',
+        mode: 'clike',
+        readOnly: false,
     });
 
 </script>
