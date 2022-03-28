@@ -1,6 +1,9 @@
 package Abstract
 
-import "OLC2_Project1/server/interpreter/SymbolTable"
+import (
+	"OLC2_Project1/server/Generator"
+	"OLC2_Project1/server/interpreter/SymbolTable"
+)
 
 type Expression interface {
 	GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.ReturnType
@@ -8,4 +11,5 @@ type Expression interface {
 
 type Instruction interface {
 	Execute(symbolTable SymbolTable.SymbolTable) interface{}
+	Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{}
 }

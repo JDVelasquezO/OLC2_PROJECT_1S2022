@@ -20,4 +20,5 @@ func Setup(app *fiber.App) {
 		})
 	})
 	app.Post("/analyze", controllers.Analyze)
+	app.Post("/compiler", controllers.Compiler)
 }

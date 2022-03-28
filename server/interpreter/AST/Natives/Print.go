@@ -1,6 +1,7 @@
 package Natives
 
 import (
+	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter"
 	"OLC2_Project1/server/interpreter/AST/Expression"
 	"OLC2_Project1/server/interpreter/Abstract"
@@ -18,6 +19,11 @@ type Print struct {
 	isBreakLine bool
 	Row         int
 	Col         int
+}
+
+func (p Print) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+	//TODO implement me
+	panic("implement me")
 }
 
 func NewPrint(val Abstract.Expression, isBreakLine bool, row int, col int) Print {

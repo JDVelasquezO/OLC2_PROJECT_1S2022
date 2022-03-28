@@ -1,6 +1,7 @@
 package ExpressionSpecial
 
 import (
+	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment"
@@ -16,6 +17,11 @@ type CallFunction struct {
 	ListExpressions *arrayList.List
 	Row             int
 	Col             int
+}
+
+func (c CallFunction) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+	//TODO implement me
+	panic("implement me")
 }
 
 func NewCallFunction(idFunction string, listExpressions *arrayList.List, row int, col int) CallFunction {

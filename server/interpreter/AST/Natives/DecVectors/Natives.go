@@ -1,6 +1,7 @@
 package DecVectors
 
 import (
+	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Vector"
@@ -12,6 +13,11 @@ type Natives struct {
 	Value     Abstract.Expression
 	Operation string
 	Index     Abstract.Expression
+}
+
+func (n Natives) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+	//TODO implement me
+	panic("implement me")
 }
 
 func (n Natives) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.ReturnType {

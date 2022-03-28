@@ -1,6 +1,7 @@
 package DecObjects
 
 import (
+	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter/AST/Expression"
 	"OLC2_Project1/server/interpreter/AST/Expression/Access"
 	"OLC2_Project1/server/interpreter/AST/Expression/Objects"
@@ -12,6 +13,11 @@ import (
 type AssignObject struct {
 	AccessObject Abstract.Expression
 	Value        Abstract.Expression
+}
+
+func (a AssignObject) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+	//TODO implement me
+	panic("implement me")
 }
 
 func (a AssignObject) Execute(symbolTable SymbolTable.SymbolTable) interface{} {

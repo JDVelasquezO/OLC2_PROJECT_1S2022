@@ -1,6 +1,7 @@
 package Environment
 
 import (
+	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter"
 	"OLC2_Project1/server/interpreter/AST/Natives"
 	"OLC2_Project1/server/interpreter/Abstract"
@@ -28,6 +29,10 @@ type Function struct {
 	ListInstructs *arrayList.List
 	Line          int
 	Col           int
+}
+
+func (f Function) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+	return f
 }
 
 func NewFunction(line int, col int, name string, listParams *arrayList.List, listInstructs *arrayList.List,

@@ -1,6 +1,7 @@
 package Natives
 
 import (
+	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	arrayList "github.com/colegno/arraylist"
@@ -8,6 +9,11 @@ import (
 
 type Loop struct {
 	Instructions *arrayList.List
+}
+
+func (l Loop) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+	//TODO implement me
+	panic("implement me")
 }
 
 func NewLoop(instructions *arrayList.List) Loop {

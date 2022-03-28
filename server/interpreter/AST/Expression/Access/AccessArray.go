@@ -1,6 +1,7 @@
 package Access
 
 import (
+	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Array"
@@ -13,6 +14,11 @@ import (
 type ArrayAccess struct {
 	Id  string
 	Dim *arrayList.List
+}
+
+func (a ArrayAccess) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+	//TODO implement me
+	panic("implement me")
 }
 
 func NewAccessArray(id string, dims *arrayList.List) ArrayAccess {

@@ -1,6 +1,7 @@
 package Natives
 
 import (
+	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 )
@@ -11,6 +12,11 @@ type Return struct {
 	Expression Abstract.Expression
 	Type       SymbolTable.DataType
 	Result     interface{}
+}
+
+func (r Return) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+	//TODO implement me
+	panic("implement me")
 }
 
 func NewReturn(row int, col int, expression Abstract.Expression) Return {

@@ -1,6 +1,7 @@
 package BucleForIn
 
 import (
+	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter"
 	"OLC2_Project1/server/interpreter/AST/Expression"
 	"OLC2_Project1/server/interpreter/AST/ExpressionSpecial"
@@ -18,6 +19,11 @@ type ForIn struct {
 	Iterator       Abstract.Expression
 	ValueToIterate Abstract.Expression
 	Instructions   *arrayList.List
+}
+
+func (f ForIn) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+	//TODO implement me
+	panic("implement me")
 }
 
 func NewForIn(iterator Abstract.Expression, valToIterate Abstract.Expression, instructions *arrayList.List) ForIn {

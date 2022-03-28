@@ -1,6 +1,7 @@
 package Expression
 
 import (
+	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 )
 
@@ -9,6 +10,11 @@ type Primitive struct {
 	Type  SymbolTable.DataType
 	Row   int
 	Col   int
+}
+
+func (p Primitive) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+	//TODO implement me
+	panic("implement me")
 }
 
 func (p Primitive) Execute(symbolTable SymbolTable.SymbolTable) interface{} {

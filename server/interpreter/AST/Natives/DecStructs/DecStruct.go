@@ -1,6 +1,7 @@
 package DecStructs
 
 import (
+	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Struct"
 	arrayList "github.com/colegno/arraylist"
@@ -9,6 +10,11 @@ import (
 type DecStruct struct {
 	Id    string
 	Items *arrayList.List
+}
+
+func (d DecStruct) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+	//TODO implement me
+	panic("implement me")
 }
 
 func (d DecStruct) Execute(symbolTable SymbolTable.SymbolTable) interface{} {

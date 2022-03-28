@@ -1,6 +1,7 @@
 package DecObjects
 
 import (
+	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter/AST/Expression"
 	"OLC2_Project1/server/interpreter/AST/Expression/Objects"
 	"OLC2_Project1/server/interpreter/AST/Natives/DecStructs"
@@ -12,6 +13,11 @@ type DecObjects struct {
 	Id         string
 	IdObject   string
 	Attributes *arrayList.List
+}
+
+func (d DecObjects) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+	//TODO implement me
+	panic("implement me")
 }
 
 func NewDecObjects(id string, idObject string, attributes *arrayList.List) DecObjects {

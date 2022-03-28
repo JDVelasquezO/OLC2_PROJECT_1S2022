@@ -1,6 +1,7 @@
 package DecVectors
 
 import (
+	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter/AST/Expression"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
@@ -19,6 +20,11 @@ type DecVector struct {
 	IsMut           bool
 	Positions       Abstract.Expression
 	IsCapacityFixed bool
+}
+
+func (d DecVector) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+	//TODO implement me
+	panic("implement me")
 }
 
 func (d DecVector) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.ReturnType {

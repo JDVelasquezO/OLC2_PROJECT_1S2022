@@ -1,6 +1,7 @@
 package Natives
 
 import (
+	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
@@ -16,6 +17,11 @@ type If struct {
 	ListInstructsElse *arrayList.List
 	Row               int
 	Col               int
+}
+
+func (i If) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+	//TODO implement me
+	panic("implement me")
 }
 
 func NewIf(condition Abstract.Expression, listInstructs *arrayList.List,

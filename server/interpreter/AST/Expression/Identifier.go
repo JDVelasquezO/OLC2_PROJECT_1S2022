@@ -1,6 +1,7 @@
 package Expression
 
 import (
+	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Array"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Vector"
@@ -11,6 +12,11 @@ type Identifier struct {
 	Id  string
 	Row int
 	Col int
+}
+
+func (id Identifier) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+	//TODO implement me
+	panic("implement me")
 }
 
 func (id Identifier) Execute(symbolTable SymbolTable.SymbolTable) interface{} {

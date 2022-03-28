@@ -1,6 +1,7 @@
 package Natives
 
 import (
+	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter"
 	"OLC2_Project1/server/interpreter/AST/Expression"
 	"OLC2_Project1/server/interpreter/Abstract"
@@ -28,6 +29,11 @@ type Declaration struct {
 	DataType SymbolTable.DataType
 	ListIds  *arrayList.List
 	IsMut    bool
+}
+
+func (d *Declaration) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+	//TODO implement me
+	panic("implement me")
 }
 
 func NewDeclaration(listIds *arrayList.List, isMut bool, dataType string) *Declaration {

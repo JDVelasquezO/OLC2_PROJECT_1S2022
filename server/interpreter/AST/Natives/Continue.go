@@ -1,6 +1,9 @@
 package Natives
 
-import "OLC2_Project1/server/interpreter/SymbolTable"
+import (
+	"OLC2_Project1/server/Generator"
+	"OLC2_Project1/server/interpreter/SymbolTable"
+)
 
 type Continue struct {
 	Row int
@@ -8,6 +11,10 @@ type Continue struct {
 }
 
 func (c Continue) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
+	return c
+}
+
+func (c Continue) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
 	return c
 }
 

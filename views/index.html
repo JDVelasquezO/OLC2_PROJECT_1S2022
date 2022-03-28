@@ -90,7 +90,7 @@
 
 <div class="container mt-6 mb-6" id="mirror">
 
-    <form action="http://localhost:3000/analyze" method="post" id="formCode">
+    <form action="http://localhost:3000/compiler" method="post" id="formCode">
         <div class="columns">
             <div class="column code_mirror">
                 <p class="has-text-light">Input code:</p>
@@ -105,19 +105,17 @@
             <div class="column code_mirror">
                 <p class="has-text-light">Output C:</p>
                 <div style="border: 5px solid hsl(348, 100%, 61%); width: 100%">
-                    {{ if (eq .Res "") }}
+                    {{ if (eq .Code3Directions "") }}
                     <textarea id="reader3D"></textarea>
                     {{ else }}
-                    <textarea id="reader3D">{{ .Res }}</textarea>
+                    <textarea id="reader3D">{{ .Code3Directions }}</textarea>
                     {{ end }}
                 </div>
             </div>
         </div>
 
-        <button class="button is-link" id="btnInterpret">Compiler</button>
-        <button class="button is-info" id="btnInterpret">Interpreter</button>
-        <br><br>
-        <div class="columns">
+        <button class="button is-link" id="btnInterpret">Compiler</button><br><br>
+        <!--<div class="columns">
             <div class="column code_mirror">
                 <p class="has-text-light">Output Rust:</p>
                 <div style="border: 5px solid hsl(348, 100%, 61%); width: 100%">
@@ -128,12 +126,12 @@
                     {{ end }}
                 </div>
             </div>
-        </div>
+        </div>-->
     </form>
 
-    <hr>
+<!--    <hr>-->
 
-    <div class="container mt-6">
+    <!--<div class="container mt-6">
         <div class="columns">
             <div class="column">
                 <h2 class="has-text-white">Symbol Table:</h2>
@@ -148,7 +146,7 @@
                         <th><abbr class="has-text-info">Ambit</abbr></th>
                     </tr>
                     </thead>
-                    <!-- ********************* FUNCTIONS ********************* -->
+                    &lt;!&ndash; ********************* FUNCTIONS ********************* &ndash;&gt;
                     <tbody>
                     {{ range .Functions }}
                     <tr>
@@ -161,7 +159,7 @@
                     </tr>
                     {{ end }}
 
-                    <!-- ********************* PARAMETERS ********************* -->
+                    &lt;!&ndash; ********************* PARAMETERS ********************* &ndash;&gt;
                     {{ range .Params }}
                     <tr>
                         <td>{{ .Id }}</td>
@@ -173,7 +171,7 @@
                     </tr>
                     {{ end }}
 
-                    <!-- ********************* VARIABLES IN FUNCTIONS ********************* -->
+                    &lt;!&ndash; ********************* VARIABLES IN FUNCTIONS ********************* &ndash;&gt;
                     {{ range .VarsFunction }}
                     <tr>
                         <td>{{ .Id }}</td>
@@ -185,7 +183,7 @@
                     </tr>
                     {{ end }}
 
-                    <!-- ********************* VARIABLES ********************* -->
+                    &lt;!&ndash; ********************* VARIABLES ********************* &ndash;&gt;
                     {{ range .Symbols }}
                     <tr>
                         <td>{{ .Id }}</td>
@@ -197,7 +195,7 @@
                     </tr>
                     {{ end }}
 
-                    <!-- ********************* ARRAYS ********************* -->
+                    &lt;!&ndash; ********************* ARRAYS ********************* &ndash;&gt;
 
                     {{ range .Arrays }}
                     <tr>
@@ -240,7 +238,7 @@
                 </table>
             </div>
         </div>
-    </div>
+    </div>-->
 
 </div>
 
@@ -268,18 +266,18 @@
         mode: 'javascript',
     });
 
-    myCodeMirror2 = CodeMirror.fromTextArea(document.getElementById("reader"), {
-        lineNumbers: true,
-        theme: 'dracula',
-        mode: 'powershell',
-        readOnly: true,
-    });
+    // myCodeMirror2 = CodeMirror.fromTextArea(document.getElementById("reader"), {
+    //     lineNumbers: true,
+    //     theme: 'dracula',
+    //     mode: 'powershell',
+    //     readOnly: true,
+    // });
 
     myCodeMirror3 = CodeMirror.fromTextArea(document.getElementById("reader3D"), {
         lineNumbers: true,
         theme: 'dracula',
         mode: 'clike',
-        readOnly: false,
+        readOnly: true,
     });
 
 </script>

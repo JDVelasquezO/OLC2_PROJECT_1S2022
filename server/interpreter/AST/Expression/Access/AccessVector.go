@@ -1,6 +1,7 @@
 package Access
 
 import (
+	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	arrayList "github.com/colegno/arraylist"
 )
@@ -8,6 +9,11 @@ import (
 type VectorAccess struct {
 	Id  string
 	Dim *arrayList.List
+}
+
+func (v VectorAccess) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+	//TODO implement me
+	panic("implement me")
 }
 
 func (v VectorAccess) Execute(symbolTable SymbolTable.SymbolTable) interface{} {

@@ -1,6 +1,7 @@
 package DecArrays
 
 import (
+	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter"
 	"OLC2_Project1/server/interpreter/AST/Expression"
 	"OLC2_Project1/server/interpreter/Abstract"
@@ -21,6 +22,11 @@ type DecArray struct {
 	Positions    Abstract.Expression
 	Row          int
 	Col          int
+}
+
+func (d DecArray) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+	//TODO implement me
+	panic("implement me")
 }
 
 func NewDecArray(length int, id string, init Abstract.Expression,

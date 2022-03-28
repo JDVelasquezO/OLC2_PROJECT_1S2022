@@ -1,6 +1,7 @@
 package Expression
 
 import (
+	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
@@ -50,6 +51,11 @@ type Operation struct {
 	Unary    bool
 	Row      int
 	Col      int
+}
+
+func (p Operation) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+	//TODO implement me
+	panic("implement me")
 }
 
 func (p Operation) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
