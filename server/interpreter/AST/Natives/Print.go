@@ -21,7 +21,7 @@ type Print struct {
 	Col         int
 }
 
-func (p Print) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+func (p Print) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }

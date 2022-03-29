@@ -2,6 +2,7 @@ package Expression
 
 import (
 	"OLC2_Project1/server/Generator"
+	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 )
 
@@ -12,9 +13,12 @@ type Primitive struct {
 	Col   int
 }
 
-func (p Primitive) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
-	//TODO implement me
-	panic("implement me")
+func (p Primitive) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+	if p.Type == SymbolTable.INTEGER || p.Type == SymbolTable.FLOAT {
+		return Abstract.NewValue(p.Value, p.Type, false, "")
+	}
+
+	return nil
 }
 
 func (p Primitive) Execute(symbolTable SymbolTable.SymbolTable) interface{} {

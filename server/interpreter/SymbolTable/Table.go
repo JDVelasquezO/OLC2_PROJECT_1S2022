@@ -13,6 +13,10 @@ type SymbolTable struct {
 	StructTable   map[string]interface{}
 	ObjectTable   map[string]interface{}
 	ModuleTable   map[string]interface{}
+	BreakLabel    string
+	ContinueLabel string
+	ReturnLabel   string
+	SizeTable     int
 }
 
 func NewSymbolTable(name string, before *SymbolTable) SymbolTable {
@@ -32,6 +36,10 @@ func NewSymbolTable(name string, before *SymbolTable) SymbolTable {
 		StructTable:   structTable,
 		ObjectTable:   objTable,
 		ModuleTable:   modTable,
+		BreakLabel:    "",
+		ContinueLabel: "",
+		ReturnLabel:   "",
+		SizeTable:     0,
 	}
 
 	return in
@@ -40,6 +48,8 @@ func NewSymbolTable(name string, before *SymbolTable) SymbolTable {
 func (table *SymbolTable) AddNewSymbol(id string, symbol interface{}) {
 	newId := strings.ToLower(id)
 	table.Table[newId] = symbol
+	table.SizeTable += 1
+	symbol.(Symbol).SetPosition(table.SizeTable)
 }
 
 func (table *SymbolTable) ExistsSymbol(id string) bool {

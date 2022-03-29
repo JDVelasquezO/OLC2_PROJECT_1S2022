@@ -20,7 +20,7 @@ type Assign struct {
 	ListIds *arrayList.List
 }
 
-func (d *Assign) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+func (d *Assign) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }

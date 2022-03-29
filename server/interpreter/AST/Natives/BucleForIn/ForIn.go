@@ -21,7 +21,7 @@ type ForIn struct {
 	Instructions   *arrayList.List
 }
 
-func (f ForIn) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+func (f ForIn) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }

@@ -31,8 +31,24 @@ type Function struct {
 	Col           int
 }
 
-func (f Function) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
-	return f
+func (f Function) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+	newTable := SymbolTable.NewSymbolTable("function", &symbolTable)
+	returnLabel := generator.NewLabel()
+	newTable.ReturnLabel = returnLabel
+	newTable.SizeTable = 1
+	generator.FreeAllTemps()
+	generator.AddBeginFunc(f.Id, f.DataType)
+	for i := 0; i < f.ListInstructs.Len(); i++ {
+		instr := f.ListInstructs.GetValue(i)
+		instr.(Abstract.Instruction).Compile(newTable, generator)
+	}
+	if f.DataType != SymbolTable.NULL {
+		generator.SetLabel(returnLabel)
+	}
+	generator.AddEndFunc()
+	generator.FreeAllTemps()
+
+	return nil
 }
 
 func NewFunction(line int, col int, name string, listParams *arrayList.List, listInstructs *arrayList.List,

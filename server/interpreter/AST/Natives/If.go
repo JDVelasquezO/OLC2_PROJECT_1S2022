@@ -19,7 +19,7 @@ type If struct {
 	Col               int
 }
 
-func (i If) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+func (i If) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }

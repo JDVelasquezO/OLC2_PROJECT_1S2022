@@ -12,7 +12,7 @@ type Module struct {
 	Access       string
 }
 
-func (m Module) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+func (m Module) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }
