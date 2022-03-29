@@ -12,8 +12,8 @@ type Break struct {
 	Expression Abstract.Expression
 }
 
-func (b Break) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
-	return b
+func (b Break) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+	return nil
 }
 
 func (b Break) Execute(symbolTable SymbolTable.SymbolTable) interface{} {

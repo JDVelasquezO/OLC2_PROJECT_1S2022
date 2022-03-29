@@ -11,12 +11,33 @@ type Symbol struct {
 	IsConst    bool
 	IsFunc     bool
 	ListParams *arrayList.List
+	InHeap     bool
+	Pos        int
+	LabelTrue  string
+	LabelFalse string
+	Size       int
 }
 
-func NewSymbolId(id string, row int, col int, dataType DataType, value interface{}, isConst bool) Symbol {
-	in := Symbol{Id: id, Row: row, Col: col, IsConst: isConst,
-		IsFunc: false, Value: value, DataType: dataType}
+func NewSymbolId(id string, row int, col int, dataType DataType, value interface{}, isConst bool,
+	inHeap bool, labelTrue string, labelFalse string) Symbol {
+	in := Symbol{
+		Id:         id,
+		Row:        row,
+		Col:        col,
+		IsConst:    isConst,
+		IsFunc:     false,
+		Value:      value,
+		DataType:   dataType,
+		InHeap:     inHeap,
+		LabelTrue:  labelTrue,
+		LabelFalse: labelFalse,
+		Size:       1,
+	}
 	return in
+}
+
+func (s Symbol) SetPosition(pos int) {
+	s.Pos = pos
 }
 
 func NewSymbolFunction(line int, col int, id string, typeRet DataType, listParams *arrayList.List) Symbol {

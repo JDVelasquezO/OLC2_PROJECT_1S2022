@@ -14,7 +14,7 @@ type Identifier struct {
 	Col int
 }
 
-func (id Identifier) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+func (id Identifier) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }

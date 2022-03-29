@@ -15,7 +15,7 @@ type Natives struct {
 	Index     Abstract.Expression
 }
 
-func (n Natives) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+func (n Natives) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }

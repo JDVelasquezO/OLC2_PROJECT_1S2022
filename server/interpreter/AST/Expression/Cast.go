@@ -13,7 +13,7 @@ type Cast struct {
 	Col        int
 }
 
-func (c Cast) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+func (c Cast) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }

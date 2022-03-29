@@ -15,7 +15,7 @@ type While struct {
 	Col           int
 }
 
-func (w While) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+func (w While) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }

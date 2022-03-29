@@ -11,5 +11,5 @@ type Expression interface {
 
 type Instruction interface {
 	Execute(symbolTable SymbolTable.SymbolTable) interface{}
-	Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{}
+	Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{}
 }

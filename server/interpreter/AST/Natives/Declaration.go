@@ -31,9 +31,29 @@ type Declaration struct {
 	IsMut    bool
 }
 
-func (d *Declaration) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
-	//TODO implement me
-	panic("implement me")
+func (d *Declaration) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+	if d.InitVal == nil {
+		switch d.DataType {
+		case SymbolTable.INTEGER:
+			d.InitVal = Expression.NewPrimitive("0", SymbolTable.INTEGER, 0, 0)
+			break
+		}
+	}
+
+	value := d.InitVal.(Abstract.Instruction).Compile(symbolTable, generator)
+	fmt.Println(value)
+	newVar := symbolTable.GetSymbol(d.ListIds.GetValue(0).(Expression.Identifier).Id)
+	var tempPos int
+	if newVar == nil {
+		/*inHeap := value.(Abstract.Value).Type == SymbolTable.STRING
+		newSymbol :=*/
+	} else {
+		tempPos = newVar.(SymbolTable.Symbol).Pos
+	}
+
+	generator.SetStack(tempPos, value.(Abstract.Value).Value, true)
+
+	return nil
 }
 
 func NewDeclaration(listIds *arrayList.List, isMut bool, dataType string) *Declaration {
@@ -205,12 +225,12 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 			} else {
 
 				if dataOriginType == SymbolTable.OBJECT {
-					symbol := SymbolTable.NewSymbolId(varDec.Id, varDec.Row, varDec.Col, typeRes, dataOrigin.Value, !d.IsMut)
+					symbol := SymbolTable.NewSymbolId(varDec.Id, varDec.Row, varDec.Col, typeRes, dataOrigin.Value, !d.IsMut, true, "", "")
 					table.AddObject(symbol.Id, symbol)
 					break
 				}
 
-				symbol := SymbolTable.NewSymbolId(varDec.Id, varDec.Row, varDec.Col, typeRes, dataOrigin.Value, !d.IsMut)
+				symbol := SymbolTable.NewSymbolId(varDec.Id, varDec.Row, varDec.Col, typeRes, dataOrigin.Value, !d.IsMut, false, "", "")
 				table.AddNewSymbol(varDec.Id, symbol)
 			}
 		}
@@ -222,7 +242,7 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 			if table.ExistsSymbol(varDec.Id) {
 				fmt.Println("Error: Variable declarada")
 			} else {
-				symbol := SymbolTable.NewSymbolId(varDec.Id, 0, 0, typeDec, nil, !d.IsMut)
+				symbol := SymbolTable.NewSymbolId(varDec.Id, 0, 0, typeDec, nil, !d.IsMut, false, "", "")
 				table.AddNewSymbol(varDec.Id, symbol)
 			}
 		}

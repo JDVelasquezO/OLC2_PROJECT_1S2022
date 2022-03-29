@@ -13,7 +13,7 @@ type Case struct {
 	Col          int
 }
 
-func (c Case) Compile(symbolTable SymbolTable.SymbolTable, generator Generator.Generator) interface{} {
+func (c Case) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }
