@@ -12,6 +12,7 @@ type Generator struct {
 	Temps          *arraylist.List
 	Code           string
 	CountLabel     int
+	CountTemp      int
 	TempsRecovered map[string]interface{}
 	InNatives      bool
 	InFunc         bool
@@ -26,6 +27,7 @@ func NewGenerator(code string) Generator {
 		Temps:          temps,
 		Code:           "",
 		CountLabel:     0,
+		CountTemp:      0,
 		TempsRecovered: make(map[string]interface{}),
 		InNatives:      false,
 		InFunc:         false,
@@ -122,15 +124,53 @@ func (g *Generator) SetStack(pos int, value interface{}, freeValue bool) {
 		} else if typeof(value) == "float64" {
 			g.GetFreeTemp(fmt.Sprintf("%v", value))
 			g.CodeInFunction("stack[(int)"+strconv.Itoa(pos)+"] = "+fmt.Sprintf("%v", value)+";\n", "\t")
-		} else {
+		} else if typeof(value) == "char" {
 			g.GetFreeTemp(value.(string))
 			g.CodeInFunction("stack[(int)"+strconv.Itoa(pos)+"] = '"+value.(string)+"';\n", "\t")
+		} else {
+			g.GetFreeTemp(value.(string))
+			g.CodeInFunction("stack[(int)"+strconv.Itoa(pos)+"] = "+value.(string)+";\n", "\t")
 		}
 	}
 }
 
+func (g *Generator) SetHeap(pos interface{}, value interface{}) {
+	g.GetFreeTemp(pos.(string))
+	if typeof(value) == "int" {
+		g.GetFreeTemp(strconv.Itoa(value.(int)))
+		g.CodeInFunction("heap[int("+pos.(string)+")]="+strconv.Itoa(value.(int))+";\n", "\t")
+	} else {
+		g.GetFreeTemp(value.(string))
+		g.CodeInFunction("heap[int("+pos.(string)+")]="+value.(string)+";\n", "\t")
+	}
+}
+
+func (g *Generator) NextHeap() {
+	g.CodeInFunction("H = H + 1;\n", "\t")
+}
+
 func (g *Generator) AddGoTo(label string) {
 	g.CodeInFunction("goto "+label+";\n", "\t")
+}
+
+func (g *Generator) AddTemp() string {
+	temp := "t" + strconv.Itoa(g.CountTemp)
+	g.CountTemp += 1
+	g.Temps.Add(temp)
+	g.TempsRecovered[temp] = temp
+	return temp
+}
+
+func (g *Generator) AddExpression(res string, left string, right string, ope string) {
+	g.GetFreeTemp(left)
+	g.GetFreeTemp(right)
+	var newCode string
+	if right == "" && ope == "" {
+		newCode = res + " = " + left + ";\n"
+	} else {
+		newCode = res + " = " + left + " " + ope + " " + right + ";\n"
+	}
+	g.CodeInFunction(newCode, "\t")
 }
 
 func typeof(v interface{}) string {

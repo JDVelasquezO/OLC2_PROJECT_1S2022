@@ -40,6 +40,9 @@ func (d *Declaration) Compile(symbolTable SymbolTable.SymbolTable, generator *Ge
 		case SymbolTable.CHAR:
 			d.InitVal = Expression.NewPrimitive("", SymbolTable.CHAR, 0, 0)
 			break
+		case SymbolTable.BOOLEAN:
+			d.InitVal = Expression.NewPrimitive(true, SymbolTable.BOOLEAN, 0, 0)
+			break
 		}
 	}
 

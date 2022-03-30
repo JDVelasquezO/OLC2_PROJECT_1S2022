@@ -16,6 +16,7 @@ type Primitive struct {
 func (p Primitive) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	if p.Type == SymbolTable.INTEGER || p.Type == SymbolTable.FLOAT || p.Type == SymbolTable.CHAR {
 		return Abstract.NewValue(p.Value, p.Type, false, "")
+
 	} else if p.Type == SymbolTable.BOOLEAN {
 		res := Abstract.NewValue(p.Value, p.Type, false, "")
 		newValue := CheckLabels(generator, res)
@@ -32,6 +33,23 @@ func (p Primitive) Compile(symbolTable SymbolTable.SymbolTable, generator *Gener
 		res.FalseLabel = newValue.FalseLabel
 
 		return res
+
+	} else if p.Type == SymbolTable.STR || p.Type == SymbolTable.STRING {
+		retTemp := generator.AddTemp()
+		generator.AddExpression(retTemp, "H", "", "")
+		counter := 0
+		for _, char := range p.Value.(string) {
+			generator.SetHeap("H", int(char))
+			generator.NextHeap()
+			counter += 1
+		}
+
+		generator.SetHeap("H", -1)
+		generator.NextHeap()
+
+		retVal := Abstract.NewValue(retTemp, p.Type, true, "")
+		retVal.Size = counter
+		return retVal
 	}
 
 	return nil
