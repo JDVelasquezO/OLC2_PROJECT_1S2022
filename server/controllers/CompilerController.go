@@ -3,20 +3,17 @@ package controllers
 import (
 	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter"
-	"OLC2_Project1/server/interpreter/AST/Natives"
 	"OLC2_Project1/server/interpreter/AST/Natives/DecArrays"
 	"OLC2_Project1/server/interpreter/AST/Natives/DecStructs"
 	"OLC2_Project1/server/interpreter/AST/Natives/Module"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment"
-	"OLC2_Project1/server/interpreter/errors"
 	"OLC2_Project1/server/parser"
 	"OLC2_Project1/server/utilities"
 	"fmt"
 	"github.com/antlr/antlr4/runtime/Go/antlr"
 	"github.com/gofiber/fiber/v2"
-	"strconv"
 )
 
 type CodeToCompile struct {
@@ -73,62 +70,18 @@ func Compiler(c *fiber.Ctx) error {
 		}
 
 		if interpreter.GlobalTable.ExistsFunction("main") {
+			newTable := SymbolTable.NewSymbolTable("main", &interpreter.GlobalTable)
+			codeCompiled.FreeAllTemps()
 			listInstructs := interpreter.GlobalTable.GetFunction("main").(Environment.Function).ListInstructs
 			for i := 0; i < listInstructs.Len(); i++ {
 				r := listInstructs.GetValue(i)
+				r.(Abstract.Instruction).Execute(newTable)
+				newTable.SizeTable += 1
 
-				if typeof(r) == "Natives.Break" || typeof(r) == "Natives.Continue" || typeof(r) == "Natives.Return" {
-					errors.CounterError += 1
-
-					var row int
-					var col int
-					var transfer string
-					if typeof(r) == "Natives.Break" {
-						row = r.(Natives.Break).Row
-						col = r.(Natives.Break).Col
-						transfer = "Break"
-					}
-
-					if typeof(r) == "Natives.Continue" {
-						row = r.(Natives.Continue).Row
-						col = r.(Natives.Continue).Col
-						transfer = "Continue"
-					}
-
-					if typeof(r) == "Natives.Return" {
-						row = r.(Natives.Return).Row
-						col = r.(Natives.Return).Col
-						transfer = "Return"
-					}
-
-					msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") Error: No se puede declarar " + transfer + " sin un ciclo \n"
-					err := errors.NewError(errors.CounterError, row, col, msg, interpreter.GlobalTable.Name)
-					errors.TypeError = append(errors.TypeError, err)
-					interpreter.Console += fmt.Sprintf("%v", msg)
-					continue
-				}
-
-				r.(Abstract.Instruction).Execute(interpreter.GlobalTable)
-			}
-		}
-	}
-
-	if ast.ListInstr != nil {
-		for i := 0; i < ast.ListInstr.Len(); i++ {
-			r := ast.ListInstr.GetValue(i)
-			if interpreter.GlobalTable.ExistsFunction("main") {
-				newTable := SymbolTable.NewSymbolTable("main", &interpreter.GlobalTable)
-				newTable.SizeTable = 1
 				codeCompiled.FreeAllTemps()
-				listInstructs := interpreter.GlobalTable.GetFunction("main").(Environment.Function).ListInstructs
-				for i := 0; i < listInstructs.Len(); i++ {
-					instr := r.(Environment.Function).ListInstructs.GetValue(i)
-					instr.(Abstract.Instruction).Compile(newTable, &codeCompiled)
-				}
-				codeCompiled.FreeAllTemps()
-			} else {
-				r.(Abstract.Instruction).Compile(interpreter.GlobalTable, &codeCompiled)
+				r.(Abstract.Instruction).Compile(newTable, &codeCompiled)
 			}
+			codeCompiled.FreeAllTemps()
 		}
 	}
 

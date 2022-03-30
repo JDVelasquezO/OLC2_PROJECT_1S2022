@@ -2,15 +2,12 @@ package Natives
 
 import (
 	"OLC2_Project1/server/Generator"
-	"OLC2_Project1/server/interpreter"
 	"OLC2_Project1/server/interpreter/AST/Expression"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
-	"OLC2_Project1/server/interpreter/errors"
 	"encoding/json"
 	"fmt"
 	arrayList "github.com/colegno/arraylist"
-	"strconv"
 )
 
 var typeDef = [8][8]SymbolTable.DataType{
@@ -36,6 +33,9 @@ func (d *Declaration) Compile(symbolTable SymbolTable.SymbolTable, generator *Ge
 		switch d.DataType {
 		case SymbolTable.INTEGER:
 			d.InitVal = Expression.NewPrimitive("0", SymbolTable.INTEGER, 0, 0)
+			break
+		case SymbolTable.FLOAT:
+			d.InitVal = Expression.NewPrimitive("0.0", SymbolTable.FLOAT, 0, 0)
 			break
 		}
 	}
@@ -128,30 +128,6 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 		dataOrigin := d.InitVal.GetValue(table)
 		dataOriginType := dataOrigin.Type
 
-		if (dataOriginType != d.DataType) && (d.DataType != SymbolTable.NULL) {
-			typeVal := typeof(d.InitVal)
-			var row int
-			var col int
-			switch typeVal {
-			case "Expression.Primitive":
-				row = d.InitVal.(Expression.Primitive).Row
-				col = d.InitVal.(Expression.Primitive).Col
-			case "Expression.Operation":
-				row = d.InitVal.(Expression.Operation).Row
-				col = d.InitVal.(Expression.Operation).Col
-			case "Expression.Identifier":
-				row = d.InitVal.(Expression.Identifier).Row
-				col = d.InitVal.(Expression.Identifier).Col
-			}
-
-			errors.CounterError += 1
-			msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") Tipos de datos incorrectos. \n"
-			err := errors.NewError(errors.CounterError, row, col, msg, table.Name)
-			errors.TypeError = append(errors.TypeError, err)
-			interpreter.Console += fmt.Sprintf("%v", err.Msg)
-			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
-		}
-
 		switch dataOrigin.Type {
 		case SymbolTable.INTEGER:
 			d.DataType = SymbolTable.INTEGER
@@ -186,53 +162,16 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 			typeRes = typeDef[typeDec][dataOriginType]
 		}
 
-		typeVal := typeof(d.InitVal)
-		var row int
-		var col int
-		switch typeVal {
-		case "Expression.Primitive":
-			row = d.InitVal.(Expression.Primitive).Row
-			col = d.InitVal.(Expression.Primitive).Col
-		case "Expression.Operation":
-			row = d.InitVal.(Expression.Operation).Row
-			col = d.InitVal.(Expression.Operation).Col
-		case "Expression.Identifier":
-			row = d.InitVal.(Expression.Identifier).Row
-			col = d.InitVal.(Expression.Identifier).Col
-		}
-		if typeRes == SymbolTable.NULL {
-			errors.CounterError += 1
-			msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") No concuerdan los tipos de datos \n"
-			err := errors.NewError(errors.CounterError, row, col, msg, table.Name)
-			errors.TypeError = append(errors.TypeError, err)
-			interpreter.Console += fmt.Sprintf("%v", err.Msg)
-			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
-		}
-
 		for i := 0; i < d.ListIds.Len(); i++ {
 			varDec := d.ListIds.GetValue(i).(Expression.Identifier)
-
-			// Error - Variable repetida
-			if table.ExistsSymbolInEnvironment(varDec.Id) {
-
-				errors.CounterError += 1
-				msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") La variable con ID \"" + fmt.Sprintf("%v", varDec.Id) + "\" ya existe. \n"
-				err := errors.NewError(errors.CounterError, row, col, msg, table.Name)
-				errors.TypeError = append(errors.TypeError, err)
-				interpreter.Console += fmt.Sprintf("%v", err.Msg)
-				return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
-
-			} else {
-
-				if dataOriginType == SymbolTable.OBJECT {
-					symbol := SymbolTable.NewSymbolId(varDec.Id, varDec.Row, varDec.Col, typeRes, dataOrigin.Value, !d.IsMut, true, "", "")
-					table.AddObject(symbol.Id, symbol)
-					break
-				}
-
-				symbol := SymbolTable.NewSymbolId(varDec.Id, varDec.Row, varDec.Col, typeRes, dataOrigin.Value, !d.IsMut, false, "", "")
-				table.AddNewSymbol(varDec.Id, symbol)
+			if dataOriginType == SymbolTable.OBJECT {
+				symbol := SymbolTable.NewSymbolId(varDec.Id, varDec.Row, varDec.Col, typeRes, dataOrigin.Value, !d.IsMut, true, "", "")
+				table.AddObject(symbol.Id, symbol)
+				break
 			}
+
+			symbol := SymbolTable.NewSymbolId(varDec.Id, varDec.Row, varDec.Col, typeRes, dataOrigin.Value, !d.IsMut, false, "", "")
+			table.AddNewSymbol(varDec.Id, symbol)
 		}
 	} else {
 		typeDec := d.DataType
@@ -255,7 +194,6 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 
 	stringQuery := string(data)
 	fmt.Println(stringQuery)
-	fmt.Printf("%v\n", d.ListIds)
 
 	return nil
 }
