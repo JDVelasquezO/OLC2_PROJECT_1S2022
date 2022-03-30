@@ -2,6 +2,7 @@ package Generator
 
 import (
 	"OLC2_Project1/server/interpreter/SymbolTable"
+	"fmt"
 	"github.com/colegno/arraylist"
 	"reflect"
 	"strconv"
@@ -118,11 +119,18 @@ func (g *Generator) SetStack(pos int, value interface{}, freeValue bool) {
 		if typeof(value) == "int" {
 			g.GetFreeTemp(strconv.Itoa(value.(int)))
 			g.CodeInFunction("stack[(int)"+strconv.Itoa(pos)+"] = "+strconv.Itoa(value.(int))+";\n", "\t")
+		} else if typeof(value) == "float64" {
+			g.GetFreeTemp(fmt.Sprintf("%v", value))
+			g.CodeInFunction("stack[(int)"+strconv.Itoa(pos)+"] = "+fmt.Sprintf("%v", value)+";\n", "\t")
 		} else {
 			g.GetFreeTemp(value.(string))
-			g.CodeInFunction("stack[(int)"+strconv.Itoa(pos)+"] = "+value.(string)+";\n", "\t")
+			g.CodeInFunction("stack[(int)"+strconv.Itoa(pos)+"] = '"+value.(string)+"';\n", "\t")
 		}
 	}
+}
+
+func (g *Generator) AddGoTo(label string) {
+	g.CodeInFunction("goto "+label+";\n", "\t")
 }
 
 func typeof(v interface{}) string {

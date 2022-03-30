@@ -14,11 +14,39 @@ type Primitive struct {
 }
 
 func (p Primitive) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
-	if p.Type == SymbolTable.INTEGER || p.Type == SymbolTable.FLOAT {
+	if p.Type == SymbolTable.INTEGER || p.Type == SymbolTable.FLOAT || p.Type == SymbolTable.CHAR {
 		return Abstract.NewValue(p.Value, p.Type, false, "")
+	} else if p.Type == SymbolTable.BOOLEAN {
+		res := Abstract.NewValue(p.Value, p.Type, false, "")
+		newValue := CheckLabels(generator, res)
+
+		if newValue.Value.(bool) {
+			generator.AddGoTo(newValue.TrueLabel)
+			generator.AddGoTo(newValue.FalseLabel)
+		} else {
+			generator.AddGoTo(newValue.FalseLabel)
+			generator.AddGoTo(newValue.TrueLabel)
+		}
+
+		res.TrueLabel = newValue.TrueLabel
+		res.FalseLabel = newValue.FalseLabel
+
+		return res
 	}
 
 	return nil
+}
+
+func CheckLabels(generator *Generator.Generator, value Abstract.Value) Abstract.Value {
+	if value.TrueLabel == "" {
+		value.TrueLabel = generator.NewLabel()
+	}
+
+	if value.FalseLabel == "" {
+		value.FalseLabel = generator.NewLabel()
+	}
+
+	return value
 }
 
 func (p Primitive) Execute(symbolTable SymbolTable.SymbolTable) interface{} {

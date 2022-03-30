@@ -32,10 +32,13 @@ func (d *Declaration) Compile(symbolTable SymbolTable.SymbolTable, generator *Ge
 	if d.InitVal == nil {
 		switch d.DataType {
 		case SymbolTable.INTEGER:
-			d.InitVal = Expression.NewPrimitive("0", SymbolTable.INTEGER, 0, 0)
+			d.InitVal = Expression.NewPrimitive(0, SymbolTable.INTEGER, 0, 0)
 			break
 		case SymbolTable.FLOAT:
-			d.InitVal = Expression.NewPrimitive("0.0", SymbolTable.FLOAT, 0, 0)
+			d.InitVal = Expression.NewPrimitive(0.0, SymbolTable.FLOAT, 0, 0)
+			break
+		case SymbolTable.CHAR:
+			d.InitVal = Expression.NewPrimitive("", SymbolTable.CHAR, 0, 0)
 			break
 		}
 	}
@@ -51,9 +54,24 @@ func (d *Declaration) Compile(symbolTable SymbolTable.SymbolTable, generator *Ge
 		tempPos = newVar.(SymbolTable.Symbol).Pos
 	}
 
-	generator.SetStack(tempPos, value.(Abstract.Value).Value, true)
+	if value.(Abstract.Value).Type == SymbolTable.BOOLEAN {
+		ValueBoolean(value, tempPos, generator)
+	} else {
+		generator.SetStack(tempPos, value.(Abstract.Value).Value, true)
+	}
 
 	return nil
+}
+
+func ValueBoolean(value interface{}, tempPos int, generator *Generator.Generator) {
+	tempLabel := generator.NewLabel()
+	generator.SetLabel(value.(Abstract.Value).TrueLabel)
+	generator.SetStack(tempPos, 1, true)
+	generator.AddGoTo(tempLabel)
+
+	generator.SetLabel(value.(Abstract.Value).FalseLabel)
+	generator.SetStack(tempPos, 0, true)
+	generator.SetLabel(tempLabel)
 }
 
 func NewDeclaration(listIds *arrayList.List, isMut bool, dataType string) *Declaration {
