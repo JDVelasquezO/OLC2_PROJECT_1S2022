@@ -314,6 +314,10 @@ func (g *Generator) AddOperationMod(res string, left string, right string) {
 	g.CodeInFunction(res+"=fmod("+left+", "+right+");\n", "\t")
 }
 
+func (g *Generator) AddOperationPow(res string, base string, exponent string) {
+	g.CodeInFunction(res+"=pow("+base+", "+exponent+");\n", "\t")
+}
+
 func typeof(v interface{}) string {
 	return reflect.TypeOf(v).String()
 }

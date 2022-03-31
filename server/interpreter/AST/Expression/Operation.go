@@ -69,6 +69,8 @@ func (p Operation) Compile(symbolTable SymbolTable.SymbolTable, generator *Gener
 
 			if operation == "%" {
 				generator.AddOperationMod(temp, valLeft, valRight)
+			} else if operation == "pow" {
+				generator.AddOperationPow(temp, valLeft, valRight)
 			} else {
 				generator.AddExpression(temp, valLeft, valRight, operation)
 			}
