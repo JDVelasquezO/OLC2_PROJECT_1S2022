@@ -18,6 +18,7 @@ type Generator struct {
 	InFunc         bool
 	Natives        string
 	Functions      string
+	PrintStr       bool
 }
 
 func NewGenerator(code string) Generator {
@@ -31,6 +32,7 @@ func NewGenerator(code string) Generator {
 		TempsRecovered: make(map[string]interface{}),
 		InNatives:      false,
 		InFunc:         false,
+		PrintStr:       false,
 		Natives:        "",
 		Functions:      "",
 	}
@@ -45,6 +47,8 @@ func (g *Generator) CleanAll() {
 
 func (g *Generator) GetCode() string {
 	code := initialHeader(g)
+	code += g.Natives
+	code += g.Functions
 	code += "\n/*------MAIN------*/\n void main() { \n\tP = 1; H = 0;\n\n" + g.Code + "\n\t return; \n }"
 	return code
 }
@@ -60,6 +64,13 @@ func initialHeader(g *Generator) string {
 
 	if g.Temps.Len() > 0 {
 		header += "float "
+		for i := 0; i < g.Temps.Len(); i++ {
+			header += g.Temps.GetValue(i).(string)
+			if i != (g.Temps.Len() - 1) {
+				header += ", "
+			}
+		}
+		header += ";\n"
 	}
 
 	return header
@@ -115,33 +126,43 @@ func (g *Generator) GetFreeTemp(temp string) {
 	}
 }
 
-func (g *Generator) SetStack(pos int, value interface{}, freeValue bool) {
-	g.GetFreeTemp(strconv.Itoa(pos))
+func (g *Generator) SetStack(pos interface{}, value interface{}, freeValue bool) {
 	if freeValue {
 		if typeof(value) == "int" {
 			g.GetFreeTemp(strconv.Itoa(value.(int)))
-			g.CodeInFunction("stack[(int)"+strconv.Itoa(pos)+"] = "+strconv.Itoa(value.(int))+";\n", "\t")
+			g.CodeInFunction("stack[(int)"+pos.(string)+"] = "+strconv.Itoa(value.(int))+";\n", "\t")
 		} else if typeof(value) == "float64" {
 			g.GetFreeTemp(fmt.Sprintf("%v", value))
-			g.CodeInFunction("stack[(int)"+strconv.Itoa(pos)+"] = "+fmt.Sprintf("%v", value)+";\n", "\t")
-		} else if typeof(value) == "char" {
-			g.GetFreeTemp(value.(string))
-			g.CodeInFunction("stack[(int)"+strconv.Itoa(pos)+"] = '"+value.(string)+"';\n", "\t")
+			g.CodeInFunction("stack[(int)"+pos.(string)+"] = "+fmt.Sprintf("%v", value)+";\n", "\t")
 		} else {
 			g.GetFreeTemp(value.(string))
-			g.CodeInFunction("stack[(int)"+strconv.Itoa(pos)+"] = "+value.(string)+";\n", "\t")
+			if value == "" {
+				g.CodeInFunction("stack[(int)"+pos.(string)+"] = '"+value.(string)+"';\n", "\t")
+			} else {
+				g.CodeInFunction("stack[(int)"+pos.(string)+"] = "+value.(string)+";\n", "\t")
+			}
 		}
 	}
+}
+
+func (g *Generator) GetStack(place string, pos string) {
+	g.GetFreeTemp(pos)
+	g.CodeInFunction(place+"=stack[(int)"+pos+"];\n", "\t")
+}
+
+func (g *Generator) GetHeap(place string, pos string) {
+	g.GetFreeTemp(pos)
+	g.CodeInFunction(place+"=heap[(int)"+pos+"];\n", "\t")
 }
 
 func (g *Generator) SetHeap(pos interface{}, value interface{}) {
 	g.GetFreeTemp(pos.(string))
 	if typeof(value) == "int" {
 		g.GetFreeTemp(strconv.Itoa(value.(int)))
-		g.CodeInFunction("heap[int("+pos.(string)+")]="+strconv.Itoa(value.(int))+";\n", "\t")
+		g.CodeInFunction("heap[(int)"+pos.(string)+"]="+strconv.Itoa(value.(int))+";\n", "\t")
 	} else {
 		g.GetFreeTemp(value.(string))
-		g.CodeInFunction("heap[int("+pos.(string)+")]="+value.(string)+";\n", "\t")
+		g.CodeInFunction("heap[(int)"+pos.(string)+"]="+value.(string)+";\n", "\t")
 	}
 }
 
@@ -171,6 +192,60 @@ func (g *Generator) AddExpression(res string, left string, right string, ope str
 		newCode = res + " = " + left + " " + ope + " " + right + ";\n"
 	}
 	g.CodeInFunction(newCode, "\t")
+}
+
+func (g *Generator) AddIf(left string, right string, ope string, label string) {
+	g.GetFreeTemp(left)
+	g.GetFreeTemp(right)
+	g.CodeInFunction("if ("+left+" "+ope+" "+right+") goto "+label+";\n", "\t")
+}
+
+func (g *Generator) AddPrint(format string, dataType string, value string) {
+	g.GetFreeTemp(value)
+	g.CodeInFunction("printf(\"%"+format+"\", ("+dataType+")"+value+");\n", "\t")
+}
+
+func (g *Generator) PrintString() {
+	if g.PrintStr {
+		return
+	}
+
+	g.PrintStr = true
+	g.InNatives = true
+	g.AddBeginFunc("print", SymbolTable.VOID)
+	retLbl1 := g.NewLabel()
+	cmpLbl1 := g.NewLabel()
+	tempP := g.AddTemp()
+	tempH := g.AddTemp()
+	g.AddExpression(tempP, "P", "1", "+")
+	g.GetStack(tempH, tempP)
+
+	tempCmp := g.AddTemp()
+	g.SetLabel(cmpLbl1)
+	g.GetHeap(tempCmp, tempH)
+	g.AddIf(tempCmp, "-1", "==", retLbl1)
+
+	g.AddPrint("c", "char", tempCmp)
+	g.AddExpression(tempH, tempH, "1", "+")
+	g.AddGoTo(cmpLbl1)
+	g.SetLabel(retLbl1)
+	g.AddEndFunc()
+	g.InNatives = false
+	g.GetFreeTemp(tempP)
+	g.GetFreeTemp(tempH)
+	g.GetFreeTemp(tempCmp)
+}
+
+func (g *Generator) NewEnv(size int) {
+	g.CodeInFunction("P = P + "+strconv.Itoa(size)+";\n", "\t")
+}
+
+func (g *Generator) SetEnv(size int) {
+	g.CodeInFunction("P = P - "+strconv.Itoa(size)+";\n", "\t")
+}
+
+func (g *Generator) CallFunc(id string) {
+	g.CodeInFunction(id+"();\n", "\t")
 }
 
 func typeof(v interface{}) string {

@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"fmt"
 	arrayList "github.com/colegno/arraylist"
+	"strconv"
 )
 
 var typeDef = [8][8]SymbolTable.DataType{
@@ -43,6 +44,9 @@ func (d *Declaration) Compile(symbolTable SymbolTable.SymbolTable, generator *Ge
 		case SymbolTable.BOOLEAN:
 			d.InitVal = Expression.NewPrimitive(true, SymbolTable.BOOLEAN, 0, 0)
 			break
+		case SymbolTable.STRING, SymbolTable.STR:
+			d.InitVal = Expression.NewPrimitive("", SymbolTable.STRING, 0, 0)
+			break
 		}
 	}
 
@@ -60,7 +64,7 @@ func (d *Declaration) Compile(symbolTable SymbolTable.SymbolTable, generator *Ge
 	if value.(Abstract.Value).Type == SymbolTable.BOOLEAN {
 		ValueBoolean(value, tempPos, generator)
 	} else {
-		generator.SetStack(tempPos, value.(Abstract.Value).Value, true)
+		generator.SetStack(strconv.Itoa(tempPos), value.(Abstract.Value).Value, true)
 	}
 
 	return nil
@@ -69,11 +73,11 @@ func (d *Declaration) Compile(symbolTable SymbolTable.SymbolTable, generator *Ge
 func ValueBoolean(value interface{}, tempPos int, generator *Generator.Generator) {
 	tempLabel := generator.NewLabel()
 	generator.SetLabel(value.(Abstract.Value).TrueLabel)
-	generator.SetStack(tempPos, 1, true)
+	generator.SetStack(strconv.Itoa(tempPos), 1, true)
 	generator.AddGoTo(tempLabel)
 
 	generator.SetLabel(value.(Abstract.Value).FalseLabel)
-	generator.SetStack(tempPos, 0, true)
+	generator.SetStack(strconv.Itoa(tempPos), 0, true)
 	generator.SetLabel(tempLabel)
 }
 

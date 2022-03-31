@@ -22,8 +22,27 @@ type Print struct {
 }
 
 func (p Print) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
-	//TODO implement me
-	panic("implement me")
+
+	res := p.Expressions.(Expression.Primitive).Compile(symbolTable, generator)
+	valueShow := res.(Abstract.Value).Value
+	TypeString(valueShow.(string), symbolTable, generator)
+	generator.AddPrint("c", "char", "10")
+
+	return nil
+}
+
+func TypeString(value string, table SymbolTable.SymbolTable, generator *Generator.Generator) {
+	generator.PrintString()
+	paramTemp1 := generator.AddTemp()
+	generator.AddExpression(paramTemp1, "P", strconv.Itoa(table.SizeTable), "+")
+	generator.AddExpression(paramTemp1, paramTemp1, "1", "+")
+	generator.SetStack(paramTemp1, value, true)
+	generator.NewEnv(table.SizeTable)
+	generator.CallFunc("print")
+
+	temp := generator.AddTemp()
+	generator.GetStack(temp, "P")
+	generator.SetEnv(table.SizeTable)
 }
 
 func NewPrint(val Abstract.Expression, isBreakLine bool, row int, col int) Print {
@@ -130,6 +149,7 @@ func (p Print) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 			}
 
 			interpreter.Console += fmt.Sprintf("%v", finalMsg)
+			interpreter.FinalMsg = finalMsg
 		} else {
 			row := p.Row
 			col := p.Col
