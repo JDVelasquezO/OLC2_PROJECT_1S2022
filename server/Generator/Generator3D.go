@@ -16,9 +16,10 @@ type Generator struct {
 	TempsRecovered map[string]interface{}
 	InNatives      bool
 	InFunc         bool
+	PrintStr       bool
+	ConcatStr      bool
 	Natives        string
 	Functions      string
-	PrintStr       bool
 }
 
 func NewGenerator(code string) Generator {
@@ -33,6 +34,7 @@ func NewGenerator(code string) Generator {
 		InNatives:      false,
 		InFunc:         false,
 		PrintStr:       false,
+		ConcatStr:      false,
 		Natives:        "",
 		Functions:      "",
 	}
@@ -234,6 +236,66 @@ func (g *Generator) PrintString() {
 	g.GetFreeTemp(tempP)
 	g.GetFreeTemp(tempH)
 	g.GetFreeTemp(tempCmp)
+}
+
+func (g *Generator) ConcatString() {
+	if g.ConcatStr {
+		return
+	}
+
+	g.ConcatStr = true
+	g.InNatives = true
+	g.AddBeginFunc("concat", SymbolTable.STRING)
+
+	t2 := g.AddTemp()
+	t3 := g.AddTemp()
+	t4 := g.AddTemp()
+	t5 := g.AddTemp()
+
+	g.AddExpression(t2, "H", "", "")
+	g.AddExpression(t3, "P", "1", "+")
+	g.GetStack(t5, t3)
+	g.AddExpression(t4, "P", "2", "+")
+
+	l1 := g.NewLabel()
+	l2 := g.NewLabel()
+
+	g.SetLabel(l1)
+	t6 := g.AddTemp()
+	g.GetHeap(t6, t5)
+
+	g.AddIf(t6, "-1", "==", l2)
+	g.SetHeap("H", t6)
+	g.NextHeap()
+	g.AddExpression(t5, t5, "1", "+")
+	g.AddGoTo(l1)
+
+	g.SetLabel(l2)
+	g.GetStack(t5, t4)
+
+	l0 := g.NewLabel()
+	l3 := g.NewLabel()
+	g.SetLabel(l3)
+	g.GetHeap(t6, t5)
+
+	g.AddIf(t6, "-1", "==", l0)
+	g.SetHeap("H", t6)
+	g.NextHeap()
+	g.AddExpression(t5, t5, "1", "+")
+	g.AddGoTo(l3)
+
+	g.SetLabel(l0)
+	g.SetHeap("H", "-1")
+	g.NextHeap()
+	g.SetStack("P", t2, true)
+
+	g.AddEndFunc()
+	g.InNatives = false
+	g.GetFreeTemp(t2)
+	g.GetFreeTemp(t3)
+	g.GetFreeTemp(t4)
+	g.GetFreeTemp(t5)
+	g.GetFreeTemp(t6)
 }
 
 func (g *Generator) NewEnv(size int) {

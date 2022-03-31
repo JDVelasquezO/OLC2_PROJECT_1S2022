@@ -75,6 +75,28 @@ func (p Operation) Compile(symbolTable SymbolTable.SymbolTable, generator *Gener
 
 			typeOf := interpreter.DataTypeRes
 			return Abstract.NewValue(temp, typeOf, true, "")
+		} else if left.(Abstract.Value).Type == SymbolTable.STRING &&
+			(right.(Abstract.Value).Type == SymbolTable.STRING || right.(Abstract.Value).Type == SymbolTable.STR) {
+			generator.ConcatString()
+			paramTemp := generator.AddTemp()
+			generator.AddExpression(paramTemp, "P", strconv.Itoa(symbolTable.SizeTable), "+")
+
+			generator.AddExpression(paramTemp, paramTemp, "1", "+")
+			generator.SetStack(paramTemp, left.(Abstract.Value).Value, true)
+
+			generator.AddExpression(paramTemp, paramTemp, "1", "+")
+			generator.SetStack(paramTemp, right.(Abstract.Value).Value, true)
+
+			generator.NewEnv(symbolTable.SizeTable)
+			generator.CallFunc("concat")
+			temp := generator.AddTemp()
+
+			generator.GetStack(temp, "P")
+			generator.SetEnv(symbolTable.SizeTable)
+
+			retVal := Abstract.NewValue(temp, SymbolTable.STRING, true, "")
+			retVal.Size = left.(Abstract.Value).Size + right.(Abstract.Value).Size
+			return retVal
 		}
 	}
 
@@ -249,7 +271,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 				return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
 			}
 
-			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(int) / retRight.Value.(int)}
+			return SymbolTable.ReturnType{Type: SymbolTable.FLOAT, Value: float64(retLeft.Value.(int)) / float64(retRight.Value.(int))}
 		} else if priority == SymbolTable.FLOAT {
 
 			if retRight.Value.(float64) == 0 {
