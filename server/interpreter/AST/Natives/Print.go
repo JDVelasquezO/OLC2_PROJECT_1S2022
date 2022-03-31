@@ -23,8 +23,12 @@ type Print struct {
 
 func (p Print) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 
-	res := p.Expressions.(Expression.Primitive).Compile(symbolTable, generator)
+	newExp := Expression.NewPrimitive(interpreter.FinalMsg, SymbolTable.STR, 0, 0)
+	//res := p.Expressions.(Expression.Primitive).Compile(symbolTable, generator)
+	res := newExp.Compile(symbolTable, generator)
 	valueShow := res.(Abstract.Value).Value
+	//valueShow2 := interpreter.FinalMsg
+	//fmt.Println(valueShow2)
 	TypeString(valueShow.(string), symbolTable, generator)
 	generator.AddPrint("c", "char", "10")
 
@@ -126,6 +130,7 @@ func (p Print) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 			finalMsg = finalMsg + "\n"
 		}
 		interpreter.Console += fmt.Sprintf("%v", finalMsg)
+		interpreter.FinalMsg = finalMsg
 
 	} else {
 		varDec := p.Expressions.GetValue(symbolTable)

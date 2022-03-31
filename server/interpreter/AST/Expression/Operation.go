@@ -54,8 +54,48 @@ type Operation struct {
 }
 
 func (p Operation) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
-	//TODO implement me
-	panic("implement me")
+	left := p.OpLeft.Compile(symbolTable, generator)
+
+	if p.OpRight != nil {
+		right := p.OpRight.Compile(symbolTable, generator)
+		temp := generator.AddTemp()
+		operation := p.Operator
+
+		if (left.(Abstract.Value).Type == SymbolTable.INTEGER || left.(Abstract.Value).Type == SymbolTable.FLOAT) &&
+			(right.(Abstract.Value).Type == SymbolTable.INTEGER || right.(Abstract.Value).Type == SymbolTable.FLOAT) {
+
+			valLeft := LookForDataType(left.(Abstract.Value).Value)
+			valRight := LookForDataType(right.(Abstract.Value).Value)
+
+			if operation == "%" {
+				generator.AddOperationMod(temp, valLeft, valRight)
+			} else {
+				generator.AddExpression(temp, valLeft, valRight, operation)
+			}
+
+			typeOf := interpreter.DataTypeRes
+			return Abstract.NewValue(temp, typeOf, true, "")
+		}
+	}
+
+	return nil
+}
+
+func LookForDataType(val interface{}) string {
+	var valRet string
+	switch typeof(val) {
+	case "int":
+		valRet = strconv.Itoa(val.(int))
+		break
+	case "float64":
+		valRet = fmt.Sprintf("%v", val)
+		break
+	case "string":
+		valRet = val.(string)
+		break
+	}
+
+	return valRet
 }
 
 func (p Operation) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
@@ -115,6 +155,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 
 		priority = sum[retLeft.Type][retRight.Type]
+		interpreter.DataTypeRes = priority
 
 		if priority == SymbolTable.INTEGER {
 			fmt.Println(retLeft.Type)
@@ -152,6 +193,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 
 		priority = sub[retLeft.Type][retRight.Type]
+		interpreter.DataTypeRes = priority
 		if priority == SymbolTable.INTEGER {
 			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(int) - retRight.Value.(int)}
 		} else if priority == SymbolTable.FLOAT {
@@ -172,6 +214,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 
 		priority = multiDiv[retLeft.Type][retRight.Type]
+		interpreter.DataTypeRes = priority
 		if priority == SymbolTable.INTEGER {
 			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(int) * retRight.Value.(int)}
 		} else if priority == SymbolTable.FLOAT {
@@ -192,6 +235,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 
 		priority = multiDiv[retLeft.Type][retRight.Type]
+		interpreter.DataTypeRes = priority
 		if priority == SymbolTable.INTEGER {
 
 			if retRight.Value.(int) == 0 {
@@ -238,6 +282,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 
 		priority = multiDiv[retLeft.Type][retRight.Type]
+		interpreter.DataTypeRes = priority
 		if priority == SymbolTable.INTEGER {
 			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(int) % retRight.Value.(int)}
 		} else if priority == SymbolTable.FLOAT {
@@ -258,6 +303,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 
 		priority = relational[retLeft.Type][retRight.Type]
+		interpreter.DataTypeRes = priority
 		if priority == SymbolTable.INTEGER && p.Operator == "pow" {
 			return SymbolTable.ReturnType{Type: priority, Value: math.Pow(float64(retLeft.Value.(int)), float64(retRight.Value.(int)))}
 		} else if priority == SymbolTable.FLOAT && p.Operator == "powf" {
@@ -286,6 +332,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 
 		priority = relational[retLeft.Type][retRight.Type]
+		interpreter.DataTypeRes = SymbolTable.BOOLEAN
 		if priority == SymbolTable.INTEGER {
 			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: retLeft.Value.(int) > retRight.Value.(int)}
 		} else if priority == SymbolTable.FLOAT {
@@ -306,6 +353,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 
 		priority = relational[retLeft.Type][retRight.Type]
+		interpreter.DataTypeRes = SymbolTable.BOOLEAN
 		if priority == SymbolTable.INTEGER {
 			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: retLeft.Value.(int) < retRight.Value.(int)}
 		} else if priority == SymbolTable.FLOAT {
@@ -326,6 +374,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 
 		priority = relational[retLeft.Type][retRight.Type]
+		interpreter.DataTypeRes = SymbolTable.BOOLEAN
 		if priority == SymbolTable.INTEGER {
 			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: retLeft.Value.(int) >= retRight.Value.(int)}
 		} else if priority == SymbolTable.FLOAT {
@@ -346,6 +395,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 
 		priority = relational[retLeft.Type][retRight.Type]
+		interpreter.DataTypeRes = SymbolTable.BOOLEAN
 		if priority == SymbolTable.INTEGER {
 			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: retLeft.Value.(int) <= retRight.Value.(int)}
 		} else if priority == SymbolTable.FLOAT {
@@ -366,6 +416,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 
 		priority = relational[retLeft.Type][retRight.Type]
+		interpreter.DataTypeRes = SymbolTable.BOOLEAN
 		if priority == SymbolTable.INTEGER {
 			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: retLeft.Value.(int) == retRight.Value.(int)}
 		} else if priority == SymbolTable.FLOAT {
@@ -386,6 +437,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 
 		priority = relational[retLeft.Type][retRight.Type]
+		interpreter.DataTypeRes = SymbolTable.BOOLEAN
 		if priority == SymbolTable.INTEGER {
 			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: retLeft.Value.(int) != retRight.Value.(int)}
 		} else if priority == SymbolTable.FLOAT {
@@ -412,20 +464,8 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			errors.TypeError = append(errors.TypeError, err)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 		}
-		//var left bool
-		//var right bool
-		//if retLeft.Value == "true" {
-		//	left = true
-		//} else {
-		//	left = false
-		//}
-		//
-		//if retRight.Value == "true" {
-		//	right = true
-		//} else {
-		//	right = false
-		//}
 
+		interpreter.DataTypeRes = SymbolTable.BOOLEAN
 		return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: retLeft.Value.(bool) && retRight.Value.(bool)}
 
 	case "||":
@@ -447,6 +487,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 		}
 
+		interpreter.DataTypeRes = SymbolTable.BOOLEAN
 		return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: retLeft.Value.(bool) || retRight.Value.(bool)}
 
 	case "!":
@@ -458,6 +499,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			goto ErrorDataType
 		}
 
+		interpreter.DataTypeRes = SymbolTable.BOOLEAN
 		return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: !retLeft.Value.(bool)}
 	}
 

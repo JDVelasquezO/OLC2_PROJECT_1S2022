@@ -1,6 +1,7 @@
 package ExpressionSpecial
 
 import (
+	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Array"
@@ -12,6 +13,10 @@ type ValueArray struct {
 	Expressions *arrayList.List
 	Exp1        Abstract.Expression
 	Exp2        Abstract.Expression
+}
+
+func (v ValueArray) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+	return nil
 }
 
 func NewValueArray(expressions *arrayList.List, exp1 Abstract.Expression, exp2 Abstract.Expression) ValueArray {
@@ -123,7 +128,7 @@ func (v ValueArray) GetData(table SymbolTable.SymbolTable) (interface{}, SymbolT
 	return objectVal, SymbolTable.ARRAY
 }
 
-func (val ValueArray) resizeArray(data SymbolTable.DataType) bool {
+func (v ValueArray) resizeArray(data SymbolTable.DataType) bool {
 	switch data {
 	case SymbolTable.INTEGER:
 	case SymbolTable.BOOLEAN:

@@ -248,6 +248,10 @@ func (g *Generator) CallFunc(id string) {
 	g.CodeInFunction(id+"();\n", "\t")
 }
 
+func (g *Generator) AddOperationMod(res string, left string, right string) {
+	g.CodeInFunction(res+"=fmod("+left+", "+right+");\n", "\t")
+}
+
 func typeof(v interface{}) string {
 	return reflect.TypeOf(v).String()
 }

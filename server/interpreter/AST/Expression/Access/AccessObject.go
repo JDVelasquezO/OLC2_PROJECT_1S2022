@@ -1,6 +1,7 @@
 package Access
 
 import (
+	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter/AST/Expression"
 	"OLC2_Project1/server/interpreter/AST/Expression/Objects"
 	"OLC2_Project1/server/interpreter/SymbolTable"
@@ -10,6 +11,10 @@ import (
 
 type ObjectAccess struct {
 	listAccess *arrayList.List
+}
+
+func (o ObjectAccess) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+	return nil
 }
 
 func (o ObjectAccess) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.ReturnType {

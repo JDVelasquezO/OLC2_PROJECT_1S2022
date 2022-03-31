@@ -2,10 +2,12 @@ package Expression
 
 import (
 	"OLC2_Project1/server/Generator"
+	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Array"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Vector"
 	"reflect"
+	"strconv"
 )
 
 type Identifier struct {
@@ -15,8 +17,40 @@ type Identifier struct {
 }
 
 func (id Identifier) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
-	//TODO implement me
-	panic("implement me")
+	value := symbolTable.GetSymbol(id.Id)
+	if value == nil {
+		return nil
+	}
+
+	temp := generator.AddTemp()
+	var tempPos string
+	if value.(SymbolTable.Symbol).Id != "" {
+		tempPos = strconv.Itoa(value.(SymbolTable.Symbol).Pos)
+		//tempPos = generator.AddTemp()
+		//newPos := strconv.Itoa(value.(SymbolTable.Symbol).Pos - 1)
+		//generator.AddExpression(tempPos, "P", newPos, "+")
+	}
+
+	generator.GetStack(temp, tempPos)
+
+	if value.(SymbolTable.Symbol).DataType != SymbolTable.BOOLEAN {
+		return Abstract.NewValue(temp, value.(SymbolTable.Symbol).DataType, true, "")
+	}
+
+	CheckLabelsId(generator, value.(SymbolTable.Symbol))
+	generator.AddIf(temp, "-1", "==", value.(SymbolTable.Symbol).LabelTrue)
+	generator.AddGoTo(value.(SymbolTable.Symbol).LabelFalse)
+
+	valRet := Abstract.NewValue(nil, SymbolTable.BOOLEAN, false, "")
+	valRet.TrueLabel = value.(SymbolTable.Symbol).LabelTrue
+	valRet.FalseLabel = value.(SymbolTable.Symbol).LabelFalse
+
+	return valRet
+}
+
+func CheckLabelsId(generator *Generator.Generator, value SymbolTable.Symbol) {
+	value.LabelTrue = generator.NewLabel()
+	value.LabelFalse = generator.NewLabel()
 }
 
 func (id Identifier) Execute(symbolTable SymbolTable.SymbolTable) interface{} {

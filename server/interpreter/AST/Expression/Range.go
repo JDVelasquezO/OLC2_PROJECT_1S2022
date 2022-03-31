@@ -1,6 +1,7 @@
 package Expression
 
 import (
+	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 )
@@ -20,6 +21,10 @@ func NewRange(row int, col int, expr1 Abstract.Expression, expr2 Abstract.Expres
 		Expr1: expr1,
 		Expr2: expr2,
 	}
+}
+
+func (r Range) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+	return nil
 }
 
 func (r Range) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.ReturnType {

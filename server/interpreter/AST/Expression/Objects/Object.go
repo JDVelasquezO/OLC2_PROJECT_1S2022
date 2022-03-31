@@ -1,6 +1,7 @@
 package Objects
 
 import (
+	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	arrayList "github.com/colegno/arraylist"
 )
@@ -8,6 +9,11 @@ import (
 type Object struct {
 	Id         string
 	Attributes *arrayList.List
+}
+
+func (o Object) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+	//TODO implement me
+	panic("implement me")
 }
 
 func (o Object) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.ReturnType {
