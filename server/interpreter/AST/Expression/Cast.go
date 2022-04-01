@@ -4,6 +4,8 @@ import (
 	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
+	"fmt"
+	"strconv"
 )
 
 type Cast struct {
@@ -14,8 +16,20 @@ type Cast struct {
 }
 
 func (c Cast) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
-	//TODO implement me
-	panic("implement me")
+	exp := c.Expression.Compile(symbolTable, generator)
+	temp := generator.AddTemp()
+	switch exp.(Abstract.Value).Type {
+	case SymbolTable.INTEGER:
+		generator.ToFloat(temp, strconv.Itoa(exp.(Abstract.Value).Value.(int)))
+		break
+	case SymbolTable.FLOAT:
+		generator.ToInt(temp, fmt.Sprintf("%v", exp.(Abstract.Value).Value.(float64)))
+		break
+	case SymbolTable.STRING:
+		generator.ToInt(temp, exp.(Abstract.Value).Value.(string))
+		break
+	}
+	return Abstract.NewValue(temp, c.Type, false, "")
 }
 
 func (c Cast) Execute(symbolTable SymbolTable.SymbolTable) interface{} {

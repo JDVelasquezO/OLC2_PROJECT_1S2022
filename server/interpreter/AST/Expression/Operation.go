@@ -69,14 +69,25 @@ func (p Operation) Compile(symbolTable SymbolTable.SymbolTable, generator *Gener
 
 			if operation == "%" {
 				generator.AddOperationMod(temp, valLeft, valRight)
-			} else if operation == "pow" {
+			} else if operation == "pow" || operation == "powf" {
 				generator.AddOperationPow(temp, valLeft, valRight)
+			} else if operation == ">" {
+				leftToSend := left.(Abstract.Value)
+				CheckLabelsBool(generator, &leftToSend)
+				generator.AddIf(valLeft, valRight, operation, leftToSend.TrueLabel)
+				generator.AddGoTo(leftToSend.FalseLabel)
+
+				typeOf := interpreter.DataTypeRes
+				leftToSend.Value = temp
+				leftToSend.Type = typeOf
+				return leftToSend
 			} else {
 				generator.AddExpression(temp, valLeft, valRight, operation)
 			}
 
 			typeOf := interpreter.DataTypeRes
 			return Abstract.NewValue(temp, typeOf, true, "")
+
 		} else if left.(Abstract.Value).Type == SymbolTable.STRING &&
 			(right.(Abstract.Value).Type == SymbolTable.STRING || right.(Abstract.Value).Type == SymbolTable.STR) {
 			generator.ConcatString()
@@ -103,6 +114,11 @@ func (p Operation) Compile(symbolTable SymbolTable.SymbolTable, generator *Gener
 	}
 
 	return nil
+}
+
+func CheckLabelsBool(generator *Generator.Generator, value *Abstract.Value) {
+	value.TrueLabel = generator.NewLabel()
+	value.FalseLabel = generator.NewLabel()
 }
 
 func LookForDataType(val interface{}) string {
@@ -329,7 +345,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		priority = relational[retLeft.Type][retRight.Type]
 		interpreter.DataTypeRes = priority
 		if priority == SymbolTable.INTEGER && p.Operator == "pow" {
-			return SymbolTable.ReturnType{Type: priority, Value: math.Pow(float64(retLeft.Value.(int)), float64(retRight.Value.(int)))}
+			return SymbolTable.ReturnType{Type: SymbolTable.FLOAT, Value: math.Pow(float64(retLeft.Value.(int)), float64(retRight.Value.(int)))}
 		} else if priority == SymbolTable.FLOAT && p.Operator == "powf" {
 			return SymbolTable.ReturnType{Type: priority, Value: math.Pow(retLeft.Value.(float64), retRight.Value.(float64))}
 		} else {

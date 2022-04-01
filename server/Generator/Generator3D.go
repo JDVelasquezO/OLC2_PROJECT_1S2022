@@ -311,11 +311,19 @@ func (g *Generator) CallFunc(id string) {
 }
 
 func (g *Generator) AddOperationMod(res string, left string, right string) {
-	g.CodeInFunction(res+"=fmod("+left+", "+right+");\n", "\t")
+	g.CodeInFunction(res+"=(int)fmod("+left+", "+right+");\n", "\t")
 }
 
 func (g *Generator) AddOperationPow(res string, base string, exponent string) {
 	g.CodeInFunction(res+"=pow("+base+", "+exponent+");\n", "\t")
+}
+
+func (g *Generator) ToInt(res string, exp string) {
+	g.CodeInFunction(res+"=(int)"+exp+";\n", "\t")
+}
+
+func (g *Generator) ToFloat(res string, exp string) {
+	g.CodeInFunction(res+"=(double)"+exp+";\n", "\t")
 }
 
 func typeof(v interface{}) string {

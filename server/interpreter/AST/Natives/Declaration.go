@@ -51,7 +51,6 @@ func (d *Declaration) Compile(symbolTable SymbolTable.SymbolTable, generator *Ge
 	}
 
 	value := d.InitVal.(Abstract.Instruction).Compile(symbolTable, generator)
-	fmt.Println(value)
 	newVar := symbolTable.GetSymbol(d.ListIds.GetValue(0).(Expression.Identifier).Id)
 	var tempPos int
 	if newVar == nil {
