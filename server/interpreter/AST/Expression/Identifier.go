@@ -37,18 +37,19 @@ func (id Identifier) Compile(symbolTable SymbolTable.SymbolTable, generator *Gen
 		return Abstract.NewValue(temp, value.(SymbolTable.Symbol).DataType, true, "")
 	}
 
-	CheckLabelsId(generator, value.(SymbolTable.Symbol))
-	generator.AddIf(temp, "-1", "==", value.(SymbolTable.Symbol).LabelTrue)
-	generator.AddGoTo(value.(SymbolTable.Symbol).LabelFalse)
+	valToSend := value.(SymbolTable.Symbol)
+	CheckLabelsId(generator, &valToSend)
+	generator.AddIf(temp, "-1", "==", valToSend.LabelTrue)
+	generator.AddGoTo(valToSend.LabelFalse)
 
-	valRet := Abstract.NewValue(nil, SymbolTable.BOOLEAN, false, "")
-	valRet.TrueLabel = value.(SymbolTable.Symbol).LabelTrue
-	valRet.FalseLabel = value.(SymbolTable.Symbol).LabelFalse
+	valRet := Abstract.NewValue(valToSend.Value, SymbolTable.BOOLEAN, false, "")
+	valRet.TrueLabel = valToSend.LabelTrue
+	valRet.FalseLabel = valToSend.LabelFalse
 
 	return valRet
 }
 
-func CheckLabelsId(generator *Generator.Generator, value SymbolTable.Symbol) {
+func CheckLabelsId(generator *Generator.Generator, value *SymbolTable.Symbol) {
 	value.LabelTrue = generator.NewLabel()
 	value.LabelFalse = generator.NewLabel()
 }

@@ -67,11 +67,14 @@ func (p Operation) Compile(symbolTable SymbolTable.SymbolTable, generator *Gener
 			valLeft := LookForDataType(left.(Abstract.Value).Value)
 			valRight := LookForDataType(right.(Abstract.Value).Value)
 
-			if operation == "%" {
+			switch operation {
+			case "%":
 				generator.AddOperationMod(temp, valLeft, valRight)
-			} else if operation == "pow" || operation == "powf" {
+				break
+			case "pow", "powf":
 				generator.AddOperationPow(temp, valLeft, valRight)
-			} else if operation == ">" {
+				break
+			case ">", "<", ">=", "<=", "==", "!=":
 				leftToSend := left.(Abstract.Value)
 				CheckLabelsBool(generator, &leftToSend)
 				generator.AddIf(valLeft, valRight, operation, leftToSend.TrueLabel)
@@ -81,35 +84,136 @@ func (p Operation) Compile(symbolTable SymbolTable.SymbolTable, generator *Gener
 				leftToSend.Value = temp
 				leftToSend.Type = typeOf
 				return leftToSend
-			} else {
+			default:
 				generator.AddExpression(temp, valLeft, valRight, operation)
+				break
 			}
 
 			typeOf := interpreter.DataTypeRes
 			return Abstract.NewValue(temp, typeOf, true, "")
 
-		} else if left.(Abstract.Value).Type == SymbolTable.STRING &&
+		} else if (left.(Abstract.Value).Type == SymbolTable.STRING || left.(Abstract.Value).Type == SymbolTable.STR) &&
 			(right.(Abstract.Value).Type == SymbolTable.STRING || right.(Abstract.Value).Type == SymbolTable.STR) {
-			generator.ConcatString()
-			paramTemp := generator.AddTemp()
-			generator.AddExpression(paramTemp, "P", strconv.Itoa(symbolTable.SizeTable), "+")
 
-			generator.AddExpression(paramTemp, paramTemp, "1", "+")
-			generator.SetStack(paramTemp, left.(Abstract.Value).Value, true)
+			switch operation {
+			case "+":
+				generator.ConcatString()
+				paramTemp := generator.AddTemp()
+				generator.AddExpression(paramTemp, "P", strconv.Itoa(symbolTable.SizeTable), "+")
 
-			generator.AddExpression(paramTemp, paramTemp, "1", "+")
-			generator.SetStack(paramTemp, right.(Abstract.Value).Value, true)
+				generator.AddExpression(paramTemp, paramTemp, "1", "+")
+				generator.SetStack(paramTemp, left.(Abstract.Value).Value, true)
 
-			generator.NewEnv(symbolTable.SizeTable)
-			generator.CallFunc("concat")
-			temp := generator.AddTemp()
+				generator.AddExpression(paramTemp, paramTemp, "1", "+")
+				generator.SetStack(paramTemp, right.(Abstract.Value).Value, true)
 
-			generator.GetStack(temp, "P")
-			generator.SetEnv(symbolTable.SizeTable)
+				generator.NewEnv(symbolTable.SizeTable)
+				generator.CallFunc("concat")
+				temp := generator.AddTemp()
 
-			retVal := Abstract.NewValue(temp, SymbolTable.STRING, true, "")
-			retVal.Size = left.(Abstract.Value).Size + right.(Abstract.Value).Size
-			return retVal
+				generator.GetStack(temp, "P")
+				generator.SetEnv(symbolTable.SizeTable)
+
+				retVal := Abstract.NewValue(temp, SymbolTable.STRING, true, "")
+				retVal.Size = left.(Abstract.Value).Size + right.(Abstract.Value).Size
+				return retVal
+			case "<", ">", ">=", "<=", "==", "!=":
+				generator.CompareString()
+				paramTemp := generator.AddTemp()
+				generator.AddExpression(paramTemp, "P", strconv.Itoa(symbolTable.SizeTable), "+")
+
+				generator.AddExpression(paramTemp, paramTemp, "1", "+")
+				generator.SetStack(paramTemp, left.(Abstract.Value).Value.(string), true)
+
+				generator.AddExpression(paramTemp, paramTemp, "1", "+")
+				generator.SetStack(paramTemp, right.(Abstract.Value).Value.(string), true)
+
+				generator.NewEnv(symbolTable.SizeTable)
+				generator.CallFunc("cmp")
+
+				temp := generator.AddTemp()
+				generator.GetStack(temp, "P")
+				generator.SetEnv(symbolTable.SizeTable)
+
+				trueLabel := generator.NewLabel()
+				falseLabel := generator.NewLabel()
+
+				if operation == "==" {
+					generator.AddIf(temp, "0", "==", falseLabel)
+					generator.AddGoTo(trueLabel)
+
+					res := Abstract.NewValue(temp, SymbolTable.BOOLEAN, true, "")
+					res.TrueLabel = trueLabel
+					res.FalseLabel = falseLabel
+
+					return res
+				}
+
+				if operation == "!=" {
+					generator.AddIf(temp, "0", "!=", falseLabel)
+					generator.AddGoTo(trueLabel)
+
+					res := Abstract.NewValue(temp, SymbolTable.BOOLEAN, true, "")
+					res.TrueLabel = trueLabel
+					res.FalseLabel = falseLabel
+
+					return res
+				}
+			}
+		} else if left.(Abstract.Value).Type == SymbolTable.BOOLEAN && right.(Abstract.Value).Type == SymbolTable.BOOLEAN {
+			if operation == "&&" || operation == "||" {
+				res := Abstract.NewValue(nil, SymbolTable.BOOLEAN, false, "")
+				goRight := generator.NewLabel()
+				leftTemp := generator.AddTemp()
+
+				generator.SetLabel(left.(Abstract.Value).TrueLabel)
+				generator.AddExpression(leftTemp, "1", "", "")
+				generator.AddGoTo(goRight)
+
+				generator.SetLabel(left.(Abstract.Value).FalseLabel)
+				generator.AddExpression(leftTemp, "0", "", "")
+				generator.SetLabel(goRight)
+
+				gotoEnd := generator.NewLabel()
+				rightTemp := generator.AddTemp()
+
+				generator.SetLabel(right.(Abstract.Value).TrueLabel)
+				generator.AddExpression(rightTemp, "1", "", "")
+				generator.AddGoTo(gotoEnd)
+
+				generator.SetLabel(right.(Abstract.Value).FalseLabel)
+				generator.AddExpression(rightTemp, "0", "", "")
+
+				generator.SetLabel(gotoEnd)
+				leftToSend := left.(Abstract.Value)
+				CheckLabelsBool(generator, &leftToSend)
+				generator.AddIf(leftTemp, rightTemp, operation, leftToSend.TrueLabel)
+				generator.AddGoTo(leftToSend.FalseLabel)
+
+				res.TrueLabel = leftToSend.TrueLabel
+				res.FalseLabel = leftToSend.FalseLabel
+
+				return res
+			}
+		}
+	} else {
+		var value string
+		if p.Operator == "-" {
+			switch left.(Abstract.Value).Type {
+			case SymbolTable.INTEGER:
+				value = strconv.Itoa(left.(Abstract.Value).Value.(int) * -1)
+				break
+			case SymbolTable.FLOAT:
+				value = fmt.Sprintf("%v", left.(Abstract.Value).Value.(float64)*-1.0)
+				break
+			}
+			return Abstract.NewValue(value, left.(Abstract.Value).Type, false, "")
+		} else if p.Operator == "!" {
+			value = fmt.Sprintf("%v", !left.(Abstract.Value).Value.(bool))
+			newVal := Abstract.NewValue(value, left.(Abstract.Value).Type, false, "")
+			newVal.TrueLabel = left.(Abstract.Value).TrueLabel
+			newVal.FalseLabel = left.(Abstract.Value).FalseLabel
+			return newVal
 		}
 	}
 

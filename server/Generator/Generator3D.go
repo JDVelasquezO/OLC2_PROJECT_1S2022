@@ -18,6 +18,7 @@ type Generator struct {
 	InFunc         bool
 	PrintStr       bool
 	ConcatStr      bool
+	CompareStr     bool
 	Natives        string
 	Functions      string
 }
@@ -35,6 +36,7 @@ func NewGenerator(code string) Generator {
 		InFunc:         false,
 		PrintStr:       false,
 		ConcatStr:      false,
+		CompareStr:     false,
 		Natives:        "",
 		Functions:      "",
 	}
@@ -298,6 +300,57 @@ func (g *Generator) ConcatString() {
 	g.GetFreeTemp(t6)
 }
 
+func (g *Generator) CompareString() {
+	if g.CompareStr {
+		return
+	}
+
+	g.CompareStr = true
+	g.InNatives = true
+	g.AddBeginFunc("cmp", SymbolTable.STRING)
+
+	t2 := g.AddTemp()
+	g.AddExpression(t2, "P", "1", "+")
+	t3 := g.AddTemp()
+	g.GetStack(t3, t2)
+	g.AddExpression(t2, t2, "1", "+")
+	t4 := g.AddTemp()
+	g.GetStack(t4, t2)
+
+	l0 := g.NewLabel()
+	l1 := g.NewLabel()
+	l2 := g.NewLabel()
+	l3 := g.NewLabel()
+
+	g.SetLabel(l1)
+	t5 := g.AddTemp()
+	g.GetHeap(t5, t3)
+	t6 := g.AddTemp()
+	g.GetHeap(t6, t4)
+
+	g.AddIf(t5, t6, "!=", l3)
+	g.AddIf(t5, "-1", "==", l2)
+	g.AddExpression(t3, t3, "1", "+")
+	g.AddExpression(t4, t4, "1", "+")
+	g.AddGoTo(l1)
+
+	g.SetLabel(l2)
+	g.SetStack("P", "1", true)
+	g.AddGoTo(l0)
+
+	g.SetLabel(l3)
+	g.SetStack("P", "0", true)
+	g.SetLabel(l0)
+
+	g.AddEndFunc()
+	g.InNatives = false
+	g.GetFreeTemp(t2)
+	g.GetFreeTemp(t3)
+	g.GetFreeTemp(t4)
+	g.GetFreeTemp(t5)
+	g.GetFreeTemp(t6)
+}
+
 func (g *Generator) NewEnv(size int) {
 	g.CodeInFunction("P = P + "+strconv.Itoa(size)+";\n", "\t")
 }
@@ -316,6 +369,10 @@ func (g *Generator) AddOperationMod(res string, left string, right string) {
 
 func (g *Generator) AddOperationPow(res string, base string, exponent string) {
 	g.CodeInFunction(res+"=pow("+base+", "+exponent+");\n", "\t")
+}
+
+func (g *Generator) AddComment(comment string) {
+	g.CodeInFunction("/* "+comment+" */\n", "\t")
 }
 
 func (g *Generator) ToInt(res string, exp string) {

@@ -20,8 +20,40 @@ type If struct {
 }
 
 func (i If) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
-	//TODO implement me
-	panic("implement me")
+	generator.AddComment("---- Inicio IF ----")
+	condition := i.Condition.Compile(symbolTable, generator)
+
+	if condition.(Abstract.Value).Type != SymbolTable.BOOLEAN {
+		return nil
+	}
+
+	generator.SetLabel(condition.(Abstract.Value).TrueLabel)
+
+	for _, instr := range i.ListInstructs.ToArray() {
+		instr.(Abstract.Instruction).Compile(symbolTable, generator)
+	}
+
+	if i.ListIfElse != nil {
+		generator.SetLabel(condition.(Abstract.Value).FalseLabel)
+		for _, instr := range i.ListIfElse.ToArray() {
+			instr.(Abstract.Expression).Compile(symbolTable, generator)
+		}
+	}
+
+	var labelExitIf string
+	if i.ListInstructsElse != nil {
+		labelExitIf = generator.NewLabel()
+		generator.AddGoTo(labelExitIf)
+	}
+
+	generator.SetLabel(condition.(Abstract.Value).FalseLabel)
+	if i.ListInstructsElse != nil {
+		for _, instr := range i.ListInstructsElse.ToArray() {
+			instr.(Abstract.Expression).Compile(symbolTable, generator)
+		}
+	}
+
+	return nil
 }
 
 func NewIf(condition Abstract.Expression, listInstructs *arrayList.List,
