@@ -21,8 +21,10 @@ type Assign struct {
 }
 
 func (d *Assign) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
-	//TODO implement me
-	panic("implement me")
+	value := symbolTable.GetSymbol(d.ListIds.GetValue(0).(Expression.Identifier).Id)
+	tempPos := strconv.Itoa(value.(SymbolTable.Symbol).Pos)
+	generator.SetStack(tempPos, value.(SymbolTable.Symbol).Value, true)
+	return nil
 }
 
 func NewAssign(listIds *arrayList.List, val Abstract.Expression) *Assign {

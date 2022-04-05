@@ -23,6 +23,7 @@ func (id Identifier) Compile(symbolTable SymbolTable.SymbolTable, generator *Gen
 	}
 
 	temp := generator.AddTemp()
+	//temp := "t" + strconv.Itoa(value.(SymbolTable.Symbol).Pos)
 	var tempPos string
 	if value.(SymbolTable.Symbol).Id != "" {
 		tempPos = strconv.Itoa(value.(SymbolTable.Symbol).Pos)

@@ -53,7 +53,7 @@ func (g *Generator) GetCode() string {
 	code := initialHeader(g)
 	code += g.Natives
 	code += g.Functions
-	code += "\n/*------MAIN------*/\n void main() { \n\tP = 1; H = 0;\n\n" + g.Code + "\n\t return; \n }"
+	code += "\n/*------MAIN------*/\n void main() { \n\tP = 0; H = 0;\n\n" + g.Code + "\n\t return; \n }"
 	return code
 }
 
@@ -140,10 +140,10 @@ func (g *Generator) SetStack(pos interface{}, value interface{}, freeValue bool)
 			g.CodeInFunction("stack[(int)"+pos.(string)+"] = "+fmt.Sprintf("%v", value)+";\n", "\t")
 		} else {
 			g.GetFreeTemp(value.(string))
-			if value == "" {
-				g.CodeInFunction("stack[(int)"+pos.(string)+"] = '"+value.(string)+"';\n", "\t")
-			} else {
+			if len(value.(string)) > 1 {
 				g.CodeInFunction("stack[(int)"+pos.(string)+"] = "+value.(string)+";\n", "\t")
+			} else {
+				g.CodeInFunction("stack[(int)"+pos.(string)+"] = '"+value.(string)+"';\n", "\t")
 			}
 		}
 	}
