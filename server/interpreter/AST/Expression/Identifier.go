@@ -40,7 +40,7 @@ func (id Identifier) Compile(symbolTable SymbolTable.SymbolTable, generator *Gen
 
 	valToSend := value.(SymbolTable.Symbol)
 	CheckLabelsId(generator, &valToSend)
-	generator.AddIf(temp, "-1", "==", valToSend.LabelTrue)
+	generator.AddIf(temp, "1", "==", valToSend.LabelTrue)
 	generator.AddGoTo(valToSend.LabelFalse)
 
 	valRet := Abstract.NewValue(valToSend.Value, SymbolTable.BOOLEAN, false, "")
