@@ -7,10 +7,12 @@ import (
 )
 
 type Primitive struct {
-	Value interface{}
-	Type  SymbolTable.DataType
-	Row   int
-	Col   int
+	Value      interface{}
+	Type       SymbolTable.DataType
+	Row        int
+	Col        int
+	TrueLabel  string
+	FalseLabel string
 }
 
 func (p Primitive) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
@@ -18,19 +20,20 @@ func (p Primitive) Compile(symbolTable SymbolTable.SymbolTable, generator *Gener
 		return Abstract.NewValue(p.Value, p.Type, false, "")
 
 	} else if p.Type == SymbolTable.BOOLEAN {
-		res := Abstract.NewValue(p.Value, p.Type, false, "")
-		newValue := CheckLabels(generator, res)
+		//res := Abstract.NewValue(p.Value, p.Type, false, "")
+		p.CheckLabels(generator)
 
-		if newValue.Value.(bool) {
-			generator.AddGoTo(newValue.TrueLabel)
-			generator.AddGoTo(newValue.FalseLabel)
+		if p.Value.(bool) {
+			generator.AddGoTo(p.TrueLabel)
+			//generator.AddGoTo(p.FalseLabel)
 		} else {
-			generator.AddGoTo(newValue.FalseLabel)
-			generator.AddGoTo(newValue.TrueLabel)
+			generator.AddGoTo(p.FalseLabel)
+			//generator.AddGoTo(p.TrueLabel)
 		}
 
-		res.TrueLabel = newValue.TrueLabel
-		res.FalseLabel = newValue.FalseLabel
+		res := Abstract.NewValue(p.Value, p.Type, false, "")
+		res.TrueLabel = p.TrueLabel
+		res.FalseLabel = p.FalseLabel
 
 		return res
 
@@ -55,16 +58,14 @@ func (p Primitive) Compile(symbolTable SymbolTable.SymbolTable, generator *Gener
 	return nil
 }
 
-func CheckLabels(generator *Generator.Generator, value Abstract.Value) Abstract.Value {
-	if value.TrueLabel == "" {
-		value.TrueLabel = generator.NewLabel()
+func (p *Primitive) CheckLabels(generator *Generator.Generator) {
+	if p.TrueLabel == "" {
+		p.TrueLabel = generator.NewLabel()
 	}
 
-	if value.FalseLabel == "" {
-		value.FalseLabel = generator.NewLabel()
+	if p.FalseLabel == "" {
+		p.FalseLabel = generator.NewLabel()
 	}
-
-	return value
 }
 
 func (p Primitive) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
@@ -81,6 +82,6 @@ func (p Primitive) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 }
 
 func NewPrimitive(val interface{}, types SymbolTable.DataType, row int, col int) Primitive {
-	e := Primitive{val, types, row, col}
+	e := Primitive{val, types, row, col, "", ""}
 	return e
 }

@@ -17,6 +17,8 @@ const (
 )
 
 type ReturnType struct {
-	Type  DataType
-	Value interface{}
+	Type       DataType
+	Value      interface{}
+	LabelTrue  string
+	LabelFalse string
 }

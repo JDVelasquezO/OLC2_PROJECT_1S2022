@@ -45,21 +45,54 @@ var relational = [5][5]SymbolTable.DataType{
 }
 
 type Operation struct {
-	OpLeft   Abstract.Expression
-	Operator string
-	OpRight  Abstract.Expression
-	Unary    bool
-	Row      int
-	Col      int
+	OpLeft     Abstract.Expression
+	Operator   string
+	OpRight    Abstract.Expression
+	Unary      bool
+	Row        int
+	Col        int
+	LabelTrue  string
+	LabelFalse string
 }
 
-func (p Operation) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
-	left := p.OpLeft.Compile(symbolTable, generator)
+func (o Operation) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 
-	if p.OpRight != nil {
-		right := p.OpRight.Compile(symbolTable, generator)
+	if o.OpRight != nil {
+		if o.Operator == "&&" || o.Operator == "||" {
+			generator.AddComment("---- Logical ----")
+			o.CheckLabelsLogic(generator)
+
+			switch o.Operator {
+			case "&&":
+				if !o.OpLeft.GetValue(symbolTable).Value.(bool) || !o.OpRight.GetValue(symbolTable).Value.(bool) {
+					generator.AddGoTo(o.LabelFalse)
+					generator.AddGoTo(o.LabelTrue)
+				} else {
+					generator.AddGoTo(o.LabelTrue)
+					generator.AddGoTo(o.LabelFalse)
+				}
+				break
+			case "||":
+				if !o.OpLeft.GetValue(symbolTable).Value.(bool) && !o.OpRight.GetValue(symbolTable).Value.(bool) {
+					generator.AddGoTo(o.LabelFalse)
+					generator.AddGoTo(o.LabelTrue)
+				} else {
+					generator.AddGoTo(o.LabelTrue)
+					generator.AddGoTo(o.LabelFalse)
+				}
+				break
+			}
+
+			res := Abstract.NewValue(nil, SymbolTable.BOOLEAN, false, "")
+			res.TrueLabel = o.LabelTrue
+			res.FalseLabel = o.LabelFalse
+			return res
+		}
+
+		left := o.OpLeft.Compile(symbolTable, generator)
+		right := o.OpRight.Compile(symbolTable, generator)
 		temp := generator.AddTemp()
-		operation := p.Operator
+		operation := o.Operator
 
 		if (left.(Abstract.Value).Type == SymbolTable.INTEGER || left.(Abstract.Value).Type == SymbolTable.FLOAT) &&
 			(right.(Abstract.Value).Type == SymbolTable.INTEGER || right.(Abstract.Value).Type == SymbolTable.FLOAT) {
@@ -160,45 +193,11 @@ func (p Operation) Compile(symbolTable SymbolTable.SymbolTable, generator *Gener
 					return res
 				}
 			}
-		} else if left.(Abstract.Value).Type == SymbolTable.BOOLEAN && right.(Abstract.Value).Type == SymbolTable.BOOLEAN {
-			if operation == "&&" || operation == "||" {
-				res := Abstract.NewValue(nil, SymbolTable.BOOLEAN, false, "")
-				goRight := generator.NewLabel()
-				leftTemp := generator.AddTemp()
-
-				generator.SetLabel(left.(Abstract.Value).TrueLabel)
-				generator.AddExpression(leftTemp, "1", "", "")
-				generator.AddGoTo(goRight)
-
-				generator.SetLabel(left.(Abstract.Value).FalseLabel)
-				generator.AddExpression(leftTemp, "0", "", "")
-				generator.SetLabel(goRight)
-
-				gotoEnd := generator.NewLabel()
-				rightTemp := generator.AddTemp()
-
-				generator.SetLabel(right.(Abstract.Value).TrueLabel)
-				generator.AddExpression(rightTemp, "1", "", "")
-				generator.AddGoTo(gotoEnd)
-
-				generator.SetLabel(right.(Abstract.Value).FalseLabel)
-				generator.AddExpression(rightTemp, "0", "", "")
-
-				generator.SetLabel(gotoEnd)
-				leftToSend := left.(Abstract.Value)
-				CheckLabelsBool(generator, &leftToSend)
-				generator.AddIf(leftTemp, rightTemp, operation, leftToSend.TrueLabel)
-				generator.AddGoTo(leftToSend.FalseLabel)
-
-				res.TrueLabel = leftToSend.TrueLabel
-				res.FalseLabel = leftToSend.FalseLabel
-
-				return res
-			}
 		}
 	} else {
+		left := o.OpLeft.Compile(symbolTable, generator)
 		var value string
-		if p.Operator == "-" {
+		if o.Operator == "-" {
 			switch left.(Abstract.Value).Type {
 			case SymbolTable.INTEGER:
 				value = strconv.Itoa(left.(Abstract.Value).Value.(int) * -1)
@@ -208,7 +207,7 @@ func (p Operation) Compile(symbolTable SymbolTable.SymbolTable, generator *Gener
 				break
 			}
 			return Abstract.NewValue(value, left.(Abstract.Value).Type, false, "")
-		} else if p.Operator == "!" {
+		} else if o.Operator == "!" {
 			value = fmt.Sprintf("%v", !left.(Abstract.Value).Value.(bool))
 			newVal := Abstract.NewValue(value, left.(Abstract.Value).Type, false, "")
 			newVal.TrueLabel = left.(Abstract.Value).TrueLabel
@@ -223,6 +222,11 @@ func (p Operation) Compile(symbolTable SymbolTable.SymbolTable, generator *Gener
 func CheckLabelsBool(generator *Generator.Generator, value *Abstract.Value) {
 	value.TrueLabel = generator.NewLabel()
 	value.FalseLabel = generator.NewLabel()
+}
+
+func (o *Operation) CheckLabelsLogic(generator *Generator.Generator) {
+	o.LabelTrue = generator.NewLabel()
+	o.LabelFalse = generator.NewLabel()
 }
 
 func LookForDataType(val interface{}) string {
@@ -242,51 +246,51 @@ func LookForDataType(val interface{}) string {
 	return valRet
 }
 
-func (p Operation) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
-	res := p.GetValue(symbolTable)
+func (o Operation) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
+	res := o.GetValue(symbolTable)
 	return res
 }
 
 func NewOperation(OpLeft Abstract.Expression, Operator string, OpRight Abstract.Expression,
 	unary bool, row int, col int) Operation {
-	e := Operation{OpLeft, Operator, OpRight, unary, row, col}
+	e := Operation{OpLeft, Operator, OpRight, unary, row, col, "", ""}
 	return e
 }
 
-func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.ReturnType {
-	retLeft := p.OpLeft.GetValue(symbolTable)
+func (o Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.ReturnType {
+	retLeft := o.OpLeft.GetValue(symbolTable)
 	var retRight SymbolTable.ReturnType
 
 	if retLeft.Value == nil {
 
-		row := strconv.Itoa(p.Row)
-		col := strconv.Itoa(p.Col)
+		row := strconv.Itoa(o.Row)
+		col := strconv.Itoa(o.Col)
 		errors.CounterError += 1
-		msg := "(" + row + ", " + col + ") ID " + p.OpLeft.(Identifier).Id + " no declarado o asignado \n"
-		err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
+		msg := "(" + row + ", " + col + ") ID " + o.OpLeft.(Identifier).Id + " no declarado o asignado \n"
+		err := errors.NewError(errors.CounterError, o.Row, o.Col, msg, symbolTable.Name)
 		errors.TypeError = append(errors.TypeError, err)
 		return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 	}
 
-	if p.Unary {
-		retLeft = p.OpLeft.GetValue(symbolTable)
+	if o.Unary {
+		retLeft = o.OpLeft.GetValue(symbolTable)
 	} else {
-		if p.OpRight.GetValue(symbolTable).Value == nil {
-			row := strconv.Itoa(p.Row)
-			col := strconv.Itoa(p.Col)
+		if o.OpRight.GetValue(symbolTable).Value == nil {
+			row := strconv.Itoa(o.Row)
+			col := strconv.Itoa(o.Col)
 			errors.CounterError += 1
-			msg := "(" + row + ", " + col + ") ID " + p.OpRight.(Identifier).Id + " no asignado \n"
-			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
+			msg := "(" + row + ", " + col + ") ID " + o.OpRight.(Identifier).Id + " no asignado \n"
+			err := errors.NewError(errors.CounterError, o.Row, o.Col, msg, symbolTable.Name)
 			errors.TypeError = append(errors.TypeError, err)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 		}
 
-		retRight = p.OpRight.GetValue(symbolTable)
+		retRight = o.OpRight.GetValue(symbolTable)
 	}
 
 	var priority SymbolTable.DataType
 
-	switch p.Operator {
+	switch o.Operator {
 	case "+":
 		if retLeft.Type == SymbolTable.BOOLEAN ||
 			retLeft.Type == SymbolTable.NULL ||
@@ -319,7 +323,7 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 
 	case "-":
-		if p.Unary {
+		if o.Unary {
 			value := retLeft.Value.(int) * -1
 			return SymbolTable.ReturnType{Type: retLeft.Type, Value: value}
 		}
@@ -383,8 +387,8 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		if priority == SymbolTable.INTEGER {
 
 			if retRight.Value.(int) == 0 {
-				row := p.Row
-				col := p.Col
+				row := o.Row
+				col := o.Col
 				errors.CounterError += 1
 				msg := "(" + strconv.Itoa(row) + ", " + strconv.Itoa(col) + ") Error: No se puede dividir dentro de 0 \n"
 				err := errors.NewError(errors.CounterError, row, col, msg, symbolTable.Name)
@@ -448,17 +452,17 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 
 		priority = relational[retLeft.Type][retRight.Type]
 		interpreter.DataTypeRes = priority
-		if priority == SymbolTable.INTEGER && p.Operator == "pow" {
+		if priority == SymbolTable.INTEGER && o.Operator == "pow" {
 			return SymbolTable.ReturnType{Type: SymbolTable.FLOAT, Value: math.Pow(float64(retLeft.Value.(int)), float64(retRight.Value.(int)))}
-		} else if priority == SymbolTable.FLOAT && p.Operator == "powf" {
+		} else if priority == SymbolTable.FLOAT && o.Operator == "powf" {
 			return SymbolTable.ReturnType{Type: priority, Value: math.Pow(retLeft.Value.(float64), retRight.Value.(float64))}
 		} else {
 
-			row := strconv.Itoa(p.Row)
-			col := strconv.Itoa(p.Col)
+			row := strconv.Itoa(o.Row)
+			col := strconv.Itoa(o.Col)
 			errors.CounterError += 1
-			msg := "(" + row + ", " + col + ") Error: el operador " + p.Operator + " no puede operarse con este tipo de dato \n"
-			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
+			msg := "(" + row + ", " + col + ") Error: el operador " + o.Operator + " no puede operarse con este tipo de dato \n"
+			err := errors.NewError(errors.CounterError, o.Row, o.Col, msg, symbolTable.Name)
 			errors.TypeError = append(errors.TypeError, err)
 			interpreter.Console += fmt.Sprintf("%v", err.Msg)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
@@ -600,11 +604,11 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			retLeft.Type == SymbolTable.STR ||
 			retRight.Type == SymbolTable.STR {
 
-			row := strconv.Itoa(p.Row)
-			col := strconv.Itoa(p.Col)
+			row := strconv.Itoa(o.Row)
+			col := strconv.Itoa(o.Col)
 			errors.CounterError += 1
 			msg := "(" + row + ", " + col + ") Error: Operación 'AND' no soportada \n"
-			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
+			err := errors.NewError(errors.CounterError, o.Row, o.Col, msg, symbolTable.Name)
 			errors.TypeError = append(errors.TypeError, err)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 		}
@@ -622,11 +626,11 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			retLeft.Type == SymbolTable.STR ||
 			retRight.Type == SymbolTable.STR {
 
-			row := strconv.Itoa(p.Row)
-			col := strconv.Itoa(p.Col)
+			row := strconv.Itoa(o.Row)
+			col := strconv.Itoa(o.Col)
 			errors.CounterError += 1
 			msg := "(" + row + ", " + col + ") Error: Operación 'OR' no soportada \n"
-			err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
+			err := errors.NewError(errors.CounterError, o.Row, o.Col, msg, symbolTable.Name)
 			errors.TypeError = append(errors.TypeError, err)
 			return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err}
 		}
@@ -648,11 +652,11 @@ func (p Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 	}
 
 ErrorDataType:
-	row := strconv.Itoa(p.Row)
-	col := strconv.Itoa(p.Col)
+	row := strconv.Itoa(o.Row)
+	col := strconv.Itoa(o.Col)
 	errors.CounterError += 1
 	msg := "(" + row + ", " + col + ") Error: tipos de datos no soportados \n"
-	err := errors.NewError(errors.CounterError, p.Row, p.Col, msg, symbolTable.Name)
+	err := errors.NewError(errors.CounterError, o.Row, o.Col, msg, symbolTable.Name)
 	errors.TypeError = append(errors.TypeError, err)
 	interpreter.Console += fmt.Sprintf("%v", err.Msg)
 	return SymbolTable.ReturnType{Type: SymbolTable.NULL, Value: err}
