@@ -765,9 +765,13 @@ expr_logic returns[Abstract.Expression p, Abstract.Instruction instr]
         $p = Expression.NewOperation($opU.p, "!", nil, true, localctx.(*Expr_logicContext).GetOpU().GetStart().GetLine(), localctx.(*Expr_logicContext).GetOpU().GetStart().GetColumn())
         $instr = Expression.NewOperation($opU.p, "!", nil, true, localctx.(*Expr_logicContext).GetOpU().GetStart().GetLine(), localctx.(*Expr_logicContext).GetOpU().GetStart().GetColumn())
         }
-    | opLeft = expr_rel op=( AND | OR ) opRight = expr_rel {
+    | opLeft = expr_logic op=( AND | OR ) opRight = expr_logic {
         $p = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_logicContext).GetOp().GetColumn() )
         $instr = Expression.NewOperation($opLeft.p, $op.text, $opRight.p, false, $op.line, localctx.(*Expr_logicContext).GetOp().GetColumn() )
+    }
+    | expr_rel {
+        $p = $expr_rel.p
+        $instr = $expr_rel.instr
     }
     ;
 

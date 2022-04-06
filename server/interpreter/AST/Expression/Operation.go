@@ -59,18 +59,39 @@ func (o Operation) Compile(symbolTable SymbolTable.SymbolTable, generator *Gener
 
 	if o.OpRight != nil {
 		if o.Operator == "&&" || o.Operator == "||" {
+
+			var trueLeft string
+			if typeof(o.OpLeft) == "Expression.Identifier" {
+				left := o.OpLeft.Compile(symbolTable, generator)
+				generator.SetLabel(left.(Abstract.Value).FalseLabel)
+				trueLeft = left.(Abstract.Value).TrueLabel
+			}
+
+			if typeof(o.OpRight) == "Expression.Identifier" {
+				right := o.OpRight.Compile(symbolTable, generator)
+				//generator.SetLabel(trueLeft)
+				generator.SetLabel(right.(Abstract.Value).TrueLabel)
+
+				o.LabelTrue = trueLeft
+				o.LabelFalse = right.(Abstract.Value).FalseLabel
+			}
+
 			generator.AddComment("---- Logical ----")
 			o.CheckLabelsLogic(generator)
 
+			var newVal bool
 			switch o.Operator {
 			case "&&":
-				if !o.OpLeft.GetValue(symbolTable).Value.(bool) || !o.OpRight.GetValue(symbolTable).Value.(bool) {
+				opLeft := o.OpLeft.GetValue(symbolTable).Value.(bool)
+				opRight := o.OpRight.GetValue(symbolTable).Value.(bool)
+				if !opLeft || !opRight {
 					generator.AddGoTo(o.LabelFalse)
 					generator.AddGoTo(o.LabelTrue)
 				} else {
 					generator.AddGoTo(o.LabelTrue)
 					generator.AddGoTo(o.LabelFalse)
 				}
+				newVal = o.OpLeft.GetValue(symbolTable).Value.(bool) && o.OpRight.GetValue(symbolTable).Value.(bool)
 				break
 			case "||":
 				if !o.OpLeft.GetValue(symbolTable).Value.(bool) && !o.OpRight.GetValue(symbolTable).Value.(bool) {
@@ -80,10 +101,11 @@ func (o Operation) Compile(symbolTable SymbolTable.SymbolTable, generator *Gener
 					generator.AddGoTo(o.LabelTrue)
 					generator.AddGoTo(o.LabelFalse)
 				}
+				newVal = o.OpLeft.GetValue(symbolTable).Value.(bool) || o.OpRight.GetValue(symbolTable).Value.(bool)
 				break
 			}
 
-			res := Abstract.NewValue(nil, SymbolTable.BOOLEAN, false, "")
+			res := Abstract.NewValue(newVal, SymbolTable.BOOLEAN, false, "")
 			res.TrueLabel = o.LabelTrue
 			res.FalseLabel = o.LabelFalse
 			return res
@@ -210,8 +232,8 @@ func (o Operation) Compile(symbolTable SymbolTable.SymbolTable, generator *Gener
 		} else if o.Operator == "!" {
 			value = fmt.Sprintf("%v", !left.(Abstract.Value).Value.(bool))
 			newVal := Abstract.NewValue(value, left.(Abstract.Value).Type, false, "")
-			newVal.TrueLabel = left.(Abstract.Value).TrueLabel
-			newVal.FalseLabel = left.(Abstract.Value).FalseLabel
+			newVal.TrueLabel = left.(Abstract.Value).FalseLabel
+			newVal.FalseLabel = left.(Abstract.Value).TrueLabel
 			return newVal
 		}
 	}
@@ -225,8 +247,13 @@ func CheckLabelsBool(generator *Generator.Generator, value *Abstract.Value) {
 }
 
 func (o *Operation) CheckLabelsLogic(generator *Generator.Generator) {
-	o.LabelTrue = generator.NewLabel()
-	o.LabelFalse = generator.NewLabel()
+	if o.LabelTrue == "" {
+		o.LabelTrue = generator.NewLabel()
+	}
+
+	if o.LabelFalse == "" {
+		o.LabelFalse = generator.NewLabel()
+	}
 }
 
 func LookForDataType(val interface{}) string {
