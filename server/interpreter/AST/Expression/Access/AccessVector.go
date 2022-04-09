@@ -11,7 +11,7 @@ type VectorAccess struct {
 	Dim *arrayList.List
 }
 
-func (v VectorAccess) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (v VectorAccess) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }

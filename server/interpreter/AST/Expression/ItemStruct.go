@@ -12,7 +12,7 @@ type ItemStruct struct {
 	DataType SymbolTable.DataType
 }
 
-func (i ItemStruct) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (i ItemStruct) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }

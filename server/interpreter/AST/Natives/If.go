@@ -19,7 +19,7 @@ type If struct {
 	Col               int
 }
 
-func (i If) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (i If) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	generator.AddComment("---- Inicio IF ----")
 	condition := i.Condition.Compile(symbolTable, generator)
 
@@ -31,6 +31,12 @@ func (i If) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Ge
 
 	for _, instr := range i.ListInstructs.ToArray() {
 		instr.(Abstract.Instruction).Compile(symbolTable, generator)
+	}
+
+	var labelExitIfElseIf string
+	if i.ListIfElse != nil {
+		labelExitIfElseIf = generator.NewLabel()
+		generator.AddGoTo(labelExitIfElseIf)
 	}
 
 	if i.ListIfElse != nil {
@@ -46,14 +52,21 @@ func (i If) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Ge
 		generator.AddGoTo(labelExitIf)
 	}
 
-	generator.SetLabel(condition.(Abstract.Value).FalseLabel)
+	if labelExitIfElseIf != "" {
+		generator.SetLabel(labelExitIfElseIf)
+	} else {
+		generator.SetLabel(condition.(Abstract.Value).FalseLabel)
+	}
+
 	if i.ListInstructsElse != nil {
 		for _, instr := range i.ListInstructsElse.ToArray() {
 			instr.(Abstract.Instruction).Compile(symbolTable, generator)
 		}
 	}
 
-	generator.SetLabel(labelExitIf)
+	if labelExitIf != "" {
+		generator.SetLabel(labelExitIf)
+	}
 
 	return nil
 }
@@ -111,7 +124,8 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 					return valueRet
 				}
 
-				newTable.AddNewSymbol(valueRet.(SymbolTable.Symbol).Id, valueRet.(SymbolTable.Symbol))
+				valueToSend := valueRet.(SymbolTable.Symbol)
+				newTable.AddNewSymbol(valueRet.(SymbolTable.Symbol).Id, &valueToSend)
 			}
 		}
 		return valueRet

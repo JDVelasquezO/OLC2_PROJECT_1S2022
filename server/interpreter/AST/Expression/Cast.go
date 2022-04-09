@@ -15,7 +15,7 @@ type Cast struct {
 	Col        int
 }
 
-func (c Cast) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (c Cast) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	exp := c.Expression.Compile(symbolTable, generator)
 	temp := generator.AddTemp()
 	switch exp.(Abstract.Value).Type {

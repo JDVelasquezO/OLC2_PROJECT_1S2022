@@ -14,7 +14,7 @@ func (c Continue) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 	return c
 }
 
-func (c Continue) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (c Continue) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	return nil
 }
 

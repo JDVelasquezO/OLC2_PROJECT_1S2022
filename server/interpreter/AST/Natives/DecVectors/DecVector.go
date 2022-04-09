@@ -22,7 +22,7 @@ type DecVector struct {
 	IsCapacityFixed bool
 }
 
-func (d DecVector) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (d DecVector) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }

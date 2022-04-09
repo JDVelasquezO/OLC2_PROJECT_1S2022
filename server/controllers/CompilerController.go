@@ -88,10 +88,10 @@ func Compiler(c *fiber.Ctx) error {
 				for i := 0; i < listInstructs.Len(); i++ {
 					r := listInstructs.GetValue(i)
 					r.(Abstract.Instruction).Execute(newTable)
-					newTable.SizeTable += 1
 
 					codeCompiled.FreeAllTemps()
-					r.(Abstract.Instruction).Compile(newTable, &codeCompiled)
+					r.(Abstract.Instruction).Compile(&newTable, &codeCompiled)
+					//newTable.SizeTable += 1
 				}
 				codeCompiled.FreeAllTemps()
 			}

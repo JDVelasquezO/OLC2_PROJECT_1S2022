@@ -45,11 +45,11 @@ func NewSymbolTable(name string, before *SymbolTable) SymbolTable {
 	return in
 }
 
-func (table *SymbolTable) AddNewSymbol(id string, symbol Symbol) {
+func (table *SymbolTable) AddNewSymbol(id string, symbol *Symbol) {
 	newId := strings.ToLower(id)
 	symbol.Pos = table.SizeTable
 	table.Table[newId] = symbol
-	table.SizeTable = table.SizeTable + 1
+	table.SizeTable += 1
 }
 
 func (table *SymbolTable) ExistsSymbol(id string) bool {
@@ -91,7 +91,7 @@ func (table *SymbolTable) GetSymbol(id string) interface{} {
 		}
 	}
 
-	var symbolNil Symbol
+	var symbolNil *Symbol
 	return symbolNil
 }
 

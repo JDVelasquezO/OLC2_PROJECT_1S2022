@@ -15,7 +15,7 @@ type While struct {
 	Col           int
 }
 
-func (w While) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (w While) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }
@@ -67,7 +67,8 @@ StartLoop:
 				if typeof(newSymbol) == "SymbolTable.ReturnType" {
 					return newSymbol
 				}
-				newTable.AddNewSymbol(newSymbol.(SymbolTable.Symbol).Id, newSymbol.(SymbolTable.Symbol))
+				valueToSend := newSymbol.(SymbolTable.Symbol)
+				newTable.AddNewSymbol(newSymbol.(SymbolTable.Symbol).Id, &valueToSend)
 			}
 			//fmt.Println(otherTable)
 		}

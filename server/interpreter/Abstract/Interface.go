@@ -12,10 +12,10 @@ type Labels struct {
 
 type Expression interface {
 	GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.ReturnType
-	Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{}
+	Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{}
 }
 
 type Instruction interface {
 	Execute(symbolTable SymbolTable.SymbolTable) interface{}
-	Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{}
+	Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{}
 }

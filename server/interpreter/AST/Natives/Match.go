@@ -17,7 +17,7 @@ type Match struct {
 	ListMatches *arrayList.List
 }
 
-func (m Match) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (m Match) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }

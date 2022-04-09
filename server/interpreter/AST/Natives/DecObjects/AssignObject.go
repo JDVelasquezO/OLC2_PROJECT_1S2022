@@ -15,7 +15,7 @@ type AssignObject struct {
 	Value        Abstract.Expression
 }
 
-func (a AssignObject) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (a AssignObject) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }

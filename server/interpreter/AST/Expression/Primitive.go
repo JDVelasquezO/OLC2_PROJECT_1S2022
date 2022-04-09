@@ -15,7 +15,7 @@ type Primitive struct {
 	FalseLabel string
 }
 
-func (p Primitive) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (p Primitive) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	if p.Type == SymbolTable.INTEGER || p.Type == SymbolTable.FLOAT || p.Type == SymbolTable.CHAR {
 		return Abstract.NewValue(p.Value, p.Type, false, "")
 

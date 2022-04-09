@@ -12,7 +12,7 @@ type Attribute struct {
 	Value Abstract.Expression
 }
 
-func (a Attribute) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (a Attribute) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }

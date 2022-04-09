@@ -19,7 +19,7 @@ type CallFunction struct {
 	Col             int
 }
 
-func (c CallFunction) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (c CallFunction) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }

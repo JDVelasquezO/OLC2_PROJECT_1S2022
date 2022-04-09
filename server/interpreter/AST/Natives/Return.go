@@ -14,7 +14,7 @@ type Return struct {
 	Result     interface{}
 }
 
-func (r Return) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (r Return) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }

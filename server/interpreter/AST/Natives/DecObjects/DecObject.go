@@ -15,7 +15,7 @@ type DecObjects struct {
 	Attributes *arrayList.List
 }
 
-func (d DecObjects) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (d DecObjects) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }

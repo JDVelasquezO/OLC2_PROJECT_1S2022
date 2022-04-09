@@ -6,7 +6,6 @@ import (
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Array"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Vector"
-	"reflect"
 	"strconv"
 )
 
@@ -16,30 +15,30 @@ type Identifier struct {
 	Col int
 }
 
-func (id Identifier) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (id Identifier) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	value := symbolTable.GetSymbol(id.Id)
 	if value == nil {
 		return nil
 	}
 
 	temp := generator.AddTemp()
-	//temp := "t" + strconv.Itoa(value.(SymbolTable.Symbol).Pos)
+	//temp := "t" + strconv.Itoa(value.(*SymbolTable.Symbol).Pos)
 	var tempPos string
-	if value.(SymbolTable.Symbol).Id != "" {
-		tempPos = strconv.Itoa(value.(SymbolTable.Symbol).Pos)
+	if value.(*SymbolTable.Symbol).Id != "" {
+		tempPos = strconv.Itoa(value.(*SymbolTable.Symbol).Pos)
 		//tempPos = generator.AddTemp()
-		//newPos := strconv.Itoa(value.(SymbolTable.Symbol).Pos - 1)
+		//newPos := strconv.Itoa(value.(*SymbolTable.Symbol).Pos - 1)
 		//generator.AddExpression(tempPos, "P", newPos, "+")
 	}
 
 	generator.GetStack(temp, tempPos)
 
-	if value.(SymbolTable.Symbol).DataType != SymbolTable.BOOLEAN {
-		return Abstract.NewValue(temp, value.(SymbolTable.Symbol).DataType, true, "")
+	if value.(*SymbolTable.Symbol).DataType != SymbolTable.BOOLEAN {
+		return Abstract.NewValue(temp, value.(*SymbolTable.Symbol).DataType, true, "")
 	}
 
-	valToSend := value.(SymbolTable.Symbol)
-	CheckLabelsId(generator, &valToSend)
+	valToSend := value.(*SymbolTable.Symbol)
+	CheckLabelsId(generator, valToSend)
 	generator.AddIf(temp, "1", "==", valToSend.LabelTrue)
 	generator.AddGoTo(valToSend.LabelFalse)
 
@@ -105,8 +104,8 @@ func (id Identifier) GetValue(table SymbolTable.SymbolTable) SymbolTable.ReturnT
 
 	symbol := table.GetSymbol(id.Id)
 
-	if reflect.TypeOf(symbol) == reflect.TypeOf(SymbolTable.Symbol{}) {
-		data := symbol.(SymbolTable.Symbol)
+	if typeof(symbol) == "*SymbolTable.Symbol" {
+		data := symbol.(*SymbolTable.Symbol)
 		return SymbolTable.ReturnType{
 			Value: data.Value,
 			Type:  data.DataType,

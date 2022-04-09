@@ -20,7 +20,7 @@ type Assign struct {
 	ListIds *arrayList.List
 }
 
-func (d *Assign) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (d *Assign) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	value := symbolTable.GetSymbol(d.ListIds.GetValue(0).(Expression.Identifier).Id)
 	tempPos := strconv.Itoa(value.(SymbolTable.Symbol).Pos)
 	generator.SetStack(tempPos, value.(SymbolTable.Symbol).Value, true)

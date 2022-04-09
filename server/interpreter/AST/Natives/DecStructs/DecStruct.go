@@ -12,7 +12,7 @@ type DecStruct struct {
 	Items *arrayList.List
 }
 
-func (d DecStruct) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (d DecStruct) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }

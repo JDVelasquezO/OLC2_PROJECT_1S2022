@@ -16,7 +16,7 @@ type ArrayAccess struct {
 	Dim *arrayList.List
 }
 
-func (a ArrayAccess) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (a ArrayAccess) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }

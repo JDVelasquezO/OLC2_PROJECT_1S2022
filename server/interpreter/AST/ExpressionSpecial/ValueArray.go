@@ -15,7 +15,7 @@ type ValueArray struct {
 	Exp2        Abstract.Expression
 }
 
-func (v ValueArray) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (v ValueArray) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	return nil
 }
 

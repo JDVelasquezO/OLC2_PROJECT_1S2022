@@ -276,6 +276,10 @@ if_prod returns [Abstract.Instruction instr, Abstract.Expression p]
         $instr = Natives.NewIf($expression.p, $bif.content, nil, $belse.content, $RIF.line, localctx.(*If_prodContext).Get_RIF().GetColumn())
         $p = Natives.NewIf($expression.p, $bif.content, nil, $belse.content, $RIF.line, localctx.(*If_prodContext).Get_RIF().GetColumn())
     }
+    | RIF expression bif=bloq list_else_if {
+        $instr = Natives.NewIf($expression.p, $bif.content, $list_else_if.list, nil, $RIF.line, localctx.(*If_prodContext).Get_RIF().GetColumn() )
+        $p = Natives.NewIf($expression.p, $bif.content, $list_else_if.list, nil, $RIF.line, localctx.(*If_prodContext).Get_RIF().GetColumn() )
+    }
     | RIF expression bif=bloq list_else_if RELSE belse=bloq {
         $instr = Natives.NewIf($expression.p, $bif.content, $list_else_if.list, $belse.content, $RIF.line, localctx.(*If_prodContext).Get_RIF().GetColumn() )
         $p = Natives.NewIf($expression.p, $bif.content, $list_else_if.list, $belse.content, $RIF.line, localctx.(*If_prodContext).Get_RIF().GetColumn() )

@@ -134,6 +134,7 @@ func (g *Generator) SetStack(pos interface{}, value interface{}, freeValue bool)
 	if freeValue {
 		if typeof(value) == "int" {
 			g.GetFreeTemp(strconv.Itoa(value.(int)))
+			//newPos := strconv.Itoa(pos.(int))
 			g.CodeInFunction("stack[(int)"+pos.(string)+"] = "+strconv.Itoa(value.(int))+";\n", "\t")
 		} else if typeof(value) == "float64" {
 			g.GetFreeTemp(fmt.Sprintf("%v", value))
@@ -357,6 +358,10 @@ func (g *Generator) NewEnv(size int) {
 
 func (g *Generator) SetEnv(size int) {
 	g.CodeInFunction("P = P - "+strconv.Itoa(size)+";\n", "\t")
+}
+
+func (g *Generator) SetTemp(temp string, size int) {
+	g.CodeInFunction(temp+" = P + "+strconv.Itoa(size)+";\n", "\t")
 }
 
 func (g *Generator) CallFunc(id string) {

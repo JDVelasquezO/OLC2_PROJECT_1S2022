@@ -23,7 +23,7 @@ func NewRange(row int, col int, expr1 Abstract.Expression, expr2 Abstract.Expres
 	}
 }
 
-func (r Range) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (r Range) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	return nil
 }
 

@@ -24,7 +24,7 @@ type DecArray struct {
 	Col          int
 }
 
-func (d DecArray) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (d DecArray) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }

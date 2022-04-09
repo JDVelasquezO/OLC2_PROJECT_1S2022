@@ -55,7 +55,7 @@ type Operation struct {
 	LabelFalse string
 }
 
-func (o Operation) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (o Operation) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 
 	if o.OpRight != nil {
 		if o.Operator == "&&" || o.Operator == "||" {
@@ -82,8 +82,8 @@ func (o Operation) Compile(symbolTable SymbolTable.SymbolTable, generator *Gener
 			var newVal bool
 			switch o.Operator {
 			case "&&":
-				opLeft := o.OpLeft.GetValue(symbolTable).Value.(bool)
-				opRight := o.OpRight.GetValue(symbolTable).Value.(bool)
+				opLeft := o.OpLeft.GetValue(*symbolTable).Value.(bool)
+				opRight := o.OpRight.GetValue(*symbolTable).Value.(bool)
 				if !opLeft || !opRight {
 					generator.AddGoTo(o.LabelFalse)
 					generator.AddGoTo(o.LabelTrue)
@@ -91,17 +91,17 @@ func (o Operation) Compile(symbolTable SymbolTable.SymbolTable, generator *Gener
 					generator.AddGoTo(o.LabelTrue)
 					generator.AddGoTo(o.LabelFalse)
 				}
-				newVal = o.OpLeft.GetValue(symbolTable).Value.(bool) && o.OpRight.GetValue(symbolTable).Value.(bool)
+				newVal = o.OpLeft.GetValue(*symbolTable).Value.(bool) && o.OpRight.GetValue(*symbolTable).Value.(bool)
 				break
 			case "||":
-				if !o.OpLeft.GetValue(symbolTable).Value.(bool) && !o.OpRight.GetValue(symbolTable).Value.(bool) {
+				if !o.OpLeft.GetValue(*symbolTable).Value.(bool) && !o.OpRight.GetValue(*symbolTable).Value.(bool) {
 					generator.AddGoTo(o.LabelFalse)
 					generator.AddGoTo(o.LabelTrue)
 				} else {
 					generator.AddGoTo(o.LabelTrue)
 					generator.AddGoTo(o.LabelFalse)
 				}
-				newVal = o.OpLeft.GetValue(symbolTable).Value.(bool) || o.OpRight.GetValue(symbolTable).Value.(bool)
+				newVal = o.OpLeft.GetValue(*symbolTable).Value.(bool) || o.OpRight.GetValue(*symbolTable).Value.(bool)
 				break
 			}
 
@@ -135,9 +135,9 @@ func (o Operation) Compile(symbolTable SymbolTable.SymbolTable, generator *Gener
 				generator.AddIf(valLeft, valRight, operation, leftToSend.TrueLabel)
 				generator.AddGoTo(leftToSend.FalseLabel)
 
-				typeOf := interpreter.DataTypeRes
+				//typeOf := interpreter.DataTypeRes
 				leftToSend.Value = temp
-				leftToSend.Type = typeOf
+				leftToSend.Type = SymbolTable.BOOLEAN
 				return leftToSend
 			default:
 				generator.AddExpression(temp, valLeft, valRight, operation)

@@ -29,7 +29,7 @@ type Declaration struct {
 	IsMut    bool
 }
 
-func (d *Declaration) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (d *Declaration) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	if d.InitVal == nil {
 		switch d.DataType {
 		case SymbolTable.INTEGER:
@@ -52,18 +52,26 @@ func (d *Declaration) Compile(symbolTable SymbolTable.SymbolTable, generator *Ge
 
 	value := d.InitVal.(Abstract.Instruction).Compile(symbolTable, generator)
 	newVar := symbolTable.GetSymbol(d.ListIds.GetValue(0).(Expression.Identifier).Id)
-	var tempPos int
-	if newVar == nil {
-		/*inHeap := value.(Abstract.Value).Type == SymbolTable.STRING
-		newSymbol :=*/
+	var tempPos interface{}
+	if newVar.(*SymbolTable.Symbol) == nil {
+		newId := d.ListIds.GetValue(0).(Expression.Identifier).Id
+		newSymbol := SymbolTable.NewSymbolId(newId, 0, 0, d.DataType, value.(Abstract.Value).Value, false, false, "", "")
+		newSymbol.Size = value.(Abstract.Value).Size
+		temp := generator.AddTemp()
+		generator.SetTemp(temp, 1)
+		//symbolTable.AddNewSymbol(newId, &newSymbol)
+		//symbolTable.SizeTable += 1
+		tempPos = temp
 	} else {
-		tempPos = newVar.(SymbolTable.Symbol).Pos
+		posNew := newVar.(*SymbolTable.Symbol).Pos
+		tempPos = strconv.Itoa(posNew)
+		symbolTable.SizeTable += 1
 	}
 
 	if value.(Abstract.Value).Type == SymbolTable.BOOLEAN {
-		ValueBoolean(value, tempPos, generator)
+		ValueBoolean(value, tempPos.(int), generator)
 	} else {
-		generator.SetStack(strconv.Itoa(tempPos), value.(Abstract.Value).Value, true)
+		generator.SetStack(tempPos, value.(Abstract.Value).Value, true)
 	}
 
 	return nil
@@ -195,7 +203,7 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 			}
 
 			symbol := SymbolTable.NewSymbolId(varDec.Id, varDec.Row, varDec.Col, typeRes, dataOrigin.Value, !d.IsMut, false, "", "")
-			table.AddNewSymbol(varDec.Id, symbol)
+			table.AddNewSymbol(varDec.Id, &symbol)
 		}
 	} else {
 		typeDec := d.DataType
@@ -206,7 +214,7 @@ func (d *Declaration) Execute(table SymbolTable.SymbolTable) interface{} {
 				fmt.Println("Error: Variable declarada")
 			} else {
 				symbol := SymbolTable.NewSymbolId(varDec.Id, 0, 0, typeDec, nil, !d.IsMut, false, "", "")
-				table.AddNewSymbol(varDec.Id, symbol)
+				table.AddNewSymbol(varDec.Id, &symbol)
 			}
 		}
 	}

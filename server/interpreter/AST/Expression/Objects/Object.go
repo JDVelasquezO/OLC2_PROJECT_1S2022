@@ -11,7 +11,7 @@ type Object struct {
 	Attributes *arrayList.List
 }
 
-func (o Object) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (o Object) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }

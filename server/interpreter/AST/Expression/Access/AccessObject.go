@@ -13,7 +13,7 @@ type ObjectAccess struct {
 	listAccess *arrayList.List
 }
 
-func (o ObjectAccess) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (o ObjectAccess) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	return nil
 }
 

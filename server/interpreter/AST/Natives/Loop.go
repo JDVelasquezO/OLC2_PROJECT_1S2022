@@ -11,7 +11,7 @@ type Loop struct {
 	Instructions *arrayList.List
 }
 
-func (l Loop) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+func (l Loop) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	//TODO implement me
 	panic("implement me")
 }
@@ -61,7 +61,8 @@ StartLoop:
 			if typeof(newSymbol) == "SymbolTable.ReturnType" {
 				return newSymbol
 			}
-			newTable.AddNewSymbol(newSymbol.(SymbolTable.Symbol).Id, newSymbol.(SymbolTable.Symbol))
+			valueToSend := newSymbol.(SymbolTable.Symbol)
+			newTable.AddNewSymbol(newSymbol.(SymbolTable.Symbol).Id, &valueToSend)
 		}
 	}
 	goto StartLoop
