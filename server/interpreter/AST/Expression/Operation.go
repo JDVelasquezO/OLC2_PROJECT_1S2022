@@ -61,13 +61,13 @@ func (o Operation) Compile(symbolTable SymbolTable.SymbolTable, generator *Gener
 		if o.Operator == "&&" || o.Operator == "||" {
 
 			var trueLeft string
-			if typeof(o.OpLeft) == "Expression.Identifier" {
+			if typeof(o.OpLeft) == "Expression.Identifier" || typeof(o.OpLeft) == "Expression.Operation" {
 				left := o.OpLeft.Compile(symbolTable, generator)
 				generator.SetLabel(left.(Abstract.Value).FalseLabel)
 				trueLeft = left.(Abstract.Value).TrueLabel
 			}
 
-			if typeof(o.OpRight) == "Expression.Identifier" {
+			if typeof(o.OpRight) == "Expression.Identifier" || typeof(o.OpRight) == "Expression.Operation" {
 				right := o.OpRight.Compile(symbolTable, generator)
 				//generator.SetLabel(trueLeft)
 				generator.SetLabel(right.(Abstract.Value).TrueLabel)

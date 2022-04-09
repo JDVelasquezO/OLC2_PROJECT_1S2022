@@ -36,7 +36,7 @@ func (i If) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Ge
 	if i.ListIfElse != nil {
 		generator.SetLabel(condition.(Abstract.Value).FalseLabel)
 		for _, instr := range i.ListIfElse.ToArray() {
-			instr.(Abstract.Expression).Compile(symbolTable, generator)
+			instr.(Abstract.Instruction).Compile(symbolTable, generator)
 		}
 	}
 
@@ -49,9 +49,11 @@ func (i If) Compile(symbolTable SymbolTable.SymbolTable, generator *Generator.Ge
 	generator.SetLabel(condition.(Abstract.Value).FalseLabel)
 	if i.ListInstructsElse != nil {
 		for _, instr := range i.ListInstructsElse.ToArray() {
-			instr.(Abstract.Expression).Compile(symbolTable, generator)
+			instr.(Abstract.Instruction).Compile(symbolTable, generator)
 		}
 	}
+
+	generator.SetLabel(labelExitIf)
 
 	return nil
 }
