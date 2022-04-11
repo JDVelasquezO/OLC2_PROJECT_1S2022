@@ -144,7 +144,7 @@ func (o Operation) Compile(symbolTable *SymbolTable.SymbolTable, generator *Gene
 				break
 			}
 
-			typeOf := interpreter.DataTypeRes
+			typeOf := sum[left.(Abstract.Value).Type][right.(Abstract.Value).Type]
 			return Abstract.NewValue(temp, typeOf, true, "")
 
 		} else if (left.(Abstract.Value).Type == SymbolTable.STRING || left.(Abstract.Value).Type == SymbolTable.STR) &&

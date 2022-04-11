@@ -90,8 +90,8 @@ func Compiler(c *fiber.Ctx) error {
 					r.(Abstract.Instruction).Execute(newTable)
 
 					codeCompiled.FreeAllTemps()
+					interpreter.FlagIf = false
 					r.(Abstract.Instruction).Compile(&newTable, &codeCompiled)
-					//newTable.SizeTable += 1
 				}
 				codeCompiled.FreeAllTemps()
 			}

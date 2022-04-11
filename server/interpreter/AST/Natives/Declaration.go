@@ -53,23 +53,22 @@ func (d *Declaration) Compile(symbolTable *SymbolTable.SymbolTable, generator *G
 	value := d.InitVal.(Abstract.Instruction).Compile(symbolTable, generator)
 	newVar := symbolTable.GetSymbol(d.ListIds.GetValue(0).(Expression.Identifier).Id)
 	var tempPos interface{}
+	var posNew int
 	if newVar.(*SymbolTable.Symbol) == nil {
 		newId := d.ListIds.GetValue(0).(Expression.Identifier).Id
 		newSymbol := SymbolTable.NewSymbolId(newId, 0, 0, d.DataType, value.(Abstract.Value).Value, false, false, "", "")
 		newSymbol.Size = value.(Abstract.Value).Size
 		temp := generator.AddTemp()
 		generator.SetTemp(temp, 1)
-		//symbolTable.AddNewSymbol(newId, &newSymbol)
-		//symbolTable.SizeTable += 1
 		tempPos = temp
 	} else {
-		posNew := newVar.(*SymbolTable.Symbol).Pos
+		posNew = newVar.(*SymbolTable.Symbol).Pos
 		tempPos = strconv.Itoa(posNew)
 		symbolTable.SizeTable += 1
 	}
 
 	if value.(Abstract.Value).Type == SymbolTable.BOOLEAN {
-		ValueBoolean(value, tempPos.(int), generator)
+		ValueBoolean(value, posNew, generator)
 	} else {
 		generator.SetStack(tempPos, value.(Abstract.Value).Value, true)
 	}

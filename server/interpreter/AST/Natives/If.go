@@ -124,8 +124,8 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 					return valueRet
 				}
 
-				valueToSend := valueRet.(SymbolTable.Symbol)
-				newTable.AddNewSymbol(valueRet.(SymbolTable.Symbol).Id, &valueToSend)
+				valueToSend := valueRet.(*SymbolTable.Symbol)
+				newTable.AddNewSymbol(valueRet.(*SymbolTable.Symbol).Id, valueToSend)
 			}
 		}
 		return valueRet

@@ -6,8 +6,6 @@ import (
 	"OLC2_Project1/server/interpreter/AST/Expression"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
-	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Array"
-	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Vector"
 	"OLC2_Project1/server/interpreter/errors"
 	"fmt"
 	arrayList "github.com/colegno/arraylist"
@@ -22,8 +20,8 @@ type Assign struct {
 
 func (d *Assign) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	value := symbolTable.GetSymbol(d.ListIds.GetValue(0).(Expression.Identifier).Id)
-	tempPos := strconv.Itoa(value.(SymbolTable.Symbol).Pos)
-	generator.SetStack(tempPos, value.(SymbolTable.Symbol).Value, true)
+	tempPos := strconv.Itoa(value.(*SymbolTable.Symbol).Pos)
+	generator.SetStack(tempPos, value.(*SymbolTable.Symbol).Value, true)
 	return nil
 }
 
@@ -53,16 +51,16 @@ func (d *Assign) Execute(table SymbolTable.SymbolTable) interface{} {
 	retExpr := d.Val.GetValue(table)
 	typeExpr := retExpr.Type
 	varDec := d.ListIds.GetValue(0).(Expression.Identifier).Id
-	var val SymbolTable.Symbol
+	var val *SymbolTable.Symbol
 	if typeExpr == SymbolTable.ARRAY {
 		valBefore := table.GetSymbolArray(varDec)
 		if typeof(valBefore) == "Array.Array" {
-			val = valBefore.(Array.Array).Symbol
+			//val = valBefore.(Array.Array).Symbol
 		} else {
-			val = valBefore.(Vector.Vector).Symbol
+			//val = valBefore.(Vector.Vector).Symbol
 		}
 	} else {
-		val = table.GetSymbol(varDec).(SymbolTable.Symbol)
+		val = table.GetSymbol(varDec).(*SymbolTable.Symbol)
 	}
 
 	if val.IsConst {
