@@ -60,6 +60,8 @@ func (d *Declaration) Compile(symbolTable *SymbolTable.SymbolTable, generator *G
 		newSymbol.Size = value.(Abstract.Value).Size
 		temp := generator.AddTemp()
 		generator.SetTemp(temp, 1)
+		symbolTable.AddNewSymbol(newId, &newSymbol)
+		//symbolTable.SizeTable -= 1
 		tempPos = temp
 	} else {
 		posNew = newVar.(*SymbolTable.Symbol).Pos

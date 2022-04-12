@@ -60,55 +60,69 @@ func (o Operation) Compile(symbolTable *SymbolTable.SymbolTable, generator *Gene
 
 	if o.OpRight != nil {
 		if o.Operator == "&&" || o.Operator == "||" {
-
-			var trueLeft string
-			if typeof(o.OpLeft) == "Expression.Identifier" || typeof(o.OpLeft) == "Expression.Operation" {
-				left := o.OpLeft.Compile(symbolTable, generator)
-				generator.SetLabel(left.(Abstract.Value).FalseLabel)
-				trueLeft = left.(Abstract.Value).TrueLabel
-			}
-
-			if typeof(o.OpRight) == "Expression.Identifier" || typeof(o.OpRight) == "Expression.Operation" {
-				right := o.OpRight.Compile(symbolTable, generator)
-				//generator.SetLabel(trueLeft)
-				generator.SetLabel(right.(Abstract.Value).TrueLabel)
-
-				o.LabelTrue = trueLeft
-				o.LabelFalse = right.(Abstract.Value).FalseLabel
-			}
-
 			generator.AddComment("---- Logical ----")
-			o.CheckLabelsLogic(generator)
 
-			var newVal bool
+			left := o.OpLeft.Compile(symbolTable, generator)
+			ValueBoolean(left, generator)
+			right := o.OpRight.Compile(symbolTable, generator)
+			ValueBoolean(right, generator)
+			LT1 := generator.NewLabel()
+			LF1 := generator.NewLabel()
+			LT2 := generator.NewLabel()
+			LF2 := generator.NewLabel()
+			LExit := generator.NewLabel()
+			//o.CheckLabelsLogic(generator)
+			//labelUnion := ""
+
+			//var newVal bool
+			var newTemp string
 			switch o.Operator {
 			case "&&":
-				opLeft := o.OpLeft.GetValue(*symbolTable).Value.(bool)
-				opRight := o.OpRight.GetValue(*symbolTable).Value.(bool)
-				if !opLeft || !opRight {
-					generator.AddGoTo(o.LabelFalse)
-					generator.AddGoTo(o.LabelTrue)
-				} else {
-					generator.AddGoTo(o.LabelTrue)
-					generator.AddGoTo(o.LabelFalse)
-				}
-				newVal = o.OpLeft.GetValue(*symbolTable).Value.(bool) && o.OpRight.GetValue(*symbolTable).Value.(bool)
+				generator.AddIf(left.(Abstract.Value).Value.(string), "1", "==", LT1)
+				generator.AddGoTo(LF1)
+				generator.SetLabel(LT1)
+
+				generator.AddIf(right.(Abstract.Value).Value.(string), "1", "==", LT2)
+				generator.AddGoTo(LF2)
+				generator.SetLabel(LT2)
+
+				newTemp = generator.AddTemp()
+				generator.AddExpression(newTemp, "1", "", "")
+				generator.AddGoTo(LExit)
+
+				generator.SetLabel(LF1)
+				generator.SetLabel(LF2)
+				generator.AddExpression(newTemp, "0", "", "")
+				generator.AddGoTo(LExit)
+
+				generator.SetLabel(LExit)
 				break
 			case "||":
-				if !o.OpLeft.GetValue(*symbolTable).Value.(bool) && !o.OpRight.GetValue(*symbolTable).Value.(bool) {
-					generator.AddGoTo(o.LabelFalse)
-					generator.AddGoTo(o.LabelTrue)
-				} else {
-					generator.AddGoTo(o.LabelTrue)
-					generator.AddGoTo(o.LabelFalse)
-				}
-				newVal = o.OpLeft.GetValue(*symbolTable).Value.(bool) || o.OpRight.GetValue(*symbolTable).Value.(bool)
+				generator.AddIf(left.(Abstract.Value).Value.(string), "1", "==", LT2)
+				generator.AddGoTo(LT1)
+				generator.SetLabel(LT1)
+
+				generator.AddIf(right.(Abstract.Value).Value.(string), "1", "==", LT2)
+				generator.AddGoTo(LF2)
+				generator.SetLabel(LT2)
+
+				newTemp = generator.AddTemp()
+				generator.AddExpression(newTemp, "1", "", "")
+				generator.AddGoTo(LExit)
+
+				generator.SetLabel(LF1)
+				generator.SetLabel(LF2)
+				generator.AddExpression(newTemp, "0", "", "")
+				generator.AddGoTo(LExit)
+
+				generator.SetLabel(LExit)
+
 				break
 			}
 
-			res := Abstract.NewValue(newVal, SymbolTable.BOOLEAN, false, "")
-			res.TrueLabel = o.LabelTrue
-			res.FalseLabel = o.LabelFalse
+			res := Abstract.NewValue(newTemp, SymbolTable.BOOLEAN, false, "")
+			res.TrueLabel = generator.NewLabel()
+			res.FalseLabel = generator.NewLabel()
 			return res
 		}
 
@@ -297,12 +311,12 @@ func (o Operation) Compile(symbolTable *SymbolTable.SymbolTable, generator *Gene
 func ValueBoolean(value interface{}, generator *Generator.Generator) {
 	tempLabel := generator.NewLabel()
 	generator.SetLabel(value.(Abstract.Value).TrueLabel)
-	temp := generator.AddTemp()
-	generator.AddExpression(temp, "1", "", "")
+	//temp := generator.AddTemp()
+	generator.AddExpression(value.(Abstract.Value).Value.(string), "1", "", "")
 	generator.AddGoTo(tempLabel)
 
 	generator.SetLabel(value.(Abstract.Value).FalseLabel)
-	generator.AddExpression(temp, "0", "", "")
+	generator.AddExpression(value.(Abstract.Value).Value.(string), "0", "", "")
 	generator.SetLabel(tempLabel)
 }
 

@@ -22,7 +22,7 @@ func (p Primitive) Compile(symbolTable *SymbolTable.SymbolTable, generator *Gene
 	} else if p.Type == SymbolTable.BOOLEAN {
 		//res := Abstract.NewValue(p.Value, p.Type, false, "")
 		p.CheckLabels(generator)
-
+		newTemp := generator.AddTemp()
 		if p.Value.(bool) {
 			generator.AddGoTo(p.TrueLabel)
 			//generator.AddGoTo(p.FalseLabel)
@@ -31,7 +31,7 @@ func (p Primitive) Compile(symbolTable *SymbolTable.SymbolTable, generator *Gene
 			//generator.AddGoTo(p.TrueLabel)
 		}
 
-		res := Abstract.NewValue(p.Value, p.Type, false, "")
+		res := Abstract.NewValue(newTemp, p.Type, false, "")
 		res.TrueLabel = p.TrueLabel
 		res.FalseLabel = p.FalseLabel
 
