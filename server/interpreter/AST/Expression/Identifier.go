@@ -42,7 +42,7 @@ func (id Identifier) Compile(symbolTable *SymbolTable.SymbolTable, generator *Ge
 	generator.AddIf(temp, "1", "==", valToSend.LabelTrue)
 	generator.AddGoTo(valToSend.LabelFalse)
 
-	valRet := Abstract.NewValue(valToSend.Value, SymbolTable.BOOLEAN, false, "")
+	valRet := Abstract.NewValue(temp, SymbolTable.BOOLEAN, false, "")
 	valRet.TrueLabel = valToSend.LabelTrue
 	valRet.FalseLabel = valToSend.LabelFalse
 

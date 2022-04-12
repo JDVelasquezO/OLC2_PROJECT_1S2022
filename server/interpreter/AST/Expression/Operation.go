@@ -36,12 +36,13 @@ var sub = [5][5]SymbolTable.DataType{
 	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
 }
 
-var relational = [5][5]SymbolTable.DataType{
-	{SymbolTable.INTEGER, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
-	{SymbolTable.NULL, SymbolTable.FLOAT, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
-	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.STR, SymbolTable.STRING, SymbolTable.NULL},
-	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.STRING, SymbolTable.BOOLEAN, SymbolTable.NULL},
-	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
+var relational = [6][6]SymbolTable.DataType{
+	{SymbolTable.INTEGER, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
+	{SymbolTable.NULL, SymbolTable.FLOAT, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
+	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.STR, SymbolTable.STRING, SymbolTable.NULL, SymbolTable.NULL},
+	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.STRING, SymbolTable.BOOLEAN, SymbolTable.NULL, SymbolTable.NULL},
+	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
+	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.BOOLEAN},
 }
 
 type Operation struct {
@@ -112,6 +113,43 @@ func (o Operation) Compile(symbolTable *SymbolTable.SymbolTable, generator *Gene
 		}
 
 		left := o.OpLeft.Compile(symbolTable, generator)
+
+		if left.(Abstract.Value).Type == SymbolTable.BOOLEAN {
+			gotoRight := generator.NewLabel()
+			leftTemp := generator.AddTemp()
+
+			generator.SetLabel(left.(Abstract.Value).TrueLabel)
+			generator.AddExpression(leftTemp, "1", "", "")
+			generator.AddGoTo(gotoRight)
+
+			generator.SetLabel(left.(Abstract.Value).FalseLabel)
+			generator.AddExpression(leftTemp, "0", "", "")
+
+			generator.SetLabel(gotoRight)
+
+			right := o.OpRight.Compile(symbolTable, generator)
+			gotoEnd := generator.NewLabel()
+			rightTemp := generator.AddTemp()
+
+			generator.SetLabel(right.(Abstract.Value).TrueLabel)
+			generator.AddExpression(rightTemp, "1", "", "")
+			generator.AddGoTo(gotoEnd)
+
+			generator.SetLabel(right.(Abstract.Value).FalseLabel)
+			generator.AddExpression(rightTemp, "0", "", "")
+
+			generator.SetLabel(gotoEnd)
+			o.CheckLabelsLogic(generator)
+			generator.AddIf(leftTemp, rightTemp, o.Operator, o.LabelTrue)
+			generator.AddGoTo(o.LabelFalse)
+
+			res := Abstract.NewValue(true, SymbolTable.BOOLEAN, true, "")
+			res.TrueLabel = o.LabelTrue
+			res.FalseLabel = o.LabelFalse
+
+			return res
+		}
+
 		right := o.OpRight.Compile(symbolTable, generator)
 		temp := generator.AddTemp()
 		operation := o.Operator
@@ -215,6 +253,21 @@ func (o Operation) Compile(symbolTable *SymbolTable.SymbolTable, generator *Gene
 					return res
 				}
 			}
+		} else {
+			valLeft := LookForDataType(left.(Abstract.Value).Value)
+			valRight := LookForDataType(right.(Abstract.Value).Value)
+			switch operation {
+			case "<", ">", ">=", "<=", "==", "!=":
+				leftToSend := left.(Abstract.Value)
+				CheckLabelsBool(generator, &leftToSend)
+				generator.AddIf(valLeft, valRight, operation, leftToSend.TrueLabel)
+				generator.AddGoTo(leftToSend.FalseLabel)
+
+				//typeOf := interpreter.DataTypeRes
+				leftToSend.Value = temp
+				leftToSend.Type = SymbolTable.BOOLEAN
+				return leftToSend
+			}
 		}
 	} else {
 		left := o.OpLeft.Compile(symbolTable, generator)
@@ -239,6 +292,18 @@ func (o Operation) Compile(symbolTable *SymbolTable.SymbolTable, generator *Gene
 	}
 
 	return nil
+}
+
+func ValueBoolean(value interface{}, generator *Generator.Generator) {
+	tempLabel := generator.NewLabel()
+	generator.SetLabel(value.(Abstract.Value).TrueLabel)
+	temp := generator.AddTemp()
+	generator.AddExpression(temp, "1", "", "")
+	generator.AddGoTo(tempLabel)
+
+	generator.SetLabel(value.(Abstract.Value).FalseLabel)
+	generator.AddExpression(temp, "0", "", "")
+	generator.SetLabel(tempLabel)
 }
 
 func CheckLabelsBool(generator *Generator.Generator, value *Abstract.Value) {
@@ -580,9 +645,7 @@ func (o Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 		}
 
 	case "==":
-		if retLeft.Type == SymbolTable.BOOLEAN ||
-			retRight.Type == SymbolTable.BOOLEAN ||
-			retRight.Type == SymbolTable.NULL ||
+		if retRight.Type == SymbolTable.NULL ||
 			retLeft.Type == SymbolTable.NULL ||
 			retRight.Type == SymbolTable.CHAR ||
 			retLeft.Type == SymbolTable.CHAR {
@@ -598,6 +661,8 @@ func (o Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: retLeft.Value.(float64) == retRight.Value.(float64)}
 		} else if priority == SymbolTable.STR || priority == SymbolTable.STRING {
 			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: len(retLeft.Value.(string)) == len(retRight.Value.(string))}
+		} else if priority == SymbolTable.BOOLEAN {
+			return SymbolTable.ReturnType{Type: SymbolTable.BOOLEAN, Value: retLeft.Value.(bool) == retRight.Value.(bool)}
 		}
 
 	case "!=":
