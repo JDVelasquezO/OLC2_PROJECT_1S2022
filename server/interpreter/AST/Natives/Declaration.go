@@ -81,11 +81,19 @@ func (d *Declaration) Compile(symbolTable *SymbolTable.SymbolTable, generator *G
 func ValueBoolean(value interface{}, tempPos int, generator *Generator.Generator) {
 	tempLabel := generator.NewLabel()
 	generator.SetLabel(value.(Abstract.Value).TrueLabel)
-	generator.SetStack(strconv.Itoa(tempPos), 1, true)
+	if value.(Abstract.Value).IsNegative {
+		generator.SetStack(strconv.Itoa(tempPos), 0, true)
+	} else {
+		generator.SetStack(strconv.Itoa(tempPos), 1, true)
+	}
 	generator.AddGoTo(tempLabel)
 
 	generator.SetLabel(value.(Abstract.Value).FalseLabel)
-	generator.SetStack(strconv.Itoa(tempPos), 0, true)
+	if value.(Abstract.Value).IsNegative {
+		generator.SetStack(strconv.Itoa(tempPos), 1, true)
+	} else {
+		generator.SetStack(strconv.Itoa(tempPos), 0, true)
+	}
 	generator.SetLabel(tempLabel)
 }
 

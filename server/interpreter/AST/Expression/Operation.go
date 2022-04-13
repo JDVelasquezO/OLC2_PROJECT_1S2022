@@ -297,10 +297,11 @@ func (o Operation) Compile(symbolTable *SymbolTable.SymbolTable, generator *Gene
 			}
 			return Abstract.NewValue(value, left.(Abstract.Value).Type, false, "")
 		} else if o.Operator == "!" {
-			value = fmt.Sprintf("%v", !left.(Abstract.Value).Value.(bool))
+			//value = fmt.Sprintf("%v", !left.(Abstract.Value).Value.(bool))
 			newVal := Abstract.NewValue(value, left.(Abstract.Value).Type, false, "")
-			newVal.TrueLabel = left.(Abstract.Value).FalseLabel
-			newVal.FalseLabel = left.(Abstract.Value).TrueLabel
+			newVal.IsNegative = !left.(Abstract.Value).IsNegative
+			newVal.TrueLabel = left.(Abstract.Value).TrueLabel
+			newVal.FalseLabel = left.(Abstract.Value).FalseLabel
 			return newVal
 		}
 	}

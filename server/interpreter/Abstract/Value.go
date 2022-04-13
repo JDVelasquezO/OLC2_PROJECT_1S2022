@@ -15,6 +15,7 @@ type Value struct {
 	ValuesArray *arrayList.List
 	TypeArray   interface{}
 	Size        int
+	IsNegative  bool
 }
 
 func NewValue(value interface{}, dataType SymbolTable.DataType, isTemp bool, auxType string) Value {
@@ -28,6 +29,7 @@ func NewValue(value interface{}, dataType SymbolTable.DataType, isTemp bool, aux
 		ValuesArray: arrayList.New(),
 		TypeArray:   nil,
 		Size:        1,
+		IsNegative:  false,
 	}
 }
 
