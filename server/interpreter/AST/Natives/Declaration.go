@@ -59,7 +59,7 @@ func (d *Declaration) Compile(symbolTable *SymbolTable.SymbolTable, generator *G
 		newSymbol := SymbolTable.NewSymbolId(newId, 0, 0, d.DataType, value.(Abstract.Value).Value, false, false, "", "")
 		newSymbol.Size = value.(Abstract.Value).Size
 		temp := generator.AddTemp()
-		generator.SetTemp(temp, 1)
+		generator.SetTemp(temp, symbolTable.SizeTable)
 		symbolTable.AddNewSymbol(newId, &newSymbol)
 		//symbolTable.SizeTable -= 1
 		tempPos = temp

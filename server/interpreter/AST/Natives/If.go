@@ -29,14 +29,11 @@ func (i If) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.G
 
 	generator.SetLabel(condition.(Abstract.Value).TrueLabel)
 
-	counterPositions := 0
+	newTable := SymbolTable.NewSymbolTable("if", nil)
+	newTable.SizeTable = symbolTable.SizeTable
 	for _, instr := range i.ListInstructs.ToArray() {
-		instr.(Abstract.Instruction).Compile(symbolTable, generator)
-		if typeof(instr) == "*Natives.Declaration" {
-			counterPositions += 1
-		}
+		instr.(Abstract.Instruction).Compile(&newTable, generator)
 	}
-	symbolTable.SizeTable -= counterPositions
 
 	var labelExitIfElseIf string
 	if i.ListIfElse != nil {
