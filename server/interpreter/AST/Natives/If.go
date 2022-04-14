@@ -20,16 +20,22 @@ type If struct {
 }
 
 func (i If) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
-	generator.AddComment("---- Inicio IF ----")
 	condition := i.Condition.Compile(symbolTable, generator)
 
 	if condition.(Abstract.Value).Type != SymbolTable.BOOLEAN {
 		return nil
 	}
 
-	generator.SetLabel(condition.(Abstract.Value).TrueLabel)
+	if condition.(Abstract.Value).IsLogical {
+		generator.AddComment("---- Inicio IF ----")
+		generator.AddIf(condition.(Abstract.Value).Value.(string), "1", "==", condition.(Abstract.Value).TrueLabel)
+		generator.AddGoTo(condition.(Abstract.Value).FalseLabel)
+		generator.SetLabel(condition.(Abstract.Value).TrueLabel)
+	} else {
+		generator.SetLabel(condition.(Abstract.Value).TrueLabel)
+	}
 
-	newTable := SymbolTable.NewSymbolTable("if", nil)
+	newTable := SymbolTable.NewSymbolTable("if", symbolTable)
 	newTable.SizeTable = symbolTable.SizeTable
 	for _, instr := range i.ListInstructs.ToArray() {
 		instr.(Abstract.Instruction).Compile(&newTable, generator)
@@ -145,6 +151,13 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 					tableNewIf := SymbolTable.NewSymbolTable("Else-If", &table)
 					for j := 0; j < newIf.ListInstructs.Len(); j++ {
 						instr := newIf.ListInstructs.GetValue(j).(Abstract.Instruction)
+						valueRet = instr.Execute(tableNewIf)
+					}
+					return valueRet
+				} else {
+					tableNewIf := SymbolTable.NewSymbolTable("Else", &table)
+					for j := 0; j < newIf.ListInstructsElse.Len(); j++ {
+						instr := newIf.ListInstructsElse.GetValue(j).(Abstract.Instruction)
 						valueRet = instr.Execute(tableNewIf)
 					}
 					return valueRet

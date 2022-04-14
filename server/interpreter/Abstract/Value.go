@@ -16,6 +16,7 @@ type Value struct {
 	TypeArray   interface{}
 	Size        int
 	IsNegative  bool
+	IsLogical   bool
 }
 
 func NewValue(value interface{}, dataType SymbolTable.DataType, isTemp bool, auxType string) Value {
@@ -30,6 +31,7 @@ func NewValue(value interface{}, dataType SymbolTable.DataType, isTemp bool, aux
 		TypeArray:   nil,
 		Size:        1,
 		IsNegative:  false,
+		IsLogical:   false,
 	}
 }
 

@@ -62,8 +62,10 @@ func (o Operation) Compile(symbolTable *SymbolTable.SymbolTable, generator *Gene
 		if o.Operator == "&&" || o.Operator == "||" {
 			generator.AddComment("---- Logical ----")
 
+			generator.AddComment("---- Op Left Logic ----")
 			left := o.OpLeft.Compile(symbolTable, generator)
 			ValueBoolean(left, generator)
+			generator.AddComment("---- Op Right Logic ----")
 			right := o.OpRight.Compile(symbolTable, generator)
 			ValueBoolean(right, generator)
 			LT1 := generator.NewLabel()
@@ -76,8 +78,10 @@ func (o Operation) Compile(symbolTable *SymbolTable.SymbolTable, generator *Gene
 
 			//var newVal bool
 			var newTemp string
+			res := Abstract.NewValue("", SymbolTable.BOOLEAN, false, "")
 			switch o.Operator {
 			case "&&":
+				generator.AddComment("---- Validate Operator && ----")
 				generator.AddIf(left.(Abstract.Value).Value.(string), "1", "==", LT1)
 				generator.AddGoTo(LF1)
 				generator.SetLabel(LT1)
@@ -93,6 +97,7 @@ func (o Operation) Compile(symbolTable *SymbolTable.SymbolTable, generator *Gene
 				generator.SetLabel(LF1)
 				generator.SetLabel(LF2)
 				generator.AddExpression(newTemp, "0", "", "")
+				res.IsNegative = true
 				generator.AddGoTo(LExit)
 
 				generator.SetLabel(LExit)
@@ -120,9 +125,10 @@ func (o Operation) Compile(symbolTable *SymbolTable.SymbolTable, generator *Gene
 				break
 			}
 
-			res := Abstract.NewValue(newTemp, SymbolTable.BOOLEAN, false, "")
+			res.Value = newTemp
 			res.TrueLabel = generator.NewLabel()
 			res.FalseLabel = generator.NewLabel()
+			res.IsLogical = true
 			return res
 		}
 
