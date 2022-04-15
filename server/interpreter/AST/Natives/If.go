@@ -128,6 +128,10 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 			valueRet = instruct.Execute(newTable)
 			if valueRet != nil && typeof(valueRet) != "SymbolTable.ReturnType" {
 
+				if typeof(valueRet) == "string" {
+					return valueRet
+				}
+
 				if typeof(valueRet) == "Natives.Break" || typeof(valueRet) == "Natives.Continue" {
 					return valueRet
 				}
@@ -172,7 +176,7 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 				instruct := i.ListInstructsElse.GetValue(j).(Abstract.Instruction)
 				valueRet = instruct.Execute(newTable)
 
-				if valueRet == nil {
+				if valueRet == nil || typeof(valueRet) == "string" {
 					return nil
 				}
 
