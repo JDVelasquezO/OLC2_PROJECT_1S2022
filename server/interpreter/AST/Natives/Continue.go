@@ -15,6 +15,16 @@ func (c Continue) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 }
 
 func (c Continue) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+	var contLabel string
+	for actualTable := symbolTable; actualTable != nil; actualTable = actualTable.Before {
+
+		for _, _ = range actualTable.ContinueLabel {
+			contLabel = actualTable.ContinueLabel
+			generator.AddGoTo(contLabel)
+			return nil
+		}
+	}
+
 	return nil
 }
 
