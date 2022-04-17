@@ -13,6 +13,17 @@ type Break struct {
 }
 
 func (b Break) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+
+	var breakLabel string
+	for actualTable := symbolTable; actualTable != nil; actualTable = actualTable.Before {
+
+		for _, _ = range actualTable.BreakLabel {
+			breakLabel = actualTable.BreakLabel
+			generator.AddGoTo(breakLabel)
+			return nil
+		}
+	}
+
 	return nil
 }
 
