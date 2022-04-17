@@ -388,6 +388,21 @@ func (g *Generator) ToFloat(res string, exp string) {
 	g.CodeInFunction(res+"=(double)"+exp+";\n", "\t")
 }
 
+func (g *Generator) PrintTrue() {
+	g.AddPrint("c", "char", "116")
+	g.AddPrint("c", "char", "114")
+	g.AddPrint("c", "char", "117")
+	g.AddPrint("c", "char", "101")
+}
+
+func (g *Generator) PrintFalse() {
+	g.AddPrint("c", "char", "102")
+	g.AddPrint("c", "char", "97")
+	g.AddPrint("c", "char", "108")
+	g.AddPrint("c", "char", "115")
+	g.AddPrint("c", "char", "101")
+}
+
 func typeof(v interface{}) string {
 	return reflect.TypeOf(v).String()
 }

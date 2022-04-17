@@ -23,9 +23,68 @@ type Print struct {
 
 func (p Print) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 
+	//var retVal Abstract.Value
+	//if p.ListIds.Len() > 0 {
+	//	for i := 0; i < p.ListIds.Len(); i++ {
+	//		strAsExpression := p.ListIds.GetValue(i).(Abstract.Expression)
+	//
+	//		left := strAsExpression.Compile(symbolTable, generator)
+	//		right := p.Expressions.Compile(symbolTable, generator)
+	//		generator.ConcatString()
+	//		paramTemp := generator.AddTemp()
+	//		generator.AddExpression(paramTemp, "P", strconv.Itoa(symbolTable.SizeTable), "+")
+	//
+	//		// Val left
+	//		generator.AddExpression(paramTemp, paramTemp, "1", "+")
+	//		generator.SetStack(paramTemp, left.(Abstract.Value).Value, true)
+	//
+	//		// Val right
+	//		generator.AddExpression(paramTemp, paramTemp, "1", "+")
+	//		generator.SetStack(paramTemp, right.(Abstract.Value).Value, true)
+	//
+	//		generator.NewEnv(symbolTable.SizeTable)
+	//		generator.CallFunc("concat")
+	//		temp := generator.AddTemp()
+	//
+	//		generator.GetStack(temp, "P")
+	//		generator.SetEnv(symbolTable.SizeTable)
+	//
+	//		retVal = Abstract.NewValue(temp, SymbolTable.STRING, true, "")
+	//		retVal.Size = left.(Abstract.Value).Size + right.(Abstract.Value).Size
+	//		//return retVal
+	//	}
+	//}
+
+	var res0 interface{}
+	if p.ListIds.Len() == 0 {
+		res0 = p.Expressions.(Abstract.Expression).Compile(symbolTable, generator)
+	} else {
+		res0 = p.ListIds.GetValue(0).(Abstract.Expression).Compile(symbolTable, generator)
+	}
+	fmt.Println(res0)
+
+	if res0.(Abstract.Value).Type == SymbolTable.INTEGER {
+		newVal := fmt.Sprintf("%v", res0.(Abstract.Value).Value)
+		generator.AddPrint("d", "int", newVal)
+		generator.AddPrint("c", "char", "10")
+		return nil
+	} else if res0.(Abstract.Value).Type == SymbolTable.FLOAT {
+		newVal := fmt.Sprintf("%v", res0.(Abstract.Value).Value)
+		generator.AddPrint("f", "double", newVal)
+		generator.AddPrint("c", "char", "10")
+		return nil
+	} else if res0.(Abstract.Value).Type == SymbolTable.BOOLEAN {
+		TypeBoolean(res0.(Abstract.Value), generator)
+		generator.AddPrint("c", "char", "10")
+		return nil
+	} else if res0.(Abstract.Value).Type == SymbolTable.STRING {
+		TypeString(res0.(Abstract.Value).Value.(string), *symbolTable, generator)
+		generator.AddPrint("c", "char", "10")
+	}
+
 	res1 := p.Execute(*symbolTable)
 	newExp := Expression.NewPrimitive(res1, SymbolTable.STR, 0, 0)
-	//fmt.Println(res1)
+	fmt.Println(res1)
 	res := newExp.Compile(symbolTable, generator)
 	valueShow := res.(Abstract.Value).Value
 	TypeString(valueShow.(string), *symbolTable, generator)
@@ -46,6 +105,20 @@ func TypeString(value string, table SymbolTable.SymbolTable, generator *Generato
 	temp := generator.AddTemp()
 	generator.GetStack(temp, "P")
 	generator.SetEnv(table.SizeTable)
+}
+
+func TypeBoolean(value Abstract.Value, generator *Generator.Generator) {
+	exitLabel := generator.NewLabel()
+
+	generator.SetLabel(value.TrueLabel)
+	generator.PrintTrue()
+	generator.AddGoTo(exitLabel)
+
+	generator.SetLabel(value.FalseLabel)
+	generator.PrintFalse()
+	generator.AddGoTo(exitLabel)
+
+	generator.SetLabel(exitLabel)
 }
 
 func NewPrint(val Abstract.Expression, isBreakLine bool, row int, col int) Print {

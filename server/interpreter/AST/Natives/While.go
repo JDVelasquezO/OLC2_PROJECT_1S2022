@@ -16,8 +16,24 @@ type While struct {
 }
 
 func (w While) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
-	//TODO implement me
-	panic("implement me")
+	continueLabel := generator.NewLabel()
+	generator.SetLabel(continueLabel)
+	condition := w.Condition.Compile(symbolTable, generator)
+	symbolTable.BreakLabel = condition.(Abstract.Value).FalseLabel
+	symbolTable.ContinueLabel = continueLabel
+
+	generator.SetLabel(condition.(Abstract.Value).TrueLabel)
+
+	newTable := SymbolTable.NewSymbolTable("while", symbolTable)
+	newTable.SizeTable = symbolTable.SizeTable
+	for i := 0; i < w.ListInstructs.Len(); i++ {
+		w.ListInstructs.GetValue(i).(Abstract.Instruction).Compile(&newTable, generator)
+	}
+
+	generator.AddGoTo(continueLabel)
+	generator.SetLabel(condition.(Abstract.Value).FalseLabel)
+
+	return nil
 }
 
 func NewWhile(condition Abstract.Expression, listInstructs *arrayList.List, row int, col int) While {
@@ -56,6 +72,11 @@ StartLoop:
 			newSymbol := instruct.Execute(newTable)
 
 			if newSymbol != nil {
+
+				if typeof(newSymbol) == "string" {
+					return newSymbol
+				}
+
 				if typeof(newSymbol) == "Natives.Break" {
 					return nil
 				}
@@ -67,8 +88,8 @@ StartLoop:
 				if typeof(newSymbol) == "SymbolTable.ReturnType" {
 					return newSymbol
 				}
-				valueToSend := newSymbol.(SymbolTable.Symbol)
-				newTable.AddNewSymbol(newSymbol.(SymbolTable.Symbol).Id, &valueToSend)
+				valueToSend := newSymbol.(*SymbolTable.Symbol)
+				newTable.AddNewSymbol(newSymbol.(*SymbolTable.Symbol).Id, valueToSend)
 			}
 			//fmt.Println(otherTable)
 		}

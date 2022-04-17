@@ -20,10 +20,18 @@ func (c Cast) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator
 	temp := generator.AddTemp()
 	switch exp.(Abstract.Value).Type {
 	case SymbolTable.INTEGER:
-		generator.ToFloat(temp, strconv.Itoa(exp.(Abstract.Value).Value.(int)))
+		if typeof(exp.(Abstract.Value).Value) == "string" {
+			generator.ToFloat(temp, exp.(Abstract.Value).Value.(string))
+		} else {
+			generator.ToFloat(temp, strconv.Itoa(exp.(Abstract.Value).Value.(int)))
+		}
 		break
 	case SymbolTable.FLOAT:
-		generator.ToInt(temp, fmt.Sprintf("%v", exp.(Abstract.Value).Value.(float64)))
+		if typeof(exp.(Abstract.Value).Value) == "string" {
+			generator.ToFloat(temp, exp.(Abstract.Value).Value.(string))
+		} else {
+			generator.ToInt(temp, fmt.Sprintf("%v", exp.(Abstract.Value).Value.(float64)))
+		}
 		break
 	case SymbolTable.STRING:
 		generator.ToInt(temp, exp.(Abstract.Value).Value.(string))
