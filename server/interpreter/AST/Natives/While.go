@@ -90,8 +90,8 @@ StartLoop:
 				if typeof(newSymbol) == "SymbolTable.ReturnType" {
 					return newSymbol
 				}
-				valueToSend := newSymbol.(*SymbolTable.Symbol)
-				newTable.AddNewSymbol(newSymbol.(*SymbolTable.Symbol).Id, valueToSend)
+				//valueToSend := newSymbol.(*SymbolTable.Symbol)
+				//newTable.AddNewSymbol(newSymbol.(*SymbolTable.Symbol).Id, valueToSend)
 			}
 			//fmt.Println(otherTable)
 		}

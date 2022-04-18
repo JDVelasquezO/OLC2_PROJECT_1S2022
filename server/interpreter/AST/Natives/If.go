@@ -127,6 +127,7 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 		for j := 0; j < i.ListInstructs.Len(); j++ {
 			instruct := i.ListInstructs.GetValue(j).(Abstract.Instruction)
 			valueRet = instruct.Execute(newTable)
+
 			if valueRet != nil && typeof(valueRet) != "SymbolTable.ReturnType" {
 
 				if typeof(valueRet) == "string" {
@@ -137,8 +138,8 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 					return valueRet
 				}
 
-				valueToSend := valueRet.(*SymbolTable.Symbol)
-				newTable.AddNewSymbol(valueRet.(*SymbolTable.Symbol).Id, valueToSend)
+				//valueToSend := valueRet.(*SymbolTable.Symbol)
+				//newTable.AddNewSymbol(valueRet.(*SymbolTable.Symbol).Id, valueToSend)
 			}
 		}
 		return valueRet
