@@ -19,6 +19,7 @@ type Assign struct {
 }
 
 func (d *Assign) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+	generator.AddComment("---- Assignment ----")
 	value := symbolTable.GetSymbol(d.ListIds.GetValue(0).(Expression.Identifier).Id)
 	tempPos := strconv.Itoa(value.(*SymbolTable.Symbol).Pos)
 	newVal := d.Val.Compile(symbolTable, generator)

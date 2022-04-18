@@ -20,6 +20,7 @@ type If struct {
 }
 
 func (i If) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+	generator.AddComment("---- Start If ----")
 	condition := i.Condition.Compile(symbolTable, generator)
 
 	if condition.(Abstract.Value).Type != SymbolTable.BOOLEAN {
@@ -27,7 +28,7 @@ func (i If) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.G
 	}
 
 	if condition.(Abstract.Value).IsLogical {
-		generator.AddComment("---- Inicio IF ----")
+		generator.AddComment("---- Logical - If ----")
 		generator.AddIf(condition.(Abstract.Value).Value.(string), "1", "==", condition.(Abstract.Value).TrueLabel)
 		generator.AddGoTo(condition.(Abstract.Value).FalseLabel)
 		generator.SetLabel(condition.(Abstract.Value).TrueLabel)

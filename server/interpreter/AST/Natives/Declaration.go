@@ -30,6 +30,7 @@ type Declaration struct {
 }
 
 func (d *Declaration) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+	generator.AddComment("---- Declaration ----")
 	if d.InitVal == nil {
 		switch d.DataType {
 		case SymbolTable.INTEGER:

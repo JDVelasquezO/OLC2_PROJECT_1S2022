@@ -55,6 +55,7 @@ func (p Print) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generato
 	//	}
 	//}
 
+	generator.AddComment("---- Print ----")
 	var res0 interface{}
 	if p.ListIds.Len() == 0 {
 		res0 = p.Expressions.(Abstract.Expression).Compile(symbolTable, generator)

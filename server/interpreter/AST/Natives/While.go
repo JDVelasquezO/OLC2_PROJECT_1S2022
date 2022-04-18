@@ -16,16 +16,18 @@ type While struct {
 }
 
 func (w While) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+	generator.AddComment("---- Start While ----")
+	newTable := SymbolTable.NewSymbolTable("while", symbolTable)
+	newTable.SizeTable = symbolTable.SizeTable
+
 	continueLabel := generator.NewLabel()
 	generator.SetLabel(continueLabel)
 	condition := w.Condition.Compile(symbolTable, generator)
-	symbolTable.BreakLabel = condition.(Abstract.Value).FalseLabel
-	symbolTable.ContinueLabel = continueLabel
+	newTable.BreakLabel = condition.(Abstract.Value).FalseLabel
+	newTable.ContinueLabel = continueLabel
 
 	generator.SetLabel(condition.(Abstract.Value).TrueLabel)
 
-	newTable := SymbolTable.NewSymbolTable("while", symbolTable)
-	newTable.SizeTable = symbolTable.SizeTable
 	for i := 0; i < w.ListInstructs.Len(); i++ {
 		w.ListInstructs.GetValue(i).(Abstract.Instruction).Compile(&newTable, generator)
 	}
