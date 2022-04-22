@@ -22,8 +22,11 @@ type ForIn struct {
 }
 
 func (f ForIn) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
-	//TODO implement me
-	panic("implement me")
+	generator.AddComment("---- For Cycle ----")
+
+	f.Iterator.Compile(symbolTable, generator)
+
+	return nil
 }
 
 func NewForIn(iterator Abstract.Expression, valToIterate Abstract.Expression, instructions *arrayList.List) ForIn {

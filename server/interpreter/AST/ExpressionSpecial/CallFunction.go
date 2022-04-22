@@ -3,6 +3,7 @@ package ExpressionSpecial
 import (
 	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter"
+	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment"
 	"OLC2_Project1/server/interpreter/errors"
@@ -20,8 +21,26 @@ type CallFunction struct {
 }
 
 func (c CallFunction) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
-	//TODO implement me
-	panic("implement me")
+	function := symbolTable.GetFunction(c.IdFunction)
+
+	if function != nil {
+		table := interpreter.GlobalTable.FunctionTable[c.IdFunction].(Environment.Function)
+		env := table.Symbol
+		size := generator.SaveTemps(env)
+
+		temp := generator.AddTemp()
+		generator.AddExpression(temp, "P", fmt.Sprintf("%v", env.Size+1), "+")
+
+		generator.NewEnv(env.Size)
+		generator.CallFunc(c.IdFunction)
+		generator.GetStack(temp, "P")
+		generator.SetEnv(env.Size)
+		generator.RecoverTemps(env, size)
+
+		return Abstract.NewValue(temp, function.(Environment.Function).DataType, true, "")
+	}
+
+	return nil
 }
 
 func NewCallFunction(idFunction string, listExpressions *arrayList.List, row int, col int) CallFunction {

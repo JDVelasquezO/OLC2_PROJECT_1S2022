@@ -78,18 +78,11 @@ func (p Print) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generato
 		TypeBoolean(res0.(Abstract.Value), generator)
 		generator.AddPrint("c", "char", "10")
 		return nil
-	} else if res0.(Abstract.Value).Type == SymbolTable.STRING {
+	} else if res0.(Abstract.Value).Type == SymbolTable.STRING || res0.(Abstract.Value).Type == SymbolTable.STR {
 		TypeString(res0.(Abstract.Value).Value.(string), *symbolTable, generator)
 		generator.AddPrint("c", "char", "10")
+		return nil
 	}
-
-	res1 := p.Execute(*symbolTable)
-	newExp := Expression.NewPrimitive(res1, SymbolTable.STR, 0, 0)
-	fmt.Println(res1)
-	res := newExp.Compile(symbolTable, generator)
-	valueShow := res.(Abstract.Value).Value
-	TypeString(valueShow.(string), *symbolTable, generator)
-	generator.AddPrint("c", "char", "10")
 
 	return nil
 }

@@ -94,6 +94,57 @@ func (g *Generator) FreeAllTemps() {
 	g.TempsRecovered = make(map[string]interface{})
 }
 
+func (g *Generator) SaveTemps(table SymbolTable.Symbol) int {
+	size := 0
+	if len(g.TempsRecovered) > 0 {
+		temp := g.AddTemp()
+		g.FreeTemp(temp)
+
+		g.AddComment("---- Start Keep Temps ----")
+		g.AddExpression(temp, "P", strconv.Itoa(table.Size), "+")
+		for val := range g.TempsRecovered {
+			size += 1
+			g.SetStack(temp, val, false)
+			if size != len(g.TempsRecovered) {
+				g.AddExpression(temp, temp, "1", "+")
+			}
+		}
+		g.AddComment("---- End Keep Temps ----")
+	}
+
+	ptr := table.Size
+	table.Size = ptr + size
+	return ptr
+}
+
+func (g *Generator) RecoverTemps(env SymbolTable.Symbol, pos int) {
+	if len(g.TempsRecovered) > 0 {
+		temp := g.AddTemp()
+		g.FreeTemp(temp)
+
+		size := 0
+
+		g.AddComment("---- Start Recover Temps ----")
+		g.AddExpression(temp, "P", strconv.Itoa(pos), "+")
+		for value := range g.TempsRecovered {
+			size += 1
+			g.GetStack(value, temp)
+			if size != len(g.TempsRecovered) {
+				g.AddExpression(temp, temp, "1", "+")
+			}
+
+		}
+		env.Size = pos
+		g.AddComment("---- Fin Recover Temps ----")
+	}
+}
+
+func (g *Generator) FreeTemp(temp string) {
+	if _, found := g.TempsRecovered[temp]; found {
+		delete(g.TempsRecovered, temp)
+	}
+}
+
 func (g *Generator) AddBeginFunc(id string, dataType SymbolTable.DataType) {
 	if !g.InNatives {
 		g.InFunc = true

@@ -64,8 +64,12 @@ func Compiler(c *fiber.Ctx) error {
 		if ast.ListInstr != nil {
 			for i := 0; i < ast.ListInstr.Len(); i++ {
 				r := ast.ListInstr.GetValue(i)
+
 				if typeof(r) == "Environment.Function" {
 					interpreter.GlobalTable.AddFunction(r.(Environment.Function).Id, r.(Environment.Function))
+					if r.(Environment.Function).Id != "main" {
+						r.(Environment.Function).Compile(&interpreter.GlobalTable, &codeCompiled)
+					}
 				}
 
 				if typeof(r) == "DecStructs.DecStruct" {
