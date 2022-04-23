@@ -57,7 +57,6 @@ type Operation struct {
 }
 
 func (o Operation) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
-
 	if o.OpRight != nil {
 		if o.Operator == "&&" || o.Operator == "||" {
 			generator.AddComment("---- Logical ----")
@@ -177,6 +176,7 @@ func (o Operation) Compile(symbolTable *SymbolTable.SymbolTable, generator *Gene
 		if (left.(Abstract.Value).Type == SymbolTable.INTEGER || left.(Abstract.Value).Type == SymbolTable.FLOAT) &&
 			(right.(Abstract.Value).Type == SymbolTable.INTEGER || right.(Abstract.Value).Type == SymbolTable.FLOAT) {
 
+			generator.AddComment("---- Arithmetic Operation ----")
 			valLeft := LookForDataType(left.(Abstract.Value).Value)
 			valRight := LookForDataType(right.(Abstract.Value).Value)
 

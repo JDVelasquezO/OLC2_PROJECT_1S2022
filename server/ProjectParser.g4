@@ -742,7 +742,7 @@ expr_arit returns [Abstract.Expression p, Abstract.Instruction instr]
 ;
 
 expr_valor returns [Abstract.Expression p, Abstract.Instruction instr]
-    : called_func {
+    : called_func SEMICOLON? {
         $p = $called_func.p
         $instr = $called_func.instr
     }

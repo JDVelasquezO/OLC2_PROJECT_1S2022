@@ -52,6 +52,7 @@ func (d *Declaration) Compile(symbolTable *SymbolTable.SymbolTable, generator *G
 	}
 
 	value := d.InitVal.(Abstract.Instruction).Compile(symbolTable, generator)
+	generator.AddComment("---- Assign Value ----")
 	newVar := symbolTable.GetSymbol(d.ListIds.GetValue(0).(Expression.Identifier).Id)
 	var tempPos interface{}
 	var posNew int

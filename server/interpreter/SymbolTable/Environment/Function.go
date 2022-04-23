@@ -32,10 +32,20 @@ type Function struct {
 }
 
 func (f Function) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
-	newTable := SymbolTable.NewSymbolTable("function", symbolTable)
+	newTable := SymbolTable.NewSymbolTable(f.Symbol.Id, symbolTable)
+
+	newTable.SizeTable = 1
+	for i := 0; i < f.ListParams.Len(); i++ {
+		f.ListParams.GetValue(i).(*Natives.Declaration).Execute(newTable)
+		newTable.SizeTable += 1
+	}
+	symbol := interpreter.GlobalTable.FunctionTable[f.Id].(Function)
+	symbol.SetSize(newTable.SizeTable)
+	interpreter.GlobalTable.FunctionTable[f.Id] = symbol
+
 	returnLabel := generator.NewLabel()
 	newTable.ReturnLabel = returnLabel
-	newTable.SizeTable = 1
+
 	generator.FreeAllTemps()
 	generator.AddBeginFunc(f.Id, f.DataType)
 	for i := 0; i < f.ListInstructs.Len(); i++ {
@@ -49,6 +59,10 @@ func (f Function) Compile(symbolTable *SymbolTable.SymbolTable, generator *Gener
 	generator.FreeAllTemps()
 
 	return nil
+}
+
+func (f *Function) SetSize(size int) {
+	f.Size = size
 }
 
 func NewFunction(line int, col int, name string, listParams *arrayList.List, listInstructs *arrayList.List,

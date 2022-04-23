@@ -21,20 +21,38 @@ type CallFunction struct {
 }
 
 func (c CallFunction) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+	generator.AddComment("---- Start Call Function ----")
 	function := symbolTable.GetFunction(c.IdFunction)
 
 	if function != nil {
-		table := interpreter.GlobalTable.FunctionTable[c.IdFunction].(Environment.Function)
+		table := function.(Environment.Function)
 		env := table.Symbol
 		size := generator.SaveTemps(env)
 
-		temp := generator.AddTemp()
-		generator.AddExpression(temp, "P", fmt.Sprintf("%v", env.Size+1), "+")
+		paramValues := *arrayList.New()
+		for i := 0; i < c.ListExpressions.Len(); i++ {
+			param := c.ListExpressions.GetValue(i)
+			paramValues.Add(param.(Abstract.Expression).Compile(symbolTable, generator))
+		}
 
-		generator.NewEnv(env.Size)
+		temp := generator.AddTemp()
+		generator.AddExpression(temp, "P", fmt.Sprintf("%v", env.Size), "+")
+
+		aux := 0
+		for i := 0; i < paramValues.Len(); i++ {
+			aux = aux + 1
+			param := paramValues.GetValue(i)
+			generator.SetStack(temp, param.(Abstract.Value).Value, true)
+
+			if aux != paramValues.Len() {
+				generator.AddExpression(temp, temp, "1", "+")
+			}
+		}
+
+		generator.NewEnv(env.Size - 1)
 		generator.CallFunc(c.IdFunction)
 		generator.GetStack(temp, "P")
-		generator.SetEnv(env.Size)
+		generator.SetEnv(env.Size - 1)
 		generator.RecoverTemps(env, size)
 
 		return Abstract.NewValue(temp, function.(Environment.Function).DataType, true, "")

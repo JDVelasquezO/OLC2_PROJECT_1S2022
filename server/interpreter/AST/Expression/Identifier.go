@@ -16,6 +16,7 @@ type Identifier struct {
 }
 
 func (id Identifier) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
+	generator.AddComment("---- Identifier ----")
 	value := symbolTable.GetSymbol(id.Id)
 	if value == nil {
 		return nil
@@ -25,10 +26,9 @@ func (id Identifier) Compile(symbolTable *SymbolTable.SymbolTable, generator *Ge
 	//temp := "t" + strconv.Itoa(value.(*SymbolTable.Symbol).Pos)
 	var tempPos string
 	if value.(*SymbolTable.Symbol).Id != "" {
-		tempPos = strconv.Itoa(value.(*SymbolTable.Symbol).Pos)
-		//tempPos = generator.AddTemp()
+		tempPos = generator.AddTemp()
 		//newPos := strconv.Itoa(value.(*SymbolTable.Symbol).Pos - 1)
-		//generator.AddExpression(tempPos, "P", newPos, "+")
+		generator.AddExpression(tempPos, "P", strconv.Itoa(value.(*SymbolTable.Symbol).Pos), "+")
 	}
 
 	generator.GetStack(temp, tempPos)
