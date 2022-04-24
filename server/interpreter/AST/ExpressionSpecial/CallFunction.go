@@ -30,13 +30,13 @@ func (c CallFunction) Compile(symbolTable *SymbolTable.SymbolTable, generator *G
 		size := generator.SaveTemps(env)
 
 		paramValues := *arrayList.New()
+		temp := generator.AddTemp()
 		for i := 0; i < c.ListExpressions.Len(); i++ {
 			param := c.ListExpressions.GetValue(i)
 			paramValues.Add(param.(Abstract.Expression).Compile(symbolTable, generator))
-		}
 
-		temp := generator.AddTemp()
-		generator.AddExpression(temp, "P", fmt.Sprintf("%v", env.Size), "+")
+			generator.AddExpression(temp, "P", fmt.Sprintf("%v", env.Size), "+")
+		}
 
 		aux := 0
 		for i := 0; i < paramValues.Len(); i++ {
@@ -53,7 +53,9 @@ func (c CallFunction) Compile(symbolTable *SymbolTable.SymbolTable, generator *G
 		generator.CallFunc(c.IdFunction)
 		generator.GetStack(temp, "P")
 		generator.SetEnv(env.Size - 1)
-		generator.RecoverTemps(env, size)
+		if c.ListExpressions.Len() > 0 {
+			generator.RecoverTemps(env, size)
+		}
 
 		return Abstract.NewValue(temp, function.(Environment.Function).DataType, true, "")
 	}

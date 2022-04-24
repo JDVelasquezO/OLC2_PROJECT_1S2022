@@ -15,8 +15,24 @@ type Return struct {
 }
 
 func (r Return) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
-	//TODO implement me
-	panic("implement me")
+	value := r.Expression.Compile(symbolTable, generator)
+
+	if value.(Abstract.Value).Type == SymbolTable.BOOLEAN {
+		tempLabel := generator.NewLabel()
+
+		generator.SetLabel(value.(Abstract.Value).TrueLabel)
+		generator.SetStack("P", "1", true)
+		generator.AddGoTo(tempLabel)
+
+		generator.SetLabel(value.(Abstract.Value).FalseLabel)
+		generator.SetStack("P", "0", true)
+		generator.SetLabel(tempLabel)
+	} else {
+		generator.SetStack("P", value.(Abstract.Value).Value, true)
+	}
+
+	generator.AddGoTo(symbolTable.ReturnLabel)
+	return nil
 }
 
 func NewReturn(row int, col int, expression Abstract.Expression) Return {
