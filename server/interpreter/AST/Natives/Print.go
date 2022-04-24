@@ -55,7 +55,7 @@ func (p Print) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generato
 	//	}
 	//}
 
-	generator.AddComment("---- Print ----")
+	generator.AddComment("---- Start Print ----")
 	var res0 interface{}
 	if p.ListIds.Len() == 0 {
 		res0 = p.Expressions.(Abstract.Expression).Compile(symbolTable, generator)
@@ -64,24 +64,21 @@ func (p Print) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generato
 	}
 	fmt.Println(res0)
 
+	generator.AddComment("---- Print ----")
 	if res0.(Abstract.Value).Type == SymbolTable.INTEGER {
 		newVal := fmt.Sprintf("%v", res0.(Abstract.Value).Value)
 		generator.AddPrint("d", "int", newVal)
-		generator.AddPrint("c", "char", "10")
-		return nil
 	} else if res0.(Abstract.Value).Type == SymbolTable.FLOAT {
 		newVal := fmt.Sprintf("%v", res0.(Abstract.Value).Value)
 		generator.AddPrint("f", "double", newVal)
-		generator.AddPrint("c", "char", "10")
-		return nil
 	} else if res0.(Abstract.Value).Type == SymbolTable.BOOLEAN {
 		TypeBoolean(res0.(Abstract.Value), generator)
-		generator.AddPrint("c", "char", "10")
-		return nil
 	} else if res0.(Abstract.Value).Type == SymbolTable.STRING || res0.(Abstract.Value).Type == SymbolTable.STR {
 		TypeString(res0.(Abstract.Value).Value.(string), *symbolTable, generator)
+	}
+
+	if p.isBreakLine {
 		generator.AddPrint("c", "char", "10")
-		return nil
 	}
 
 	return nil
