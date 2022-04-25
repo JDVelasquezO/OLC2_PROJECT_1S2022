@@ -2,19 +2,24 @@ package DecStructs
 
 import (
 	"OLC2_Project1/server/Generator"
+	"OLC2_Project1/server/interpreter"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Struct"
 	arrayList "github.com/colegno/arraylist"
+	"strings"
 )
 
 type DecStruct struct {
 	Id    string
 	Items *arrayList.List
+	Size  int
 }
 
 func (d DecStruct) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
-	//TODO implement me
-	panic("implement me")
+	symbol := interpreter.GlobalTable.StructTable[strings.ToLower(d.Id)].(DecStruct)
+	symbol.SetSize(d.Items.Len())
+	interpreter.GlobalTable.StructTable[strings.ToLower(d.Id)] = symbol
+	return nil
 }
 
 func (d DecStruct) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
@@ -35,4 +40,8 @@ func NewDecStruct(id string, items *arrayList.List) DecStruct {
 		Id:    id,
 		Items: items,
 	}
+}
+
+func (d *DecStruct) SetSize(size int) {
+	d.Size = size
 }

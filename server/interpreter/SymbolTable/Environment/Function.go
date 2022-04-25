@@ -11,6 +11,7 @@ import (
 	arrayList "github.com/colegno/arraylist"
 	"reflect"
 	"strconv"
+	"strings"
 )
 
 var typeDef = [7][7]SymbolTable.DataType{
@@ -39,9 +40,9 @@ func (f Function) Compile(symbolTable *SymbolTable.SymbolTable, generator *Gener
 		f.ListParams.GetValue(i).(*Natives.Declaration).Execute(newTable)
 		newTable.SizeTable += 1
 	}
-	symbol := interpreter.GlobalTable.FunctionTable[f.Id].(Function)
+	symbol := interpreter.GlobalTable.FunctionTable[strings.ToLower(f.Id)].(Function)
 	symbol.SetSize(newTable.SizeTable)
-	interpreter.GlobalTable.FunctionTable[f.Id] = symbol
+	interpreter.GlobalTable.FunctionTable[strings.ToLower(f.Id)] = symbol
 
 	returnLabel := generator.NewLabel()
 	newTable.ReturnLabel = returnLabel

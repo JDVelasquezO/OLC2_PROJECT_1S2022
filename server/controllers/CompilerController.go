@@ -74,6 +74,7 @@ func Compiler(c *fiber.Ctx) error {
 
 				if typeof(r) == "DecStructs.DecStruct" {
 					interpreter.GlobalTable.AddStruct(r.(DecStructs.DecStruct).Id, r.(DecStructs.DecStruct))
+					r.(DecStructs.DecStruct).Compile(&interpreter.GlobalTable, &codeCompiled)
 				}
 
 				if typeof(r) == "DecArrays.DecArray" {

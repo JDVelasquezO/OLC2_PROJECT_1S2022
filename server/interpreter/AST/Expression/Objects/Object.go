@@ -9,6 +9,7 @@ import (
 type Object struct {
 	Id         string
 	Attributes *arrayList.List
+	Pos        int
 }
 
 func (o Object) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
@@ -30,4 +31,8 @@ func NewObject(id string, attributes *arrayList.List) Object {
 		Id:         id,
 		Attributes: attributes,
 	}
+}
+
+func (o Object) SetPos(pos int) {
+	o.Pos = pos
 }

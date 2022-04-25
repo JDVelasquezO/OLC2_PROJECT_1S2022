@@ -192,7 +192,7 @@ func (g *Generator) SetStack(pos interface{}, value interface{}, freeValue bool)
 			g.CodeInFunction("stack[(int)"+pos.(string)+"] = "+fmt.Sprintf("%v", value)+";\n", "\t")
 		} else {
 			g.GetFreeTemp(value.(string))
-			if len(value.(string)) > 1 {
+			if len(value.(string)) > 1 || value.(string) == "H" {
 				g.CodeInFunction("stack[(int)"+pos.(string)+"] = "+value.(string)+";\n", "\t")
 			} else {
 				g.CodeInFunction("stack[(int)"+pos.(string)+"] = '"+value.(string)+"';\n", "\t")

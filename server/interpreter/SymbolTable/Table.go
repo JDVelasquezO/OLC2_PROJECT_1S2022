@@ -241,6 +241,7 @@ func (table *SymbolTable) AddStruct(id string, symbol interface{}) {
 func (table *SymbolTable) AddObject(id string, symbol interface{}) {
 	idFinal := strings.ToLower(id)
 	table.ObjectTable[idFinal] = symbol
+	table.SizeTable += 1
 }
 
 func (table *SymbolTable) GetObject(id string) interface{} {
