@@ -23,38 +23,6 @@ type Print struct {
 
 func (p Print) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 
-	//var retVal Abstract.Value
-	//if p.ListIds.Len() > 0 {
-	//	for i := 0; i < p.ListIds.Len(); i++ {
-	//		strAsExpression := p.ListIds.GetValue(i).(Abstract.Expression)
-	//
-	//		left := strAsExpression.Compile(symbolTable, generator)
-	//		right := p.Expressions.Compile(symbolTable, generator)
-	//		generator.ConcatString()
-	//		paramTemp := generator.AddTemp()
-	//		generator.AddExpression(paramTemp, "P", strconv.Itoa(symbolTable.SizeTable), "+")
-	//
-	//		// Val left
-	//		generator.AddExpression(paramTemp, paramTemp, "1", "+")
-	//		generator.SetStack(paramTemp, left.(Abstract.Value).Value, true)
-	//
-	//		// Val right
-	//		generator.AddExpression(paramTemp, paramTemp, "1", "+")
-	//		generator.SetStack(paramTemp, right.(Abstract.Value).Value, true)
-	//
-	//		generator.NewEnv(symbolTable.SizeTable)
-	//		generator.CallFunc("concat")
-	//		temp := generator.AddTemp()
-	//
-	//		generator.GetStack(temp, "P")
-	//		generator.SetEnv(symbolTable.SizeTable)
-	//
-	//		retVal = Abstract.NewValue(temp, SymbolTable.STRING, true, "")
-	//		retVal.Size = left.(Abstract.Value).Size + right.(Abstract.Value).Size
-	//		//return retVal
-	//	}
-	//}
-
 	generator.AddComment("---- Start Print ----")
 	var res0 interface{}
 	if p.ListIds.Len() == 0 {
