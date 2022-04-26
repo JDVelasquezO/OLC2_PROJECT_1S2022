@@ -40,6 +40,13 @@ func (o ObjectAccess) Compile(symbolTable *SymbolTable.SymbolTable, generator *G
 	generator.GetHeap(tempAttribute, tempPosAttribute)
 
 	val := Abstract.NewValue(tempAttribute, typeAttr, true, "")
+	if val.Type == SymbolTable.BOOLEAN {
+		labelTrue := generator.NewLabel()
+		labelFalse := generator.NewLabel()
+
+		val.TrueLabel = labelTrue
+		val.FalseLabel = labelFalse
+	}
 	return val
 }
 

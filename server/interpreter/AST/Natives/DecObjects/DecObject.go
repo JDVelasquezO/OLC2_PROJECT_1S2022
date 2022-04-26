@@ -39,32 +39,35 @@ func (d DecObjects) Compile(symbolTable *SymbolTable.SymbolTable, generator *Gen
 		val := d.Attributes.GetValue(i).(Objects.Attribute).Value.Compile(symbolTable, generator)
 
 		if val.(Abstract.Value).Type == SymbolTable.BOOLEAN {
-			ValueBoolean(val, i, generator)
+			ValueBoolean(val, tempAttribute, generator)
 		} else {
 			generator.SetHeap(tempAttribute, val.(Abstract.Value).Value)
 		}
 
+		generator.AddComment("---- ----")
 		//valToSend := val.(Abstract.Value).Value
 		//generator.SetHeap(tempAttribute, valToSend)
 	}
+
+	symbolTable.SizeTable += 1
 	return nil
 }
 
-func ValueBoolean(value interface{}, tempPos int, generator *Generator.Generator) {
+func ValueBoolean(value interface{}, tempPos interface{}, generator *Generator.Generator) {
 	tempLabel := generator.NewLabel()
 	generator.SetLabel(value.(Abstract.Value).TrueLabel)
 	if value.(Abstract.Value).IsNegative {
-		generator.SetHeap(strconv.Itoa(tempPos), 0)
+		generator.SetHeap(tempPos.(string), 0)
 	} else {
-		generator.SetHeap(strconv.Itoa(tempPos), 1)
+		generator.SetHeap(tempPos.(string), 1)
 	}
 	generator.AddGoTo(tempLabel)
 
 	generator.SetLabel(value.(Abstract.Value).FalseLabel)
 	if value.(Abstract.Value).IsNegative {
-		generator.SetHeap(strconv.Itoa(tempPos), 1)
+		generator.SetHeap(tempPos.(string), 1)
 	} else {
-		generator.SetHeap(strconv.Itoa(tempPos), 0)
+		generator.SetHeap(tempPos.(string), 0)
 	}
 	generator.SetLabel(tempLabel)
 }
