@@ -37,11 +37,36 @@ func (d DecObjects) Compile(symbolTable *SymbolTable.SymbolTable, generator *Gen
 		generator.AddExpression(tempAttribute, tempRef, strconv.Itoa(i), "+")
 
 		val := d.Attributes.GetValue(i).(Objects.Attribute).Value.Compile(symbolTable, generator)
-		valToSend := val.(Abstract.Value).Value
 
-		generator.SetHeap(tempAttribute, valToSend)
+		if val.(Abstract.Value).Type == SymbolTable.BOOLEAN {
+			ValueBoolean(val, i, generator)
+		} else {
+			generator.SetHeap(tempAttribute, val.(Abstract.Value).Value)
+		}
+
+		//valToSend := val.(Abstract.Value).Value
+		//generator.SetHeap(tempAttribute, valToSend)
 	}
 	return nil
+}
+
+func ValueBoolean(value interface{}, tempPos int, generator *Generator.Generator) {
+	tempLabel := generator.NewLabel()
+	generator.SetLabel(value.(Abstract.Value).TrueLabel)
+	if value.(Abstract.Value).IsNegative {
+		generator.SetHeap(strconv.Itoa(tempPos), 0)
+	} else {
+		generator.SetHeap(strconv.Itoa(tempPos), 1)
+	}
+	generator.AddGoTo(tempLabel)
+
+	generator.SetLabel(value.(Abstract.Value).FalseLabel)
+	if value.(Abstract.Value).IsNegative {
+		generator.SetHeap(strconv.Itoa(tempPos), 1)
+	} else {
+		generator.SetHeap(strconv.Itoa(tempPos), 0)
+	}
+	generator.SetLabel(tempLabel)
 }
 
 func NewDecObjects(id string, idObject string, attributes *arrayList.List) DecObjects {

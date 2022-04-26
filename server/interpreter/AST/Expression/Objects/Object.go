@@ -33,6 +33,6 @@ func NewObject(id string, attributes *arrayList.List) Object {
 	}
 }
 
-func (o Object) SetPos(pos int) {
+func (o *Object) SetPos(pos int) {
 	o.Pos = pos
 }

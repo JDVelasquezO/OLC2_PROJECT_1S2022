@@ -62,7 +62,7 @@ func (p Print) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generato
 	} else {
 		res0 = p.ListIds.GetValue(0).(Abstract.Expression).Compile(symbolTable, generator)
 	}
-	fmt.Println(res0)
+	//fmt.Println(res0)
 
 	generator.AddComment("---- Print ----")
 	if res0.(Abstract.Value).Type == SymbolTable.INTEGER {

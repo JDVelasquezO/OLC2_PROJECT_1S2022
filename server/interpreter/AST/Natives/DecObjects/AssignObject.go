@@ -8,6 +8,7 @@ import (
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	arrayList "github.com/colegno/arraylist"
+	"strconv"
 )
 
 type AssignObject struct {
@@ -16,8 +17,33 @@ type AssignObject struct {
 }
 
 func (a AssignObject) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
-	//TODO implement me
-	panic("implement me")
+	idInit := a.AccessObject.(Access.ObjectAccess).GetId(*symbolTable, 0)
+	idAttr := a.AccessObject.(Access.ObjectAccess).GetId(*symbolTable, 1)
+	newObj := symbolTable.GetObject(idInit)
+
+	generator.AddComment("---- Assign New Val Struct ----")
+	tempPosObject := generator.AddTemp()
+	tempValObject := generator.AddTemp()
+	tempPosAttr := generator.AddTemp()
+
+	generator.AddExpression(tempPosObject, "P", strconv.Itoa(newObj.(Objects.Object).Pos), "+")
+	generator.GetStack(tempValObject, tempPosObject)
+
+	var symbol interface{}
+	var posAttr int
+	for i := 0; i < newObj.(Objects.Object).Attributes.Len(); i++ {
+		nameAttr := newObj.(Objects.Object).Attributes.GetValue(i).(SymbolTable.ReturnType).Value
+		symbol = nameAttr.(map[string]interface{})[idAttr]
+		if symbol != nil {
+			posAttr = i
+			break
+		}
+	}
+
+	generator.AddExpression(tempPosAttr, tempValObject, strconv.Itoa(posAttr), "+")
+	generator.SetHeap(tempPosAttr, a.Value.GetValue(*symbolTable).Value)
+
+	return nil
 }
 
 func (a AssignObject) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
