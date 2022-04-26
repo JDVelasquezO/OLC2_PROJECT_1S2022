@@ -21,9 +21,16 @@ type Assign struct {
 func (d *Assign) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	generator.AddComment("---- Assignment ----")
 	value := symbolTable.GetSymbol(d.ListIds.GetValue(0).(Expression.Identifier).Id)
-	tempPos := strconv.Itoa(value.(*SymbolTable.Symbol).Pos)
+	tempPos := value.(*SymbolTable.Symbol).Pos
 	newVal := d.Val.Compile(symbolTable, generator)
-	generator.SetStack(tempPos, newVal.(Abstract.Value).Value, true)
+	//generator.SetStack(tempPos, newVal.(Abstract.Value).Value, true)
+
+	if newVal.(Abstract.Value).Type == SymbolTable.BOOLEAN {
+		ValueBoolean(newVal, tempPos, generator)
+	} else {
+		generator.SetStack(strconv.Itoa(tempPos), newVal.(Abstract.Value).Value, true)
+	}
+
 	return nil
 }
 
