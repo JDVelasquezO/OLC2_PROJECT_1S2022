@@ -46,6 +46,9 @@ func (o ObjectAccess) Compile(symbolTable *SymbolTable.SymbolTable, generator *G
 
 		val.TrueLabel = labelTrue
 		val.FalseLabel = labelFalse
+
+		generator.AddIf(tempAttribute, "1", "==", val.TrueLabel)
+		generator.AddGoTo(val.FalseLabel)
 	}
 	return val
 }

@@ -41,7 +41,13 @@ func (a AssignObject) Compile(symbolTable *SymbolTable.SymbolTable, generator *G
 	}
 
 	generator.AddExpression(tempPosAttr, tempValObject, strconv.Itoa(posAttr), "+")
-	generator.SetHeap(tempPosAttr, a.Value.GetValue(*symbolTable).Value)
+	val := symbol.(Expression.Primitive).Compile(symbolTable, generator)
+
+	if val.(Abstract.Value).Type == SymbolTable.BOOLEAN {
+		ValueBoolean(val, tempPosAttr, generator)
+	} else {
+		generator.SetHeap(tempPosAttr, val.(Abstract.Value).Value)
+	}
 
 	return nil
 }
