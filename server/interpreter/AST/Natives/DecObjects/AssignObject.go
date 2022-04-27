@@ -8,6 +8,7 @@ import (
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	arrayList "github.com/colegno/arraylist"
+	"reflect"
 	"strconv"
 )
 
@@ -41,12 +42,17 @@ func (a AssignObject) Compile(symbolTable *SymbolTable.SymbolTable, generator *G
 	}
 
 	generator.AddExpression(tempPosAttr, tempValObject, strconv.Itoa(posAttr), "+")
-	val := symbol.(Expression.Primitive).Compile(symbolTable, generator)
+	var val Abstract.Value
+	if reflect.TypeOf(symbol) == reflect.TypeOf(Expression.Identifier{}) {
+		val = symbol.(Expression.Identifier).Compile(symbolTable, generator).(Abstract.Value)
+	} else {
+		val = symbol.(Expression.Primitive).Compile(symbolTable, generator).(Abstract.Value)
+	}
 
-	if val.(Abstract.Value).Type == SymbolTable.BOOLEAN {
+	if val.Type == SymbolTable.BOOLEAN {
 		ValueBoolean(val, tempPosAttr, generator)
 	} else {
-		generator.SetHeap(tempPosAttr, val.(Abstract.Value).Value)
+		generator.SetHeap(tempPosAttr, val.Value)
 	}
 
 	return nil
@@ -72,7 +78,12 @@ func (a AssignObject) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 
 			newAttr := make(map[string]interface{})
 			newAttr[idAttr] = retVal
-			newVal := SymbolTable.ReturnType{Value: newAttr, Type: retVal.(Expression.Primitive).Type}
+			var newVal SymbolTable.ReturnType
+			if reflect.TypeOf(retVal) == reflect.TypeOf(Expression.Identifier{}) {
+				newVal = SymbolTable.ReturnType{Value: newAttr, Type: retVal.(Expression.Identifier).GetValue(symbolTable).Type}
+			} else {
+				newVal = SymbolTable.ReturnType{Value: newAttr, Type: retVal.(Expression.Primitive).Type}
+			}
 			objRet.Add(newVal)
 			//newObj.(Objects.Object).Attributes.Add(newVal)
 			//break

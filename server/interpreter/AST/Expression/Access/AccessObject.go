@@ -71,7 +71,11 @@ func (o ObjectAccess) GetAttribute(symbolTable *SymbolTable.SymbolTable, listAcc
 			symbol = nameAttr.(map[string]interface{})[id]
 			if symbol != nil {
 				//retVal = symbol
-				mapToSend["type"] = symbol.(Expression.Primitive).Type
+				if reflect.TypeOf(symbol) == reflect.TypeOf(Expression.Identifier{}) {
+					mapToSend["type"] = symbol.(Expression.Identifier).GetValue(*symbolTable).Type
+				} else {
+					mapToSend["type"] = symbol.(Expression.Primitive).Type
+				}
 				mapToSend["pos"] = i
 				return mapToSend
 			}
@@ -125,9 +129,17 @@ func (o ObjectAccess) GetValueRecursion(symbolTable *SymbolTable.SymbolTable, li
 				break
 			}
 		}
-		return SymbolTable.ReturnType{
-			Value: retVal.(Expression.Primitive).Value,
-			Type:  retVal.(Expression.Primitive).Type,
+
+		if reflect.TypeOf(retVal) == reflect.TypeOf(Expression.Identifier{}) {
+			return SymbolTable.ReturnType{
+				Value: retVal.(Expression.Identifier).GetValue(*symbolTable).Value,
+				Type:  retVal.(Expression.Identifier).GetValue(*symbolTable).Type,
+			}
+		} else {
+			return SymbolTable.ReturnType{
+				Value: retVal.(Expression.Primitive).Value,
+				Type:  retVal.(Expression.Primitive).Type,
+			}
 		}
 	}
 

@@ -100,7 +100,6 @@ func Compiler(c *fiber.Ctx) error {
 				codeCompiled.FreeAllTemps()
 			}
 		}
-
 	}
 	codeString := codeCompiled.GetCode()
 
