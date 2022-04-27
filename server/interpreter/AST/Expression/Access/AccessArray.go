@@ -17,8 +17,23 @@ type ArrayAccess struct {
 }
 
 func (a ArrayAccess) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
-	//TODO implement me
-	panic("implement me")
+	generator.AddComment("---- Access to Index Array ----")
+	temp := generator.AddTemp()
+	tempIndex := generator.AddTemp()
+	tempSend := generator.AddTemp()
+
+	array := symbolTable.GetSymbolArray(a.Id)
+	//val := a.GetValue(*symbolTable)
+	posArray := array.(Array.Array).Pos
+	indexArray := a.Dim.GetValue(0).(Abstract.Expression).GetValue(*symbolTable)
+
+	generator.GetStack(temp, fmt.Sprintf("%v", posArray))
+	generator.AddExpression(tempIndex, temp, fmt.Sprintf("%v", indexArray.Value), "+")
+	generator.AddExpression(tempIndex, tempIndex, "1", "+")
+	generator.GetHeap(tempSend, tempIndex)
+
+	val := Abstract.NewValue(tempSend, indexArray.Type, true, "")
+	return val
 }
 
 func NewAccessArray(id string, dims *arrayList.List) ArrayAccess {

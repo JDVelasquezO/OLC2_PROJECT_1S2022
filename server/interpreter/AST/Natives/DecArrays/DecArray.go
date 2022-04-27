@@ -25,8 +25,28 @@ type DecArray struct {
 }
 
 func (d DecArray) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
-	//TODO implement me
-	panic("implement me")
+	generator.AddComment("---- Start Keep Array ----")
+	temp := generator.AddTemp()
+	tempMove := generator.AddTemp()
+
+	size := d.Positions.GetValue(*symbolTable).Value
+	generator.AddExpression(temp, "H", "", "")
+	generator.AddExpression(tempMove, temp, "1", "+")
+	generator.SetHeap("H", size)
+	generator.AddExpression("H", "H", fmt.Sprintf("%v", size.(int)+1), "+")
+
+	valueDec := d.ValueInitial.GetValue(*symbolTable)
+	objectArray := valueDec.Value.(SymbolTable.ReturnType)
+	symbol := objectArray.Value.(Array.Array)
+
+	for i := 0; i < len(symbol.Values); i++ {
+		generator.SetHeap(tempMove, symbol.Values[i])
+		generator.AddExpression(tempMove, tempMove, "1", "+")
+	}
+
+	generator.SetStack(fmt.Sprintf("%v", symbolTable.SizeTable), temp, true)
+
+	return nil
 }
 
 func NewDecArray(length int, id string, init Abstract.Expression,
