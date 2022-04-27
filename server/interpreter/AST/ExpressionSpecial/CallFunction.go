@@ -27,7 +27,7 @@ func (c CallFunction) Compile(symbolTable *SymbolTable.SymbolTable, generator *G
 	if function != nil {
 		table := function.(Environment.Function)
 		env := table.Symbol
-		size := generator.SaveTemps(env)
+		//size := generator.SaveTemps(env)
 
 		paramValues := *arrayList.New()
 		temp := generator.AddTemp()
@@ -53,9 +53,9 @@ func (c CallFunction) Compile(symbolTable *SymbolTable.SymbolTable, generator *G
 		generator.CallFunc(c.IdFunction)
 		generator.GetStack(temp, "P")
 		generator.SetEnv(env.Size - 1)
-		if c.ListExpressions.Len() > 0 {
-			generator.RecoverTemps(env, size)
-		}
+		//if c.ListExpressions.Len() > 0 {
+		//	generator.RecoverTemps(env, size)
+		//}
 
 		return Abstract.NewValue(temp, function.(Environment.Function).DataType, true, "")
 	}
