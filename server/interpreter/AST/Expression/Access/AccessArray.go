@@ -23,7 +23,6 @@ func (a ArrayAccess) Compile(symbolTable *SymbolTable.SymbolTable, generator *Ge
 	tempSend := generator.AddTemp()
 
 	array := symbolTable.GetSymbolArray(a.Id)
-	//val := a.GetValue(*symbolTable)
 	posArray := array.(Array.Array).Pos
 	indexArray := a.Dim.GetValue(0).(Abstract.Expression).GetValue(*symbolTable)
 

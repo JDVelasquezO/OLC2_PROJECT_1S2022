@@ -21,8 +21,20 @@ type AssignArray struct {
 }
 
 func (a AssignArray) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
-	//TODO implement me
-	panic("implement me")
+	generator.AddComment("---- Assign New Pos Array ----")
+	temp := generator.AddTemp()
+	tempMove := generator.AddTemp()
+
+	array := symbolTable.GetSymbolArray(a.Id)
+	posArray := array.(Array.Array).Pos
+	indexArray := a.ListIndex.GetValue(0).(Abstract.Expression).GetValue(*symbolTable)
+	newVal := a.Val.GetValue(*symbolTable).Value
+
+	generator.GetStack(temp, fmt.Sprintf("%v", posArray))
+	generator.AddExpression(tempMove, temp, fmt.Sprintf("%v", indexArray.Value), "+")
+	generator.AddExpression(tempMove, tempMove, "1", "+")
+	generator.SetHeap(tempMove, newVal)
+	return nil
 }
 
 func (a AssignArray) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
