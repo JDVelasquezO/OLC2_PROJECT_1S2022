@@ -45,6 +45,7 @@ func (d DecArray) Compile(symbolTable *SymbolTable.SymbolTable, generator *Gener
 	}
 
 	generator.SetStack(fmt.Sprintf("%v", symbolTable.SizeTable), temp, true)
+	symbolTable.SizeTable += 1
 
 	return nil
 }
@@ -114,6 +115,7 @@ func (d DecArray) Execute(table SymbolTable.SymbolTable) interface{} {
 		symbol.Id = d.Id
 		symbol.Row = d.Row
 		symbol.Col = d.Col
+		symbol.Pos = table.SizeTable
 
 		if !d.IsMut {
 			symbol.IsConst = true
