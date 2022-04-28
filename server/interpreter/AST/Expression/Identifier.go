@@ -18,7 +18,7 @@ type Identifier struct {
 func (id Identifier) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	generator.AddComment("---- Identifier ----")
 	value := symbolTable.GetSymbol(id.Id)
-	if value == nil {
+	if value.(*SymbolTable.Symbol) == nil {
 		return nil
 	}
 

@@ -24,7 +24,49 @@ type ForIn struct {
 func (f ForIn) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	generator.AddComment("---- For Cycle ----")
 
-	f.Iterator.Compile(symbolTable, generator)
+	//var := Natives.NewDeclaration()
+
+	listRank := f.ValueToIterate.Compile(symbolTable, generator).(Abstract.Value).Value
+	list := listRank.(arrayList.List)
+	expr1 := list.GetValue(0)
+	expr2 := list.GetValue(1)
+
+	idIterator := f.Iterator.(Expression.Identifier).Id
+	symbol := SymbolTable.NewSymbolId(idIterator, 0, 0, SymbolTable.INTEGER, 0, false, false, "", "")
+	symbolTable.AddNewSymbol(idIterator, &symbol)
+
+	variable := symbolTable.GetSymbol(idIterator)
+	tempPos := generator.AddTemp()
+	generator.AddExpression(tempPos, "P", fmt.Sprintf("%v", variable.(*SymbolTable.Symbol).Pos), "+")
+
+	generator.SetStack(tempPos, expr1.(Abstract.Value).Value, true)
+
+	start := generator.NewLabel()
+	labelTrue := generator.NewLabel()
+	exit := generator.NewLabel()
+
+	t1 := generator.AddTemp()
+	t4 := generator.AddTemp()
+	t5 := generator.AddTemp()
+
+	generator.SetLabel(start)
+
+	generator.GetStack(t1, tempPos)
+	generator.AddIf(t1, fmt.Sprintf("%v", expr2.(Abstract.Value).Value), "<", labelTrue)
+	generator.AddGoTo(exit)
+
+	generator.SetLabel(labelTrue)
+
+	for i := 0; i < f.Instructions.Len(); i++ {
+		f.Instructions.GetValue(i).(Abstract.Instruction).Compile(symbolTable, generator)
+	}
+
+	generator.GetStack(t4, tempPos)
+	generator.AddExpression(t5, t4, "1", "+")
+	generator.SetStack(tempPos, t5, true)
+
+	generator.AddGoTo(start)
+	generator.SetLabel(exit)
 
 	return nil
 }

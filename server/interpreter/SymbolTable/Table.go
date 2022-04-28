@@ -107,7 +107,7 @@ func (table *SymbolTable) GetSymbolArray(id string) interface{} {
 		}
 	}
 
-	var symbolNil Symbol
+	var symbolNil *Symbol
 	return symbolNil
 }
 

@@ -4,6 +4,7 @@ import (
 	"OLC2_Project1/server/Generator"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
+	arrayList "github.com/colegno/arraylist"
 )
 
 type Range struct {
@@ -24,7 +25,15 @@ func NewRange(row int, col int, expr1 Abstract.Expression, expr2 Abstract.Expres
 }
 
 func (r Range) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
-	return nil
+	value1 := r.Expr1.Compile(symbolTable, generator)
+	value2 := r.Expr2.Compile(symbolTable, generator)
+
+	auxList := *arrayList.New()
+	auxList.Add(value1)
+	auxList.Add(value2)
+
+	value := Abstract.NewValue(auxList, r.Type, false, "")
+	return value
 }
 
 func (r Range) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.ReturnType {
