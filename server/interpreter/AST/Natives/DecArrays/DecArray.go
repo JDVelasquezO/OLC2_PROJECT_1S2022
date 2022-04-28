@@ -116,6 +116,7 @@ func (d DecArray) Execute(table SymbolTable.SymbolTable) interface{} {
 		symbol.Row = d.Row
 		symbol.Col = d.Col
 		symbol.Pos = table.SizeTable
+		symbol.DataType = d.Type
 
 		if !d.IsMut {
 			symbol.IsConst = true

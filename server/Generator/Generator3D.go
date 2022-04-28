@@ -216,9 +216,16 @@ func (g *Generator) SetHeap(pos interface{}, value interface{}) {
 	if typeof(value) == "int" {
 		g.GetFreeTemp(strconv.Itoa(value.(int)))
 		g.CodeInFunction("heap[(int)"+pos.(string)+"]="+strconv.Itoa(value.(int))+";\n", "\t")
+	} else if typeof(value) == "float64" {
+		g.GetFreeTemp(fmt.Sprintf("%v", value))
+		g.CodeInFunction("heap[(int)"+pos.(string)+"]="+fmt.Sprintf("%v", value)+";\n", "\t")
 	} else {
 		g.GetFreeTemp(value.(string))
-		g.CodeInFunction("heap[(int)"+pos.(string)+"]="+value.(string)+";\n", "\t")
+		if len(value.(string)) == 1 {
+			g.CodeInFunction("heap[(int)"+pos.(string)+"]='"+value.(string)+"';\n", "\t")
+		} else {
+			g.CodeInFunction("heap[(int)"+pos.(string)+"]="+value.(string)+";\n", "\t")
+		}
 	}
 }
 

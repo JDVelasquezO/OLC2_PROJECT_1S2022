@@ -425,6 +425,8 @@ listDim returns[int length, SymbolTable.DataType data, Abstract.Expression pos]
                 $data = SymbolTable.STRING
             case "bool":
                 $data = SymbolTable.BOOLEAN
+            case "char":
+                $data = SymbolTable.CHAR
         }
     }
     ;

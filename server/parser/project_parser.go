@@ -9450,6 +9450,8 @@ func (p *ProjectParser) ListDim() (localctx IListDimContext) {
 			localctx.(*ListDimContext).data = SymbolTable.STRING
 		case "bool":
 			localctx.(*ListDimContext).data = SymbolTable.BOOLEAN
+		case "char":
+			localctx.(*ListDimContext).data = SymbolTable.CHAR
 		}
 
 	}

@@ -43,6 +43,9 @@ func (p Print) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generato
 		TypeBoolean(res0.(Abstract.Value), generator)
 	} else if res0.(Abstract.Value).Type == SymbolTable.STRING || res0.(Abstract.Value).Type == SymbolTable.STR {
 		TypeString(res0.(Abstract.Value).Value.(string), *symbolTable, generator)
+	} else if res0.(Abstract.Value).Type == SymbolTable.CHAR {
+		newVal := fmt.Sprintf("%v", res0.(Abstract.Value).Value)
+		generator.AddPrint("c", "char", newVal)
 	}
 
 	if p.isBreakLine {

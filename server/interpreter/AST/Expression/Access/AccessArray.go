@@ -31,7 +31,7 @@ func (a ArrayAccess) Compile(symbolTable *SymbolTable.SymbolTable, generator *Ge
 	generator.AddExpression(tempIndex, tempIndex, "1", "+")
 	generator.GetHeap(tempSend, tempIndex)
 
-	val := Abstract.NewValue(tempSend, indexArray.Type, true, "")
+	val := Abstract.NewValue(tempSend, array.(Array.Array).DataType, true, "")
 	return val
 }
 
