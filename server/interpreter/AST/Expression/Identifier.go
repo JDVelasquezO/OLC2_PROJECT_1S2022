@@ -20,11 +20,14 @@ func (id Identifier) Compile(symbolTable *SymbolTable.SymbolTable, generator *Ge
 	value := symbolTable.GetSymbol(id.Id)
 	if value.(*SymbolTable.Symbol) == nil {
 		return nil
+		//value = symbolTable.GetSymbolArray(id.Id)
+		//return PrintArray(value.(Array.Array), *generator)
 	}
 
 	temp := generator.AddTemp()
 	//temp := "t" + strconv.Itoa(value.(*SymbolTable.Symbol).Pos)
 	var tempPos string
+
 	if value.(*SymbolTable.Symbol).Id != "" {
 		tempPos = generator.AddTemp()
 		//newPos := strconv.Itoa(value.(*SymbolTable.Symbol).Pos - 1)
@@ -48,6 +51,20 @@ func (id Identifier) Compile(symbolTable *SymbolTable.SymbolTable, generator *Ge
 
 	return valRet
 }
+
+//func PrintArray(value Array.Array, generator Generator.Generator) interface{} {
+//	//temp := generator.AddTemp()
+//	//temp := "t" + strconv.Itoa(value.(*SymbolTable.Symbol).Pos)
+//	var tempPos string
+//
+//	if value.Id != "" {
+//		tempPos = generator.AddTemp()
+//		//newPos := strconv.Itoa(value.(*SymbolTable.Symbol).Pos - 1)
+//		generator.AddExpression(tempPos, "P", strconv.Itoa(value.Pos), "+")
+//	}
+//
+//	return Abstract.NewValue(value, SymbolTable.ARRAY, false, "")
+//}
 
 func CheckLabelsId(generator *Generator.Generator, value *SymbolTable.Symbol) {
 	value.LabelTrue = generator.NewLabel()

@@ -46,6 +46,9 @@ func (p Print) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generato
 	} else if res0.(Abstract.Value).Type == SymbolTable.CHAR {
 		newVal := fmt.Sprintf("%v", res0.(Abstract.Value).Value)
 		generator.AddPrint("c", "char", newVal)
+	} else if res0.(Abstract.Value).Type == SymbolTable.ARRAY {
+		//newVal := res0.(Abstract.Value)
+		//TypeArray(newVal, *symbolTable, generator)
 	}
 
 	if p.isBreakLine {
@@ -68,6 +71,22 @@ func TypeString(value string, table SymbolTable.SymbolTable, generator *Generato
 	generator.GetStack(temp, "P")
 	generator.SetEnv(table.SizeTable)
 }
+
+//func TypeArray(value Abstract.Value, table SymbolTable.SymbolTable, generator *Generator.Generator) {
+//	temp := generator.AddTemp()
+//	tempObj := generator.AddTemp()
+//	paramTemp := generator.AddTemp()
+//	tempHeap := generator.AddTemp()
+//	array := value.Value.(Array.Array)
+//
+//	generator.AddExpression(temp, "P", strconv.Itoa(array.Pos), "+")
+//	generator.GetStack(tempObj, temp)
+//	generator.AddExpression(paramTemp, paramTemp, "1", "+")
+//	generator.GetHeap(tempHeap, paramTemp)
+//	generator.AddPrint("d", "int", tempHeap)
+//
+//	generator.AddIf()
+//}
 
 func TypeBoolean(value Abstract.Value, generator *Generator.Generator) {
 	exitLabel := generator.NewLabel()
