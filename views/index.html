@@ -93,7 +93,7 @@
     <form action="http://localhost:3000/compiler" method="post" id="formCode">
         <div class="columns">
             <div class="column code_mirror">
-                <p class="has-text-light">Input code:</p>
+                <p class="has-text-light">Input Rust:</p>
                 <div style="border: 5px solid hsl(348, 100%, 61%); width: 100%">
                     {{ if (eq .Parser "") }}
                     <textarea autofocus name="code" id="writer"></textarea>
@@ -115,6 +115,45 @@
         </div>
 
         <button class="button is-link" id="btnInterpret">Compiler</button><br><br>
+        <!--<div class="columns">
+            <div class="column code_mirror">
+                <p class="has-text-light">Output Rust:</p>
+                <div style="border: 5px solid hsl(348, 100%, 61%); width: 100%">
+                    {{ if (eq .Res "") }}
+                    <textarea id="reader"></textarea>
+                    {{ else }}
+                    <textarea id="reader">{{ .Res }}</textarea>
+                    {{ end }}
+                </div>
+            </div>
+        </div>-->
+    </form>
+
+    <form action="http://localhost:3000/optimizer" method="post" id="formCode">
+        <div class="columns">
+            <div class="column code_mirror">
+                <p class="has-text-light">Input C:</p>
+                <div style="border: 5px solid hsl(348, 100%, 61%); width: 100%">
+                    {{ if (eq .Parser3D "") }}
+                    <textarea autofocus name="code" id="writer3D"></textarea>
+                    {{ else }}
+                    <textarea autofocus name="code" id="writer3D">{{ .Parser3D }}</textarea>
+                    {{ end }}
+                </div>
+            </div>
+            <div class="column code_mirror">
+                <p class="has-text-light">Output C Optimized:</p>
+                <div style="border: 5px solid hsl(348, 100%, 61%); width: 100%">
+                    {{ if (eq .Code3DirectionsOptimized "") }}
+                    <textarea id="reader3DOptimized"></textarea>
+                    {{ else }}
+                    <textarea id="reader3DOptimized">{{ .Code3DirectionsOptimized }}</textarea>
+                    {{ end }}
+                </div>
+            </div>
+        </div>
+
+        <button class="button is-danger" id="btnOptimizer">Optimizer</button><br><br>
         <!--<div class="columns">
             <div class="column code_mirror">
                 <p class="has-text-light">Output Rust:</p>
@@ -274,6 +313,21 @@
     // });
 
     myCodeMirror3 = CodeMirror.fromTextArea(document.getElementById("reader3D"), {
+        lineNumbers: true,
+        theme: 'dracula',
+        mode: 'clike',
+        readOnly: true,
+    });
+
+    myCodeMirror4 = CodeMirror.fromTextArea(document.getElementById("writer3D"), {
+        lineNumbers: true,
+        styleActivateLine: true,
+        matchBrackets: true,
+        theme: 'dracula',
+        mode: 'clike',
+    });
+
+    myCodeMirror5 = CodeMirror.fromTextArea(document.getElementById("reader3DOptimized"), {
         lineNumbers: true,
         theme: 'dracula',
         mode: 'clike',

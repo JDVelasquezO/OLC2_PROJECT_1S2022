@@ -437,8 +437,13 @@ func (o Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 
 	case "-":
 		if o.Unary {
-			value := retLeft.Value.(int) * -1
-			return SymbolTable.ReturnType{Type: retLeft.Type, Value: value}
+			if retLeft.Type == SymbolTable.INTEGER {
+				value := retLeft.Value.(int) * -1
+				return SymbolTable.ReturnType{Type: retLeft.Type, Value: value}
+			} else {
+				value := retLeft.Value.(float64) * -1
+				return SymbolTable.ReturnType{Type: retLeft.Type, Value: value}
+			}
 		}
 
 		if retLeft.Type == SymbolTable.STR ||

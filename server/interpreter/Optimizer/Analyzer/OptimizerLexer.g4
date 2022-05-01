@@ -7,8 +7,8 @@ RFLOAT:     'float';
 RCHAR:      'char';
 RVOID:      'void';
 RINCLUDE:   '#include';
-RSTUDIO:    '<stdio.h>';
-RMATH:      '<math.ht>';
+RSTDIO:     '<stdio.h>';
+RMATH:      '<math.h>';
 RHEAP:      'heap';
 RSTACK:     'stack';
 RIF:        'if';
@@ -17,6 +17,8 @@ RRETURN:    'return';
 RPRINTF:    'printf';
 RPOW:       'pow';
 RMOD:       'mod';
+RPSTACK:    'P';
+RPHEAP:     'H';
 
 // Comments
 MULTILINE:      '/*' (~[/])+ '*/' -> skip;
