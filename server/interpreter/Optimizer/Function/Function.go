@@ -80,12 +80,18 @@ func (f Function) Execute() interface{} {
 				limit := newList2.Len()
 				for j := limit - 1; j >= 0; j-- {
 					tempToCmp := newList2.GetValue(j).(map[string]interface{})
+
 					valOfNew := tempNew["val"].(string)
 					valOfCmp := tempToCmp["temp"].(string)
+					valRightOfCmp := tempToCmp["val"].(string)
+
 					valOfNewArray := Splitter(valOfNew, "+ - * /")
+					valOfCmpArray := Splitter(valRightOfCmp, "+ - * /")
+					
 					if len(valOfNewArray) == 2 {
 						for k := 0; k < 2; k++ {
-							if valOfNewArray[k] == valOfCmp {
+							if valOfNewArray[k] == valOfCmp && len(valOfCmpArray) == 1 {
+
 								valToReplace := newList2.GetValue(j).(map[string]interface{})["val"].(string)
 								newVal := strings.ReplaceAll(valOfNew, valOfNewArray[k], valToReplace)
 								tempNew["val"] = newVal
