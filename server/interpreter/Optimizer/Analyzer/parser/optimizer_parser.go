@@ -256,8 +256,14 @@ type IStartContext interface {
 	// GetParser returns the parser.
 	GetParser() antlr.Parser
 
+	// Get_list_temps returns the _list_temps rule contexts.
+	Get_list_temps() IList_tempsContext
+
 	// Get_listFuncs returns the _listFuncs rule contexts.
 	Get_listFuncs() IListFuncsContext
+
+	// Set_list_temps sets the _list_temps rule contexts.
+	Set_list_temps(IList_tempsContext)
 
 	// Set_listFuncs sets the _listFuncs rule contexts.
 	Set_listFuncs(IListFuncsContext)
@@ -274,9 +280,10 @@ type IStartContext interface {
 
 type StartContext struct {
 	*antlr.BaseParserRuleContext
-	parser     antlr.Parser
-	tree       AST.Tree
-	_listFuncs IListFuncsContext
+	parser      antlr.Parser
+	tree        AST.Tree
+	_list_temps IList_tempsContext
+	_listFuncs  IListFuncsContext
 }
 
 func NewEmptyStartContext() *StartContext {
@@ -301,7 +308,11 @@ func NewStartContext(parser antlr.Parser, parent antlr.ParserRuleContext, invoki
 
 func (s *StartContext) GetParser() antlr.Parser { return s.parser }
 
+func (s *StartContext) Get_list_temps() IList_tempsContext { return s._list_temps }
+
 func (s *StartContext) Get_listFuncs() IListFuncsContext { return s._listFuncs }
+
+func (s *StartContext) Set_list_temps(v IList_tempsContext) { s._list_temps = v }
 
 func (s *StartContext) Set_listFuncs(v IListFuncsContext) { s._listFuncs = v }
 
@@ -386,7 +397,10 @@ func (p *OptimizerParser) Start() (localctx IStartContext) {
 	}
 	{
 		p.SetState(37)
-		p.List_temps()
+
+		var _x = p.List_temps()
+
+		localctx.(*StartContext)._list_temps = _x
 	}
 	{
 		p.SetState(38)
@@ -395,7 +409,7 @@ func (p *OptimizerParser) Start() (localctx IStartContext) {
 
 		localctx.(*StartContext)._listFuncs = _x
 	}
-	localctx.(*StartContext).tree = AST.NewTree(localctx.(*StartContext).Get_listFuncs().GetL())
+	localctx.(*StartContext).tree = AST.NewTreeOptimizer(localctx.(*StartContext).Get_listFuncs().GetL(), localctx.(*StartContext).Get_list_temps().GetL())
 
 	return localctx
 }

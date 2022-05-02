@@ -16,7 +16,7 @@ options {
 
 // Rules
 start returns [AST.Tree tree]
-    : headers list_temps listFuncs { $tree = AST.NewTree($listFuncs.l) }
+    : headers list_temps listFuncs { $tree = AST.NewTreeOptimizer($listFuncs.l, $list_temps.l) }
 ;
 
 headers returns [string code]
