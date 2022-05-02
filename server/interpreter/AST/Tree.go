@@ -9,6 +9,7 @@ type Tree struct {
 	ListFunctions *arrayList.List
 	ListStructs   *arrayList.List
 	ListArrays    *arrayList.List
+	ListTemps     *arrayList.List
 }
 
 func NewTree(list *arrayList.List) Tree {
@@ -17,6 +18,14 @@ func NewTree(list *arrayList.List) Tree {
 		ListFunctions: nil,
 		ListStructs:   nil,
 		ListArrays:    nil,
+	}
+	return tree
+}
+
+func NewTreeOptimizer(list *arrayList.List, listTemps *arrayList.List) Tree {
+	tree := Tree{
+		ListInstr: list,
+		ListTemps: listTemps,
 	}
 	return tree
 }

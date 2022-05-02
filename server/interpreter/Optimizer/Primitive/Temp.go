@@ -16,5 +16,5 @@ func NewTemp(temp string, row int, col int) Temp {
 }
 
 func (t Temp) GetValue() interface{} {
-	return t
+	return t.Temp
 }

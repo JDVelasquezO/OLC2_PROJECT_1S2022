@@ -56,15 +56,30 @@ func Optimize(c *fiber.Ctx) error {
 
 	ast := tree.GetTree()
 
+	resToSend := "/*------HEADER------*/\n#include <stdio.h>\n#include <math.h>\nfloat heap[30101999];\nfloat stack[30101999];\nfloat P;\nfloat H;\n"
+
+	resToSend += "float "
+	for i := 0; i < ast.ListTemps.Len(); i++ {
+		if i < ast.ListTemps.Len()-1 {
+			resToSend += ast.ListTemps.GetValue(i).(string) + ", "
+		} else {
+			resToSend += ast.ListTemps.GetValue(i).(string)
+		}
+	}
+	resToSend += ";\n\n"
+
+	resToSend += "/*------MAIN------*/\nvoid main() {\n"
 	if ast.ListInstr != nil {
 		for i := 0; i < ast.ListInstr.Len(); i++ {
 			r := ast.ListInstr.GetValue(i)
-			r.(AbstractOptimizer.Instruction).Execute()
+			resToSend += r.(AbstractOptimizer.Instruction).Execute().(string)
+
 		}
 	}
+	resToSend += "}"
 
 	return c.Render("index", fiber.Map{
 		"Parser3D":                 data.Code,
-		"Code3DirectionsOptimized": data.Code,
+		"Code3DirectionsOptimized": resToSend,
 	})
 }

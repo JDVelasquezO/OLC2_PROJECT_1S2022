@@ -24,6 +24,12 @@ func NewAssign(temp AbstractOptimizer.Expression, value AbstractOptimizer.Expres
 func (a Assign) Execute() interface{} {
 
 	opAssign := a.Value.GetValue()
+	temp := a.Temp.GetValue()
 
-	return opAssign
+	typeRet := make(map[string]interface{})
+	typeRet["temp"] = temp
+	typeRet["val"] = opAssign
+	typeRet["rep"] = false
+
+	return typeRet
 }
