@@ -99,6 +99,12 @@ func (s *BaseOptimizerParserListener) EnterGoto_instr(ctx *Goto_instrContext) {}
 // ExitGoto_instr is called when production goto_instr is exited.
 func (s *BaseOptimizerParserListener) ExitGoto_instr(ctx *Goto_instrContext) {}
 
+// EnterLabel_instr is called when production label_instr is entered.
+func (s *BaseOptimizerParserListener) EnterLabel_instr(ctx *Label_instrContext) {}
+
+// ExitLabel_instr is called when production label_instr is exited.
+func (s *BaseOptimizerParserListener) ExitLabel_instr(ctx *Label_instrContext) {}
+
 // EnterExpression is called when production expression is entered.
 func (s *BaseOptimizerParserListener) EnterExpression(ctx *ExpressionContext) {}
 

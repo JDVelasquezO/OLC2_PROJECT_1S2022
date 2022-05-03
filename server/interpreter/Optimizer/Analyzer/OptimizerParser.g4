@@ -80,6 +80,7 @@ instruction returns [AbstractOptimizer.Instruction instr]
     | assign       { $instr = $assign.instr }
     | if_instr     { $instr = $if_instr.instr }
     | goto_instr   { $instr = $goto_instr.instr }
+    | label_instr  { $instr = $label_instr.instr }
 ;
 
 assign_stack returns [AbstractOptimizer.Instruction instr]
@@ -109,6 +110,12 @@ if_instr returns [AbstractOptimizer.Instruction instr]
 goto_instr returns [AbstractOptimizer.Instruction instr]
     : RGOTO ID SEMICOLON {
         $instr = Control.NewGoTo($ID.text, $ID.line, localctx.(*Goto_instrContext).Get_ID().GetColumn())
+    }
+;
+
+label_instr returns [AbstractOptimizer.Instruction instr]
+    : ID COLON {
+        $instr = Control.NewLabel($ID.text, $ID.line, localctx.(*Label_instrContext).Get_ID().GetColumn())
     }
 ;
 

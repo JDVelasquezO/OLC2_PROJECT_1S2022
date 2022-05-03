@@ -47,6 +47,9 @@ type OptimizerParserListener interface {
 	// EnterGoto_instr is called when entering the goto_instr production.
 	EnterGoto_instr(c *Goto_instrContext)
 
+	// EnterLabel_instr is called when entering the label_instr production.
+	EnterLabel_instr(c *Label_instrContext)
+
 	// EnterExpression is called when entering the expression production.
 	EnterExpression(c *ExpressionContext)
 
@@ -100,6 +103,9 @@ type OptimizerParserListener interface {
 
 	// ExitGoto_instr is called when exiting the goto_instr production.
 	ExitGoto_instr(c *Goto_instrContext)
+
+	// ExitLabel_instr is called when exiting the label_instr production.
+	ExitLabel_instr(c *Label_instrContext)
 
 	// ExitExpression is called when exiting the expression production.
 	ExitExpression(c *ExpressionContext)
