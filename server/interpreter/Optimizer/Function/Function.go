@@ -5,6 +5,7 @@ import (
 	"OLC2_Project1/server/interpreter/Optimizer/Assignment"
 	"OLC2_Project1/server/interpreter/Optimizer/Control"
 	"OLC2_Project1/server/interpreter/Optimizer/Primitive"
+	"fmt"
 	arrayList "github.com/colegno/arraylist"
 	"reflect"
 	"strings"
@@ -55,11 +56,11 @@ func (f Function) Execute() interface{} {
 				}
 			}
 			newList.Add(newExpr)
-			valToSend = "\t" + tempNew["temp"].(string) + " = " + tempNew["val"].(string) + ";\n"
+			valToSend = "\t" + fmt.Sprintf("%v", tempNew["temp"]) + " = " + fmt.Sprintf("%v", tempNew["val"]) + ";\n"
 			newListStrs.Add(valToSend)
 
-			newExpTemp := Primitive.NewTemp(tempNew["temp"].(string), 0, 0)
-			newExpVal := Primitive.NewTemp(tempNew["val"].(string), 0, 0)
+			newExpTemp := Primitive.NewTemp(fmt.Sprintf("%v", tempNew["temp"]), 0, 0)
+			newExpVal := Primitive.NewTemp(fmt.Sprintf("%v", tempNew["val"]), 0, 0)
 			newInstr := Assignment.NewAssign(newExpTemp, newExpVal, 0, 0)
 			newListInstr.Add(newInstr)
 		}
