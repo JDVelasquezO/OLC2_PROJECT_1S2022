@@ -87,7 +87,7 @@ func (f Function) Execute() interface{} {
 
 					valOfNewArray := Splitter(valOfNew, "+ - * /")
 					valOfCmpArray := Splitter(valRightOfCmp, "+ - * /")
-					
+
 					if len(valOfNewArray) == 2 {
 						for k := 0; k < 2; k++ {
 							if valOfNewArray[k] == valOfCmp && len(valOfCmpArray) == 1 {
@@ -97,7 +97,10 @@ func (f Function) Execute() interface{} {
 								tempNew["val"] = newVal
 								valToSend = "\t" + tempNew["temp"].(string) + " = " + tempNew["val"].(string) + ";\n"
 								newListStrs.RemoveAtIndex(i)
+								newListStrs.RemoveAtIndex(j)
+								newList2.RemoveAtIndex(j)
 								newListStrs.Add(valToSend)
+								newList2.Add(valToSend)
 								goto ContinueLabel
 							}
 						}
