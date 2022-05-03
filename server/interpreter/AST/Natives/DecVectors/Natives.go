@@ -5,6 +5,7 @@ import (
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Vector"
+	"fmt"
 	"reflect"
 )
 
@@ -16,8 +17,17 @@ type Natives struct {
 }
 
 func (n Natives) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
-	//TODO implement me
-	panic("implement me")
+	id := symbolTable.GetSymbol(n.Id)
+	if n.Operation == "abs" {
+		if id.(*SymbolTable.Symbol).Value.(int) < 0 {
+			temp := generator.AddTemp()
+			generator.AddExpression(temp, fmt.Sprintf("%v", id.(*SymbolTable.Symbol).Value), "-1", "*")
+			val := Abstract.NewValue(temp, SymbolTable.INTEGER, true, "")
+			return val
+		}
+	}
+	val := Abstract.NewValue(id.(*SymbolTable.Symbol).Value, SymbolTable.INTEGER, false, "")
+	return val
 }
 
 func (n Natives) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.ReturnType {
@@ -62,6 +72,19 @@ func (n Natives) Execute(symbolTable SymbolTable.SymbolTable) interface{} {
 	case "contains":
 		val := symbolTable.GetSymbolArray(n.Id)
 		return val.(Vector.Vector).Contains(n.Value, symbolTable)
+	case "abs":
+		symbol := symbolTable.GetSymbol(n.Id)
+		if symbol.(*SymbolTable.Symbol).DataType == SymbolTable.INTEGER {
+			if symbol.(*SymbolTable.Symbol).Value.(int) < 0 {
+				return symbol.(*SymbolTable.Symbol).Value.(int) * -1
+			}
+			return symbol.(*SymbolTable.Symbol).Value.(int)
+		} else {
+			if symbol.(*SymbolTable.Symbol).Value.(float64) < 0 {
+				return symbol.(*SymbolTable.Symbol).Value.(float64) * -1.0
+			}
+			return symbol.(*SymbolTable.Symbol).Value.(float64)
+		}
 	}
 	return nil
 }
