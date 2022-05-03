@@ -181,11 +181,8 @@ func (o Operation) Compile(symbolTable *SymbolTable.SymbolTable, generator *Gene
 			valRight := LookForDataType(right.(Abstract.Value).Value)
 
 			switch operation {
-			case "%":
-				generator.AddOperationMod(temp, valLeft, valRight)
-				break
 			case "pow", "powf":
-				generator.AddOperationPow(temp, valLeft, valRight)
+				generator.AddExpression(temp, valLeft, valLeft, "*")
 				break
 			case ">", "<", ">=", "<=", "==", "!=":
 				leftToSend := left.(Abstract.Value)

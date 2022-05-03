@@ -56,7 +56,7 @@ func Optimize(c *fiber.Ctx) error {
 
 	ast := tree.GetTree()
 
-	resToSend := "/*------HEADER------*/\n#include <stdio.h>\n#include <math.h>\nfloat heap[30101999];\nfloat stack[30101999];\nfloat P;\nfloat H;\n"
+	resToSend := "/*------HEADER------*/\n#include <stdio.h>\nfloat heap[30101999];\nfloat stack[30101999];\nfloat P;\nfloat H;\n"
 
 	resToSend += "float "
 	for i := 0; i < ast.ListTemps.Len(); i++ {

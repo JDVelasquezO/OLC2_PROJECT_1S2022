@@ -60,7 +60,6 @@ func (g *Generator) GetCode() string {
 func initialHeader(g *Generator) string {
 	header := "/*------HEADER------*/\n"
 	header += "#include <stdio.h>\n"
-	header += "#include <math.h>\n"
 	header += "float heap[30101999];\n"
 	header += "float stack[30101999];\n"
 	header += "float P;\n"
