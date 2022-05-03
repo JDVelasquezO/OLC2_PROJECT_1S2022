@@ -72,8 +72,9 @@ func Optimize(c *fiber.Ctx) error {
 	if ast.ListInstr != nil {
 		for i := 0; i < ast.ListInstr.Len(); i++ {
 			r := ast.ListInstr.GetValue(i)
-			resToSend += r.(AbstractOptimizer.Instruction).Execute().(string)
-
+			if r != nil {
+				resToSend += r.(AbstractOptimizer.Instruction).Execute().(string)
+			}
 		}
 	}
 	resToSend += "}"

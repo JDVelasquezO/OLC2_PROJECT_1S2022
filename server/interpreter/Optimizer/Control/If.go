@@ -21,5 +21,5 @@ func NewIf(condition AbstractOptimizer.Expression, label string, row int, col in
 }
 
 func (i If) Execute() interface{} {
-	return nil
+	return "if (" + i.Condition.GetValue().(string) + ") goto " + i.label + ";"
 }

@@ -20,10 +20,7 @@ start returns [AST.Tree tree]
 ;
 
 headers returns [string code]
-    : RINCLUDE RSTDIO RINCLUDE RMATH
-        RFLOAT RHEAP LEFT_BRACKET INTEGER RIGHT_BRACKET SEMICOLON
-        RFLOAT RSTACK LEFT_BRACKET INTEGER RIGHT_BRACKET SEMICOLON
-        RFLOAT RPSTACK SEMICOLON RFLOAT RPHEAP SEMICOLON {
+    : RINCLUDE RSTDIO RFLOAT RHEAP LEFT_BRACKET INTEGER RIGHT_BRACKET SEMICOLON RFLOAT RSTACK LEFT_BRACKET INTEGER RIGHT_BRACKET SEMICOLON RFLOAT RPSTACK SEMICOLON RFLOAT RPHEAP SEMICOLON {
             $code = $RINCLUDE.text
         }
 ;
@@ -36,7 +33,7 @@ temps returns [*arrayList.List l]
     @init{
         $l = arrayList.New()
     }
-    : sub = temps COMMA? ID {
+    : sub = temps COMMA ID {
         $sub.l.Add($ID.text)
         $l = $sub.l
     }

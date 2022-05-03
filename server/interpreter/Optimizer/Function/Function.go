@@ -37,11 +37,17 @@ func (f Function) Execute() interface{} {
 	for i := 0; i < f.ListInstructs.Len(); i++ {
 		instruction := f.ListInstructs.GetValue(i)
 
-		if reflect.TypeOf(instruction) != reflect.TypeOf(Control.If{}) ||
-			reflect.TypeOf(instruction) != reflect.TypeOf(Control.GoTo{}) {
+		newExpr := instruction.(AbstractOptimizer.Instruction).Execute()
 
-			newExpr := instruction.(AbstractOptimizer.Instruction).Execute()
+		if reflect.TypeOf(instruction) == reflect.TypeOf(Control.Label{}) ||
+			reflect.TypeOf(instruction) == reflect.TypeOf(Control.If{}) ||
+			reflect.TypeOf(instruction) == reflect.TypeOf(Control.GoTo{}) {
+			valToSend = "\t" + newExpr.(string) + "\n"
+			newListStrs.Add(valToSend)
+			continue
+		}
 
+		if reflect.TypeOf(instruction) != reflect.TypeOf(Control.Label{}) {
 			tempNew := newExpr.(map[string]interface{})
 			if newList.Len() > 0 {
 				limit := newList.Len()
@@ -71,10 +77,9 @@ func (f Function) Execute() interface{} {
 	for i := 0; i < newListInstr.Len(); i++ {
 		instruction := newListInstr.GetValue(i)
 
-		if reflect.TypeOf(instruction) != reflect.TypeOf(Control.If{}) ||
-			reflect.TypeOf(instruction) != reflect.TypeOf(Control.GoTo{}) {
+		newExpr := instruction.(AbstractOptimizer.Instruction).Execute()
 
-			newExpr := instruction.(AbstractOptimizer.Instruction).Execute()
+		if reflect.TypeOf(instruction) != reflect.TypeOf(Control.Label{}) {
 
 			tempNew := newExpr.(map[string]interface{})
 			if newList2.Len() > 0 {
@@ -97,11 +102,23 @@ func (f Function) Execute() interface{} {
 								newVal := strings.ReplaceAll(valOfNew, valOfNewArray[k], valToReplace)
 								tempNew["val"] = newVal
 								valToSend = "\t" + tempNew["temp"].(string) + " = " + tempNew["val"].(string) + ";\n"
-								newListStrs.RemoveAtIndex(i)
-								newListStrs.RemoveAtIndex(j)
+
+								strToCmp1 := "\t" + tempNew["temp"].(string) + " = " + valOfNew + ";\n"
+								if newListStrs.Contains(strToCmp1) {
+									//index := newListStrs.IndexOf(strToCmp1)
+									//newListStrs.RemoveAtIndex(index)
+									newListStrs.ReplaceAll(strToCmp1, valToSend)
+								}
+								//newList2.RemoveAtIndex(newList2.Len() - 1)
+
+								strToCmp2 := "\t" + valOfCmp + " = " + valRightOfCmp + ";\n"
+								if newListStrs.Contains(strToCmp2) {
+									index := newListStrs.IndexOf(strToCmp2)
+									newListStrs.RemoveAtIndex(index)
+								}
 								newList2.RemoveAtIndex(j)
-								newListStrs.Add(valToSend)
-								newList2.Add(valToSend)
+
+								newList2.Add(newExpr)
 								goto ContinueLabel
 							}
 						}

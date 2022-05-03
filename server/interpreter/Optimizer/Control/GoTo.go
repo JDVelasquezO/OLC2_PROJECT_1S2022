@@ -15,5 +15,5 @@ func NewGoTo(label string, row int, col int) GoTo {
 }
 
 func (g GoTo) Execute() interface{} {
-	return nil
+	return "goto " + g.Label + ";"
 }
