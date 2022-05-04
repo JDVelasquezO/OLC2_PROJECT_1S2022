@@ -175,7 +175,7 @@ func (o Operation) Compile(symbolTable *SymbolTable.SymbolTable, generator *Gene
 			valRight := o.OpRight.GetValue(*symbolTable).Value
 			if valRight == 0 {
 				//generator.AddError("No es posible dividir por 0", o.Row, o.Col)
-				err := errors.NewError(0, o.Row, o.Col, "Error: Division entre 0", "local")
+				err := errors.NewError(0, o.Row, o.Col, "Error: Division entre 0\n", "local")
 				val := Abstract.NewValue(err, SymbolTable.ERROR, false, "")
 				return val
 			}

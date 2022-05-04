@@ -6,6 +6,7 @@ import (
 	"OLC2_Project1/server/interpreter/SymbolTable"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Array"
 	"OLC2_Project1/server/interpreter/SymbolTable/Environment/Vector"
+	"OLC2_Project1/server/interpreter/errors"
 	"fmt"
 	arrayList "github.com/colegno/arraylist"
 	"reflect"
@@ -25,6 +26,13 @@ func (a ArrayAccess) Compile(symbolTable *SymbolTable.SymbolTable, generator *Ge
 	array := symbolTable.GetSymbolArray(a.Id)
 	posArray := array.(Array.Array).Pos
 	indexArray := a.Dim.GetValue(0).(Abstract.Expression).GetValue(*symbolTable)
+	numberPositions := array.(Array.Array).ListIntDim.GetValue(0)
+
+	if indexArray.Value.(int) > numberPositions.(int) {
+		err := errors.NewError(0, array.(Array.Array).Row, array.(Array.Array).Col, "Error: Indice fuera de limites\n", "local")
+		val := Abstract.NewValue(err, SymbolTable.ERROR, false, "")
+		return val
+	}
 
 	generator.GetStack(temp, fmt.Sprintf("%v", posArray))
 	generator.AddExpression(tempIndex, temp, fmt.Sprintf("%v", indexArray.Value), "+")
