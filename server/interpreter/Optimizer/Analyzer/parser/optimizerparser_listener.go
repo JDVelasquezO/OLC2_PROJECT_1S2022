@@ -62,6 +62,9 @@ type OptimizerParserListener interface {
 	// EnterGetStack_instr is called when entering the getStack_instr production.
 	EnterGetStack_instr(c *GetStack_instrContext)
 
+	// EnterCall_instr is called when entering the call_instr production.
+	EnterCall_instr(c *Call_instrContext)
+
 	// EnterExpr_print is called when entering the expr_print production.
 	EnterExpr_print(c *Expr_printContext)
 
@@ -136,6 +139,9 @@ type OptimizerParserListener interface {
 
 	// ExitGetStack_instr is called when exiting the getStack_instr production.
 	ExitGetStack_instr(c *GetStack_instrContext)
+
+	// ExitCall_instr is called when exiting the call_instr production.
+	ExitCall_instr(c *Call_instrContext)
 
 	// ExitExpr_print is called when exiting the expr_print production.
 	ExitExpr_print(c *Expr_printContext)

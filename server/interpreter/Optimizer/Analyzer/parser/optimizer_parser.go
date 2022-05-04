@@ -25,145 +25,151 @@ var _ = reflect.Copy
 var _ = strconv.Itoa
 
 var parserATN = []uint16{
-	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 49, 336,
+	3, 24715, 42794, 33075, 47597, 16764, 15335, 30598, 22884, 3, 50, 349,
 	4, 2, 9, 2, 4, 3, 9, 3, 4, 4, 9, 4, 4, 5, 9, 5, 4, 6, 9, 6, 4, 7, 9, 7,
 	4, 8, 9, 8, 4, 9, 9, 9, 4, 10, 9, 10, 4, 11, 9, 11, 4, 12, 9, 12, 4, 13,
 	9, 13, 4, 14, 9, 14, 4, 15, 9, 15, 4, 16, 9, 16, 4, 17, 9, 17, 4, 18, 9,
 	18, 4, 19, 9, 19, 4, 20, 9, 20, 4, 21, 9, 21, 4, 22, 9, 22, 4, 23, 9, 23,
-	4, 24, 9, 24, 4, 25, 9, 25, 4, 26, 9, 26, 3, 2, 3, 2, 3, 2, 3, 2, 3, 2,
+	4, 24, 9, 24, 4, 25, 9, 25, 4, 26, 9, 26, 4, 27, 9, 27, 3, 2, 3, 2, 3,
+	2, 3, 2, 3, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
 	3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-	3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 4,
-	3, 4, 3, 4, 3, 4, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 7, 5,
-	93, 10, 5, 12, 5, 14, 5, 96, 11, 5, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6, 3, 6,
-	3, 6, 3, 6, 7, 6, 106, 10, 6, 12, 6, 14, 6, 109, 11, 6, 3, 7, 3, 7, 3,
-	7, 3, 7, 3, 7, 3, 7, 3, 7, 3, 7, 3, 7, 3, 8, 7, 8, 121, 10, 8, 12, 8, 14,
-	8, 124, 11, 8, 3, 8, 3, 8, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3,
+	3, 3, 4, 3, 4, 3, 4, 3, 4, 3, 4, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3, 5, 3,
+	5, 3, 5, 7, 5, 95, 10, 5, 12, 5, 14, 5, 98, 11, 5, 3, 6, 3, 6, 3, 6, 3,
+	6, 3, 6, 3, 6, 3, 6, 3, 6, 7, 6, 108, 10, 6, 12, 6, 14, 6, 111, 11, 6,
+	3, 7, 3, 7, 3, 7, 3, 7, 3, 7, 3, 7, 3, 7, 3, 7, 3, 7, 3, 8, 7, 8, 123,
+	10, 8, 12, 8, 14, 8, 126, 11, 8, 3, 8, 3, 8, 3, 9, 3, 9, 3, 9, 3, 9, 3,
 	9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3,
-	9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 5, 9, 158,
-	10, 9, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3,
-	10, 3, 10, 3, 10, 3, 11, 3, 11, 3, 11, 3, 11, 3, 11, 3, 11, 3, 11, 3, 11,
-	3, 11, 3, 11, 3, 11, 3, 11, 3, 12, 3, 12, 3, 12, 3, 12, 3, 12, 3, 12, 3,
-	13, 3, 13, 3, 13, 3, 13, 3, 13, 3, 13, 3, 13, 3, 13, 3, 13, 3, 14, 3, 14,
-	3, 14, 3, 14, 3, 14, 3, 15, 3, 15, 3, 15, 3, 15, 3, 16, 3, 16, 3, 16, 3,
-	16, 3, 16, 3, 16, 3, 16, 3, 16, 3, 16, 3, 16, 3, 17, 3, 17, 3, 17, 3, 17,
-	3, 17, 3, 17, 3, 17, 3, 17, 5, 17, 226, 10, 17, 3, 18, 3, 18, 3, 18, 3,
-	18, 3, 18, 3, 18, 3, 18, 3, 18, 3, 18, 3, 18, 3, 18, 3, 18, 3, 19, 3, 19,
-	3, 19, 3, 19, 3, 19, 3, 19, 3, 19, 3, 19, 3, 19, 3, 19, 3, 19, 3, 19, 3,
-	20, 3, 20, 3, 20, 3, 21, 3, 21, 3, 21, 3, 21, 3, 21, 3, 21, 3, 21, 3, 21,
-	3, 21, 3, 21, 3, 21, 3, 21, 5, 21, 267, 10, 21, 3, 22, 3, 22, 3, 22, 3,
-	23, 3, 23, 3, 23, 3, 23, 3, 23, 3, 23, 3, 23, 3, 23, 3, 23, 7, 23, 281,
-	10, 23, 12, 23, 14, 23, 284, 11, 23, 3, 24, 3, 24, 3, 24, 3, 24, 3, 24,
-	3, 24, 3, 24, 3, 24, 3, 24, 3, 24, 3, 24, 3, 24, 3, 24, 5, 24, 299, 10,
-	24, 3, 24, 3, 24, 3, 24, 3, 24, 3, 24, 3, 24, 3, 24, 3, 24, 3, 24, 3, 24,
-	7, 24, 311, 10, 24, 12, 24, 14, 24, 314, 11, 24, 3, 25, 3, 25, 3, 25, 3,
-	25, 3, 25, 3, 25, 5, 25, 322, 10, 25, 3, 26, 3, 26, 3, 26, 3, 26, 3, 26,
-	3, 26, 3, 26, 3, 26, 3, 26, 3, 26, 5, 26, 334, 10, 26, 3, 26, 2, 6, 8,
-	10, 44, 46, 27, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30,
-	32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 2, 5, 3, 2, 38, 43, 3, 2, 44, 45,
-	3, 2, 47, 48, 2, 336, 2, 52, 3, 2, 2, 2, 4, 57, 3, 2, 2, 2, 6, 79, 3, 2,
-	2, 2, 8, 84, 3, 2, 2, 2, 10, 97, 3, 2, 2, 2, 12, 110, 3, 2, 2, 2, 14, 122,
-	3, 2, 2, 2, 16, 157, 3, 2, 2, 2, 18, 159, 3, 2, 2, 2, 20, 171, 3, 2, 2,
-	2, 22, 183, 3, 2, 2, 2, 24, 189, 3, 2, 2, 2, 26, 198, 3, 2, 2, 2, 28, 203,
-	3, 2, 2, 2, 30, 207, 3, 2, 2, 2, 32, 225, 3, 2, 2, 2, 34, 227, 3, 2, 2,
-	2, 36, 239, 3, 2, 2, 2, 38, 251, 3, 2, 2, 2, 40, 266, 3, 2, 2, 2, 42, 268,
-	3, 2, 2, 2, 44, 271, 3, 2, 2, 2, 46, 298, 3, 2, 2, 2, 48, 321, 3, 2, 2,
-	2, 50, 333, 3, 2, 2, 2, 52, 53, 5, 4, 3, 2, 53, 54, 5, 6, 4, 2, 54, 55,
-	5, 10, 6, 2, 55, 56, 8, 2, 1, 2, 56, 3, 3, 2, 2, 2, 57, 58, 7, 7, 2, 2,
-	58, 59, 7, 8, 2, 2, 59, 60, 7, 4, 2, 2, 60, 61, 7, 10, 2, 2, 61, 62, 7,
-	36, 2, 2, 62, 63, 7, 22, 2, 2, 63, 64, 7, 37, 2, 2, 64, 65, 7, 28, 2, 2,
-	65, 66, 7, 4, 2, 2, 66, 67, 7, 11, 2, 2, 67, 68, 7, 36, 2, 2, 68, 69, 7,
-	22, 2, 2, 69, 70, 7, 37, 2, 2, 70, 71, 7, 28, 2, 2, 71, 72, 7, 4, 2, 2,
-	72, 73, 7, 18, 2, 2, 73, 74, 7, 28, 2, 2, 74, 75, 7, 4, 2, 2, 75, 76, 7,
-	19, 2, 2, 76, 77, 7, 28, 2, 2, 77, 78, 8, 3, 1, 2, 78, 5, 3, 2, 2, 2, 79,
-	80, 7, 4, 2, 2, 80, 81, 5, 8, 5, 2, 81, 82, 7, 28, 2, 2, 82, 83, 8, 4,
-	1, 2, 83, 7, 3, 2, 2, 2, 84, 85, 8, 5, 1, 2, 85, 86, 7, 26, 2, 2, 86, 87,
-	8, 5, 1, 2, 87, 94, 3, 2, 2, 2, 88, 89, 12, 4, 2, 2, 89, 90, 7, 29, 2,
-	2, 90, 91, 7, 26, 2, 2, 91, 93, 8, 5, 1, 2, 92, 88, 3, 2, 2, 2, 93, 96,
-	3, 2, 2, 2, 94, 92, 3, 2, 2, 2, 94, 95, 3, 2, 2, 2, 95, 9, 3, 2, 2, 2,
-	96, 94, 3, 2, 2, 2, 97, 98, 8, 6, 1, 2, 98, 99, 5, 12, 7, 2, 99, 100, 8,
-	6, 1, 2, 100, 107, 3, 2, 2, 2, 101, 102, 12, 4, 2, 2, 102, 103, 5, 12,
-	7, 2, 103, 104, 8, 6, 1, 2, 104, 106, 3, 2, 2, 2, 105, 101, 3, 2, 2, 2,
-	106, 109, 3, 2, 2, 2, 107, 105, 3, 2, 2, 2, 107, 108, 3, 2, 2, 2, 108,
-	11, 3, 2, 2, 2, 109, 107, 3, 2, 2, 2, 110, 111, 7, 6, 2, 2, 111, 112, 7,
-	26, 2, 2, 112, 113, 7, 32, 2, 2, 113, 114, 7, 33, 2, 2, 114, 115, 7, 34,
-	2, 2, 115, 116, 5, 14, 8, 2, 116, 117, 7, 35, 2, 2, 117, 118, 8, 7, 1,
-	2, 118, 13, 3, 2, 2, 2, 119, 121, 5, 16, 9, 2, 120, 119, 3, 2, 2, 2, 121,
-	124, 3, 2, 2, 2, 122, 120, 3, 2, 2, 2, 122, 123, 3, 2, 2, 2, 123, 125,
-	3, 2, 2, 2, 124, 122, 3, 2, 2, 2, 125, 126, 8, 8, 1, 2, 126, 15, 3, 2,
-	2, 2, 127, 128, 5, 18, 10, 2, 128, 129, 8, 9, 1, 2, 129, 158, 3, 2, 2,
-	2, 130, 131, 5, 20, 11, 2, 131, 132, 8, 9, 1, 2, 132, 158, 3, 2, 2, 2,
-	133, 134, 5, 22, 12, 2, 134, 135, 8, 9, 1, 2, 135, 158, 3, 2, 2, 2, 136,
-	137, 5, 24, 13, 2, 137, 138, 8, 9, 1, 2, 138, 158, 3, 2, 2, 2, 139, 140,
-	5, 26, 14, 2, 140, 141, 8, 9, 1, 2, 141, 158, 3, 2, 2, 2, 142, 143, 5,
-	28, 15, 2, 143, 144, 8, 9, 1, 2, 144, 158, 3, 2, 2, 2, 145, 146, 5, 30,
-	16, 2, 146, 147, 8, 9, 1, 2, 147, 158, 3, 2, 2, 2, 148, 149, 5, 32, 17,
-	2, 149, 150, 8, 9, 1, 2, 150, 158, 3, 2, 2, 2, 151, 152, 5, 34, 18, 2,
-	152, 153, 8, 9, 1, 2, 153, 158, 3, 2, 2, 2, 154, 155, 5, 36, 19, 2, 155,
-	156, 8, 9, 1, 2, 156, 158, 3, 2, 2, 2, 157, 127, 3, 2, 2, 2, 157, 130,
-	3, 2, 2, 2, 157, 133, 3, 2, 2, 2, 157, 136, 3, 2, 2, 2, 157, 139, 3, 2,
-	2, 2, 157, 142, 3, 2, 2, 2, 157, 145, 3, 2, 2, 2, 157, 148, 3, 2, 2, 2,
-	157, 151, 3, 2, 2, 2, 157, 154, 3, 2, 2, 2, 158, 17, 3, 2, 2, 2, 159, 160,
-	7, 11, 2, 2, 160, 161, 7, 36, 2, 2, 161, 162, 7, 32, 2, 2, 162, 163, 5,
-	48, 25, 2, 163, 164, 7, 33, 2, 2, 164, 165, 5, 50, 26, 2, 165, 166, 7,
-	37, 2, 2, 166, 167, 7, 27, 2, 2, 167, 168, 5, 42, 22, 2, 168, 169, 7, 28,
-	2, 2, 169, 170, 8, 10, 1, 2, 170, 19, 3, 2, 2, 2, 171, 172, 7, 10, 2, 2,
-	172, 173, 7, 36, 2, 2, 173, 174, 7, 32, 2, 2, 174, 175, 5, 48, 25, 2, 175,
-	176, 7, 33, 2, 2, 176, 177, 5, 50, 26, 2, 177, 178, 7, 37, 2, 2, 178, 179,
-	7, 27, 2, 2, 179, 180, 5, 42, 22, 2, 180, 181, 7, 28, 2, 2, 181, 182, 8,
-	11, 1, 2, 182, 21, 3, 2, 2, 2, 183, 184, 5, 50, 26, 2, 184, 185, 7, 27,
-	2, 2, 185, 186, 5, 42, 22, 2, 186, 187, 7, 28, 2, 2, 187, 188, 8, 12, 1,
-	2, 188, 23, 3, 2, 2, 2, 189, 190, 7, 12, 2, 2, 190, 191, 7, 32, 2, 2, 191,
-	192, 5, 42, 22, 2, 192, 193, 7, 33, 2, 2, 193, 194, 7, 13, 2, 2, 194, 195,
-	7, 26, 2, 2, 195, 196, 7, 28, 2, 2, 196, 197, 8, 13, 1, 2, 197, 25, 3,
-	2, 2, 2, 198, 199, 7, 13, 2, 2, 199, 200, 7, 26, 2, 2, 200, 201, 7, 28,
-	2, 2, 201, 202, 8, 14, 1, 2, 202, 27, 3, 2, 2, 2, 203, 204, 7, 26, 2, 2,
-	204, 205, 7, 30, 2, 2, 205, 206, 8, 15, 1, 2, 206, 29, 3, 2, 2, 2, 207,
-	208, 7, 15, 2, 2, 208, 209, 7, 32, 2, 2, 209, 210, 7, 25, 2, 2, 210, 211,
-	7, 29, 2, 2, 211, 212, 5, 40, 21, 2, 212, 213, 5, 38, 20, 2, 213, 214,
-	7, 33, 2, 2, 214, 215, 7, 28, 2, 2, 215, 216, 8, 16, 1, 2, 216, 31, 3,
-	2, 2, 2, 217, 218, 7, 14, 2, 2, 218, 219, 5, 42, 22, 2, 219, 220, 7, 28,
-	2, 2, 220, 221, 8, 17, 1, 2, 221, 226, 3, 2, 2, 2, 222, 223, 7, 14, 2,
-	2, 223, 224, 7, 28, 2, 2, 224, 226, 8, 17, 1, 2, 225, 217, 3, 2, 2, 2,
-	225, 222, 3, 2, 2, 2, 226, 33, 3, 2, 2, 2, 227, 228, 5, 50, 26, 2, 228,
-	229, 7, 27, 2, 2, 229, 230, 7, 10, 2, 2, 230, 231, 7, 36, 2, 2, 231, 232,
-	7, 32, 2, 2, 232, 233, 5, 48, 25, 2, 233, 234, 7, 33, 2, 2, 234, 235, 5,
-	42, 22, 2, 235, 236, 7, 37, 2, 2, 236, 237, 7, 28, 2, 2, 237, 238, 8, 18,
-	1, 2, 238, 35, 3, 2, 2, 2, 239, 240, 5, 50, 26, 2, 240, 241, 7, 27, 2,
-	2, 241, 242, 7, 11, 2, 2, 242, 243, 7, 36, 2, 2, 243, 244, 7, 32, 2, 2,
-	244, 245, 5, 48, 25, 2, 245, 246, 7, 33, 2, 2, 246, 247, 5, 42, 22, 2,
-	247, 248, 7, 37, 2, 2, 248, 249, 7, 28, 2, 2, 249, 250, 8, 19, 1, 2, 250,
-	37, 3, 2, 2, 2, 251, 252, 5, 50, 26, 2, 252, 253, 8, 20, 1, 2, 253, 39,
-	3, 2, 2, 2, 254, 255, 7, 32, 2, 2, 255, 256, 7, 3, 2, 2, 256, 257, 7, 33,
-	2, 2, 257, 267, 8, 21, 1, 2, 258, 259, 7, 32, 2, 2, 259, 260, 7, 4, 2,
-	2, 260, 261, 7, 33, 2, 2, 261, 267, 8, 21, 1, 2, 262, 263, 7, 32, 2, 2,
-	263, 264, 7, 5, 2, 2, 264, 265, 7, 33, 2, 2, 265, 267, 8, 21, 1, 2, 266,
-	254, 3, 2, 2, 2, 266, 258, 3, 2, 2, 2, 266, 262, 3, 2, 2, 2, 267, 41, 3,
-	2, 2, 2, 268, 269, 5, 44, 23, 2, 269, 270, 8, 22, 1, 2, 270, 43, 3, 2,
-	2, 2, 271, 272, 8, 23, 1, 2, 272, 273, 5, 46, 24, 2, 273, 274, 8, 23, 1,
-	2, 274, 282, 3, 2, 2, 2, 275, 276, 12, 4, 2, 2, 276, 277, 9, 2, 2, 2, 277,
-	278, 5, 44, 23, 5, 278, 279, 8, 23, 1, 2, 279, 281, 3, 2, 2, 2, 280, 275,
-	3, 2, 2, 2, 281, 284, 3, 2, 2, 2, 282, 280, 3, 2, 2, 2, 282, 283, 3, 2,
-	2, 2, 283, 45, 3, 2, 2, 2, 284, 282, 3, 2, 2, 2, 285, 286, 8, 24, 1, 2,
-	286, 287, 7, 48, 2, 2, 287, 288, 5, 42, 22, 2, 288, 289, 8, 24, 1, 2, 289,
-	299, 3, 2, 2, 2, 290, 291, 5, 50, 26, 2, 291, 292, 8, 24, 1, 2, 292, 299,
-	3, 2, 2, 2, 293, 294, 7, 32, 2, 2, 294, 295, 5, 42, 22, 2, 295, 296, 7,
-	33, 2, 2, 296, 297, 8, 24, 1, 2, 297, 299, 3, 2, 2, 2, 298, 285, 3, 2,
-	2, 2, 298, 290, 3, 2, 2, 2, 298, 293, 3, 2, 2, 2, 299, 312, 3, 2, 2, 2,
-	300, 301, 12, 6, 2, 2, 301, 302, 9, 3, 2, 2, 302, 303, 5, 46, 24, 7, 303,
-	304, 8, 24, 1, 2, 304, 311, 3, 2, 2, 2, 305, 306, 12, 5, 2, 2, 306, 307,
-	9, 4, 2, 2, 307, 308, 5, 46, 24, 6, 308, 309, 8, 24, 1, 2, 309, 311, 3,
-	2, 2, 2, 310, 300, 3, 2, 2, 2, 310, 305, 3, 2, 2, 2, 311, 314, 3, 2, 2,
-	2, 312, 310, 3, 2, 2, 2, 312, 313, 3, 2, 2, 2, 313, 47, 3, 2, 2, 2, 314,
-	312, 3, 2, 2, 2, 315, 316, 7, 3, 2, 2, 316, 322, 8, 25, 1, 2, 317, 318,
-	7, 4, 2, 2, 318, 322, 8, 25, 1, 2, 319, 320, 7, 5, 2, 2, 320, 322, 8, 25,
-	1, 2, 321, 315, 3, 2, 2, 2, 321, 317, 3, 2, 2, 2, 321, 319, 3, 2, 2, 2,
-	322, 49, 3, 2, 2, 2, 323, 324, 7, 23, 2, 2, 324, 334, 8, 26, 1, 2, 325,
-	326, 7, 22, 2, 2, 326, 334, 8, 26, 1, 2, 327, 328, 7, 26, 2, 2, 328, 334,
-	8, 26, 1, 2, 329, 330, 7, 18, 2, 2, 330, 334, 8, 26, 1, 2, 331, 332, 7,
-	19, 2, 2, 332, 334, 8, 26, 1, 2, 333, 323, 3, 2, 2, 2, 333, 325, 3, 2,
-	2, 2, 333, 327, 3, 2, 2, 2, 333, 329, 3, 2, 2, 2, 333, 331, 3, 2, 2, 2,
-	334, 51, 3, 2, 2, 2, 14, 94, 107, 122, 157, 225, 266, 282, 298, 310, 312,
-	321, 333,
+	9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3, 9, 3,
+	9, 3, 9, 3, 9, 3, 9, 3, 9, 5, 9, 163, 10, 9, 3, 10, 3, 10, 3, 10, 3, 10,
+	3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 10, 3, 11, 3, 11, 3,
+	11, 3, 11, 3, 11, 3, 11, 3, 11, 3, 11, 3, 11, 3, 11, 3, 11, 3, 11, 3, 12,
+	3, 12, 3, 12, 3, 12, 3, 12, 3, 12, 3, 13, 3, 13, 3, 13, 3, 13, 3, 13, 3,
+	13, 3, 13, 3, 13, 3, 13, 3, 14, 3, 14, 3, 14, 3, 14, 3, 14, 3, 15, 3, 15,
+	3, 15, 3, 15, 3, 16, 3, 16, 3, 16, 3, 16, 3, 16, 3, 16, 3, 16, 3, 16, 3,
+	16, 3, 16, 3, 17, 3, 17, 3, 17, 3, 17, 3, 17, 3, 17, 3, 17, 3, 17, 5, 17,
+	231, 10, 17, 3, 18, 3, 18, 3, 18, 3, 18, 3, 18, 3, 18, 3, 18, 3, 18, 3,
+	18, 3, 18, 3, 18, 3, 18, 3, 19, 3, 19, 3, 19, 3, 19, 3, 19, 3, 19, 3, 19,
+	3, 19, 3, 19, 3, 19, 3, 19, 3, 19, 3, 20, 3, 20, 3, 20, 3, 20, 3, 20, 3,
+	20, 3, 21, 3, 21, 3, 21, 3, 22, 3, 22, 3, 22, 3, 22, 3, 22, 3, 22, 3, 22,
+	3, 22, 3, 22, 3, 22, 3, 22, 3, 22, 5, 22, 278, 10, 22, 3, 23, 3, 23, 3,
+	23, 3, 24, 3, 24, 3, 24, 3, 24, 3, 24, 3, 24, 3, 24, 3, 24, 3, 24, 7, 24,
+	292, 10, 24, 12, 24, 14, 24, 295, 11, 24, 3, 25, 3, 25, 3, 25, 3, 25, 3,
+	25, 3, 25, 3, 25, 3, 25, 3, 25, 3, 25, 3, 25, 3, 25, 3, 25, 5, 25, 310,
+	10, 25, 3, 25, 3, 25, 3, 25, 3, 25, 3, 25, 3, 25, 3, 25, 3, 25, 3, 25,
+	3, 25, 7, 25, 322, 10, 25, 12, 25, 14, 25, 325, 11, 25, 3, 26, 3, 26, 3,
+	26, 3, 26, 3, 26, 3, 26, 5, 26, 333, 10, 26, 3, 27, 3, 27, 3, 27, 3, 27,
+	3, 27, 3, 27, 3, 27, 3, 27, 3, 27, 3, 27, 3, 27, 3, 27, 5, 27, 347, 10,
+	27, 3, 27, 2, 6, 8, 10, 46, 48, 28, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20,
+	22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 2, 5, 3,
+	2, 39, 44, 3, 2, 45, 46, 3, 2, 48, 49, 2, 350, 2, 54, 3, 2, 2, 2, 4, 59,
+	3, 2, 2, 2, 6, 81, 3, 2, 2, 2, 8, 86, 3, 2, 2, 2, 10, 99, 3, 2, 2, 2, 12,
+	112, 3, 2, 2, 2, 14, 124, 3, 2, 2, 2, 16, 162, 3, 2, 2, 2, 18, 164, 3,
+	2, 2, 2, 20, 176, 3, 2, 2, 2, 22, 188, 3, 2, 2, 2, 24, 194, 3, 2, 2, 2,
+	26, 203, 3, 2, 2, 2, 28, 208, 3, 2, 2, 2, 30, 212, 3, 2, 2, 2, 32, 230,
+	3, 2, 2, 2, 34, 232, 3, 2, 2, 2, 36, 244, 3, 2, 2, 2, 38, 256, 3, 2, 2,
+	2, 40, 262, 3, 2, 2, 2, 42, 277, 3, 2, 2, 2, 44, 279, 3, 2, 2, 2, 46, 282,
+	3, 2, 2, 2, 48, 309, 3, 2, 2, 2, 50, 332, 3, 2, 2, 2, 52, 346, 3, 2, 2,
+	2, 54, 55, 5, 4, 3, 2, 55, 56, 5, 6, 4, 2, 56, 57, 5, 10, 6, 2, 57, 58,
+	8, 2, 1, 2, 58, 3, 3, 2, 2, 2, 59, 60, 7, 7, 2, 2, 60, 61, 7, 8, 2, 2,
+	61, 62, 7, 4, 2, 2, 62, 63, 7, 10, 2, 2, 63, 64, 7, 37, 2, 2, 64, 65, 7,
+	22, 2, 2, 65, 66, 7, 38, 2, 2, 66, 67, 7, 29, 2, 2, 67, 68, 7, 4, 2, 2,
+	68, 69, 7, 11, 2, 2, 69, 70, 7, 37, 2, 2, 70, 71, 7, 22, 2, 2, 71, 72,
+	7, 38, 2, 2, 72, 73, 7, 29, 2, 2, 73, 74, 7, 4, 2, 2, 74, 75, 7, 18, 2,
+	2, 75, 76, 7, 29, 2, 2, 76, 77, 7, 4, 2, 2, 77, 78, 7, 19, 2, 2, 78, 79,
+	7, 29, 2, 2, 79, 80, 8, 3, 1, 2, 80, 5, 3, 2, 2, 2, 81, 82, 7, 4, 2, 2,
+	82, 83, 5, 8, 5, 2, 83, 84, 7, 29, 2, 2, 84, 85, 8, 4, 1, 2, 85, 7, 3,
+	2, 2, 2, 86, 87, 8, 5, 1, 2, 87, 88, 7, 26, 2, 2, 88, 89, 8, 5, 1, 2, 89,
+	96, 3, 2, 2, 2, 90, 91, 12, 4, 2, 2, 91, 92, 7, 30, 2, 2, 92, 93, 7, 26,
+	2, 2, 93, 95, 8, 5, 1, 2, 94, 90, 3, 2, 2, 2, 95, 98, 3, 2, 2, 2, 96, 94,
+	3, 2, 2, 2, 96, 97, 3, 2, 2, 2, 97, 9, 3, 2, 2, 2, 98, 96, 3, 2, 2, 2,
+	99, 100, 8, 6, 1, 2, 100, 101, 5, 12, 7, 2, 101, 102, 8, 6, 1, 2, 102,
+	109, 3, 2, 2, 2, 103, 104, 12, 4, 2, 2, 104, 105, 5, 12, 7, 2, 105, 106,
+	8, 6, 1, 2, 106, 108, 3, 2, 2, 2, 107, 103, 3, 2, 2, 2, 108, 111, 3, 2,
+	2, 2, 109, 107, 3, 2, 2, 2, 109, 110, 3, 2, 2, 2, 110, 11, 3, 2, 2, 2,
+	111, 109, 3, 2, 2, 2, 112, 113, 7, 6, 2, 2, 113, 114, 7, 26, 2, 2, 114,
+	115, 7, 33, 2, 2, 115, 116, 7, 34, 2, 2, 116, 117, 7, 35, 2, 2, 117, 118,
+	5, 14, 8, 2, 118, 119, 7, 36, 2, 2, 119, 120, 8, 7, 1, 2, 120, 13, 3, 2,
+	2, 2, 121, 123, 5, 16, 9, 2, 122, 121, 3, 2, 2, 2, 123, 126, 3, 2, 2, 2,
+	124, 122, 3, 2, 2, 2, 124, 125, 3, 2, 2, 2, 125, 127, 3, 2, 2, 2, 126,
+	124, 3, 2, 2, 2, 127, 128, 8, 8, 1, 2, 128, 15, 3, 2, 2, 2, 129, 130, 5,
+	18, 10, 2, 130, 131, 8, 9, 1, 2, 131, 163, 3, 2, 2, 2, 132, 133, 5, 20,
+	11, 2, 133, 134, 8, 9, 1, 2, 134, 163, 3, 2, 2, 2, 135, 136, 5, 22, 12,
+	2, 136, 137, 8, 9, 1, 2, 137, 163, 3, 2, 2, 2, 138, 139, 5, 24, 13, 2,
+	139, 140, 8, 9, 1, 2, 140, 163, 3, 2, 2, 2, 141, 142, 5, 26, 14, 2, 142,
+	143, 8, 9, 1, 2, 143, 163, 3, 2, 2, 2, 144, 145, 5, 28, 15, 2, 145, 146,
+	8, 9, 1, 2, 146, 163, 3, 2, 2, 2, 147, 148, 5, 30, 16, 2, 148, 149, 8,
+	9, 1, 2, 149, 163, 3, 2, 2, 2, 150, 151, 5, 32, 17, 2, 151, 152, 8, 9,
+	1, 2, 152, 163, 3, 2, 2, 2, 153, 154, 5, 34, 18, 2, 154, 155, 8, 9, 1,
+	2, 155, 163, 3, 2, 2, 2, 156, 157, 5, 36, 19, 2, 157, 158, 8, 9, 1, 2,
+	158, 163, 3, 2, 2, 2, 159, 160, 5, 38, 20, 2, 160, 161, 8, 9, 1, 2, 161,
+	163, 3, 2, 2, 2, 162, 129, 3, 2, 2, 2, 162, 132, 3, 2, 2, 2, 162, 135,
+	3, 2, 2, 2, 162, 138, 3, 2, 2, 2, 162, 141, 3, 2, 2, 2, 162, 144, 3, 2,
+	2, 2, 162, 147, 3, 2, 2, 2, 162, 150, 3, 2, 2, 2, 162, 153, 3, 2, 2, 2,
+	162, 156, 3, 2, 2, 2, 162, 159, 3, 2, 2, 2, 163, 17, 3, 2, 2, 2, 164, 165,
+	7, 11, 2, 2, 165, 166, 7, 37, 2, 2, 166, 167, 7, 33, 2, 2, 167, 168, 5,
+	50, 26, 2, 168, 169, 7, 34, 2, 2, 169, 170, 5, 52, 27, 2, 170, 171, 7,
+	38, 2, 2, 171, 172, 7, 28, 2, 2, 172, 173, 5, 44, 23, 2, 173, 174, 7, 29,
+	2, 2, 174, 175, 8, 10, 1, 2, 175, 19, 3, 2, 2, 2, 176, 177, 7, 10, 2, 2,
+	177, 178, 7, 37, 2, 2, 178, 179, 7, 33, 2, 2, 179, 180, 5, 50, 26, 2, 180,
+	181, 7, 34, 2, 2, 181, 182, 5, 52, 27, 2, 182, 183, 7, 38, 2, 2, 183, 184,
+	7, 28, 2, 2, 184, 185, 5, 44, 23, 2, 185, 186, 7, 29, 2, 2, 186, 187, 8,
+	11, 1, 2, 187, 21, 3, 2, 2, 2, 188, 189, 5, 52, 27, 2, 189, 190, 7, 28,
+	2, 2, 190, 191, 5, 44, 23, 2, 191, 192, 7, 29, 2, 2, 192, 193, 8, 12, 1,
+	2, 193, 23, 3, 2, 2, 2, 194, 195, 7, 12, 2, 2, 195, 196, 7, 33, 2, 2, 196,
+	197, 5, 44, 23, 2, 197, 198, 7, 34, 2, 2, 198, 199, 7, 13, 2, 2, 199, 200,
+	7, 26, 2, 2, 200, 201, 7, 29, 2, 2, 201, 202, 8, 13, 1, 2, 202, 25, 3,
+	2, 2, 2, 203, 204, 7, 13, 2, 2, 204, 205, 7, 26, 2, 2, 205, 206, 7, 29,
+	2, 2, 206, 207, 8, 14, 1, 2, 207, 27, 3, 2, 2, 2, 208, 209, 7, 26, 2, 2,
+	209, 210, 7, 31, 2, 2, 210, 211, 8, 15, 1, 2, 211, 29, 3, 2, 2, 2, 212,
+	213, 7, 15, 2, 2, 213, 214, 7, 33, 2, 2, 214, 215, 7, 25, 2, 2, 215, 216,
+	7, 30, 2, 2, 216, 217, 5, 42, 22, 2, 217, 218, 5, 40, 21, 2, 218, 219,
+	7, 34, 2, 2, 219, 220, 7, 29, 2, 2, 220, 221, 8, 16, 1, 2, 221, 31, 3,
+	2, 2, 2, 222, 223, 7, 14, 2, 2, 223, 224, 5, 44, 23, 2, 224, 225, 7, 29,
+	2, 2, 225, 226, 8, 17, 1, 2, 226, 231, 3, 2, 2, 2, 227, 228, 7, 14, 2,
+	2, 228, 229, 7, 29, 2, 2, 229, 231, 8, 17, 1, 2, 230, 222, 3, 2, 2, 2,
+	230, 227, 3, 2, 2, 2, 231, 33, 3, 2, 2, 2, 232, 233, 5, 52, 27, 2, 233,
+	234, 7, 28, 2, 2, 234, 235, 7, 10, 2, 2, 235, 236, 7, 37, 2, 2, 236, 237,
+	7, 33, 2, 2, 237, 238, 5, 50, 26, 2, 238, 239, 7, 34, 2, 2, 239, 240, 5,
+	44, 23, 2, 240, 241, 7, 38, 2, 2, 241, 242, 7, 29, 2, 2, 242, 243, 8, 18,
+	1, 2, 243, 35, 3, 2, 2, 2, 244, 245, 5, 52, 27, 2, 245, 246, 7, 28, 2,
+	2, 246, 247, 7, 11, 2, 2, 247, 248, 7, 37, 2, 2, 248, 249, 7, 33, 2, 2,
+	249, 250, 5, 50, 26, 2, 250, 251, 7, 34, 2, 2, 251, 252, 5, 44, 23, 2,
+	252, 253, 7, 38, 2, 2, 253, 254, 7, 29, 2, 2, 254, 255, 8, 19, 1, 2, 255,
+	37, 3, 2, 2, 2, 256, 257, 7, 26, 2, 2, 257, 258, 7, 33, 2, 2, 258, 259,
+	7, 34, 2, 2, 259, 260, 7, 29, 2, 2, 260, 261, 8, 20, 1, 2, 261, 39, 3,
+	2, 2, 2, 262, 263, 5, 52, 27, 2, 263, 264, 8, 21, 1, 2, 264, 41, 3, 2,
+	2, 2, 265, 266, 7, 33, 2, 2, 266, 267, 7, 3, 2, 2, 267, 268, 7, 34, 2,
+	2, 268, 278, 8, 22, 1, 2, 269, 270, 7, 33, 2, 2, 270, 271, 7, 4, 2, 2,
+	271, 272, 7, 34, 2, 2, 272, 278, 8, 22, 1, 2, 273, 274, 7, 33, 2, 2, 274,
+	275, 7, 5, 2, 2, 275, 276, 7, 34, 2, 2, 276, 278, 8, 22, 1, 2, 277, 265,
+	3, 2, 2, 2, 277, 269, 3, 2, 2, 2, 277, 273, 3, 2, 2, 2, 278, 43, 3, 2,
+	2, 2, 279, 280, 5, 46, 24, 2, 280, 281, 8, 23, 1, 2, 281, 45, 3, 2, 2,
+	2, 282, 283, 8, 24, 1, 2, 283, 284, 5, 48, 25, 2, 284, 285, 8, 24, 1, 2,
+	285, 293, 3, 2, 2, 2, 286, 287, 12, 4, 2, 2, 287, 288, 9, 2, 2, 2, 288,
+	289, 5, 46, 24, 5, 289, 290, 8, 24, 1, 2, 290, 292, 3, 2, 2, 2, 291, 286,
+	3, 2, 2, 2, 292, 295, 3, 2, 2, 2, 293, 291, 3, 2, 2, 2, 293, 294, 3, 2,
+	2, 2, 294, 47, 3, 2, 2, 2, 295, 293, 3, 2, 2, 2, 296, 297, 8, 25, 1, 2,
+	297, 298, 7, 49, 2, 2, 298, 299, 5, 44, 23, 2, 299, 300, 8, 25, 1, 2, 300,
+	310, 3, 2, 2, 2, 301, 302, 5, 52, 27, 2, 302, 303, 8, 25, 1, 2, 303, 310,
+	3, 2, 2, 2, 304, 305, 7, 33, 2, 2, 305, 306, 5, 44, 23, 2, 306, 307, 7,
+	34, 2, 2, 307, 308, 8, 25, 1, 2, 308, 310, 3, 2, 2, 2, 309, 296, 3, 2,
+	2, 2, 309, 301, 3, 2, 2, 2, 309, 304, 3, 2, 2, 2, 310, 323, 3, 2, 2, 2,
+	311, 312, 12, 6, 2, 2, 312, 313, 9, 3, 2, 2, 313, 314, 5, 48, 25, 7, 314,
+	315, 8, 25, 1, 2, 315, 322, 3, 2, 2, 2, 316, 317, 12, 5, 2, 2, 317, 318,
+	9, 4, 2, 2, 318, 319, 5, 48, 25, 6, 319, 320, 8, 25, 1, 2, 320, 322, 3,
+	2, 2, 2, 321, 311, 3, 2, 2, 2, 321, 316, 3, 2, 2, 2, 322, 325, 3, 2, 2,
+	2, 323, 321, 3, 2, 2, 2, 323, 324, 3, 2, 2, 2, 324, 49, 3, 2, 2, 2, 325,
+	323, 3, 2, 2, 2, 326, 327, 7, 3, 2, 2, 327, 333, 8, 26, 1, 2, 328, 329,
+	7, 4, 2, 2, 329, 333, 8, 26, 1, 2, 330, 331, 7, 5, 2, 2, 331, 333, 8, 26,
+	1, 2, 332, 326, 3, 2, 2, 2, 332, 328, 3, 2, 2, 2, 332, 330, 3, 2, 2, 2,
+	333, 51, 3, 2, 2, 2, 334, 335, 7, 23, 2, 2, 335, 347, 8, 27, 1, 2, 336,
+	337, 7, 22, 2, 2, 337, 347, 8, 27, 1, 2, 338, 339, 7, 27, 2, 2, 339, 347,
+	8, 27, 1, 2, 340, 341, 7, 26, 2, 2, 341, 347, 8, 27, 1, 2, 342, 343, 7,
+	18, 2, 2, 343, 347, 8, 27, 1, 2, 344, 345, 7, 19, 2, 2, 345, 347, 8, 27,
+	1, 2, 346, 334, 3, 2, 2, 2, 346, 336, 3, 2, 2, 2, 346, 338, 3, 2, 2, 2,
+	346, 340, 3, 2, 2, 2, 346, 342, 3, 2, 2, 2, 346, 344, 3, 2, 2, 2, 347,
+	53, 3, 2, 2, 2, 14, 96, 109, 124, 162, 230, 277, 293, 309, 321, 323, 332,
+	346,
 }
 var deserializer = antlr.NewATNDeserializer(nil)
 var deserializedATN = deserializer.DeserializeFromUInt16(parserATN)
@@ -171,16 +177,16 @@ var deserializedATN = deserializer.DeserializeFromUInt16(parserATN)
 var literalNames = []string{
 	"", "'int'", "'float'", "'char'", "'void'", "'#include'", "'<stdio.h>'",
 	"'<math.h>'", "'heap'", "'stack'", "'if'", "'goto'", "'return'", "'printf'",
-	"'pow'", "'mod'", "'P'", "'H'", "", "", "", "", "", "", "", "'='", "';'",
-	"','", "':'", "'!'", "'('", "')'", "'{'", "'}'", "'['", "']'", "'=='",
+	"'pow'", "'mod'", "'P'", "'H'", "", "", "", "", "", "", "", "", "'='",
+	"';'", "','", "':'", "'!'", "'('", "')'", "'{'", "'}'", "'['", "']'", "'=='",
 	"'!='", "'>'", "'<'", "'>='", "'<='", "'*'", "'/'", "'%'", "'+'", "'-'",
 }
 var symbolicNames = []string{
 	"", "RINT", "RFLOAT", "RCHAR", "RVOID", "RINCLUDE", "RSTDIO", "RMATH",
 	"RHEAP", "RSTACK", "RIF", "RGOTO", "RRETURN", "RPRINTF", "RPOW", "RMOD",
 	"RPSTACK", "RPHEAP", "MULTILINE", "INLINE", "INTEGER", "FLOAT", "CHAR",
-	"STRING", "ID", "EQUAL", "SEMICOLON", "COMMA", "COLON", "ADMIRATION", "LEFT_PAR",
-	"RIGHT_PAR", "LEFT_KEY", "RIGHT_KEY", "LEFT_BRACKET", "RIGHT_BRACKET",
+	"STRING", "ID", "TEMP", "EQUAL", "SEMICOLON", "COMMA", "COLON", "ADMIRATION",
+	"LEFT_PAR", "RIGHT_PAR", "LEFT_KEY", "RIGHT_KEY", "LEFT_BRACKET", "RIGHT_BRACKET",
 	"EQUEAL_EQUAL", "NOTEQUAL", "GREATER_THAN", "LESS_THAN", "GREATER_EQUALTHAN",
 	"LESS_EQUEALTHAN", "MUL", "DIV", "MOD", "ADD", "SUB", "WHITESPACE",
 }
@@ -189,8 +195,8 @@ var ruleNames = []string{
 	"start", "headers", "list_temps", "temps", "listFuncs", "function", "instructions",
 	"instruction", "assign_stack", "assign_heap", "assign", "if_instr", "goto_instr",
 	"label_instr", "printf_instr", "return_instr", "getHeap_instr", "getStack_instr",
-	"expr_print", "convert", "expression", "expr_rel", "expr_arit", "data_type",
-	"expr_valor",
+	"call_instr", "expr_print", "convert", "expression", "expr_rel", "expr_arit",
+	"data_type", "expr_valor",
 }
 var decisionToDFA = make([]*antlr.DFA, len(deserializedATN.DecisionToState))
 
@@ -245,29 +251,30 @@ const (
 	OptimizerParserCHAR              = 22
 	OptimizerParserSTRING            = 23
 	OptimizerParserID                = 24
-	OptimizerParserEQUAL             = 25
-	OptimizerParserSEMICOLON         = 26
-	OptimizerParserCOMMA             = 27
-	OptimizerParserCOLON             = 28
-	OptimizerParserADMIRATION        = 29
-	OptimizerParserLEFT_PAR          = 30
-	OptimizerParserRIGHT_PAR         = 31
-	OptimizerParserLEFT_KEY          = 32
-	OptimizerParserRIGHT_KEY         = 33
-	OptimizerParserLEFT_BRACKET      = 34
-	OptimizerParserRIGHT_BRACKET     = 35
-	OptimizerParserEQUEAL_EQUAL      = 36
-	OptimizerParserNOTEQUAL          = 37
-	OptimizerParserGREATER_THAN      = 38
-	OptimizerParserLESS_THAN         = 39
-	OptimizerParserGREATER_EQUALTHAN = 40
-	OptimizerParserLESS_EQUEALTHAN   = 41
-	OptimizerParserMUL               = 42
-	OptimizerParserDIV               = 43
-	OptimizerParserMOD               = 44
-	OptimizerParserADD               = 45
-	OptimizerParserSUB               = 46
-	OptimizerParserWHITESPACE        = 47
+	OptimizerParserTEMP              = 25
+	OptimizerParserEQUAL             = 26
+	OptimizerParserSEMICOLON         = 27
+	OptimizerParserCOMMA             = 28
+	OptimizerParserCOLON             = 29
+	OptimizerParserADMIRATION        = 30
+	OptimizerParserLEFT_PAR          = 31
+	OptimizerParserRIGHT_PAR         = 32
+	OptimizerParserLEFT_KEY          = 33
+	OptimizerParserRIGHT_KEY         = 34
+	OptimizerParserLEFT_BRACKET      = 35
+	OptimizerParserRIGHT_BRACKET     = 36
+	OptimizerParserEQUEAL_EQUAL      = 37
+	OptimizerParserNOTEQUAL          = 38
+	OptimizerParserGREATER_THAN      = 39
+	OptimizerParserLESS_THAN         = 40
+	OptimizerParserGREATER_EQUALTHAN = 41
+	OptimizerParserLESS_EQUEALTHAN   = 42
+	OptimizerParserMUL               = 43
+	OptimizerParserDIV               = 44
+	OptimizerParserMOD               = 45
+	OptimizerParserADD               = 46
+	OptimizerParserSUB               = 47
+	OptimizerParserWHITESPACE        = 48
 )
 
 // OptimizerParser rules.
@@ -290,13 +297,14 @@ const (
 	OptimizerParserRULE_return_instr   = 15
 	OptimizerParserRULE_getHeap_instr  = 16
 	OptimizerParserRULE_getStack_instr = 17
-	OptimizerParserRULE_expr_print     = 18
-	OptimizerParserRULE_convert        = 19
-	OptimizerParserRULE_expression     = 20
-	OptimizerParserRULE_expr_rel       = 21
-	OptimizerParserRULE_expr_arit      = 22
-	OptimizerParserRULE_data_type      = 23
-	OptimizerParserRULE_expr_valor     = 24
+	OptimizerParserRULE_call_instr     = 18
+	OptimizerParserRULE_expr_print     = 19
+	OptimizerParserRULE_convert        = 20
+	OptimizerParserRULE_expression     = 21
+	OptimizerParserRULE_expr_rel       = 22
+	OptimizerParserRULE_expr_arit      = 23
+	OptimizerParserRULE_data_type      = 24
+	OptimizerParserRULE_expr_valor     = 25
 )
 
 // IStartContext is an interface to support dynamic dispatch.
@@ -442,18 +450,18 @@ func (p *OptimizerParser) Start() (localctx IStartContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(50)
+		p.SetState(52)
 		p.Headers()
 	}
 	{
-		p.SetState(51)
+		p.SetState(53)
 
 		var _x = p.List_temps()
 
 		localctx.(*StartContext)._list_temps = _x
 	}
 	{
-		p.SetState(52)
+		p.SetState(54)
 
 		var _x = p.listFuncs(0)
 
@@ -630,86 +638,86 @@ func (p *OptimizerParser) Headers() (localctx IHeadersContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(55)
+		p.SetState(57)
 
 		var _m = p.Match(OptimizerParserRINCLUDE)
 
 		localctx.(*HeadersContext)._RINCLUDE = _m
 	}
 	{
-		p.SetState(56)
+		p.SetState(58)
 		p.Match(OptimizerParserRSTDIO)
 	}
 	{
-		p.SetState(57)
-		p.Match(OptimizerParserRFLOAT)
-	}
-	{
-		p.SetState(58)
-		p.Match(OptimizerParserRHEAP)
-	}
-	{
 		p.SetState(59)
-		p.Match(OptimizerParserLEFT_BRACKET)
+		p.Match(OptimizerParserRFLOAT)
 	}
 	{
 		p.SetState(60)
-		p.Match(OptimizerParserINTEGER)
+		p.Match(OptimizerParserRHEAP)
 	}
 	{
 		p.SetState(61)
-		p.Match(OptimizerParserRIGHT_BRACKET)
-	}
-	{
-		p.SetState(62)
-		p.Match(OptimizerParserSEMICOLON)
-	}
-	{
-		p.SetState(63)
-		p.Match(OptimizerParserRFLOAT)
-	}
-	{
-		p.SetState(64)
-		p.Match(OptimizerParserRSTACK)
-	}
-	{
-		p.SetState(65)
 		p.Match(OptimizerParserLEFT_BRACKET)
 	}
 	{
-		p.SetState(66)
+		p.SetState(62)
 		p.Match(OptimizerParserINTEGER)
 	}
 	{
-		p.SetState(67)
+		p.SetState(63)
 		p.Match(OptimizerParserRIGHT_BRACKET)
 	}
 	{
-		p.SetState(68)
+		p.SetState(64)
 		p.Match(OptimizerParserSEMICOLON)
+	}
+	{
+		p.SetState(65)
+		p.Match(OptimizerParserRFLOAT)
+	}
+	{
+		p.SetState(66)
+		p.Match(OptimizerParserRSTACK)
+	}
+	{
+		p.SetState(67)
+		p.Match(OptimizerParserLEFT_BRACKET)
+	}
+	{
+		p.SetState(68)
+		p.Match(OptimizerParserINTEGER)
 	}
 	{
 		p.SetState(69)
-		p.Match(OptimizerParserRFLOAT)
+		p.Match(OptimizerParserRIGHT_BRACKET)
 	}
 	{
 		p.SetState(70)
-		p.Match(OptimizerParserRPSTACK)
-	}
-	{
-		p.SetState(71)
 		p.Match(OptimizerParserSEMICOLON)
 	}
 	{
-		p.SetState(72)
+		p.SetState(71)
 		p.Match(OptimizerParserRFLOAT)
 	}
 	{
+		p.SetState(72)
+		p.Match(OptimizerParserRPSTACK)
+	}
+	{
 		p.SetState(73)
-		p.Match(OptimizerParserRPHEAP)
+		p.Match(OptimizerParserSEMICOLON)
 	}
 	{
 		p.SetState(74)
+		p.Match(OptimizerParserRFLOAT)
+	}
+	{
+		p.SetState(75)
+		p.Match(OptimizerParserRPHEAP)
+	}
+	{
+		p.SetState(76)
 		p.Match(OptimizerParserSEMICOLON)
 	}
 
@@ -844,18 +852,18 @@ func (p *OptimizerParser) List_temps() (localctx IList_tempsContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(77)
+		p.SetState(79)
 		p.Match(OptimizerParserRFLOAT)
 	}
 	{
-		p.SetState(78)
+		p.SetState(80)
 
 		var _x = p.temps(0)
 
 		localctx.(*List_tempsContext)._temps = _x
 	}
 	{
-		p.SetState(79)
+		p.SetState(81)
 		p.Match(OptimizerParserSEMICOLON)
 	}
 	localctx.(*List_tempsContext).l = localctx.(*List_tempsContext).Get_temps().GetL()
@@ -1007,7 +1015,7 @@ func (p *OptimizerParser) temps(_p int) (localctx ITempsContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(83)
+		p.SetState(85)
 
 		var _m = p.Match(OptimizerParserID)
 
@@ -1022,7 +1030,7 @@ func (p *OptimizerParser) temps(_p int) (localctx ITempsContext) {
 	}()))
 
 	p.GetParserRuleContext().SetStop(p.GetTokenStream().LT(-1))
-	p.SetState(92)
+	p.SetState(94)
 	p.GetErrorHandler().Sync(p)
 	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 0, p.GetParserRuleContext())
 
@@ -1035,17 +1043,17 @@ func (p *OptimizerParser) temps(_p int) (localctx ITempsContext) {
 			localctx = NewTempsContext(p, _parentctx, _parentState)
 			localctx.(*TempsContext).sub = _prevctx
 			p.PushNewRecursionContext(localctx, _startState, OptimizerParserRULE_temps)
-			p.SetState(86)
+			p.SetState(88)
 
 			if !(p.Precpred(p.GetParserRuleContext(), 2)) {
 				panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 2)", ""))
 			}
 			{
-				p.SetState(87)
+				p.SetState(89)
 				p.Match(OptimizerParserCOMMA)
 			}
 			{
-				p.SetState(88)
+				p.SetState(90)
 
 				var _m = p.Match(OptimizerParserID)
 
@@ -1062,7 +1070,7 @@ func (p *OptimizerParser) temps(_p int) (localctx ITempsContext) {
 			localctx.(*TempsContext).l = localctx.(*TempsContext).GetSub().GetL()
 
 		}
-		p.SetState(94)
+		p.SetState(96)
 		p.GetErrorHandler().Sync(p)
 		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 0, p.GetParserRuleContext())
 	}
@@ -1216,7 +1224,7 @@ func (p *OptimizerParser) listFuncs(_p int) (localctx IListFuncsContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(96)
+		p.SetState(98)
 
 		var _x = p.Function()
 
@@ -1225,7 +1233,7 @@ func (p *OptimizerParser) listFuncs(_p int) (localctx IListFuncsContext) {
 	localctx.(*ListFuncsContext).l.Add(localctx.(*ListFuncsContext).Get_function().GetInstr())
 
 	p.GetParserRuleContext().SetStop(p.GetTokenStream().LT(-1))
-	p.SetState(105)
+	p.SetState(107)
 	p.GetErrorHandler().Sync(p)
 	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 1, p.GetParserRuleContext())
 
@@ -1238,13 +1246,13 @@ func (p *OptimizerParser) listFuncs(_p int) (localctx IListFuncsContext) {
 			localctx = NewListFuncsContext(p, _parentctx, _parentState)
 			localctx.(*ListFuncsContext).subList = _prevctx
 			p.PushNewRecursionContext(localctx, _startState, OptimizerParserRULE_listFuncs)
-			p.SetState(99)
+			p.SetState(101)
 
 			if !(p.Precpred(p.GetParserRuleContext(), 2)) {
 				panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 2)", ""))
 			}
 			{
-				p.SetState(100)
+				p.SetState(102)
 
 				var _x = p.Function()
 
@@ -1255,7 +1263,7 @@ func (p *OptimizerParser) listFuncs(_p int) (localctx IListFuncsContext) {
 			localctx.(*ListFuncsContext).l = localctx.(*ListFuncsContext).GetSubList().GetL()
 
 		}
-		p.SetState(107)
+		p.SetState(109)
 		p.GetErrorHandler().Sync(p)
 		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 1, p.GetParserRuleContext())
 	}
@@ -1410,37 +1418,37 @@ func (p *OptimizerParser) Function() (localctx IFunctionContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(108)
+		p.SetState(110)
 		p.Match(OptimizerParserRVOID)
 	}
 	{
-		p.SetState(109)
+		p.SetState(111)
 
 		var _m = p.Match(OptimizerParserID)
 
 		localctx.(*FunctionContext)._ID = _m
 	}
 	{
-		p.SetState(110)
+		p.SetState(112)
 		p.Match(OptimizerParserLEFT_PAR)
 	}
 	{
-		p.SetState(111)
+		p.SetState(113)
 		p.Match(OptimizerParserRIGHT_PAR)
 	}
 	{
-		p.SetState(112)
+		p.SetState(114)
 		p.Match(OptimizerParserLEFT_KEY)
 	}
 	{
-		p.SetState(113)
+		p.SetState(115)
 
 		var _x = p.Instructions()
 
 		localctx.(*FunctionContext)._instructions = _x
 	}
 	{
-		p.SetState(114)
+		p.SetState(116)
 		p.Match(OptimizerParserRIGHT_KEY)
 	}
 
@@ -1600,13 +1608,13 @@ func (p *OptimizerParser) Instructions() (localctx IInstructionsContext) {
 	}()
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(120)
+	p.SetState(122)
 	p.GetErrorHandler().Sync(p)
 	_la = p.GetTokenStream().LA(1)
 
-	for ((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<OptimizerParserRHEAP)|(1<<OptimizerParserRSTACK)|(1<<OptimizerParserRIF)|(1<<OptimizerParserRGOTO)|(1<<OptimizerParserRRETURN)|(1<<OptimizerParserRPRINTF)|(1<<OptimizerParserRPSTACK)|(1<<OptimizerParserRPHEAP)|(1<<OptimizerParserINTEGER)|(1<<OptimizerParserFLOAT)|(1<<OptimizerParserID))) != 0 {
+	for ((_la)&-(0x1f+1)) == 0 && ((1<<uint(_la))&((1<<OptimizerParserRHEAP)|(1<<OptimizerParserRSTACK)|(1<<OptimizerParserRIF)|(1<<OptimizerParserRGOTO)|(1<<OptimizerParserRRETURN)|(1<<OptimizerParserRPRINTF)|(1<<OptimizerParserRPSTACK)|(1<<OptimizerParserRPHEAP)|(1<<OptimizerParserINTEGER)|(1<<OptimizerParserFLOAT)|(1<<OptimizerParserID)|(1<<OptimizerParserTEMP))) != 0 {
 		{
-			p.SetState(117)
+			p.SetState(119)
 
 			var _x = p.Instruction()
 
@@ -1614,7 +1622,7 @@ func (p *OptimizerParser) Instructions() (localctx IInstructionsContext) {
 		}
 		localctx.(*InstructionsContext).e = append(localctx.(*InstructionsContext).e, localctx.(*InstructionsContext)._instruction)
 
-		p.SetState(122)
+		p.SetState(124)
 		p.GetErrorHandler().Sync(p)
 		_la = p.GetTokenStream().LA(1)
 	}
@@ -1666,6 +1674,9 @@ type IInstructionContext interface {
 	// Get_getStack_instr returns the _getStack_instr rule contexts.
 	Get_getStack_instr() IGetStack_instrContext
 
+	// Get_call_instr returns the _call_instr rule contexts.
+	Get_call_instr() ICall_instrContext
+
 	// Set_assign_stack sets the _assign_stack rule contexts.
 	Set_assign_stack(IAssign_stackContext)
 
@@ -1696,6 +1707,9 @@ type IInstructionContext interface {
 	// Set_getStack_instr sets the _getStack_instr rule contexts.
 	Set_getStack_instr(IGetStack_instrContext)
 
+	// Set_call_instr sets the _call_instr rule contexts.
+	Set_call_instr(ICall_instrContext)
+
 	// GetInstr returns the instr attribute.
 	GetInstr() AbstractOptimizer.Instruction
 
@@ -1720,6 +1734,7 @@ type InstructionContext struct {
 	_return_instr   IReturn_instrContext
 	_getHeap_instr  IGetHeap_instrContext
 	_getStack_instr IGetStack_instrContext
+	_call_instr     ICall_instrContext
 }
 
 func NewEmptyInstructionContext() *InstructionContext {
@@ -1764,6 +1779,8 @@ func (s *InstructionContext) Get_getHeap_instr() IGetHeap_instrContext { return 
 
 func (s *InstructionContext) Get_getStack_instr() IGetStack_instrContext { return s._getStack_instr }
 
+func (s *InstructionContext) Get_call_instr() ICall_instrContext { return s._call_instr }
+
 func (s *InstructionContext) Set_assign_stack(v IAssign_stackContext) { s._assign_stack = v }
 
 func (s *InstructionContext) Set_assign_heap(v IAssign_heapContext) { s._assign_heap = v }
@@ -1783,6 +1800,8 @@ func (s *InstructionContext) Set_return_instr(v IReturn_instrContext) { s._retur
 func (s *InstructionContext) Set_getHeap_instr(v IGetHeap_instrContext) { s._getHeap_instr = v }
 
 func (s *InstructionContext) Set_getStack_instr(v IGetStack_instrContext) { s._getStack_instr = v }
+
+func (s *InstructionContext) Set_call_instr(v ICall_instrContext) { s._call_instr = v }
 
 func (s *InstructionContext) GetInstr() AbstractOptimizer.Instruction { return s.instr }
 
@@ -1888,6 +1907,16 @@ func (s *InstructionContext) GetStack_instr() IGetStack_instrContext {
 	return t.(IGetStack_instrContext)
 }
 
+func (s *InstructionContext) Call_instr() ICall_instrContext {
+	var t = s.GetTypedRuleContext(reflect.TypeOf((*ICall_instrContext)(nil)).Elem(), 0)
+
+	if t == nil {
+		return nil
+	}
+
+	return t.(ICall_instrContext)
+}
+
 func (s *InstructionContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
@@ -1928,13 +1957,13 @@ func (p *OptimizerParser) Instruction() (localctx IInstructionContext) {
 		}
 	}()
 
-	p.SetState(155)
+	p.SetState(160)
 	p.GetErrorHandler().Sync(p)
 	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 3, p.GetParserRuleContext()) {
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(125)
+			p.SetState(127)
 
 			var _x = p.Assign_stack()
 
@@ -1945,7 +1974,7 @@ func (p *OptimizerParser) Instruction() (localctx IInstructionContext) {
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(128)
+			p.SetState(130)
 
 			var _x = p.Assign_heap()
 
@@ -1956,7 +1985,7 @@ func (p *OptimizerParser) Instruction() (localctx IInstructionContext) {
 	case 3:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(131)
+			p.SetState(133)
 
 			var _x = p.Assign()
 
@@ -1967,7 +1996,7 @@ func (p *OptimizerParser) Instruction() (localctx IInstructionContext) {
 	case 4:
 		p.EnterOuterAlt(localctx, 4)
 		{
-			p.SetState(134)
+			p.SetState(136)
 
 			var _x = p.If_instr()
 
@@ -1978,7 +2007,7 @@ func (p *OptimizerParser) Instruction() (localctx IInstructionContext) {
 	case 5:
 		p.EnterOuterAlt(localctx, 5)
 		{
-			p.SetState(137)
+			p.SetState(139)
 
 			var _x = p.Goto_instr()
 
@@ -1989,7 +2018,7 @@ func (p *OptimizerParser) Instruction() (localctx IInstructionContext) {
 	case 6:
 		p.EnterOuterAlt(localctx, 6)
 		{
-			p.SetState(140)
+			p.SetState(142)
 
 			var _x = p.Label_instr()
 
@@ -2000,7 +2029,7 @@ func (p *OptimizerParser) Instruction() (localctx IInstructionContext) {
 	case 7:
 		p.EnterOuterAlt(localctx, 7)
 		{
-			p.SetState(143)
+			p.SetState(145)
 
 			var _x = p.Printf_instr()
 
@@ -2011,7 +2040,7 @@ func (p *OptimizerParser) Instruction() (localctx IInstructionContext) {
 	case 8:
 		p.EnterOuterAlt(localctx, 8)
 		{
-			p.SetState(146)
+			p.SetState(148)
 
 			var _x = p.Return_instr()
 
@@ -2022,7 +2051,7 @@ func (p *OptimizerParser) Instruction() (localctx IInstructionContext) {
 	case 9:
 		p.EnterOuterAlt(localctx, 9)
 		{
-			p.SetState(149)
+			p.SetState(151)
 
 			var _x = p.GetHeap_instr()
 
@@ -2033,13 +2062,24 @@ func (p *OptimizerParser) Instruction() (localctx IInstructionContext) {
 	case 10:
 		p.EnterOuterAlt(localctx, 10)
 		{
-			p.SetState(152)
+			p.SetState(154)
 
 			var _x = p.GetStack_instr()
 
 			localctx.(*InstructionContext)._getStack_instr = _x
 		}
 		localctx.(*InstructionContext).instr = localctx.(*InstructionContext).Get_getStack_instr().GetInstr()
+
+	case 11:
+		p.EnterOuterAlt(localctx, 11)
+		{
+			p.SetState(157)
+
+			var _x = p.Call_instr()
+
+			localctx.(*InstructionContext)._call_instr = _x
+		}
+		localctx.(*InstructionContext).instr = localctx.(*InstructionContext).Get_call_instr().GetInstr()
 
 	}
 
@@ -2239,55 +2279,55 @@ func (p *OptimizerParser) Assign_stack() (localctx IAssign_stackContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(157)
+		p.SetState(162)
 
 		var _m = p.Match(OptimizerParserRSTACK)
 
 		localctx.(*Assign_stackContext)._RSTACK = _m
 	}
 	{
-		p.SetState(158)
+		p.SetState(163)
 		p.Match(OptimizerParserLEFT_BRACKET)
 	}
 	{
-		p.SetState(159)
+		p.SetState(164)
 		p.Match(OptimizerParserLEFT_PAR)
 	}
 	{
-		p.SetState(160)
+		p.SetState(165)
 		p.Data_type()
 	}
 	{
-		p.SetState(161)
+		p.SetState(166)
 		p.Match(OptimizerParserRIGHT_PAR)
 	}
 	{
-		p.SetState(162)
+		p.SetState(167)
 
 		var _x = p.Expr_valor()
 
 		localctx.(*Assign_stackContext)._expr_valor = _x
 	}
 	{
-		p.SetState(163)
+		p.SetState(168)
 		p.Match(OptimizerParserRIGHT_BRACKET)
 	}
 	{
-		p.SetState(164)
+		p.SetState(169)
 
 		var _m = p.Match(OptimizerParserEQUAL)
 
 		localctx.(*Assign_stackContext)._EQUAL = _m
 	}
 	{
-		p.SetState(165)
+		p.SetState(170)
 
 		var _x = p.Expression()
 
 		localctx.(*Assign_stackContext)._expression = _x
 	}
 	{
-		p.SetState(166)
+		p.SetState(171)
 		p.Match(OptimizerParserSEMICOLON)
 	}
 
@@ -2501,55 +2541,55 @@ func (p *OptimizerParser) Assign_heap() (localctx IAssign_heapContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(169)
+		p.SetState(174)
 
 		var _m = p.Match(OptimizerParserRHEAP)
 
 		localctx.(*Assign_heapContext)._RHEAP = _m
 	}
 	{
-		p.SetState(170)
+		p.SetState(175)
 		p.Match(OptimizerParserLEFT_BRACKET)
 	}
 	{
-		p.SetState(171)
+		p.SetState(176)
 		p.Match(OptimizerParserLEFT_PAR)
 	}
 	{
-		p.SetState(172)
+		p.SetState(177)
 		p.Data_type()
 	}
 	{
-		p.SetState(173)
+		p.SetState(178)
 		p.Match(OptimizerParserRIGHT_PAR)
 	}
 	{
-		p.SetState(174)
+		p.SetState(179)
 
 		var _x = p.Expr_valor()
 
 		localctx.(*Assign_heapContext)._expr_valor = _x
 	}
 	{
-		p.SetState(175)
+		p.SetState(180)
 		p.Match(OptimizerParserRIGHT_BRACKET)
 	}
 	{
-		p.SetState(176)
+		p.SetState(181)
 
 		var _m = p.Match(OptimizerParserEQUAL)
 
 		localctx.(*Assign_heapContext)._EQUAL = _m
 	}
 	{
-		p.SetState(177)
+		p.SetState(182)
 
 		var _x = p.Expression()
 
 		localctx.(*Assign_heapContext)._expression = _x
 	}
 	{
-		p.SetState(178)
+		p.SetState(183)
 		p.Match(OptimizerParserSEMICOLON)
 	}
 
@@ -2722,28 +2762,28 @@ func (p *OptimizerParser) Assign() (localctx IAssignContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(181)
+		p.SetState(186)
 
 		var _x = p.Expr_valor()
 
 		localctx.(*AssignContext)._expr_valor = _x
 	}
 	{
-		p.SetState(182)
+		p.SetState(187)
 
 		var _m = p.Match(OptimizerParserEQUAL)
 
 		localctx.(*AssignContext)._EQUAL = _m
 	}
 	{
-		p.SetState(183)
+		p.SetState(188)
 
 		var _x = p.Expression()
 
 		localctx.(*AssignContext)._expression = _x
 	}
 	{
-		p.SetState(184)
+		p.SetState(189)
 		p.Match(OptimizerParserSEMICOLON)
 	}
 
@@ -2916,40 +2956,40 @@ func (p *OptimizerParser) If_instr() (localctx IIf_instrContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(187)
+		p.SetState(192)
 
 		var _m = p.Match(OptimizerParserRIF)
 
 		localctx.(*If_instrContext)._RIF = _m
 	}
 	{
-		p.SetState(188)
+		p.SetState(193)
 		p.Match(OptimizerParserLEFT_PAR)
 	}
 	{
-		p.SetState(189)
+		p.SetState(194)
 
 		var _x = p.Expression()
 
 		localctx.(*If_instrContext)._expression = _x
 	}
 	{
-		p.SetState(190)
+		p.SetState(195)
 		p.Match(OptimizerParserRIGHT_PAR)
 	}
 	{
-		p.SetState(191)
+		p.SetState(196)
 		p.Match(OptimizerParserRGOTO)
 	}
 	{
-		p.SetState(192)
+		p.SetState(197)
 
 		var _m = p.Match(OptimizerParserID)
 
 		localctx.(*If_instrContext)._ID = _m
 	}
 	{
-		p.SetState(193)
+		p.SetState(198)
 		p.Match(OptimizerParserSEMICOLON)
 	}
 
@@ -3084,18 +3124,18 @@ func (p *OptimizerParser) Goto_instr() (localctx IGoto_instrContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(196)
+		p.SetState(201)
 		p.Match(OptimizerParserRGOTO)
 	}
 	{
-		p.SetState(197)
+		p.SetState(202)
 
 		var _m = p.Match(OptimizerParserID)
 
 		localctx.(*Goto_instrContext)._ID = _m
 	}
 	{
-		p.SetState(198)
+		p.SetState(203)
 		p.Match(OptimizerParserSEMICOLON)
 	}
 
@@ -3226,14 +3266,14 @@ func (p *OptimizerParser) Label_instr() (localctx ILabel_instrContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(201)
+		p.SetState(206)
 
 		var _m = p.Match(OptimizerParserID)
 
 		localctx.(*Label_instrContext)._ID = _m
 	}
 	{
-		p.SetState(202)
+		p.SetState(207)
 		p.Match(OptimizerParserCOLON)
 	}
 
@@ -3422,44 +3462,44 @@ func (p *OptimizerParser) Printf_instr() (localctx IPrintf_instrContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(205)
+		p.SetState(210)
 		p.Match(OptimizerParserRPRINTF)
 	}
 	{
-		p.SetState(206)
+		p.SetState(211)
 		p.Match(OptimizerParserLEFT_PAR)
 	}
 	{
-		p.SetState(207)
+		p.SetState(212)
 
 		var _m = p.Match(OptimizerParserSTRING)
 
 		localctx.(*Printf_instrContext)._STRING = _m
 	}
 	{
-		p.SetState(208)
+		p.SetState(213)
 		p.Match(OptimizerParserCOMMA)
 	}
 	{
-		p.SetState(209)
+		p.SetState(214)
 
 		var _x = p.Convert()
 
 		localctx.(*Printf_instrContext)._convert = _x
 	}
 	{
-		p.SetState(210)
+		p.SetState(215)
 
 		var _x = p.Expr_print()
 
 		localctx.(*Printf_instrContext)._expr_print = _x
 	}
 	{
-		p.SetState(211)
+		p.SetState(216)
 		p.Match(OptimizerParserRIGHT_PAR)
 	}
 	{
-		p.SetState(212)
+		p.SetState(217)
 		p.Match(OptimizerParserSEMICOLON)
 	}
 
@@ -3609,27 +3649,27 @@ func (p *OptimizerParser) Return_instr() (localctx IReturn_instrContext) {
 		}
 	}()
 
-	p.SetState(223)
+	p.SetState(228)
 	p.GetErrorHandler().Sync(p)
 	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 4, p.GetParserRuleContext()) {
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(215)
+			p.SetState(220)
 
 			var _m = p.Match(OptimizerParserRRETURN)
 
 			localctx.(*Return_instrContext)._RRETURN = _m
 		}
 		{
-			p.SetState(216)
+			p.SetState(221)
 
 			var _x = p.Expression()
 
 			localctx.(*Return_instrContext)._expression = _x
 		}
 		{
-			p.SetState(217)
+			p.SetState(222)
 			p.Match(OptimizerParserSEMICOLON)
 		}
 
@@ -3644,14 +3684,14 @@ func (p *OptimizerParser) Return_instr() (localctx IReturn_instrContext) {
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(220)
+			p.SetState(225)
 
 			var _m = p.Match(OptimizerParserRRETURN)
 
 			localctx.(*Return_instrContext)._RRETURN = _m
 		}
 		{
-			p.SetState(221)
+			p.SetState(226)
 			p.Match(OptimizerParserSEMICOLON)
 		}
 
@@ -3861,55 +3901,55 @@ func (p *OptimizerParser) GetHeap_instr() (localctx IGetHeap_instrContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(225)
+		p.SetState(230)
 
 		var _x = p.Expr_valor()
 
 		localctx.(*GetHeap_instrContext)._expr_valor = _x
 	}
 	{
-		p.SetState(226)
+		p.SetState(231)
 
 		var _m = p.Match(OptimizerParserEQUAL)
 
 		localctx.(*GetHeap_instrContext)._EQUAL = _m
 	}
 	{
-		p.SetState(227)
+		p.SetState(232)
 
 		var _m = p.Match(OptimizerParserRHEAP)
 
 		localctx.(*GetHeap_instrContext)._RHEAP = _m
 	}
 	{
-		p.SetState(228)
+		p.SetState(233)
 		p.Match(OptimizerParserLEFT_BRACKET)
 	}
 	{
-		p.SetState(229)
+		p.SetState(234)
 		p.Match(OptimizerParserLEFT_PAR)
 	}
 	{
-		p.SetState(230)
+		p.SetState(235)
 		p.Data_type()
 	}
 	{
-		p.SetState(231)
+		p.SetState(236)
 		p.Match(OptimizerParserRIGHT_PAR)
 	}
 	{
-		p.SetState(232)
+		p.SetState(237)
 
 		var _x = p.Expression()
 
 		localctx.(*GetHeap_instrContext)._expression = _x
 	}
 	{
-		p.SetState(233)
+		p.SetState(238)
 		p.Match(OptimizerParserRIGHT_BRACKET)
 	}
 	{
-		p.SetState(234)
+		p.SetState(239)
 		p.Match(OptimizerParserSEMICOLON)
 	}
 
@@ -4123,55 +4163,55 @@ func (p *OptimizerParser) GetStack_instr() (localctx IGetStack_instrContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(237)
+		p.SetState(242)
 
 		var _x = p.Expr_valor()
 
 		localctx.(*GetStack_instrContext)._expr_valor = _x
 	}
 	{
-		p.SetState(238)
+		p.SetState(243)
 
 		var _m = p.Match(OptimizerParserEQUAL)
 
 		localctx.(*GetStack_instrContext)._EQUAL = _m
 	}
 	{
-		p.SetState(239)
+		p.SetState(244)
 
 		var _m = p.Match(OptimizerParserRSTACK)
 
 		localctx.(*GetStack_instrContext)._RSTACK = _m
 	}
 	{
-		p.SetState(240)
+		p.SetState(245)
 		p.Match(OptimizerParserLEFT_BRACKET)
 	}
 	{
-		p.SetState(241)
+		p.SetState(246)
 		p.Match(OptimizerParserLEFT_PAR)
 	}
 	{
-		p.SetState(242)
+		p.SetState(247)
 		p.Data_type()
 	}
 	{
-		p.SetState(243)
+		p.SetState(248)
 		p.Match(OptimizerParserRIGHT_PAR)
 	}
 	{
-		p.SetState(244)
+		p.SetState(249)
 
 		var _x = p.Expression()
 
 		localctx.(*GetStack_instrContext)._expression = _x
 	}
 	{
-		p.SetState(245)
+		p.SetState(250)
 		p.Match(OptimizerParserRIGHT_BRACKET)
 	}
 	{
-		p.SetState(246)
+		p.SetState(251)
 		p.Match(OptimizerParserSEMICOLON)
 	}
 
@@ -4188,6 +4228,160 @@ func (p *OptimizerParser) GetStack_instr() (localctx IGetStack_instrContext) {
 			return localctx.(*GetStack_instrContext).Get_RSTACK().GetText()
 		}
 	}()))
+
+	return localctx
+}
+
+// ICall_instrContext is an interface to support dynamic dispatch.
+type ICall_instrContext interface {
+	antlr.ParserRuleContext
+
+	// GetParser returns the parser.
+	GetParser() antlr.Parser
+
+	// Get_ID returns the _ID token.
+	Get_ID() antlr.Token
+
+	// Set_ID sets the _ID token.
+	Set_ID(antlr.Token)
+
+	// GetInstr returns the instr attribute.
+	GetInstr() AbstractOptimizer.Instruction
+
+	// SetInstr sets the instr attribute.
+	SetInstr(AbstractOptimizer.Instruction)
+
+	// IsCall_instrContext differentiates from other interfaces.
+	IsCall_instrContext()
+}
+
+type Call_instrContext struct {
+	*antlr.BaseParserRuleContext
+	parser antlr.Parser
+	instr  AbstractOptimizer.Instruction
+	_ID    antlr.Token
+}
+
+func NewEmptyCall_instrContext() *Call_instrContext {
+	var p = new(Call_instrContext)
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(nil, -1)
+	p.RuleIndex = OptimizerParserRULE_call_instr
+	return p
+}
+
+func (*Call_instrContext) IsCall_instrContext() {}
+
+func NewCall_instrContext(parser antlr.Parser, parent antlr.ParserRuleContext, invokingState int) *Call_instrContext {
+	var p = new(Call_instrContext)
+
+	p.BaseParserRuleContext = antlr.NewBaseParserRuleContext(parent, invokingState)
+
+	p.parser = parser
+	p.RuleIndex = OptimizerParserRULE_call_instr
+
+	return p
+}
+
+func (s *Call_instrContext) GetParser() antlr.Parser { return s.parser }
+
+func (s *Call_instrContext) Get_ID() antlr.Token { return s._ID }
+
+func (s *Call_instrContext) Set_ID(v antlr.Token) { s._ID = v }
+
+func (s *Call_instrContext) GetInstr() AbstractOptimizer.Instruction { return s.instr }
+
+func (s *Call_instrContext) SetInstr(v AbstractOptimizer.Instruction) { s.instr = v }
+
+func (s *Call_instrContext) ID() antlr.TerminalNode {
+	return s.GetToken(OptimizerParserID, 0)
+}
+
+func (s *Call_instrContext) LEFT_PAR() antlr.TerminalNode {
+	return s.GetToken(OptimizerParserLEFT_PAR, 0)
+}
+
+func (s *Call_instrContext) RIGHT_PAR() antlr.TerminalNode {
+	return s.GetToken(OptimizerParserRIGHT_PAR, 0)
+}
+
+func (s *Call_instrContext) SEMICOLON() antlr.TerminalNode {
+	return s.GetToken(OptimizerParserSEMICOLON, 0)
+}
+
+func (s *Call_instrContext) GetRuleContext() antlr.RuleContext {
+	return s
+}
+
+func (s *Call_instrContext) ToStringTree(ruleNames []string, recog antlr.Recognizer) string {
+	return antlr.TreesStringTree(s, ruleNames, recog)
+}
+
+func (s *Call_instrContext) EnterRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(OptimizerParserListener); ok {
+		listenerT.EnterCall_instr(s)
+	}
+}
+
+func (s *Call_instrContext) ExitRule(listener antlr.ParseTreeListener) {
+	if listenerT, ok := listener.(OptimizerParserListener); ok {
+		listenerT.ExitCall_instr(s)
+	}
+}
+
+func (p *OptimizerParser) Call_instr() (localctx ICall_instrContext) {
+	localctx = NewCall_instrContext(p, p.GetParserRuleContext(), p.GetState())
+	p.EnterRule(localctx, 36, OptimizerParserRULE_call_instr)
+
+	defer func() {
+		p.ExitRule()
+	}()
+
+	defer func() {
+		if err := recover(); err != nil {
+			if v, ok := err.(antlr.RecognitionException); ok {
+				localctx.SetException(v)
+				p.GetErrorHandler().ReportError(p, v)
+				p.GetErrorHandler().Recover(p, v)
+			} else {
+				panic(err)
+			}
+		}
+	}()
+
+	p.EnterOuterAlt(localctx, 1)
+	{
+		p.SetState(254)
+
+		var _m = p.Match(OptimizerParserID)
+
+		localctx.(*Call_instrContext)._ID = _m
+	}
+	{
+		p.SetState(255)
+		p.Match(OptimizerParserLEFT_PAR)
+	}
+	{
+		p.SetState(256)
+		p.Match(OptimizerParserRIGHT_PAR)
+	}
+	{
+		p.SetState(257)
+		p.Match(OptimizerParserSEMICOLON)
+	}
+
+	localctx.(*Call_instrContext).instr = Function.NewCall((func() string {
+		if localctx.(*Call_instrContext).Get_ID() == nil {
+			return ""
+		} else {
+			return localctx.(*Call_instrContext).Get_ID().GetText()
+		}
+	}()), (func() int {
+		if localctx.(*Call_instrContext).Get_ID() == nil {
+			return 0
+		} else {
+			return localctx.(*Call_instrContext).Get_ID().GetLine()
+		}
+	}()), localctx.(*Call_instrContext).Get_ID().GetColumn())
 
 	return localctx
 }
@@ -4284,7 +4478,7 @@ func (s *Expr_printContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *OptimizerParser) Expr_print() (localctx IExpr_printContext) {
 	localctx = NewExpr_printContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 36, OptimizerParserRULE_expr_print)
+	p.EnterRule(localctx, 38, OptimizerParserRULE_expr_print)
 
 	defer func() {
 		p.ExitRule()
@@ -4304,7 +4498,7 @@ func (p *OptimizerParser) Expr_print() (localctx IExpr_printContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(249)
+		p.SetState(260)
 
 		var _x = p.Expr_valor()
 
@@ -4440,7 +4634,7 @@ func (s *ConvertContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *OptimizerParser) Convert() (localctx IConvertContext) {
 	localctx = NewConvertContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 38, OptimizerParserRULE_convert)
+	p.EnterRule(localctx, 40, OptimizerParserRULE_convert)
 
 	defer func() {
 		p.ExitRule()
@@ -4458,24 +4652,24 @@ func (p *OptimizerParser) Convert() (localctx IConvertContext) {
 		}
 	}()
 
-	p.SetState(264)
+	p.SetState(275)
 	p.GetErrorHandler().Sync(p)
 	switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 5, p.GetParserRuleContext()) {
 	case 1:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(252)
+			p.SetState(263)
 			p.Match(OptimizerParserLEFT_PAR)
 		}
 		{
-			p.SetState(253)
+			p.SetState(264)
 
 			var _m = p.Match(OptimizerParserRINT)
 
 			localctx.(*ConvertContext)._RINT = _m
 		}
 		{
-			p.SetState(254)
+			p.SetState(265)
 			p.Match(OptimizerParserRIGHT_PAR)
 		}
 
@@ -4490,18 +4684,18 @@ func (p *OptimizerParser) Convert() (localctx IConvertContext) {
 	case 2:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(256)
+			p.SetState(267)
 			p.Match(OptimizerParserLEFT_PAR)
 		}
 		{
-			p.SetState(257)
+			p.SetState(268)
 
 			var _m = p.Match(OptimizerParserRFLOAT)
 
 			localctx.(*ConvertContext)._RFLOAT = _m
 		}
 		{
-			p.SetState(258)
+			p.SetState(269)
 			p.Match(OptimizerParserRIGHT_PAR)
 		}
 
@@ -4516,18 +4710,18 @@ func (p *OptimizerParser) Convert() (localctx IConvertContext) {
 	case 3:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(260)
+			p.SetState(271)
 			p.Match(OptimizerParserLEFT_PAR)
 		}
 		{
-			p.SetState(261)
+			p.SetState(272)
 
 			var _m = p.Match(OptimizerParserRCHAR)
 
 			localctx.(*ConvertContext)._RCHAR = _m
 		}
 		{
-			p.SetState(262)
+			p.SetState(273)
 			p.Match(OptimizerParserRIGHT_PAR)
 		}
 
@@ -4636,7 +4830,7 @@ func (s *ExpressionContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *OptimizerParser) Expression() (localctx IExpressionContext) {
 	localctx = NewExpressionContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 40, OptimizerParserRULE_expression)
+	p.EnterRule(localctx, 42, OptimizerParserRULE_expression)
 
 	defer func() {
 		p.ExitRule()
@@ -4656,7 +4850,7 @@ func (p *OptimizerParser) Expression() (localctx IExpressionContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(266)
+		p.SetState(277)
 
 		var _x = p.expr_rel(0)
 
@@ -4847,8 +5041,8 @@ func (p *OptimizerParser) expr_rel(_p int) (localctx IExpr_relContext) {
 	localctx = NewExpr_relContext(p, p.GetParserRuleContext(), _parentState)
 	var _prevctx IExpr_relContext = localctx
 	var _ antlr.ParserRuleContext = _prevctx // TODO: To prevent unused variable warning.
-	_startState := 42
-	p.EnterRecursionRule(localctx, 42, OptimizerParserRULE_expr_rel, _p)
+	_startState := 44
+	p.EnterRecursionRule(localctx, 44, OptimizerParserRULE_expr_rel, _p)
 	var _la int
 
 	defer func() {
@@ -4871,7 +5065,7 @@ func (p *OptimizerParser) expr_rel(_p int) (localctx IExpr_relContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(270)
+		p.SetState(281)
 
 		var _x = p.expr_arit(0)
 
@@ -4881,7 +5075,7 @@ func (p *OptimizerParser) expr_rel(_p int) (localctx IExpr_relContext) {
 	localctx.(*Expr_relContext).p = localctx.(*Expr_relContext).Get_expr_arit().GetP()
 
 	p.GetParserRuleContext().SetStop(p.GetTokenStream().LT(-1))
-	p.SetState(280)
+	p.SetState(291)
 	p.GetErrorHandler().Sync(p)
 	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 6, p.GetParserRuleContext())
 
@@ -4894,13 +5088,13 @@ func (p *OptimizerParser) expr_rel(_p int) (localctx IExpr_relContext) {
 			localctx = NewExpr_relContext(p, _parentctx, _parentState)
 			localctx.(*Expr_relContext).opLeft = _prevctx
 			p.PushNewRecursionContext(localctx, _startState, OptimizerParserRULE_expr_rel)
-			p.SetState(273)
+			p.SetState(284)
 
 			if !(p.Precpred(p.GetParserRuleContext(), 2)) {
 				panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 2)", ""))
 			}
 			{
-				p.SetState(274)
+				p.SetState(285)
 
 				var _lt = p.GetTokenStream().LT(1)
 
@@ -4908,7 +5102,7 @@ func (p *OptimizerParser) expr_rel(_p int) (localctx IExpr_relContext) {
 
 				_la = p.GetTokenStream().LA(1)
 
-				if !(((_la-36)&-(0x1f+1)) == 0 && ((1<<uint((_la-36)))&((1<<(OptimizerParserEQUEAL_EQUAL-36))|(1<<(OptimizerParserNOTEQUAL-36))|(1<<(OptimizerParserGREATER_THAN-36))|(1<<(OptimizerParserLESS_THAN-36))|(1<<(OptimizerParserGREATER_EQUALTHAN-36))|(1<<(OptimizerParserLESS_EQUEALTHAN-36)))) != 0) {
+				if !(((_la-37)&-(0x1f+1)) == 0 && ((1<<uint((_la-37)))&((1<<(OptimizerParserEQUEAL_EQUAL-37))|(1<<(OptimizerParserNOTEQUAL-37))|(1<<(OptimizerParserGREATER_THAN-37))|(1<<(OptimizerParserLESS_THAN-37))|(1<<(OptimizerParserGREATER_EQUALTHAN-37))|(1<<(OptimizerParserLESS_EQUEALTHAN-37)))) != 0) {
 					var _ri = p.GetErrorHandler().RecoverInline(p)
 
 					localctx.(*Expr_relContext).op = _ri
@@ -4918,7 +5112,7 @@ func (p *OptimizerParser) expr_rel(_p int) (localctx IExpr_relContext) {
 				}
 			}
 			{
-				p.SetState(275)
+				p.SetState(286)
 
 				var _x = p.expr_rel(3)
 
@@ -4940,7 +5134,7 @@ func (p *OptimizerParser) expr_rel(_p int) (localctx IExpr_relContext) {
 			}()), localctx.(*Expr_relContext).GetOp().GetColumn())
 
 		}
-		p.SetState(282)
+		p.SetState(293)
 		p.GetErrorHandler().Sync(p)
 		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 6, p.GetParserRuleContext())
 	}
@@ -5149,8 +5343,8 @@ func (p *OptimizerParser) expr_arit(_p int) (localctx IExpr_aritContext) {
 	localctx = NewExpr_aritContext(p, p.GetParserRuleContext(), _parentState)
 	var _prevctx IExpr_aritContext = localctx
 	var _ antlr.ParserRuleContext = _prevctx // TODO: To prevent unused variable warning.
-	_startState := 44
-	p.EnterRecursionRule(localctx, 44, OptimizerParserRULE_expr_arit, _p)
+	_startState := 46
+	p.EnterRecursionRule(localctx, 46, OptimizerParserRULE_expr_arit, _p)
 	var _la int
 
 	defer func() {
@@ -5172,20 +5366,20 @@ func (p *OptimizerParser) expr_arit(_p int) (localctx IExpr_aritContext) {
 	var _alt int
 
 	p.EnterOuterAlt(localctx, 1)
-	p.SetState(296)
+	p.SetState(307)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case OptimizerParserSUB:
 		{
-			p.SetState(284)
+			p.SetState(295)
 
 			var _m = p.Match(OptimizerParserSUB)
 
 			localctx.(*Expr_aritContext).op = _m
 		}
 		{
-			p.SetState(285)
+			p.SetState(296)
 
 			var _x = p.Expression()
 
@@ -5200,9 +5394,9 @@ func (p *OptimizerParser) expr_arit(_p int) (localctx IExpr_aritContext) {
 			}
 		}()), localctx.(*Expr_aritContext).GetOp().GetColumn())
 
-	case OptimizerParserRPSTACK, OptimizerParserRPHEAP, OptimizerParserINTEGER, OptimizerParserFLOAT, OptimizerParserID:
+	case OptimizerParserRPSTACK, OptimizerParserRPHEAP, OptimizerParserINTEGER, OptimizerParserFLOAT, OptimizerParserID, OptimizerParserTEMP:
 		{
-			p.SetState(288)
+			p.SetState(299)
 
 			var _x = p.Expr_valor()
 
@@ -5213,15 +5407,15 @@ func (p *OptimizerParser) expr_arit(_p int) (localctx IExpr_aritContext) {
 
 	case OptimizerParserLEFT_PAR:
 		{
-			p.SetState(291)
+			p.SetState(302)
 			p.Match(OptimizerParserLEFT_PAR)
 		}
 		{
-			p.SetState(292)
+			p.SetState(303)
 			p.Expression()
 		}
 		{
-			p.SetState(293)
+			p.SetState(304)
 			p.Match(OptimizerParserRIGHT_PAR)
 		}
 
@@ -5229,7 +5423,7 @@ func (p *OptimizerParser) expr_arit(_p int) (localctx IExpr_aritContext) {
 		panic(antlr.NewNoViableAltException(p, nil, nil, nil, nil, nil))
 	}
 	p.GetParserRuleContext().SetStop(p.GetTokenStream().LT(-1))
-	p.SetState(310)
+	p.SetState(321)
 	p.GetErrorHandler().Sync(p)
 	_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 9, p.GetParserRuleContext())
 
@@ -5239,20 +5433,20 @@ func (p *OptimizerParser) expr_arit(_p int) (localctx IExpr_aritContext) {
 				p.TriggerExitRuleEvent()
 			}
 			_prevctx = localctx
-			p.SetState(308)
+			p.SetState(319)
 			p.GetErrorHandler().Sync(p)
 			switch p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 8, p.GetParserRuleContext()) {
 			case 1:
 				localctx = NewExpr_aritContext(p, _parentctx, _parentState)
 				localctx.(*Expr_aritContext).opLeft = _prevctx
 				p.PushNewRecursionContext(localctx, _startState, OptimizerParserRULE_expr_arit)
-				p.SetState(298)
+				p.SetState(309)
 
 				if !(p.Precpred(p.GetParserRuleContext(), 4)) {
 					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 4)", ""))
 				}
 				{
-					p.SetState(299)
+					p.SetState(310)
 
 					var _lt = p.GetTokenStream().LT(1)
 
@@ -5270,7 +5464,7 @@ func (p *OptimizerParser) expr_arit(_p int) (localctx IExpr_aritContext) {
 					}
 				}
 				{
-					p.SetState(300)
+					p.SetState(311)
 
 					var _x = p.expr_arit(5)
 
@@ -5295,13 +5489,13 @@ func (p *OptimizerParser) expr_arit(_p int) (localctx IExpr_aritContext) {
 				localctx = NewExpr_aritContext(p, _parentctx, _parentState)
 				localctx.(*Expr_aritContext).opLeft = _prevctx
 				p.PushNewRecursionContext(localctx, _startState, OptimizerParserRULE_expr_arit)
-				p.SetState(303)
+				p.SetState(314)
 
 				if !(p.Precpred(p.GetParserRuleContext(), 3)) {
 					panic(antlr.NewFailedPredicateException(p, "p.Precpred(p.GetParserRuleContext(), 3)", ""))
 				}
 				{
-					p.SetState(304)
+					p.SetState(315)
 
 					var _lt = p.GetTokenStream().LT(1)
 
@@ -5319,7 +5513,7 @@ func (p *OptimizerParser) expr_arit(_p int) (localctx IExpr_aritContext) {
 					}
 				}
 				{
-					p.SetState(305)
+					p.SetState(316)
 
 					var _x = p.expr_arit(4)
 
@@ -5343,7 +5537,7 @@ func (p *OptimizerParser) expr_arit(_p int) (localctx IExpr_aritContext) {
 			}
 
 		}
-		p.SetState(312)
+		p.SetState(323)
 		p.GetErrorHandler().Sync(p)
 		_alt = p.GetInterpreter().AdaptivePredict(p.GetTokenStream(), 9, p.GetParserRuleContext())
 	}
@@ -5467,7 +5661,7 @@ func (s *Data_typeContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *OptimizerParser) Data_type() (localctx IData_typeContext) {
 	localctx = NewData_typeContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 46, OptimizerParserRULE_data_type)
+	p.EnterRule(localctx, 48, OptimizerParserRULE_data_type)
 
 	defer func() {
 		p.ExitRule()
@@ -5485,14 +5679,14 @@ func (p *OptimizerParser) Data_type() (localctx IData_typeContext) {
 		}
 	}()
 
-	p.SetState(319)
+	p.SetState(330)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case OptimizerParserRINT:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(313)
+			p.SetState(324)
 
 			var _m = p.Match(OptimizerParserRINT)
 
@@ -5509,7 +5703,7 @@ func (p *OptimizerParser) Data_type() (localctx IData_typeContext) {
 	case OptimizerParserRFLOAT:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(315)
+			p.SetState(326)
 
 			var _m = p.Match(OptimizerParserRFLOAT)
 
@@ -5526,7 +5720,7 @@ func (p *OptimizerParser) Data_type() (localctx IData_typeContext) {
 	case OptimizerParserRCHAR:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(317)
+			p.SetState(328)
 
 			var _m = p.Match(OptimizerParserRCHAR)
 
@@ -5560,6 +5754,9 @@ type IExpr_valorContext interface {
 	// Get_INTEGER returns the _INTEGER token.
 	Get_INTEGER() antlr.Token
 
+	// Get_TEMP returns the _TEMP token.
+	Get_TEMP() antlr.Token
+
 	// Get_ID returns the _ID token.
 	Get_ID() antlr.Token
 
@@ -5574,6 +5771,9 @@ type IExpr_valorContext interface {
 
 	// Set_INTEGER sets the _INTEGER token.
 	Set_INTEGER(antlr.Token)
+
+	// Set_TEMP sets the _TEMP token.
+	Set_TEMP(antlr.Token)
 
 	// Set_ID sets the _ID token.
 	Set_ID(antlr.Token)
@@ -5600,6 +5800,7 @@ type Expr_valorContext struct {
 	p        AbstractOptimizer.Expression
 	_FLOAT   antlr.Token
 	_INTEGER antlr.Token
+	_TEMP    antlr.Token
 	_ID      antlr.Token
 	_RPSTACK antlr.Token
 	_RPHEAP  antlr.Token
@@ -5631,6 +5832,8 @@ func (s *Expr_valorContext) Get_FLOAT() antlr.Token { return s._FLOAT }
 
 func (s *Expr_valorContext) Get_INTEGER() antlr.Token { return s._INTEGER }
 
+func (s *Expr_valorContext) Get_TEMP() antlr.Token { return s._TEMP }
+
 func (s *Expr_valorContext) Get_ID() antlr.Token { return s._ID }
 
 func (s *Expr_valorContext) Get_RPSTACK() antlr.Token { return s._RPSTACK }
@@ -5640,6 +5843,8 @@ func (s *Expr_valorContext) Get_RPHEAP() antlr.Token { return s._RPHEAP }
 func (s *Expr_valorContext) Set_FLOAT(v antlr.Token) { s._FLOAT = v }
 
 func (s *Expr_valorContext) Set_INTEGER(v antlr.Token) { s._INTEGER = v }
+
+func (s *Expr_valorContext) Set_TEMP(v antlr.Token) { s._TEMP = v }
 
 func (s *Expr_valorContext) Set_ID(v antlr.Token) { s._ID = v }
 
@@ -5657,6 +5862,10 @@ func (s *Expr_valorContext) FLOAT() antlr.TerminalNode {
 
 func (s *Expr_valorContext) INTEGER() antlr.TerminalNode {
 	return s.GetToken(OptimizerParserINTEGER, 0)
+}
+
+func (s *Expr_valorContext) TEMP() antlr.TerminalNode {
+	return s.GetToken(OptimizerParserTEMP, 0)
 }
 
 func (s *Expr_valorContext) ID() antlr.TerminalNode {
@@ -5693,7 +5902,7 @@ func (s *Expr_valorContext) ExitRule(listener antlr.ParseTreeListener) {
 
 func (p *OptimizerParser) Expr_valor() (localctx IExpr_valorContext) {
 	localctx = NewExpr_valorContext(p, p.GetParserRuleContext(), p.GetState())
-	p.EnterRule(localctx, 48, OptimizerParserRULE_expr_valor)
+	p.EnterRule(localctx, 50, OptimizerParserRULE_expr_valor)
 
 	defer func() {
 		p.ExitRule()
@@ -5711,14 +5920,14 @@ func (p *OptimizerParser) Expr_valor() (localctx IExpr_valorContext) {
 		}
 	}()
 
-	p.SetState(331)
+	p.SetState(344)
 	p.GetErrorHandler().Sync(p)
 
 	switch p.GetTokenStream().LA(1) {
 	case OptimizerParserFLOAT:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(321)
+			p.SetState(332)
 
 			var _m = p.Match(OptimizerParserFLOAT)
 
@@ -5746,7 +5955,7 @@ func (p *OptimizerParser) Expr_valor() (localctx IExpr_valorContext) {
 	case OptimizerParserINTEGER:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(323)
+			p.SetState(334)
 
 			var _m = p.Match(OptimizerParserINTEGER)
 
@@ -5771,10 +5980,34 @@ func (p *OptimizerParser) Expr_valor() (localctx IExpr_valorContext) {
 			}
 		}()), localctx.(*Expr_valorContext).Get_INTEGER().GetColumn())
 
-	case OptimizerParserID:
+	case OptimizerParserTEMP:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(325)
+			p.SetState(336)
+
+			var _m = p.Match(OptimizerParserTEMP)
+
+			localctx.(*Expr_valorContext)._TEMP = _m
+		}
+
+		localctx.(*Expr_valorContext).p = Primitive.NewTemp((func() string {
+			if localctx.(*Expr_valorContext).Get_TEMP() == nil {
+				return ""
+			} else {
+				return localctx.(*Expr_valorContext).Get_TEMP().GetText()
+			}
+		}()), (func() int {
+			if localctx.(*Expr_valorContext).Get_TEMP() == nil {
+				return 0
+			} else {
+				return localctx.(*Expr_valorContext).Get_TEMP().GetLine()
+			}
+		}()), localctx.(*Expr_valorContext).Get_TEMP().GetColumn())
+
+	case OptimizerParserID:
+		p.EnterOuterAlt(localctx, 4)
+		{
+			p.SetState(338)
 
 			var _m = p.Match(OptimizerParserID)
 
@@ -5796,9 +6029,9 @@ func (p *OptimizerParser) Expr_valor() (localctx IExpr_valorContext) {
 		}()), localctx.(*Expr_valorContext).Get_ID().GetColumn())
 
 	case OptimizerParserRPSTACK:
-		p.EnterOuterAlt(localctx, 4)
+		p.EnterOuterAlt(localctx, 5)
 		{
-			p.SetState(327)
+			p.SetState(340)
 
 			var _m = p.Match(OptimizerParserRPSTACK)
 
@@ -5820,9 +6053,9 @@ func (p *OptimizerParser) Expr_valor() (localctx IExpr_valorContext) {
 		}()), localctx.(*Expr_valorContext).Get_RPSTACK().GetColumn())
 
 	case OptimizerParserRPHEAP:
-		p.EnterOuterAlt(localctx, 5)
+		p.EnterOuterAlt(localctx, 6)
 		{
-			p.SetState(329)
+			p.SetState(342)
 
 			var _m = p.Match(OptimizerParserRPHEAP)
 
@@ -5866,14 +6099,14 @@ func (p *OptimizerParser) Sempred(localctx antlr.RuleContext, ruleIndex, predInd
 		}
 		return p.ListFuncs_Sempred(t, predIndex)
 
-	case 21:
+	case 22:
 		var t *Expr_relContext = nil
 		if localctx != nil {
 			t = localctx.(*Expr_relContext)
 		}
 		return p.Expr_rel_Sempred(t, predIndex)
 
-	case 22:
+	case 23:
 		var t *Expr_aritContext = nil
 		if localctx != nil {
 			t = localctx.(*Expr_aritContext)

@@ -83,6 +83,7 @@ instruction returns [AbstractOptimizer.Instruction instr]
     | return_instr   { $instr = $return_instr.instr }
     | getHeap_instr  { $instr = $getHeap_instr.instr }
     | getStack_instr { $instr = $getStack_instr.instr }
+    | call_instr     { $instr = $call_instr.instr }
 ;
 
 assign_stack returns [AbstractOptimizer.Instruction instr]
@@ -145,6 +146,12 @@ getHeap_instr returns [AbstractOptimizer.Instruction instr]
 getStack_instr returns [AbstractOptimizer.Instruction instr]
     : expr_valor EQUAL RSTACK LEFT_BRACKET LEFT_PAR data_type RIGHT_PAR expression RIGHT_BRACKET SEMICOLON {
         $instr = Assignment.NewGetHeapStack($expr_valor.p, $expression.p, $EQUAL.line, localctx.(*GetStack_instrContext).Get_EQUAL().GetColumn(), $RSTACK.text)
+    }
+;
+
+call_instr returns [AbstractOptimizer.Instruction instr]
+    : ID LEFT_PAR RIGHT_PAR SEMICOLON {
+        $instr = Function.NewCall($ID.text, $ID.line, localctx.(*Call_instrContext).Get_ID().GetColumn())
     }
 ;
 
@@ -217,6 +224,9 @@ expr_valor returns [AbstractOptimizer.Expression p]
             fmt.Println(err)
         }
         $p = Primitive.NewNumber(num, $INTEGER.line, localctx.(*Expr_valorContext).Get_INTEGER().GetColumn())
+    }
+    | TEMP {
+         $p = Primitive.NewTemp($TEMP.text, $TEMP.line, localctx.(*Expr_valorContext).Get_TEMP().GetColumn() )
     }
     | ID {
          $p = Primitive.NewTemp($ID.text, $ID.line, localctx.(*Expr_valorContext).Get_ID().GetColumn() )

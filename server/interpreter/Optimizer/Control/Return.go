@@ -23,5 +23,5 @@ func (r Return) Execute() interface{} {
 	if r.Value != nil {
 		return "return " + fmt.Sprintf("%v", r.Value.GetValue()) + ";"
 	}
-	return "return 0;"
+	return "return;"
 }

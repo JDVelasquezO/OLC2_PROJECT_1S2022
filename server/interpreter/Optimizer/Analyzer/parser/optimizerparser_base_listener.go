@@ -129,6 +129,12 @@ func (s *BaseOptimizerParserListener) EnterGetStack_instr(ctx *GetStack_instrCon
 // ExitGetStack_instr is called when production getStack_instr is exited.
 func (s *BaseOptimizerParserListener) ExitGetStack_instr(ctx *GetStack_instrContext) {}
 
+// EnterCall_instr is called when production call_instr is entered.
+func (s *BaseOptimizerParserListener) EnterCall_instr(ctx *Call_instrContext) {}
+
+// ExitCall_instr is called when production call_instr is exited.
+func (s *BaseOptimizerParserListener) ExitCall_instr(ctx *Call_instrContext) {}
+
 // EnterExpr_print is called when production expr_print is entered.
 func (s *BaseOptimizerParserListener) EnterExpr_print(ctx *Expr_printContext) {}
 

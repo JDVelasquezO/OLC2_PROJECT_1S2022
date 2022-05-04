@@ -2,6 +2,7 @@ package Assignment
 
 import (
 	"OLC2_Project1/server/interpreter/Optimizer/AbstractOptimizer"
+	"fmt"
 )
 
 type Assign struct {
@@ -25,6 +26,10 @@ func (a Assign) Execute() interface{} {
 
 	opAssign := a.Value.GetValue()
 	temp := a.Temp.GetValue()
+
+	if temp.(string) == "P" || temp.(string) == "H" {
+		return temp.(string) + " = " + fmt.Sprintf("%v", opAssign) + ";"
+	}
 
 	typeRet := make(map[string]interface{})
 	typeRet["temp"] = temp

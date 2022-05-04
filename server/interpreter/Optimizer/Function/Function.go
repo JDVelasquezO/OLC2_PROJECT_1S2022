@@ -5,7 +5,6 @@ import (
 	"OLC2_Project1/server/interpreter/Optimizer/Assignment"
 	"OLC2_Project1/server/interpreter/Optimizer/Control"
 	"OLC2_Project1/server/interpreter/Optimizer/Primitive"
-	"OLC2_Project1/server/interpreter/Optimizer/Print"
 	"fmt"
 	arrayList "github.com/colegno/arraylist"
 	"reflect"
@@ -40,16 +39,19 @@ func (f Function) Execute() interface{} {
 
 		newExpr := instruction.(AbstractOptimizer.Instruction).Execute()
 
-		if reflect.TypeOf(instruction) == reflect.TypeOf(Control.Label{}) ||
-			reflect.TypeOf(instruction) == reflect.TypeOf(Control.If{}) ||
-			reflect.TypeOf(instruction) == reflect.TypeOf(Control.GoTo{}) ||
-			reflect.TypeOf(instruction) == reflect.TypeOf(Print.Printf{}) ||
-			reflect.TypeOf(instruction) == reflect.TypeOf(Control.Return{}) ||
-			reflect.TypeOf(instruction) == reflect.TypeOf(Assignment.AssignHeapStack{}) ||
-			reflect.TypeOf(instruction) == reflect.TypeOf(Assignment.GetHeapStack{}) {
+		if reflect.TypeOf(newExpr).String() == "string" {
 			valToKeep := "\t" + newExpr.(string) + "\n"
 			newListStrs.Add(valToKeep)
 			continue
+		} else {
+			objExpr := newExpr.(map[string]interface{})
+			if strings.Contains(objExpr["val"].(string), "H") ||
+				strings.Contains(objExpr["val"].(string), "P") {
+
+				valToKeep := "\t" + objExpr["temp"].(string) + " = " + objExpr["val"].(string) + ";\n"
+				newListStrs.Add(valToKeep)
+				continue
+			}
 		}
 
 		if reflect.TypeOf(instruction) != reflect.TypeOf(Control.Label{}) {

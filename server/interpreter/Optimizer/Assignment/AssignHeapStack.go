@@ -30,5 +30,5 @@ func (a AssignHeapStack) Execute() interface{} {
 	opAssign := a.Value.GetValue()
 	temp := a.Temp.GetValue()
 
-	return a.Structure + "[(int)" + fmt.Sprintf("%v", opAssign) + "] = " + fmt.Sprintf("%v", temp) + ";"
+	return a.Structure + "[(int)" + fmt.Sprintf("%v", temp) + "] = " + fmt.Sprintf("%v", opAssign) + ";"
 }

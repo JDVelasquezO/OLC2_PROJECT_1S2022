@@ -30,6 +30,7 @@ FLOAT:                  [0-9]+'.'[0-9]+;
 CHAR:                   '\''~["]'\'';
 STRING:                 '"'~["]*'"';
 ID:                     [a-zñA-ZÑ_][_a-zñA-ZÑ0-9]*;
+TEMP:                   't'[0-9]+;
 
 // General Operators
 EQUAL:                  '=';
