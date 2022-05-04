@@ -268,7 +268,7 @@ func (g *Generator) AddIf(left string, right string, ope string, label string) {
 
 func (g *Generator) AddPrint(format string, dataType string, value string) {
 	g.GetFreeTemp(value)
-	g.CodeInFunction("Print(\"%"+format+"\", ("+dataType+")"+value+");\n", "\t")
+	g.CodeInFunction("printf(\"%"+format+"\", ("+dataType+")"+value+");\n", "\t")
 }
 
 func (g *Generator) AddError(msg string, line int, col int) {

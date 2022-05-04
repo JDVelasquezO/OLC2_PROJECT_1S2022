@@ -85,13 +85,13 @@ instruction returns [AbstractOptimizer.Instruction instr]
 
 assign_stack returns [AbstractOptimizer.Instruction instr]
     : RSTACK LEFT_BRACKET LEFT_PAR data_type RIGHT_PAR expr_valor RIGHT_BRACKET EQUAL expression SEMICOLON {
-        $instr = Assignment.NewAssign($expr_valor.p, $expression.p, $EQUAL.line, localctx.(*Assign_stackContext).Get_EQUAL().GetColumn())
+        $instr = Assignment.NewAssignHeapStack($expr_valor.p, $expression.p, $EQUAL.line, localctx.(*Assign_stackContext).Get_EQUAL().GetColumn(), $RSTACK.text)
     }
 ;
 
 assign_heap returns [AbstractOptimizer.Instruction instr]
-    : RHEAP LEFT_BRACKET expr_valor RIGHT_BRACKET EQUAL expression SEMICOLON {
-        $instr = Assignment.NewAssign($expr_valor.p, $expression.p, $EQUAL.line, localctx.(*Assign_heapContext).Get_EQUAL().GetColumn())
+    : RHEAP LEFT_BRACKET LEFT_PAR data_type RIGHT_PAR expr_valor RIGHT_BRACKET EQUAL expression SEMICOLON {
+        $instr = Assignment.NewAssignHeapStack($expr_valor.p, $expression.p, $EQUAL.line, localctx.(*Assign_heapContext).Get_EQUAL().GetColumn(), $RHEAP.text)
     }
 ;
 

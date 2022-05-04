@@ -1,6 +1,9 @@
 package Print
 
-import "OLC2_Project1/server/interpreter/Optimizer/AbstractOptimizer"
+import (
+	"OLC2_Project1/server/interpreter/Optimizer/AbstractOptimizer"
+	"fmt"
+)
 
 type Printf struct {
 	Row      int
@@ -25,5 +28,5 @@ func (f Printf) Execute() interface{} {
 		f.Format = f.Format[1 : len(f.Format)-1]
 	}
 
-	return "printf(\"" + f.Format + "\", (" + f.TypeCast + ")" + f.Value.GetValue().(string) + ");\n"
+	return "printf(\"" + f.Format + "\", (" + f.TypeCast + ")" + fmt.Sprintf("%v", f.Value.GetValue()) + ");\n"
 }

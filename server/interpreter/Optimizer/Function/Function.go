@@ -44,7 +44,8 @@ func (f Function) Execute() interface{} {
 			reflect.TypeOf(instruction) == reflect.TypeOf(Control.If{}) ||
 			reflect.TypeOf(instruction) == reflect.TypeOf(Control.GoTo{}) ||
 			reflect.TypeOf(instruction) == reflect.TypeOf(Print.Printf{}) ||
-			reflect.TypeOf(instruction) == reflect.TypeOf(Control.Return{}) {
+			reflect.TypeOf(instruction) == reflect.TypeOf(Control.Return{}) ||
+			reflect.TypeOf(instruction) == reflect.TypeOf(Assignment.AssignHeapStack{}) {
 			valToSend = "\t" + newExpr.(string) + "\n"
 			newListStrs.Add(valToSend)
 			continue
