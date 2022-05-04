@@ -111,6 +111,12 @@ func (s *BaseOptimizerParserListener) EnterPrintf_instr(ctx *Printf_instrContext
 // ExitPrintf_instr is called when production printf_instr is exited.
 func (s *BaseOptimizerParserListener) ExitPrintf_instr(ctx *Printf_instrContext) {}
 
+// EnterReturn_instr is called when production return_instr is entered.
+func (s *BaseOptimizerParserListener) EnterReturn_instr(ctx *Return_instrContext) {}
+
+// ExitReturn_instr is called when production return_instr is exited.
+func (s *BaseOptimizerParserListener) ExitReturn_instr(ctx *Return_instrContext) {}
+
 // EnterExpr_print is called when production expr_print is entered.
 func (s *BaseOptimizerParserListener) EnterExpr_print(ctx *Expr_printContext) {}
 

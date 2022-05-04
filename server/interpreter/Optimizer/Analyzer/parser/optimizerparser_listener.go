@@ -53,6 +53,9 @@ type OptimizerParserListener interface {
 	// EnterPrintf_instr is called when entering the printf_instr production.
 	EnterPrintf_instr(c *Printf_instrContext)
 
+	// EnterReturn_instr is called when entering the return_instr production.
+	EnterReturn_instr(c *Return_instrContext)
+
 	// EnterExpr_print is called when entering the expr_print production.
 	EnterExpr_print(c *Expr_printContext)
 
@@ -118,6 +121,9 @@ type OptimizerParserListener interface {
 
 	// ExitPrintf_instr is called when exiting the printf_instr production.
 	ExitPrintf_instr(c *Printf_instrContext)
+
+	// ExitReturn_instr is called when exiting the return_instr production.
+	ExitReturn_instr(c *Return_instrContext)
 
 	// ExitExpr_print is called when exiting the expr_print production.
 	ExitExpr_print(c *Expr_printContext)

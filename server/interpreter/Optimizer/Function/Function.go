@@ -43,7 +43,8 @@ func (f Function) Execute() interface{} {
 		if reflect.TypeOf(instruction) == reflect.TypeOf(Control.Label{}) ||
 			reflect.TypeOf(instruction) == reflect.TypeOf(Control.If{}) ||
 			reflect.TypeOf(instruction) == reflect.TypeOf(Control.GoTo{}) ||
-			reflect.TypeOf(instruction) == reflect.TypeOf(Print.Printf{}) {
+			reflect.TypeOf(instruction) == reflect.TypeOf(Print.Printf{}) ||
+			reflect.TypeOf(instruction) == reflect.TypeOf(Control.Return{}) {
 			valToSend = "\t" + newExpr.(string) + "\n"
 			newListStrs.Add(valToSend)
 			continue

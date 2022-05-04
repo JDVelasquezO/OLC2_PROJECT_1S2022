@@ -80,6 +80,7 @@ instruction returns [AbstractOptimizer.Instruction instr]
     | goto_instr   { $instr = $goto_instr.instr }
     | label_instr  { $instr = $label_instr.instr }
     | printf_instr { $instr = $printf_instr.instr }
+    | return_instr { $instr = $return_instr.instr }
 ;
 
 assign_stack returns [AbstractOptimizer.Instruction instr]
@@ -121,6 +122,15 @@ label_instr returns [AbstractOptimizer.Instruction instr]
 printf_instr returns [AbstractOptimizer.Instruction instr]
     : RPRINTF LEFT_PAR STRING COMMA convert expr_print RIGHT_PAR SEMICOLON {
         $instr = Print.NewPrintf($STRING.text, $convert.dtype, $expr_print.id, $STRING.line, localctx.(*Printf_instrContext).Get_STRING().GetColumn())
+    }
+;
+
+return_instr returns [AbstractOptimizer.Instruction instr]
+    : RRETURN expression SEMICOLON {
+        $instr = Control.NewReturn($expression.p, $RRETURN.line, localctx.(*Return_instrContext).Get_RRETURN().GetColumn())
+    }
+    | RRETURN SEMICOLON {
+        $instr = Control.NewReturn(nil, $RRETURN.line, localctx.(*Return_instrContext).Get_RRETURN().GetColumn())
     }
 ;
 
