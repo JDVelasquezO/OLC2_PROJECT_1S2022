@@ -115,6 +115,15 @@ func (f Function) Execute() interface{} {
 								if newListStrs.Contains(strToCmp2) {
 									index := newListStrs.IndexOf(strToCmp2)
 									newListStrs.RemoveAtIndex(index)
+
+									for l := 0; l < newListStrs.Len(); l++ {
+										strToValue := newListStrs.GetValue(l)
+										if strings.Contains(strToValue.(string), valOfCmp) {
+											strChanged := strings.ReplaceAll(strToValue.(string), valOfCmp, valRightOfCmp)
+											newListStrs.ReplaceAll(strToValue, strChanged)
+											break
+										}
+									}
 								}
 								newList2.RemoveAtIndex(j)
 
