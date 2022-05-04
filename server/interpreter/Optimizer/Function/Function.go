@@ -45,8 +45,8 @@ func (f Function) Execute() interface{} {
 			continue
 		} else {
 			objExpr := newExpr.(map[string]interface{})
-			if strings.Contains(objExpr["val"].(string), "H") ||
-				strings.Contains(objExpr["val"].(string), "P") {
+			if strings.Contains(fmt.Sprintf("%v", objExpr["val"]), "H") ||
+				strings.Contains(fmt.Sprintf("%v", objExpr["val"]), "P") {
 
 				valToKeep := "\t" + objExpr["temp"].(string) + " = " + objExpr["val"].(string) + ";\n"
 				newListStrs.Add(valToKeep)
@@ -111,7 +111,7 @@ func (f Function) Execute() interface{} {
 								newVal := strings.ReplaceAll(valOfNew, valOfNewArray[k], valToReplace)
 								tempNew["val"] = newVal
 
-								commentToSend := "\t/*---- Se aplico regla 2 y 3 ----*/\n"
+								commentToSend := "\t/*---- Se aplico regla (2 y 3) o 4 ----*/\n"
 								valToSend = commentToSend + "\t" + tempNew["temp"].(string) + " = " + tempNew["val"].(string) + ";\n"
 
 								strToCmp1 := "\t" + tempNew["temp"].(string) + " = " + valOfNew + ";\n"
