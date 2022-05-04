@@ -49,6 +49,12 @@ func (p Print) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generato
 	} else if res0.(Abstract.Value).Type == SymbolTable.ARRAY {
 		//newVal := res0.(Abstract.Value)
 		//TypeArray(newVal, *symbolTable, generator)
+	} else if res0.(Abstract.Value).Type == SymbolTable.ERROR {
+		objError := res0.(Abstract.Value).Value.(errors.Error)
+		newVal := Expression.NewPrimitive(objError.Msg, SymbolTable.STRING, 0, 0)
+		val := newVal.Compile(symbolTable, generator)
+		TypeString(val.(Abstract.Value).Value.(string), *symbolTable, generator)
+		return nil
 	}
 
 	if p.isBreakLine {

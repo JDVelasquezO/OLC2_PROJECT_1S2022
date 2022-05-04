@@ -5,6 +5,7 @@ import (
 	"OLC2_Project1/server/interpreter/AST/Expression"
 	"OLC2_Project1/server/interpreter/Abstract"
 	"OLC2_Project1/server/interpreter/SymbolTable"
+	"OLC2_Project1/server/interpreter/errors"
 	"encoding/json"
 	"fmt"
 	arrayList "github.com/colegno/arraylist"
@@ -52,6 +53,15 @@ func (d *Declaration) Compile(symbolTable *SymbolTable.SymbolTable, generator *G
 	}
 
 	value := d.InitVal.(Abstract.Instruction).Compile(symbolTable, generator)
+
+	if value.(Abstract.Value).Type == SymbolTable.ERROR {
+		objError := value.(Abstract.Value).Value.(errors.Error)
+		newVal := Expression.NewPrimitive(objError.Msg, SymbolTable.STRING, 0, 0)
+		val := newVal.Compile(symbolTable, generator)
+		TypeString(val.(Abstract.Value).Value.(string), *symbolTable, generator)
+		return nil
+	}
+
 	generator.AddComment("---- Assign Value ----")
 	newVar := symbolTable.GetSymbol(d.ListIds.GetValue(0).(Expression.Identifier).Id)
 	var tempPos interface{}
@@ -63,7 +73,6 @@ func (d *Declaration) Compile(symbolTable *SymbolTable.SymbolTable, generator *G
 		temp := generator.AddTemp()
 		generator.SetTemp(temp, symbolTable.SizeTable)
 		symbolTable.AddNewSymbol(newId, &newSymbol)
-		//symbolTable.SizeTable -= 1
 		tempPos = temp
 	} else {
 		posNew = newVar.(*SymbolTable.Symbol).Pos
