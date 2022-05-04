@@ -45,9 +45,10 @@ func (f Function) Execute() interface{} {
 			reflect.TypeOf(instruction) == reflect.TypeOf(Control.GoTo{}) ||
 			reflect.TypeOf(instruction) == reflect.TypeOf(Print.Printf{}) ||
 			reflect.TypeOf(instruction) == reflect.TypeOf(Control.Return{}) ||
-			reflect.TypeOf(instruction) == reflect.TypeOf(Assignment.AssignHeapStack{}) {
-			valToSend = "\t" + newExpr.(string) + "\n"
-			newListStrs.Add(valToSend)
+			reflect.TypeOf(instruction) == reflect.TypeOf(Assignment.AssignHeapStack{}) ||
+			reflect.TypeOf(instruction) == reflect.TypeOf(Assignment.GetHeapStack{}) {
+			valToKeep := "\t" + newExpr.(string) + "\n"
+			newListStrs.Add(valToKeep)
 			continue
 		}
 
@@ -58,6 +59,8 @@ func (f Function) Execute() interface{} {
 				for j := 0; j < limit; j++ {
 					tempToCmp := newList.GetValue(j).(map[string]interface{})
 					if tempNew["val"] == tempToCmp["val"] {
+						valToSend = "\t/*---- Se aplico regla 1 ----*/\n"
+						newListStrs.Add(valToSend)
 						tempNew["val"] = tempToCmp["temp"]
 						tempNew["rep"] = true
 						//newList.Add(newExpr)
@@ -105,15 +108,14 @@ func (f Function) Execute() interface{} {
 								valToReplace := newList2.GetValue(j).(map[string]interface{})["val"].(string)
 								newVal := strings.ReplaceAll(valOfNew, valOfNewArray[k], valToReplace)
 								tempNew["val"] = newVal
-								valToSend = "\t" + tempNew["temp"].(string) + " = " + tempNew["val"].(string) + ";\n"
+
+								commentToSend := "\t/*---- Se aplico regla 2 y 3 ----*/\n"
+								valToSend = commentToSend + "\t" + tempNew["temp"].(string) + " = " + tempNew["val"].(string) + ";\n"
 
 								strToCmp1 := "\t" + tempNew["temp"].(string) + " = " + valOfNew + ";\n"
 								if newListStrs.Contains(strToCmp1) {
-									//index := newListStrs.IndexOf(strToCmp1)
-									//newListStrs.RemoveAtIndex(index)
 									newListStrs.ReplaceAll(strToCmp1, valToSend)
 								}
-								//newList2.RemoveAtIndex(newList2.Len() - 1)
 
 								strToCmp2 := "\t" + valOfCmp + " = " + valRightOfCmp + ";\n"
 								if newListStrs.Contains(strToCmp2) {
@@ -144,8 +146,10 @@ func (f Function) Execute() interface{} {
 	}
 
 	valToSend = ""
-	for i := 0; i < newListStrs.Len(); i++ {
-		valToSend += newListStrs.GetValue(i).(string)
+	if newListStrs.Len() > 0 {
+		for i := 0; i < newListStrs.Len(); i++ {
+			valToSend += newListStrs.GetValue(i).(string)
+		}
 	}
 
 	return valToSend

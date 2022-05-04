@@ -117,6 +117,18 @@ func (s *BaseOptimizerParserListener) EnterReturn_instr(ctx *Return_instrContext
 // ExitReturn_instr is called when production return_instr is exited.
 func (s *BaseOptimizerParserListener) ExitReturn_instr(ctx *Return_instrContext) {}
 
+// EnterGetHeap_instr is called when production getHeap_instr is entered.
+func (s *BaseOptimizerParserListener) EnterGetHeap_instr(ctx *GetHeap_instrContext) {}
+
+// ExitGetHeap_instr is called when production getHeap_instr is exited.
+func (s *BaseOptimizerParserListener) ExitGetHeap_instr(ctx *GetHeap_instrContext) {}
+
+// EnterGetStack_instr is called when production getStack_instr is entered.
+func (s *BaseOptimizerParserListener) EnterGetStack_instr(ctx *GetStack_instrContext) {}
+
+// ExitGetStack_instr is called when production getStack_instr is exited.
+func (s *BaseOptimizerParserListener) ExitGetStack_instr(ctx *GetStack_instrContext) {}
+
 // EnterExpr_print is called when production expr_print is entered.
 func (s *BaseOptimizerParserListener) EnterExpr_print(ctx *Expr_printContext) {}
 

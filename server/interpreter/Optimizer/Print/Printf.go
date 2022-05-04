@@ -28,5 +28,5 @@ func (f Printf) Execute() interface{} {
 		f.Format = f.Format[1 : len(f.Format)-1]
 	}
 
-	return "printf(\"" + f.Format + "\", (" + f.TypeCast + ")" + fmt.Sprintf("%v", f.Value.GetValue()) + ");\n"
+	return "printf(\"" + f.Format + "\", (" + f.TypeCast + ")" + fmt.Sprintf("%v", f.Value.GetValue()) + ");"
 }

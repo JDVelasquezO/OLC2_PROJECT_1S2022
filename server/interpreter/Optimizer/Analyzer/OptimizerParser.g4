@@ -73,14 +73,16 @@ instructions returns[*arrayList.List l]
 ;
 
 instruction returns [AbstractOptimizer.Instruction instr]
-    : assign_stack { $instr = $assign_stack.instr }
-    | assign_heap  { $instr = $assign_heap.instr }
-    | assign       { $instr = $assign.instr }
-    | if_instr     { $instr = $if_instr.instr }
-    | goto_instr   { $instr = $goto_instr.instr }
-    | label_instr  { $instr = $label_instr.instr }
-    | printf_instr { $instr = $printf_instr.instr }
-    | return_instr { $instr = $return_instr.instr }
+    : assign_stack   { $instr = $assign_stack.instr }
+    | assign_heap    { $instr = $assign_heap.instr }
+    | assign         { $instr = $assign.instr }
+    | if_instr       { $instr = $if_instr.instr }
+    | goto_instr     { $instr = $goto_instr.instr }
+    | label_instr    { $instr = $label_instr.instr }
+    | printf_instr   { $instr = $printf_instr.instr }
+    | return_instr   { $instr = $return_instr.instr }
+    | getHeap_instr  { $instr = $getHeap_instr.instr }
+    | getStack_instr { $instr = $getStack_instr.instr }
 ;
 
 assign_stack returns [AbstractOptimizer.Instruction instr]
@@ -134,6 +136,18 @@ return_instr returns [AbstractOptimizer.Instruction instr]
     }
 ;
 
+getHeap_instr returns [AbstractOptimizer.Instruction instr]
+    : expr_valor EQUAL RHEAP LEFT_BRACKET LEFT_PAR data_type RIGHT_PAR expression RIGHT_BRACKET SEMICOLON {
+        $instr = Assignment.NewGetHeapStack($expr_valor.p, $expression.p, $EQUAL.line, localctx.(*GetHeap_instrContext).Get_EQUAL().GetColumn(), $RHEAP.text)
+    }
+;
+
+getStack_instr returns [AbstractOptimizer.Instruction instr]
+    : expr_valor EQUAL RSTACK LEFT_BRACKET LEFT_PAR data_type RIGHT_PAR expression RIGHT_BRACKET SEMICOLON {
+        $instr = Assignment.NewGetHeapStack($expr_valor.p, $expression.p, $EQUAL.line, localctx.(*GetStack_instrContext).Get_EQUAL().GetColumn(), $RSTACK.text)
+    }
+;
+
 expr_print returns [AbstractOptimizer.Expression id]
     : expr_valor {
         $id = $expr_valor.p
@@ -166,8 +180,8 @@ expr_rel returns[AbstractOptimizer.Expression p]
 ;
 
 expr_arit returns [AbstractOptimizer.Expression p]
-    : '-' opU = expression {
-
+    : op='-' opU = expression {
+        $p = Primitive.NewOperation($opU.p, "-", nil, $op.line, localctx.(*Expr_aritContext).GetOp().GetColumn())
     }
     | opLeft = expr_arit op=('*'|'/') opRight = expr_arit {
         $p = Primitive.NewOperation($opLeft.p, $op.text, $opRight.p, $op.line, localctx.(*Expr_aritContext).GetOp().GetColumn())

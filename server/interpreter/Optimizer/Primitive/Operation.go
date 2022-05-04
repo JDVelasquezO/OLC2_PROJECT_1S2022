@@ -26,5 +26,10 @@ func NewOperation(opLeft AbstractOptimizer.Expression, operator string, opRight 
 }
 
 func (o Operation) GetValue() interface{} {
-	return fmt.Sprintf("%v", o.OpLeft.GetValue()) + " " + o.Operator + " " + fmt.Sprintf("%v", o.OpRight.GetValue())
+	opLeft := fmt.Sprintf("%v", o.OpLeft.GetValue())
+	if o.OpRight == nil {
+		return o.Operator + opLeft
+	}
+	opRight := fmt.Sprintf("%v", o.OpRight.GetValue())
+	return opLeft + " " + o.Operator + " " + opRight
 }

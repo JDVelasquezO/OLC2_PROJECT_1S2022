@@ -56,6 +56,12 @@ type OptimizerParserListener interface {
 	// EnterReturn_instr is called when entering the return_instr production.
 	EnterReturn_instr(c *Return_instrContext)
 
+	// EnterGetHeap_instr is called when entering the getHeap_instr production.
+	EnterGetHeap_instr(c *GetHeap_instrContext)
+
+	// EnterGetStack_instr is called when entering the getStack_instr production.
+	EnterGetStack_instr(c *GetStack_instrContext)
+
 	// EnterExpr_print is called when entering the expr_print production.
 	EnterExpr_print(c *Expr_printContext)
 
@@ -124,6 +130,12 @@ type OptimizerParserListener interface {
 
 	// ExitReturn_instr is called when exiting the return_instr production.
 	ExitReturn_instr(c *Return_instrContext)
+
+	// ExitGetHeap_instr is called when exiting the getHeap_instr production.
+	ExitGetHeap_instr(c *GetHeap_instrContext)
+
+	// ExitGetStack_instr is called when exiting the getStack_instr production.
+	ExitGetStack_instr(c *GetStack_instrContext)
 
 	// ExitExpr_print is called when exiting the expr_print production.
 	ExitExpr_print(c *Expr_printContext)

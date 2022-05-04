@@ -4,6 +4,7 @@ import (
 	"OLC2_Project1/server/interpreter"
 	"OLC2_Project1/server/interpreter/Optimizer/AbstractOptimizer"
 	"OLC2_Project1/server/interpreter/Optimizer/Analyzer/parser"
+	"OLC2_Project1/server/interpreter/Optimizer/Function"
 	"OLC2_Project1/server/utilities"
 	"fmt"
 	"github.com/antlr/antlr4/runtime/Go/antlr"
@@ -68,16 +69,18 @@ func Optimize(c *fiber.Ctx) error {
 	}
 	resToSend += ";\n\n"
 
-	resToSend += "/*------MAIN------*/\nvoid main() {\n"
+	//resToSend += "/*------MAIN------*/\nvoid main() {\n"
 	if ast.ListInstr != nil {
 		for i := 0; i < ast.ListInstr.Len(); i++ {
 			r := ast.ListInstr.GetValue(i)
 			if r != nil {
+				resToSend += "void " + r.(Function.Function).Id + "() {\n"
 				resToSend += r.(AbstractOptimizer.Instruction).Execute().(string)
+				resToSend += "}\n\n"
 			}
 		}
 	}
-	resToSend += "}"
+	resToSend = resToSend[:len(resToSend)-1]
 
 	return c.Render("index", fiber.Map{
 		"Parser3D":                 data.Code,
