@@ -434,7 +434,7 @@ func (g *Generator) CallFunc(id string) {
 }
 
 func (g *Generator) AddOperationMod(res string, left string, right string) {
-	g.CodeInFunction(res+"=(int)fmod("+left+", "+right+");\n", "\t")
+	g.CodeInFunction(res+"=(int)"+left+" % "+right+";\n", "\t")
 }
 
 func (g *Generator) AddOperationPow(res string, base string, exponent string) {

@@ -161,12 +161,14 @@ func (i If) Execute(table SymbolTable.SymbolTable) interface{} {
 					}
 					return valueRet
 				} else {
-					tableNewIf := SymbolTable.NewSymbolTable("Else", &table)
-					for j := 0; j < newIf.ListInstructsElse.Len(); j++ {
-						instr := newIf.ListInstructsElse.GetValue(j).(Abstract.Instruction)
-						valueRet = instr.Execute(tableNewIf)
+					if i.ListInstructsElse != nil {
+						tableNewIf := SymbolTable.NewSymbolTable("Else", &table)
+						for j := 0; j < newIf.ListInstructsElse.Len(); j++ {
+							instr := newIf.ListInstructsElse.GetValue(j).(Abstract.Instruction)
+							valueRet = instr.Execute(tableNewIf)
+						}
+						return valueRet
 					}
-					return valueRet
 				}
 			}
 		}

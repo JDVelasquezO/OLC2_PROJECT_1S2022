@@ -22,7 +22,7 @@ var sum = [5][5]SymbolTable.DataType{
 
 var multiDiv = [5][5]SymbolTable.DataType{
 	{SymbolTable.INTEGER, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
-	{SymbolTable.NULL, SymbolTable.FLOAT, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
+	{SymbolTable.FLOAT, SymbolTable.FLOAT, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
 	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
 	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
 	{SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL, SymbolTable.NULL},
@@ -194,6 +194,9 @@ func (o Operation) Compile(symbolTable *SymbolTable.SymbolTable, generator *Gene
 			switch operation {
 			case "pow", "powf":
 				generator.AddExpression(temp, valLeft, valLeft, "*")
+				break
+			case "%":
+				generator.AddOperationMod(temp, valLeft, valRight)
 				break
 			case ">", "<", ">=", "<=", "==", "!=":
 				leftToSend := left.(Abstract.Value)
@@ -523,7 +526,8 @@ func (o Operation) GetValue(symbolTable SymbolTable.SymbolTable) SymbolTable.Ret
 				return SymbolTable.ReturnType{Type: SymbolTable.ERROR, Value: err.Msg}
 			}
 
-			return SymbolTable.ReturnType{Type: SymbolTable.FLOAT, Value: float64(retLeft.Value.(int)) / float64(retRight.Value.(int))}
+			return SymbolTable.ReturnType{Type: priority, Value: retLeft.Value.(int) / retRight.Value.(int)}
+
 		} else if priority == SymbolTable.FLOAT {
 
 			if retRight.Value.(float64) == 0 {

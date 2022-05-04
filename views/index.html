@@ -90,6 +90,9 @@
 
 <div class="container mt-6 mb-6" id="mirror">
 
+    <div class="">
+        <h2 class="is-size-1 has-text-centered has-text-white">Translate</h2>
+    </div>
     <form action="http://localhost:3000/compiler" method="post" id="formCode">
         <div class="columns">
             <div class="column code_mirror">
@@ -115,20 +118,11 @@
         </div>
 
         <button class="button is-link" id="btnInterpret">Compiler</button><br><br>
-        <!--<div class="columns">
-            <div class="column code_mirror">
-                <p class="has-text-light">Output Rust:</p>
-                <div style="border: 5px solid hsl(348, 100%, 61%); width: 100%">
-                    {{ if (eq .Res "") }}
-                    <textarea id="reader"></textarea>
-                    {{ else }}
-                    <textarea id="reader">{{ .Res }}</textarea>
-                    {{ end }}
-                </div>
-            </div>
-        </div>-->
     </form>
 
+    <div class="">
+        <h2 class="is-size-1 has-text-centered has-text-white">Optimizer</h2>
+    </div>
     <form action="http://localhost:3000/optimizer" method="post" id="formCode">
         <div class="columns">
             <div class="column code_mirror">
@@ -154,9 +148,25 @@
         </div>
 
         <button class="button is-danger" id="btnOptimizer">Optimizer</button><br><br>
-        <!--<div class="columns">
+    </form>
+
+    <div class="">
+        <h2 class="is-size-1 has-text-centered has-text-white">Analyzer</h2>
+    </div>
+    <form action="http://localhost:3000/analyze" method="post" id="formCodeRust">
+        <div class="columns">
             <div class="column code_mirror">
-                <p class="has-text-light">Output Rust:</p>
+                <p class="has-text-light">Input:</p>
+                <div style="border: 5px solid hsl(348, 100%, 61%); width: 100%">
+                    {{ if (eq .Parser "") }}
+                    <textarea autofocus name="code" id="writerRust"></textarea>
+                    {{ else }}
+                    <textarea autofocus name="code" id="writerRust">{{ .Parser }}</textarea>
+                    {{ end }}
+                </div>
+            </div>
+            <div class="column code_mirror">
+                <p class="has-text-light">Console:</p>
                 <div style="border: 5px solid hsl(348, 100%, 61%); width: 100%">
                     {{ if (eq .Res "") }}
                     <textarea id="reader"></textarea>
@@ -165,12 +175,14 @@
                     {{ end }}
                 </div>
             </div>
-        </div>-->
+        </div>
+
+        <button class="button is-info" id="btnInterpret">Interpreter</button><br><br>
     </form>
 
-<!--    <hr>-->
+    <hr>
 
-    <!--<div class="container mt-6">
+    <div class="container mt-6">
         <div class="columns">
             <div class="column">
                 <h2 class="has-text-white">Symbol Table:</h2>
@@ -185,7 +197,7 @@
                         <th><abbr class="has-text-info">Ambit</abbr></th>
                     </tr>
                     </thead>
-                    &lt;!&ndash; ********************* FUNCTIONS ********************* &ndash;&gt;
+                    <!-- ********************* FUNCTIONS ********************* -->
                     <tbody>
                     {{ range .Functions }}
                     <tr>
@@ -198,7 +210,7 @@
                     </tr>
                     {{ end }}
 
-                    &lt;!&ndash; ********************* PARAMETERS ********************* &ndash;&gt;
+                    <!-- ********************* PARAMETERS ********************* -->
                     {{ range .Params }}
                     <tr>
                         <td>{{ .Id }}</td>
@@ -210,7 +222,7 @@
                     </tr>
                     {{ end }}
 
-                    &lt;!&ndash; ********************* VARIABLES IN FUNCTIONS ********************* &ndash;&gt;
+                    <!-- ********************* VARIABLES IN FUNCTIONS ********************* -->
                     {{ range .VarsFunction }}
                     <tr>
                         <td>{{ .Id }}</td>
@@ -222,7 +234,7 @@
                     </tr>
                     {{ end }}
 
-                    &lt;!&ndash; ********************* VARIABLES ********************* &ndash;&gt;
+                    <!-- ********************* VARIABLES ********************* -->
                     {{ range .Symbols }}
                     <tr>
                         <td>{{ .Id }}</td>
@@ -234,7 +246,7 @@
                     </tr>
                     {{ end }}
 
-                    &lt;!&ndash; ********************* ARRAYS ********************* &ndash;&gt;
+                    <!-- ********************* ARRAYS ********************* -->
 
                     {{ range .Arrays }}
                     <tr>
@@ -277,7 +289,7 @@
                 </table>
             </div>
         </div>
-    </div>-->
+    </div>
 
 </div>
 
@@ -305,12 +317,20 @@
         mode: 'javascript',
     });
 
-    // myCodeMirror2 = CodeMirror.fromTextArea(document.getElementById("reader"), {
-    //     lineNumbers: true,
-    //     theme: 'dracula',
-    //     mode: 'powershell',
-    //     readOnly: true,
-    // });
+    myCodeMirror5 = CodeMirror.fromTextArea(document.getElementById("writerRust"), {
+        lineNumbers: true,
+        styleActivateLine: true,
+        matchBrackets: true,
+        theme: 'dracula',
+        mode: 'javascript',
+    });
+
+    myCodeMirror2 = CodeMirror.fromTextArea(document.getElementById("reader"), {
+        lineNumbers: true,
+        theme: 'dracula',
+        mode: 'powershell',
+        readOnly: true,
+    });
 
     myCodeMirror3 = CodeMirror.fromTextArea(document.getElementById("reader3D"), {
         lineNumbers: true,

@@ -85,5 +85,6 @@ func Optimize(c *fiber.Ctx) error {
 	return c.Render("index", fiber.Map{
 		"Parser3D":                 data.Code,
 		"Code3DirectionsOptimized": resToSend,
+		"Parser":                   "fn main() {\n    let x = 10;\n    let y = 25;\n\n    let z = x + y;\n\n    print!(\"Suma de x + y = \");\n  \tprintln!(\"{}\", z);\n}",
 	})
 }

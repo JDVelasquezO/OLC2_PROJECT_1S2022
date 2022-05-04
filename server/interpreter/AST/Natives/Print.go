@@ -32,6 +32,10 @@ func (p Print) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generato
 	}
 	//fmt.Println(res0)
 
+	if res0 == nil {
+		return nil
+	}
+
 	generator.AddComment("---- Print ----")
 	if res0.(Abstract.Value).Type == SymbolTable.INTEGER {
 		newVal := fmt.Sprintf("%v", res0.(Abstract.Value).Value)

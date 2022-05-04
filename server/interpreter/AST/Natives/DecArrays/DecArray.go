@@ -40,6 +40,9 @@ func (d DecArray) Compile(symbolTable *SymbolTable.SymbolTable, generator *Gener
 	symbol := objectArray.Value.(Array.Array)
 
 	for i := 0; i < len(symbol.Values); i++ {
+		//if symbol.ListIntDim.Len() > 1 {
+		//	newArray := Array.NewArray("a", SymbolTable.INTEGER, symbol.Values[i], 2)
+		//}
 		generator.SetHeap(tempMove, symbol.Values[i])
 		generator.AddExpression(tempMove, tempMove, "1", "+")
 	}
