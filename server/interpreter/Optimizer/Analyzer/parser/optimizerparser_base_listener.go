@@ -105,6 +105,24 @@ func (s *BaseOptimizerParserListener) EnterLabel_instr(ctx *Label_instrContext) 
 // ExitLabel_instr is called when production label_instr is exited.
 func (s *BaseOptimizerParserListener) ExitLabel_instr(ctx *Label_instrContext) {}
 
+// EnterPrintf_instr is called when production printf_instr is entered.
+func (s *BaseOptimizerParserListener) EnterPrintf_instr(ctx *Printf_instrContext) {}
+
+// ExitPrintf_instr is called when production printf_instr is exited.
+func (s *BaseOptimizerParserListener) ExitPrintf_instr(ctx *Printf_instrContext) {}
+
+// EnterExpr_print is called when production expr_print is entered.
+func (s *BaseOptimizerParserListener) EnterExpr_print(ctx *Expr_printContext) {}
+
+// ExitExpr_print is called when production expr_print is exited.
+func (s *BaseOptimizerParserListener) ExitExpr_print(ctx *Expr_printContext) {}
+
+// EnterConvert is called when production convert is entered.
+func (s *BaseOptimizerParserListener) EnterConvert(ctx *ConvertContext) {}
+
+// ExitConvert is called when production convert is exited.
+func (s *BaseOptimizerParserListener) ExitConvert(ctx *ConvertContext) {}
+
 // EnterExpression is called when production expression is entered.
 func (s *BaseOptimizerParserListener) EnterExpression(ctx *ExpressionContext) {}
 

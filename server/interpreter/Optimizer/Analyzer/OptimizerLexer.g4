@@ -28,6 +28,7 @@ INLINE:         '//'(~[\n])+ -> skip;
 INTEGER:                [0-9]+;
 FLOAT:                  [0-9]+'.'[0-9]+;
 CHAR:                   '\''~["]'\'';
+STRING:                 '"'~["]*'"';
 ID:                     [a-zñA-ZÑ_][_a-zñA-ZÑ0-9]*;
 
 // General Operators

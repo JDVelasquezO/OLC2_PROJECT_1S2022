@@ -50,6 +50,15 @@ type OptimizerParserListener interface {
 	// EnterLabel_instr is called when entering the label_instr production.
 	EnterLabel_instr(c *Label_instrContext)
 
+	// EnterPrintf_instr is called when entering the printf_instr production.
+	EnterPrintf_instr(c *Printf_instrContext)
+
+	// EnterExpr_print is called when entering the expr_print production.
+	EnterExpr_print(c *Expr_printContext)
+
+	// EnterConvert is called when entering the convert production.
+	EnterConvert(c *ConvertContext)
+
 	// EnterExpression is called when entering the expression production.
 	EnterExpression(c *ExpressionContext)
 
@@ -106,6 +115,15 @@ type OptimizerParserListener interface {
 
 	// ExitLabel_instr is called when exiting the label_instr production.
 	ExitLabel_instr(c *Label_instrContext)
+
+	// ExitPrintf_instr is called when exiting the printf_instr production.
+	ExitPrintf_instr(c *Printf_instrContext)
+
+	// ExitExpr_print is called when exiting the expr_print production.
+	ExitExpr_print(c *Expr_printContext)
+
+	// ExitConvert is called when exiting the convert production.
+	ExitConvert(c *ConvertContext)
 
 	// ExitExpression is called when exiting the expression production.
 	ExitExpression(c *ExpressionContext)

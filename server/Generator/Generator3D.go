@@ -2,6 +2,7 @@ package Generator
 
 import (
 	"OLC2_Project1/server/interpreter/SymbolTable"
+	"OLC2_Project1/server/interpreter/errors"
 	"fmt"
 	"github.com/colegno/arraylist"
 	"reflect"
@@ -21,17 +22,20 @@ type Generator struct {
 	CompareStr     bool
 	Natives        string
 	Functions      string
+	Errors         *arraylist.List
 }
 
 func NewGenerator(code string) Generator {
 
 	temps := arraylist.New()
+	errors := arraylist.New()
 	generator := Generator{
 		Temps:          temps,
 		Code:           "",
 		CountLabel:     0,
 		CountTemp:      0,
 		TempsRecovered: make(map[string]interface{}),
+		Errors:         errors,
 		InNatives:      false,
 		InFunc:         false,
 		PrintStr:       false,
@@ -264,7 +268,11 @@ func (g *Generator) AddIf(left string, right string, ope string, label string) {
 
 func (g *Generator) AddPrint(format string, dataType string, value string) {
 	g.GetFreeTemp(value)
-	g.CodeInFunction("printf(\"%"+format+"\", ("+dataType+")"+value+");\n", "\t")
+	g.CodeInFunction("Print(\"%"+format+"\", ("+dataType+")"+value+");\n", "\t")
+}
+
+func (g *Generator) AddError(msg string, line int, col int) {
+	g.Errors.Add(errors.NewError(0, line, col, msg, "local"))
 }
 
 func (g *Generator) PrintString() {

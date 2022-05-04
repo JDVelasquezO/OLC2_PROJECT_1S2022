@@ -5,6 +5,7 @@ import (
 	"OLC2_Project1/server/interpreter/Optimizer/Assignment"
 	"OLC2_Project1/server/interpreter/Optimizer/Control"
 	"OLC2_Project1/server/interpreter/Optimizer/Primitive"
+	"OLC2_Project1/server/interpreter/Optimizer/Print"
 	"fmt"
 	arrayList "github.com/colegno/arraylist"
 	"reflect"
@@ -41,7 +42,8 @@ func (f Function) Execute() interface{} {
 
 		if reflect.TypeOf(instruction) == reflect.TypeOf(Control.Label{}) ||
 			reflect.TypeOf(instruction) == reflect.TypeOf(Control.If{}) ||
-			reflect.TypeOf(instruction) == reflect.TypeOf(Control.GoTo{}) {
+			reflect.TypeOf(instruction) == reflect.TypeOf(Control.GoTo{}) ||
+			reflect.TypeOf(instruction) == reflect.TypeOf(Print.Printf{}) {
 			valToSend = "\t" + newExpr.(string) + "\n"
 			newListStrs.Add(valToSend)
 			continue
@@ -121,7 +123,7 @@ func (f Function) Execute() interface{} {
 										if strings.Contains(strToValue.(string), valOfCmp) {
 											strChanged := strings.ReplaceAll(strToValue.(string), valOfCmp, valRightOfCmp)
 											newListStrs.ReplaceAll(strToValue, strChanged)
-											break
+											continue
 										}
 									}
 								}

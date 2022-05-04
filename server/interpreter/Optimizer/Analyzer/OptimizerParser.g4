@@ -11,6 +11,7 @@ options {
     import "OLC2_Project1/server/interpreter/Optimizer/Assignment"
     import "OLC2_Project1/server/interpreter/Optimizer/Control"
     import "OLC2_Project1/server/interpreter/Optimizer/Function"
+    import "OLC2_Project1/server/interpreter/Optimizer/Print"
     import arrayList "github.com/colegno/arraylist"
 }
 
@@ -78,6 +79,7 @@ instruction returns [AbstractOptimizer.Instruction instr]
     | if_instr     { $instr = $if_instr.instr }
     | goto_instr   { $instr = $goto_instr.instr }
     | label_instr  { $instr = $label_instr.instr }
+    | printf_instr { $instr = $printf_instr.instr }
 ;
 
 assign_stack returns [AbstractOptimizer.Instruction instr]
@@ -113,6 +115,30 @@ goto_instr returns [AbstractOptimizer.Instruction instr]
 label_instr returns [AbstractOptimizer.Instruction instr]
     : ID COLON {
         $instr = Control.NewLabel($ID.text, $ID.line, localctx.(*Label_instrContext).Get_ID().GetColumn())
+    }
+;
+
+printf_instr returns [AbstractOptimizer.Instruction instr]
+    : RPRINTF LEFT_PAR STRING COMMA convert expr_print RIGHT_PAR SEMICOLON {
+        $instr = Print.NewPrintf($STRING.text, $convert.dtype, $expr_print.id, $STRING.line, localctx.(*Printf_instrContext).Get_STRING().GetColumn())
+    }
+;
+
+expr_print returns [AbstractOptimizer.Expression id]
+    : expr_valor {
+        $id = $expr_valor.p
+    }
+;
+
+convert returns [string dtype]
+    : LEFT_PAR RINT RIGHT_PAR {
+        $dtype = $RINT.text
+    }
+    | LEFT_PAR RFLOAT RIGHT_PAR {
+        $dtype = $RFLOAT.text
+    }
+    | LEFT_PAR RCHAR RIGHT_PAR {
+        $dtype = $RCHAR.text
     }
 ;
 

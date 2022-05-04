@@ -19,12 +19,22 @@ type Natives struct {
 func (n Natives) Compile(symbolTable *SymbolTable.SymbolTable, generator *Generator.Generator) interface{} {
 	id := symbolTable.GetSymbol(n.Id)
 	if n.Operation == "abs" {
-		if id.(*SymbolTable.Symbol).Value.(int) < 0 {
-			temp := generator.AddTemp()
-			generator.AddExpression(temp, fmt.Sprintf("%v", id.(*SymbolTable.Symbol).Value), "-1", "*")
-			val := Abstract.NewValue(temp, SymbolTable.INTEGER, true, "")
-			return val
+		if id.(*SymbolTable.Symbol).DataType == SymbolTable.INTEGER {
+			if id.(*SymbolTable.Symbol).Value.(int) < 0 {
+				temp := generator.AddTemp()
+				generator.AddExpression(temp, fmt.Sprintf("%v", id.(*SymbolTable.Symbol).Value), "-1", "*")
+				val := Abstract.NewValue(temp, SymbolTable.INTEGER, true, "")
+				return val
+			}
+		} else {
+			if id.(*SymbolTable.Symbol).Value.(float64) < 0 {
+				temp := generator.AddTemp()
+				generator.AddExpression(temp, fmt.Sprintf("%v", id.(*SymbolTable.Symbol).Value), "-1", "*")
+				val := Abstract.NewValue(temp, SymbolTable.FLOAT, true, "")
+				return val
+			}
 		}
+
 	}
 	val := Abstract.NewValue(id.(*SymbolTable.Symbol).Value, SymbolTable.INTEGER, false, "")
 	return val

@@ -169,9 +169,18 @@ func (o Operation) Compile(symbolTable *SymbolTable.SymbolTable, generator *Gene
 			return res
 		}
 
+		operation := o.Operator
+
+		if operation == "/" {
+			valRight := o.OpRight.GetValue(*symbolTable).Value
+			if valRight == 0 {
+				generator.AddError("No es posible dividir por 0", o.Row, o.Col)
+				return nil
+			}
+		}
+
 		right := o.OpRight.Compile(symbolTable, generator)
 		temp := generator.AddTemp()
-		operation := o.Operator
 
 		if (left.(Abstract.Value).Type == SymbolTable.INTEGER || left.(Abstract.Value).Type == SymbolTable.FLOAT) &&
 			(right.(Abstract.Value).Type == SymbolTable.INTEGER || right.(Abstract.Value).Type == SymbolTable.FLOAT) {
