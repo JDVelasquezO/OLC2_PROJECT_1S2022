@@ -91,7 +91,7 @@
 <div class="container mt-6 mb-6" id="mirror">
 
     <div class="">
-        <h2 class="is-size-1 has-text-centered has-text-white">Translate</h2>
+        <h2 class="is-size-1 has-text-centered has-text-white">Translate C3D</h2>
     </div>
     <form action="http://localhost:3000/compiler" method="post" id="formCode">
         <div class="columns">
@@ -121,7 +121,7 @@
     </form>
 
     <div class="">
-        <h2 class="is-size-1 has-text-centered has-text-white">Optimizer</h2>
+        <h2 class="is-size-1 has-text-centered has-text-white">Optimizer C3D</h2>
     </div>
     <form action="http://localhost:3000/optimizer" method="post" id="formCode">
         <div class="columns">
@@ -151,7 +151,7 @@
     </form>
 
     <div class="">
-        <h2 class="is-size-1 has-text-centered has-text-white">Analyzer</h2>
+        <h2 class="is-size-1 has-text-centered has-text-white">Analyzer Rust</h2>
     </div>
     <form action="http://localhost:3000/analyze" method="post" id="formCodeRust">
         <div class="columns">
@@ -291,6 +291,33 @@
         </div>
     </div>
 
+    <div class="container mt-6">
+        <div class="columns">
+            <h2 class="has-text-white has-text-centered">Optimizer Report:</h2><br>
+            <table class="mt-2 table has-background-black-ter has-text-white-bis">
+                <thead>
+                <tr>
+                    <th><abbr class="has-text-info">Optimization Type</abbr></th>
+                    <th><abbr class="has-text-info">Rule</abbr></th>
+                    <th><abbr class="has-text-info">Original Expression</abbr></th>
+                    <th><abbr class="has-text-info">New Expression</abbr></th>
+                    <th><abbr class="has-text-info">Line</abbr></th>
+                </tr>
+                </thead>
+                <tbody>
+                {{ range .Rules }}
+                <tr>
+                    <td>Por Bloques</td>
+                    <td>{{ .Rule }}</td>
+                    <td>{{ .Original }}</td>
+                    <td>{{ .Optimized }}</td>
+                    <td>{{ .File }}</td>
+                </tr>
+                {{ end }}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <footer style="border-top: solid 1px white;" class="footer has-background-dark">

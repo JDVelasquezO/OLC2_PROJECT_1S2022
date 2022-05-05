@@ -34,7 +34,7 @@ func (a Assign) Execute() interface{} {
 	typeRet := make(map[string]interface{})
 	typeRet["temp"] = temp
 	typeRet["val"] = opAssign
-	typeRet["rep"] = false
+	typeRet["row"] = a.Row
 
 	return typeRet
 }

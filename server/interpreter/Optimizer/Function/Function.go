@@ -5,6 +5,7 @@ import (
 	"OLC2_Project1/server/interpreter/Optimizer/Assignment"
 	"OLC2_Project1/server/interpreter/Optimizer/Control"
 	"OLC2_Project1/server/interpreter/Optimizer/Primitive"
+	"OLC2_Project1/server/interpreter/rules"
 	"fmt"
 	arrayList "github.com/colegno/arraylist"
 	"reflect"
@@ -63,9 +64,16 @@ func (f Function) Execute() interface{} {
 					if tempNew["val"] == tempToCmp["val"] {
 						valToSend = "\t/*---- Se aplico regla 1 ----*/\n"
 						newListStrs.Add(valToSend)
+
+						original := tempNew["temp"].(string) + " = " + tempNew["val"].(string)
 						tempNew["val"] = tempToCmp["temp"]
 						tempNew["rep"] = true
-						//newList.Add(newExpr)
+						optimized := tempNew["temp"].(string) + " = " + tempNew["val"].(string)
+						row := tempNew["row"].(int)
+						rule := rules.NewRule("Regla 1", original, optimized, row)
+						rules.CounterRule += 1
+						rules.TypeRule = append(rules.TypeRule, rule)
+
 						break
 					}
 				}
@@ -74,9 +82,9 @@ func (f Function) Execute() interface{} {
 			valToSend = "\t" + fmt.Sprintf("%v", tempNew["temp"]) + " = " + fmt.Sprintf("%v", tempNew["val"]) + ";\n"
 			newListStrs.Add(valToSend)
 
-			newExpTemp := Primitive.NewTemp(fmt.Sprintf("%v", tempNew["temp"]), 0, 0)
-			newExpVal := Primitive.NewTemp(fmt.Sprintf("%v", tempNew["val"]), 0, 0)
-			newInstr := Assignment.NewAssign(newExpTemp, newExpVal, 0, 0)
+			newExpTemp := Primitive.NewTemp(fmt.Sprintf("%v", tempNew["temp"]), tempNew["row"].(int), 0)
+			newExpVal := Primitive.NewTemp(fmt.Sprintf("%v", tempNew["val"]), tempNew["row"].(int), 0)
+			newInstr := Assignment.NewAssign(newExpTemp, newExpVal, tempNew["row"].(int), 0)
 			newListInstr.Add(newInstr)
 		}
 	}
@@ -109,9 +117,16 @@ func (f Function) Execute() interface{} {
 
 								valToReplace := newList2.GetValue(j).(map[string]interface{})["val"].(string)
 								newVal := strings.ReplaceAll(valOfNew, valOfNewArray[k], valToReplace)
-								tempNew["val"] = newVal
 
-								commentToSend := "\t/*---- Se aplico regla (2 y 3) o 4 ----*/\n"
+								original := tempNew["temp"].(string) + " = " + tempNew["val"].(string)
+								tempNew["val"] = newVal
+								optimized := tempNew["temp"].(string) + " = " + tempNew["val"].(string)
+								row := tempNew["row"].(int)
+								rule := rules.NewRule("Regla 2 o 4", original, optimized, row)
+								rules.CounterRule += 1
+								rules.TypeRule = append(rules.TypeRule, rule)
+
+								commentToSend := "\t/*---- Se aplico regla (2 o 4) y 3 ----*/\n"
 								valToSend = commentToSend + "\t" + tempNew["temp"].(string) + " = " + tempNew["val"].(string) + ";\n"
 
 								strToCmp1 := "\t" + tempNew["temp"].(string) + " = " + valOfNew + ";\n"
@@ -123,6 +138,11 @@ func (f Function) Execute() interface{} {
 								if newListStrs.Contains(strToCmp2) {
 									index := newListStrs.IndexOf(strToCmp2)
 									newListStrs.RemoveAtIndex(index)
+
+									original := valOfCmp + " = " + valRightOfCmp
+									rule := rules.NewRule("Regla 3", original, "desaparece", tempToCmp["row"].(int))
+									rules.CounterRule += 1
+									rules.TypeRule = append(rules.TypeRule, rule)
 
 									for l := 0; l < newListStrs.Len(); l++ {
 										strToValue := newListStrs.GetValue(l)

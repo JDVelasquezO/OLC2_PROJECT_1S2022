@@ -5,6 +5,7 @@ import (
 	"OLC2_Project1/server/interpreter/Optimizer/AbstractOptimizer"
 	"OLC2_Project1/server/interpreter/Optimizer/Analyzer/parser"
 	"OLC2_Project1/server/interpreter/Optimizer/Function"
+	"OLC2_Project1/server/interpreter/rules"
 	"OLC2_Project1/server/utilities"
 	"fmt"
 	"github.com/antlr/antlr4/runtime/Go/antlr"
@@ -81,10 +82,12 @@ func Optimize(c *fiber.Ctx) error {
 		}
 	}
 	resToSend = resToSend[:len(resToSend)-1]
+	rulesArray := rules.TypeRule
 
 	return c.Render("index", fiber.Map{
 		"Parser3D":                 data.Code,
 		"Code3DirectionsOptimized": resToSend,
+		"Rules":                    rulesArray,
 		"Parser":                   "fn main() {\n    let x = 10;\n    let y = 25;\n\n    let z = x + y;\n\n    print!(\"Suma de x + y = \");\n  \tprintln!(\"{}\", z);\n}",
 	})
 }
